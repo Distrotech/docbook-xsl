@@ -102,7 +102,7 @@ and <filename>subdir/page3.html</filename>):</para>
   + index.html
     + subdir/index.html
       + subdir/page2.html
-      + subdir/page2.html
+      + subdir/page3.html
     + page2.html
 </programlisting>
 
