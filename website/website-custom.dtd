@@ -27,6 +27,15 @@
 <!ENTITY % simplelist.content.module "INCLUDE">
 <!ENTITY % local.list.class "|simplelist">
 
+<!ENTITY % qandset.content.module "INCLUDE">
+<!ENTITY % qandset.module "INCLUDE">
+<!ENTITY % qandadiv.module "INCLUDE">
+<!ENTITY % qandaentry.module "INCLUDE">
+<!ENTITY % question.module "INCLUDE">
+<!ENTITY % answer.module "INCLUDE">
+<!ENTITY % label.module "INCLUDE">
+<!ENTITY % local.compound.class "|qandaset">
+
 <!-- allow webtoc to occur anywhere a para can occur -->
 <!ENTITY % local.para.class "|webtoc">
 
@@ -103,7 +112,7 @@
 	xmlns:html	CDATA	#FIXED "http://www.w3.org/1999/xhtml"
 	navto	(yes|no)	"yes"
 	role	CDATA	#IMPLIED
-	id	ID	#IMPLIED
+	id	ID	#REQUIRED
 >
 
 <!ELEMENT webtoc EMPTY>
