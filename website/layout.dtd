@@ -1,5 +1,5 @@
 <!-- ====================================================================== -->
-<!-- Website Layout DTD V2.0a1
+<!-- Website Layout DTD V2.0b1
      Part of the Website distribution
      http://sourceforge.net/projects/docbook/
 
@@ -64,3 +64,6 @@
 	dir		CDATA	#IMPLIED
 	filename	CDATA	#IMPLIED
 >
+
+<!-- End of layout.dtd V2.0b1 ............................................. -->
+<!-- ...................................................................... -->
