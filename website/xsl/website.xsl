@@ -44,7 +44,7 @@
   <html>
     <xsl:apply-templates select="head" mode="head.mode"/>
     <xsl:apply-templates select="config" mode="head.mode"/>
-    <body xsl:use-attribute-sets="body.attributes" class="website">
+    <body xsl:use-attribute-sets="body.attributes">
 
       <div id="{$id}" class="{name(.)}">
         <a name="{$id}"/>
