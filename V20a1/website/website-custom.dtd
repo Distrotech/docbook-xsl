@@ -1,0 +1,117 @@
+<!-- ====================================================================== -->
+<!-- Website DTD V2.0a1
+     Copyright (C) 1997-2001 Norman Walsh
+     http://sourceforge.net/projects/docbook/
+
+     $Id$
+
+     Please direct all questions and comments about this DTD to
+     Norman Walsh, <ndw@nwalsh.com>.
+
+     Common declaration:
+
+     <?xml version="1.0"?>
+     <!DOCTYPE website
+       PUBLIC "-//Norman Walsh//DTD Website V2.0a1//EN"
+       "http://docbook.sf.net/release/website/2.0a1/website.dtd">
+                                                                            -->
+<!-- ====================================================================== -->
+
+<!-- allow some things that would be excluded by simple -->
+<!ENTITY % sgmltag.module "INCLUDE">
+<!ENTITY % local.tech.char.class "|sgmltag">
+
+<!ENTITY % olink.module "INCLUDE">
+<!ENTITY % local.link.char.class "|olink">
+
+<!ENTITY % simplelist.content.module "INCLUDE">
+<!ENTITY % local.list.class "|simplelist">
+
+<!-- allow webtoc to occur anywhere a para can occur -->
+<!ENTITY % local.para.class "|webtoc">
+
+<!-- Forms? -->
+<!ENTITY % allowforms "INCLUDE">
+<![%allowforms;[
+<!ENTITY % local.para.char.mix "|html:input|html:button|html:label|html:select|html:textarea">
+<!ENTITY % local.divcomponent.mix "|html:form">
+]]>
+
+<!-- the XML notation; this really should go in DocBook -->
+<!NOTATION XML SYSTEM "http://www.w3.org/TR/REC-xml">
+<!ENTITY % local.notation.class "">
+<!ENTITY % notation.class
+		"BMP| CGM-CHAR | CGM-BINARY | CGM-CLEAR | DITROFF | DVI
+		| EPS | EQN | FAX | GIF | GIF87a | GIF89a 
+		| JPG | JPEG | IGES | PCX
+		| PIC | PNG | PS | SGML | XML | TBL | TEX | TIFF | WMF | WPG
+		| linespecific
+		%local.notation.class;">
+
+<!-- Now that individual XML pages are possible; it makes sense to use the -->
+<!-- simple subset for maximum utility in sending these pages across the -->
+<!-- web directly. -->
+<!ENTITY % sdocbook 
+           PUBLIC "-//Norman Walsh//DTD Simplified DocBook Custom XML V4.1.2.4//EN"
+           "../docbook/simple/sdocbook-custom.dtd">
+<!--
+<!ENTITY % docbook
+           PUBLIC "-//Norman Walsh//DTD Simplified DocBook XML V4.1.2.4//EN"
+          "http://nwalsh.com/docbook/simple/4.1.2.4/sdocbook.dtd">
+-->
+%sdocbook;
+
+<!-- define webpage elements -->
+
+<!ENTITY % webpage.mix "(config*, head, (%bookcomponent.content;),
+                        appendix*, bibliography*)">
+
+<!ELEMENT head (title, titleabbrev?, subtitle?, summary?, keywords?,
+               (copyright | author | edition
+                | meta | script | style | abstract | revhistory)*)>
+
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+	name	CDATA	#REQUIRED
+	content	CDATA	#REQUIRED
+>
+
+<!ELEMENT script (#PCDATA)>
+<!ATTLIST script
+	src	CDATA	#IMPLIED
+	language	CDATA	#IMPLIED
+>
+
+<!ELEMENT style (#PCDATA)>
+<!ATTLIST style
+	src	CDATA	#IMPLIED
+	type	CDATA	#IMPLIED
+>
+
+<!ELEMENT config EMPTY>
+<!ATTLIST config
+	param	CDATA	#REQUIRED
+	value	CDATA	#REQUIRED
+	altval	CDATA	#IMPLIED
+>
+
+<!ELEMENT summary (%word.char.mix;)*>
+<!ELEMENT keywords (#PCDATA)>
+
+<!ELEMENT webpage (%webpage.mix;)>
+<!ATTLIST webpage
+	xmlns:html	CDATA	#FIXED "http://www.w3.org/1999/xhtml"
+	navto	(yes|no)	"yes"
+	role	CDATA	#IMPLIED
+	id	ID	#IMPLIED
+>
+
+<!ELEMENT webtoc EMPTY>
+
+<![%allowforms;[
+<!ENTITY % forms.mod SYSTEM "forms.mod">
+%forms.mod;
+]]>
+
+<!-- End of Website DTD V2.0a1 ............................................ -->
+<!-- ...................................................................... -->
