@@ -1,3 +1,0 @@
-<!ENTITY bibliocoverage.synopsis.gen SYSTEM "synopsis.e.gen">
-<!ENTITY bibliocoverage.children.gen SYSTEM "children.gen">
-<!ENTITY bibliocoverage.parents.gen SYSTEM "parents.gen">
