@@ -1,0 +1,216 @@
+# This file is part of DocBook NG: The "IPA" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+
+namespace html = "http://www.w3.org/1999/xhtml"
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/docbook-ng"
+default namespace = "http://docbook.org/docbook-ng"
+
+db.extension.blocks |= db.html.form
+db.extension.inlines |= db.html.input | db.html.button | db.html.label | db.html.select | db.html.textarea
+
+# ======================================================================
+
+[
+   db:refname [ "html:form" ]
+   db:refpurpose [ "An HTML form" ]
+]
+div {
+
+   db.html.form.attlist =
+      db.html.attrs
+    & attribute action { text }
+    & attribute method { "GET" | "POST" }?
+    & attribute onsubmit { text }?
+    & attribute onreset { text }?
+
+   db.html.form =
+      element html:form {
+         db.html.form.attlist,
+         ( db.all.blocks
+          | db.html.input
+          | db.html.button
+          | db.html.label
+          | db.html.select
+          | db.html.textarea )+
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:input" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.input.attlist =
+      db.html.attrs
+    & attribute type {
+       "text"
+     | "password"
+     | "checkbox"
+     | "radio"
+     | "submit"
+     | "reset"
+     | "file"
+     | "hidden"
+     | "image"
+     | "button" }?
+    & attribute name { text }?
+    & attribute value { text }?
+    & attribute checked { "checked" }?
+    & attribute disabled { "disabled" }?
+    & attribute readonly { "readonly" }?
+    & attribute size { text }?
+    & attribute maxlength { text }?
+    & attribute src { text }?
+    & attribute alt { text }?
+    & attribute usemap { text }?
+    & attribute tabindex { text }?
+    & attribute accesskey { text }?
+    & attribute onfocus { text }?
+    & attribute onblur { text }?
+    & attribute onselect { text }?
+    & attribute onchange { text }?
+
+   db.html.input =
+      element html:input {
+         db.html.input.attlist,
+         empty
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:button" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.button.attlist =
+      db.html.attrs
+    & attribute name { text }?
+    & attribute value { text }?
+    & attribute type { "button" | "submit" | "reset" }?
+    & attribute disabled { "disabled" }?
+    & attribute tabindex { text }?
+    & attribute accesskey { text }?
+    & attribute onfocus { text }?
+    & attribute onblur { text }?
+
+   db.html.button =
+      element html:button {
+         db.html.button.attlist,
+         db.all.inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:label" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.label.attlist =
+      db.html.attrs
+    & attribute accesskey { text }?
+    & attribute onfocus { text }?
+    & attribute onblur { text }?
+
+   db.html.label =
+      element html:label {
+         db.html.label.attlist,
+         db.all.inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:select" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.select.attlist =
+      db.html.attrs
+    & attribute name { text }?
+    & attribute size { text }?
+    & attribute multiple { "multiple" }?
+    & attribute disabled { "disabled" }?
+    & attribute tabindex { text }?
+    & attribute onfocus { text }?
+    & attribute onblur { text }?
+    & attribute onchange { text }?
+
+   db.html.select =
+      element html:select {
+         db.html.select.attlist,
+         db.html.option+
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:option" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.option.attlist =
+      db.html.attrs
+    & attribute selected { "selected" }?
+    & attribute disabled { "disabled" }?
+    & attribute value { text }?
+
+   db.html.option =
+      element html:option {
+         db.html.option.attlist,
+         text
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "html:textarea" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.html.textarea.attlist =
+      db.html.attrs
+    & attribute name { text }?
+    & attribute rows { text }
+    & attribute cols { text }
+    & attribute disabled { "disabled" }?
+    & attribute readonly { "readonly" }?
+    & attribute tabindex { text }?
+    & attribute accesskey { text }?
+    & attribute onfocus { text }?
+    & attribute onblur { text }?
+    & attribute onselect { text }?
+    & attribute onchange { text }?
+
+   db.html.textarea =
+      element html:textarea {
+         db.html.textarea.attlist,
+         text
+      }
+}
