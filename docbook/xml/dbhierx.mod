@@ -372,9 +372,7 @@
 
 <!ENTITY % toc.element "INCLUDE">
 <![%toc.element;[
-<!ELEMENT toc (beginpage?,
-		(%bookcomponent.title.content;)?,
-		tocfront*,
+<!ELEMENT toc ((%bookcomponent.title.content;)?, tocfront*,
 		(tocpart | tocchap)*, tocback*)>
 <!--end of toc.element-->]]>
 
@@ -614,7 +612,7 @@
 
 <!ENTITY % lot.element "INCLUDE">
 <![%lot.element;[
-<!ELEMENT lot (beginpage?, (%bookcomponent.title.content;)?, lotentry*)>
+<!ELEMENT lot ((%bookcomponent.title.content;)?, lotentry*)>
 <!--end of lot.element-->]]>
 
 <!ENTITY % lot.attlist "INCLUDE">
@@ -665,8 +663,7 @@
 
 <!ENTITY % appendix.element "INCLUDE">
 <![%appendix.element;[
-<!ELEMENT appendix (beginpage?,
-                     appendixinfo?,
+<!ELEMENT appendix (appendixinfo?,
                      (%bookcomponent.title.content;), 
                      (%nav.class;)*,
                      tocchap?,
@@ -693,8 +690,7 @@
 
 <!ENTITY % chapter.element "INCLUDE">
 <![%chapter.element;[
-<!ELEMENT chapter (beginpage?,
-                    chapterinfo?,
+<!ELEMENT chapter (chapterinfo?,
                     (%bookcomponent.title.content;),
                     (%nav.class;)*,
                     tocchap?,
@@ -725,8 +721,7 @@ change will not be made after all. -->
 
 <!ENTITY % part.element "INCLUDE">
 <![%part.element;[
-<!ELEMENT part (beginpage?,
-                partinfo?, (%bookcomponent.title.content;), partintro?,
+<!ELEMENT part (partinfo?, (%bookcomponent.title.content;), partintro?,
 		(%partcontent.mix;)+)>
 <!--end of part.element-->]]>
 
@@ -750,8 +745,7 @@ change will not be made after all. -->
 
 <!ENTITY % preface.element "INCLUDE">
 <![%preface.element;[
-<!ELEMENT preface (beginpage?,
-                    prefaceinfo?,
+<!ELEMENT preface (prefaceinfo?,
                     (%bookcomponent.title.content;),
                     (%nav.class;)*,
                     tocchap?,
@@ -777,8 +771,7 @@ change will not be made after all. -->
 
 <!ENTITY % reference.element "INCLUDE">
 <![%reference.element;[
-<!ELEMENT reference (beginpage?,
-                     referenceinfo?,
+<!ELEMENT reference (referenceinfo?,
                      (%bookcomponent.title.content;), partintro?,
                      (%refentry.class;)+)>
 <!--end of reference.element-->]]>
@@ -1488,7 +1481,7 @@ change will not be made after all. -->
 <![%bibliography.element;[
 <!ELEMENT bibliography (bibliographyinfo?,
                         (%bookcomponent.title.content;)?,
-                        (%component.mix;)*,
+                        (%component.mix;)*, 
                         (bibliodiv+ | (biblioentry|bibliomixed)+))>
 <!--end of bibliography.element-->]]>
 
@@ -1609,8 +1602,7 @@ change will not be made after all. -->
 <![%setindex.element;[
 <!ELEMENT setindex (setindexinfo?,
                     (%bookcomponent.title.content;)?,
-                    (%component.mix;)*,
-                    (indexdiv* | indexentry*))>
+                    (%component.mix;)*, (indexdiv* | indexentry*))>
 <!--end of setindex.element-->]]>
 
 <!ENTITY % setindex.attlist "INCLUDE">
@@ -1785,8 +1777,7 @@ change will not be made after all. -->
 
 <!ENTITY % refentry.element "INCLUDE">
 <![%refentry.element;[
-<!ELEMENT refentry (beginpage?,
-                    (%ndxterm.class;)*,
+<!ELEMENT refentry ((%ndxterm.class;)*,
                     refentryinfo?, refmeta?, (remark|%link.char.class;)*,
                     refnamediv, refsynopsisdiv?, refsect1+)>
 <!--end of refentry.element-->]]>
