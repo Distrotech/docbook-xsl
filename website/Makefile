@@ -1,16 +1,21 @@
+include ../cvstools/Makefile.incl
+ZIPVER=
+
 .PHONY : distrib clean
 
 all: website.dtd
+	make -C extensions all
+	make -C extensions jars
 
 website.dtd: website-custom.dtd forms.mod
-	perl ../cvstools/flatten $< > $@
+	$(FLATTEN) $< > $@
 
 distrib:
-	cvs2log -w
-	mergechangelogs > WhatsNew
+	$(CVS2LOG) -w
+	$(MERGELOGS) > WhatsNew
 
 newversion:
-	nextversion
+	$(NEXTVERSION)
 	make distrib
 
 clean:

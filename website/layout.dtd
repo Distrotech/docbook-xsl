@@ -1,3 +1,13 @@
+<!-- ====================================================================== -->
+<!-- Website Layout DTD V2.0a1
+     Part of the Website distribution
+     http://sourceforge.net/projects/docbook/
+
+     Please direct all questions and comments about this DTD to
+     Norman Walsh, <ndw@nwalsh.com>.
+                                                                            -->
+<!-- ====================================================================== -->
+
 <!ELEMENT layout ((config|style|script|copyright)*, toc+, notoc*)>
 
 <!ELEMENT config EMPTY>

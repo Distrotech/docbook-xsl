@@ -1,9 +1,7 @@
 <!-- ====================================================================== -->
-<!-- Website DTD Forms Module V1.7
-     Part of the Website DTD
-     http://nwalsh.com/website/
-
-     See COPYRIGHT for more information
+<!-- Website DTD Forms Module V2.0a1
+     Part of the Website distribution
+     http://sourceforge.net/projects/docbook/
 
      Please direct all questions and comments about this DTD to
      Norman Walsh, <ndw@nwalsh.com>.
@@ -132,5 +130,5 @@
 	onchange	CDATA		#IMPLIED
 >
 
-<!-- End of forms.mod V1.7 ................................................ -->
+<!-- End of forms.mod V2.0a1 .............................................. -->
 <!-- ...................................................................... -->
