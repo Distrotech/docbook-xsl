@@ -50,8 +50,10 @@
 -->
 %sdocbook;
 
+<!-- define webpage elements -->
+
 <!ENTITY % webpage.mix "(config*, head, (%bookcomponent.content;),
-                        appendix*, bibliography*, glossary*)">
+                        appendix*, bibliography*)">
 
 <!ELEMENT head (title, titleabbrev?, subtitle?, summary?, keywords?,
                (copyright | author | edition
