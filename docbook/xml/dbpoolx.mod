@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- DocBook XML information pool module V4.1.2 ............................. -->
+<!-- DocBook XML information pool module V5.0a1 ............................. -->
 <!-- File dbpoolx.mod ..................................................... -->
 
 <!-- Copyright 1992-2000 HaL Computer Systems, Inc.,
@@ -49,7 +49,7 @@
      declaration that uses the public identifier shown below:
 
      <!ENTITY % dbpool PUBLIC
-     "-//OASIS//ELEMENTS DocBook XML Information Pool V4.1.2//EN"
+     "-//OASIS//ELEMENTS DocBook XML Information Pool V5.0a1//EN"
      "dbpoolx.mod">
      %dbpool;
 
@@ -383,11 +383,6 @@ f. Just BlockQuote; no other informal objects.
 <!ENTITY % remark.exclusion "-(remark|%ubiq.mix;)">
 <!ENTITY % glossterm.exclusion "-(glossterm)">
 <!ENTITY % links.exclusion "-(link|olink|ulink|xref)">
-
-<!ENTITY % ho "- O">
-<!ENTITY % hh "- -">
-<!ENTITY % oh "O -">
-
 ]]><!-- sgml.features -->
 
 <!-- not [sgml.features[ -->
@@ -716,7 +711,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 <!ENTITY % linespecific.attrib
 	"format		NOTATION
 			(linespecific)	'linespecific'
-         xml:space	(default|preserve) 	#FIXED 'preserve'"
+         xml:space	(default|preserve) 	#FIXED 'preserve'
          linenumbering	(numbered|unnumbered) 	#IMPLIED">
 ]]>
 <!ENTITY % linespecific.attrib
@@ -7561,5 +7556,5 @@ OtherCredit. -->
 <!--end of seeseealso.module-->]]>
 <!--end of indexterm.content.module-->]]>
 
-<!-- End of DocBook XML information pool module V4.1.2 ...................... -->
+<!-- End of DocBook XML information pool module V5.0a1 ...................... -->
 <!-- ...................................................................... -->

@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- DocBook XML document hierarchy module V4.1.2 ........................... -->
+<!-- DocBook XML document hierarchy module V5.0a1 ........................... -->
 <!-- File dbhierx.mod ..................................................... -->
 
 <!-- Copyright 1992-2000 HaL Computer Systems, Inc.,
@@ -43,7 +43,7 @@
      declaration that uses the public identifier shown below:
 
      <!ENTITY % dbhier PUBLIC
-     "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.1.2//EN"
+     "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V5.0a1//EN"
      "dbhierx.mod">
      %dbhier;
 
@@ -723,7 +723,7 @@
 <!ENTITY % part.module "INCLUDE">
 <![%part.module;[
 
-<!-- Note that Part was to have its content model reduced in V4.1.2.  This
+<!-- Note that Part was to have its content model reduced in V5.0a1.  This
 change will not be made after all. -->
 
 <!ENTITY % local.part.attrib "">
@@ -2116,5 +2116,5 @@ change will not be made after all. -->
 <!--end of article.attlist-->]]>
 <!--end of article.module-->]]>
 
-<!-- End of DocBook XML document hierarchy module V4.1.2 .................... -->
+<!-- End of DocBook XML document hierarchy module V5.0a1 .................... -->
 <!-- ...................................................................... -->
