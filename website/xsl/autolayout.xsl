@@ -4,7 +4,7 @@
 
 <xsl:output method="xml" indent="yes"
             doctype-public="-//Norman Walsh//DTD Website Auto Layout V1.0//EN"
-            doctype-system="autolayout.dtd"
+            doctype-system="http://docbook.sourceforge.net/release/website/current/autolayout.dtd"
 />
 
 <xsl:strip-space elements="toc tocentry layout copyright"/>
@@ -153,13 +153,8 @@
   <xsl:choose>
     <xsl:when test="starts-with(@dir, '/')">
       <!-- if the directory on this begins with a "/", we're done... -->
-<!--
       <xsl:value-of select="substring-after(@dir, '/')"/>
--->
-      <xsl:value-of select="@dir"/>
-      <xsl:if test="@dir != '/'">
-        <xsl:text>/</xsl:text>
-      </xsl:if>
+      <xsl:text>/</xsl:text>
     </xsl:when>
 
     <xsl:when test="parent::*">
