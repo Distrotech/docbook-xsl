@@ -17,7 +17,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:import href="../../xsl/xhtml/docbook.xsl"/>
+<xsl:import href="http://docbook.sf.net/release/xsl/snapshot/xhtml/docbook.xsl"/>
 <xsl:import href="xbel.xsl"/>
 <xsl:include href="VERSION"/>
 <xsl:include href="param.xsl"/>
@@ -436,7 +436,7 @@ node.</para>
 
 <xsl:template match="olink">
   <xsl:variable name="xmlfile"
-                select="document(unparsed-entity-uri(@targetdocent),.)"/>
+                select="document(unparsed-entity-uri(@targetdocent),$autolayout)"/>
   <xsl:variable name="webpage"
                 select="$xmlfile/webpage"/>
   <xsl:variable name="tocentry"
@@ -522,12 +522,11 @@ node.</para>
 <xsl:template name="link.to.page">
   <xsl:param name="page" select="ancestor-or-self::tocentry"/>
   <xsl:param name="linktext" select="'???'"/>
-
-  <xsl:variable name="relpath">
+  <xsl:param name="relpath">
     <xsl:call-template name="toc-rel-path">
       <xsl:with-param name="pageid" select="$page/@id"/>
     </xsl:call-template>
-  </xsl:variable>
+  </xsl:param>
 
   <xsl:variable name="dir">
     <xsl:choose>
