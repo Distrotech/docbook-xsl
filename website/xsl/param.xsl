@@ -317,22 +317,20 @@ will be used to indent the TOC.</para>
 </doc:param>
 
 <!-- ==================================================================== -->
+<xsl:attribute-set name="body.attributes">
+  <xsl:attribute name="bgcolor">white</xsl:attribute>
+  <xsl:attribute name="text">black</xsl:attribute>
+  <xsl:attribute name="link">#0000FF</xsl:attribute>
+  <xsl:attribute name="vlink">#840084</xsl:attribute>
+  <xsl:attribute name="alink">#0000FF</xsl:attribute>
+</xsl:attribute-set>
 
-<doc:param name="" xmlns="">
+<doc:attribute-set name="body.attributes" xmlns="">
 <refpurpose></refpurpose>
 <refdescription>
 <para></para>
 </refdescription>
-</doc:param>
-
-<!-- ==================================================================== -->
-
-<doc:param name="" xmlns="">
-<refpurpose></refpurpose>
-<refdescription>
-<para></para>
-</refdescription>
-</doc:param>
+</doc:attribute-set>
 
 <!-- ==================================================================== -->
 
