@@ -149,7 +149,6 @@ else
 	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(RELVER) | bzip2 > docbook-xsl-$(RELVER).tar.bz2
 	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(RELVER).zip docbook-xsl-$(RELVER)
 	rm -f $(TMP)/tar.exclude
-	touch zip
 endif
 
 install: zip
@@ -175,12 +174,10 @@ debdepends: zip
 	$(SUDO) cp -pR debian $(TMP)/docbook-xsl-$(RELVER); \
 	cd $(TMP)/docbook-xsl-$(RELVER); \
 	$(MAKE) -C debian RELVER=$(RELVER) DEBVER=$(DEBVER)
-	touch debdepends
 
 deb: debdepends
 	cd $(TMP)/docbook-xsl-$(RELVER); \
 	$(SUDO) $(MAKE) -f debian/rules binary RELVER=$(RELVER)
-	touch deb
 
 debupload: deb
 	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
@@ -199,7 +196,6 @@ debupload: deb
 
 debclean:
 	$(SUDO) rm -rf $(TMP)/docbook-xsl-$(RELVER)/debian
-	rm -rf zip debdepends deb
 
 clean: debclean
 	for i in $(DIRS) __bogus__; do \
