@@ -12,8 +12,15 @@ FMGO=-N
 TMP=/tmp
 BROWSER=w3m
 LFTP=lftp
+SCP=scp
+SCP_OPTS=
+SSH=ssh
+SSH_OPTS=
 SF_UPLOAD_HOST=upload.sf.net
 SF_UPLOAD_DIR=incoming
+PROJECT_HOST=docbook.sf.net
+PROJECT_BASE=/home/groups/d/do/docbook/htdocs/release/xsl
+PROJECT_USER:=`sed 's/^:.\+:\([^@]\+\)@.\+$$/\1/' CVS/Root`
 
 DIRS=common lib html fo extensions htmlhelp javahelp
 
@@ -57,21 +64,25 @@ newversion:
 ifeq ($(CVSCHECK),)
 ifeq ($(DIFFVER),)
 	@echo "DIFFVER must be specified."
+	exit 1
 else
 ifeq ($(NEXTVER),$(RELVER))
 	cvs tag $(TAGVER)
 	$(MAKE) DIFFVER=$(DIFFVER) distrib
 else
 	@echo "VERSION $(RELVER) doesn't match specified version $(NEXTVER)."
+	exit 1
 endif
 endif
 else
 	@echo "CVS is not up-to-date! ($(CVSCHECK))"
+	exit 1
 endif
 
 freshmeat:
 ifeq ($(SFRELID),)
 	@echo "You must specify the sourceforge release identifier in SFRELID"
+	exit 1
 else
 	$(XSLT) VERSION VERSION $(TMP)/fm-docbook-xsl sf-relid=$(SFRELID)
 	grep -v "<?xml" $(TMP)/fm-docbook-xsl | freshmeat-submit $(FMGO)
@@ -80,6 +91,7 @@ endif
 zip:
 ifeq ($(ZIPVER),)
 	@echo You must specify ZIPVER for the zip target
+	exit 1
 else
 	find . -type f | xargs chmod 0644
 	find . -type d | xargs chmod 0755
@@ -119,8 +131,23 @@ else
 	rm -f $(TMP)/tar.exclude
 endif
 
-upload: zip
-	$(LFTP) -e "mput -O $(SF_UPLOAD_DIR) $(TMP)/docbook-xsl-$(ZIPVER).*; quit" $(SF_UPLOAD_HOST)
+install: zip
+	-$(LFTP) -e "mput -O $(SF_UPLOAD_DIR) $(TMP)/docbook-xsl-$(ZIPVER).*; quit" $(SF_UPLOAD_HOST)
+	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl-$(ZIPVER).tar.bz2 $(PROJECT_USER)@$(PROJECT_HOST):$(PROJECT_BASE)/
+	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
+	  "(\
+	   umask 002; \
+	   cd $(PROJECT_BASE); \
+	   rm -rf $(ZIPVER); \
+	   tar xfj docbook-xsl-$(ZIPVER).tar.bz2; \
+	   mv docbook-xsl-$(ZIPVER) $(ZIPVER); \
+	   rm -rf docbook-xsl-$(ZIPVER).tar.bz2; \
+	   chmod -R g+w $(ZIPVER); \
+	   rm -f current; \
+	   ln -s $(ZIPVER) current; \
+	   cd $(ZIPVER)/doc; \
+	   ln -s ../images; \
+	   )"
 
 clean:
 	for i in $(DIRS) __bogus__; do \
