@@ -221,6 +221,7 @@
     <xsl:choose>
       <xsl:when test="$nav.graphics">
         <xsl:call-template name="link.to.page">
+          <xsl:with-param name="href" select="@href"/>
           <xsl:with-param name="page" select="$target"/>
           <xsl:with-param name="relpath" select="$relpath"/>
           <xsl:with-param name="linktext">
@@ -279,6 +280,7 @@
           </xsl:choose>
 
           <xsl:call-template name="link.to.page">
+            <xsl:with-param name="href" select="@href"/>
             <xsl:with-param name="page" select="$target"/>
             <xsl:with-param name="relpath" select="$relpath"/>
             <xsl:with-param name="linktext">

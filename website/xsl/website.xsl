@@ -91,7 +91,20 @@
     <ul class="toc">
       <xsl:for-each select="$pages">
         <li>
-          <a href="{$relpath}{@dir}{$filename-prefix}{@filename}">
+          <a>
+            <xsl:attribute name="href">
+              <xsl:choose>
+                <xsl:when test="@href">
+                  <xsl:value-of select="@href"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$relpath"/>
+                  <xsl:value-of select="@dir"/>
+                  <xsl:value-of select="$filename-prefix"/>
+                  <xsl:value-of select="@filename"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
             <xsl:apply-templates select="title"/>
           </a>
           <xsl:if test="summary">

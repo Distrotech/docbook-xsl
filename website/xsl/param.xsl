@@ -335,7 +335,7 @@ will be used to indent the TOC.</para>
 <!-- ==================================================================== -->
 <xsl:param name="sequential.links" select="'0'"/>
 
-<doc:param name="" xmlns="">
+<doc:param name="sequential.links" xmlns="">
 <refpurpose></refpurpose>
 <refdescription>
 <para></para>
@@ -343,8 +343,9 @@ will be used to indent the TOC.</para>
 </doc:param>
 
 <!-- ==================================================================== -->
+<xsl:param name="currentpage.marker" select="'@'"/>
 
-<doc:param name="" xmlns="">
+<doc:param name="currentpage.marker" xmlns="">
 <refpurpose></refpurpose>
 <refdescription>
 <para></para>

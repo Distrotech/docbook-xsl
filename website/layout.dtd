@@ -50,9 +50,10 @@
 	filename	CDATA	#IMPLIED
 >
 
-<!ELEMENT tocentry (tocentry*)>
+<!ELEMENT tocentry ((title|titleabbrev|summary)*, tocentry*)>
 <!ATTLIST tocentry
-	page		CDATA	#REQUIRED
+	page		CDATA	#IMPLIED
+	href		CDATA	#IMPLIED
 	dir		CDATA	#IMPLIED
 	filename	CDATA	#IMPLIED
 	tocskip		(0|1)	"0"
@@ -64,6 +65,12 @@
 	dir		CDATA	#IMPLIED
 	filename	CDATA	#IMPLIED
 >
+
+<!ELEMENT title ANY>
+
+<!ELEMENT titleabbrev ANY>
+
+<!ELEMENT summary (#PCDATA)*>
 
 <!-- End of layout.dtd V2.0b1 ............................................. -->
 <!-- ...................................................................... -->

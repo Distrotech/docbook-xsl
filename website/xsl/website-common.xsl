@@ -557,6 +557,7 @@ node.</para>
 <!-- ==================================================================== -->
 
 <xsl:template name="link.to.page">
+  <xsl:param name="href" select="''"/>
   <xsl:param name="page" select="ancestor-or-self::tocentry"/>
   <xsl:param name="linktext" select="'???'"/>
   <xsl:param name="relpath">
@@ -576,7 +577,19 @@ node.</para>
     </xsl:choose>
   </xsl:variable>
 
-  <a href="{$relpath}{$dir}{$filename-prefix}{$page/@filename}">
+  <xsl:variable name="html.href">
+    <xsl:choose>
+      <xsl:when test="$href != ''">
+        <xsl:value-of select="$href"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat($relpath,$dir,$filename-prefix)"/>
+        <xsl:value-of select="$page/@filename"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <a href="{$html.href}">
     <xsl:if test="summary">
       <xsl:attribute name="title">
         <xsl:value-of select="summary"/>
