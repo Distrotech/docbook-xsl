@@ -32,6 +32,9 @@
     <tocentry page="test2.xml" filename="formtest.html"/>
     <tocentry page="test3.xml" filename="test3.html"/>
     <tocentry page="rddl.xml" filename="rddl.html"/>
+    <tocentry id="nwalsh.com" href="http://nwalsh.com/">
+      <title>nwalsh.com</title>
+    </tocentry>
   </toc>
 
   <toc page="test1.xml" filename="test1.html">
