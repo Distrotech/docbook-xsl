@@ -220,7 +220,13 @@
 
     <xsl:choose>
       <xsl:when test="$nav.graphics">
-        <img src="{$preceding-icon}" alt="{$preceding-text}"/>
+        <xsl:call-template name="link.to.page">
+          <xsl:with-param name="page" select="$target"/>
+          <xsl:with-param name="relpath" select="$relpath"/>
+          <xsl:with-param name="linktext">
+            <img src="{$preceding-icon}" alt="{$preceding-text}" border="0"/>
+          </xsl:with-param>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$preceding-text"/>
