@@ -1,3 +1,0 @@
-<!ENTITY setindex.synopsis.gen SYSTEM "synopsis.e.gen">
-<!ENTITY setindex.children.gen SYSTEM "children.gen">
-<!ENTITY setindex.parents.gen SYSTEM "parents.gen">
