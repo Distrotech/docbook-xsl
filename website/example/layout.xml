@@ -22,7 +22,13 @@
 
   <toc page="website.xml" filename="index.html">
     <tocentry page="wslayout.xml" filename="layout.html"/>
+    <tocentry page="olink.xml" filename="linking.html"/>
     <tocentry page="custom.xml" filename="custom.html"/>
+    <tocentry page="building.xml" filename="building.html" tocskip='1'>
+      <tocentry page="build-make.xml" filename="buildmake.html"/>
+      <tocentry page="build-ext.xml" filename="buildext.html"/>
+      <tocentry page="build-textonly.xml" filename="textonly.html"/>
+    </tocentry>
     <tocentry page="test2.xml" filename="formtest.html"/>
     <tocentry page="test3.xml" filename="test3.html"/>
   </toc>

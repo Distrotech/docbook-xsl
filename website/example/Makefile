@@ -1,27 +1,33 @@
 PROC=saxon
-PROCOPT=
+PROCOPT=-q
 TABSTYLE=../xsl/tabular.xsl
 WEBSTYLE=../xsl/website.xsl
 TABCHUNK=../xsl/chunk-tabular.xsl
 WEBCHUNK=../xsl/chunk-website.xsl
 DESTPATH=.
 TEXTONLY=0
-
-ifeq ($(TEXTONLY),0)
-STYLESHEET=$(TABSTYLE)
-include depends.tabular
-else
-STYLESHEET=$(WEBSTYLE)
-include depends.textonly
-endif
+USETIDY=1
 
 .PHONY : clean
 
-all: website
+all:
+	make website
+	make TEXTONLY=1 website
+
+ifeq ($(TEXTONLY),0)
+STYLESHEET=$(TABSTYLE)
+STYLEOPT=
+include depends.tabular
+else
+STYLESHEET=$(WEBSTYLE)
+STYLEOPT=filename-prefix=txt
+include depends.textonly
+endif
 
 autolayout.xml: layout.xml
 	xjparse $(filter-out autolayout.xml,$^)
 	$(PROC) $(PROCOPT) $< ../xsl/autolayout.xsl $@
+	make depends
 
 chunk-tabular: autolayout.xml
 	$(PROC) $(PROCOPT) layout.xml $(TABCHUNK) - output-root=$(DESTPATH)
@@ -31,7 +37,10 @@ chunk-website: autolayout.xml
 
 %.html: autolayout.xml
 	xjparse $(filter-out autolayout.xml,$^)
-	$(PROC) $(PROCOPT) $(filter-out autolayout.xml,$^) $(STYLESHEET) $@
+	$(PROC) $(PROCOPT) $(filter-out autolayout.xml,$^) $(STYLESHEET) $@ $(STYLEOPT)
+ifeq ($(USETIDY),1)
+	-tidy -iq -latin1 -mn $@
+endif
 
 depends: autolayout.xml
 	xjparse $<

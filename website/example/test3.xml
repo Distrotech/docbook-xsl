@@ -11,8 +11,8 @@
 your web pages. Use an xlink as follows:
 </para>
 
-<screen
-><![CDATA[<olink targetdocent="bookmark-entity" type="embed"/>]]></screen>
+<programlisting
+><![CDATA[<olink targetdocent="bookmark-entity" type="embed"/>]]></programlisting>
 
 <para>
 <olink targetdocent="bookmarks" type="embed"/>

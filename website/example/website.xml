@@ -9,13 +9,13 @@
 <config param="rcsdate" value="$Date$"/>
 <config param="footer" value="about.html" altval="About..."/>
 <head>
-<title>Welcome to Website2</title>
+<title>Welcome to Website</title>
 <summary>Introduction</summary>
 <keywords>Norman Walsh, DSSSL, SGML, XML, DocBook, Website</keywords>
 </head>
 
 <para> This small, somewhat contrived website demonstrates the
-Website2 document type. Website2 provides a system for building static
+Website document type. Website provides a system for building static
 Websites from XML content.</para>
 
 <para>A <ulink url="txtindex.html">text-only</ulink> version is also
@@ -27,11 +27,11 @@ the same sources.</para>
 <section><title>What is a Website?</title>
 
 <para>A website is a collection of pages organized, for the purposes of
-navigation, into one or more hierarchies. In Website2, each page is a
-separate XML document authored according to the Website2 DTD, a customization
+navigation, into one or more hierarchies. In Website, each page is a
+separate XML document authored according to the Website DTD, a customization
 of <ulink url="http://www.oasis-open.org/docbook/">DocBook</ulink>.</para>
 
-<para>Website2 imposes the following additional constraints:</para>
+<para>Website imposes the following additional constraints:</para>
 
 <itemizedlist>
 <listitem><para>Each <sgmltag>webpage</sgmltag> must have an ID and
@@ -47,7 +47,7 @@ that don't appear in the navigational hierarchy at all.</para>
 
 <section><title>Requirements</title>
 
-<para>In order to build a website with Website2, you must have:</para>
+<para>In order to build a website with Website, you must have:</para>
 
 <itemizedlist>
 <listitem><para>The
@@ -59,7 +59,7 @@ V4.1.2</ulink> DTD.
 <listitem><para>The <ulink url="http://nwalsh.com/docbook/xsl/">DocBook
 XSL Stylesheets</ulink>.</para>
 </listitem>
-<listitem><para>The Website2 DTD and stylesheets.
+<listitem><para>The Website DTD and stylesheets.
 </para></listitem>
 </itemizedlist>
 
@@ -92,15 +92,15 @@ with different navigational hierarchies.
 </para></listitem>
 </orderedlist>
 
-<para>Website2 overcomes all of these difficulties.</para>
+<para>Website overcomes all of these difficulties.</para>
 
 <para>In fairness, the old style had some advantages:</para>
 
 <orderedlist>
 <listitem><para>There was only a single source document to maintain.
 </para></listitem>
-<listitem><para>Navigation was derived from the structure of the source
-document.
+<listitem><para>Navigation was derived automatically from the structure
+of the source document.
 </para></listitem>
 <listitem><para>Link checking was cheap and easy.
 </para></listitem>
@@ -112,7 +112,7 @@ document.
 <variablelist>
 <varlistentry><term>20 Mar 2001</term>
 <listitem>
-<para>Reworked using the Website2 paradigm.</para>
+<para>Reworked using the Website paradigm.</para>
 </listitem>
 </varlistentry>
 </variablelist>

@@ -11,7 +11,7 @@
 <para>You can customize the stylesheets for your particular website
 by making a driver like this:</para>
 
-<screen><![CDATA[
+<programlisting><![CDATA[
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'>
@@ -20,7 +20,7 @@ by making a driver like this:</para>
 
 <!-- put your customizations here -->
 
-</xsl:stylesheet>]]></screen>
+</xsl:stylesheet>]]></programlisting>
 
 <para>If you use the tabular style, you'll discover that the
 Website home page has two ugly features: "home.navhead" and
@@ -30,7 +30,7 @@ Website home page has two ugly features: "home.navhead" and
 that puts the text (or whatever) you want on the homepage in those
 locations. Your stylesheet should look like this:</para>
 
-<screen><![CDATA[
+<programlisting><![CDATA[
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'>
@@ -49,6 +49,6 @@ locations. Your stylesheet should look like this:</para>
 </xsl:template>
 
 <!-- put your customizations here -->
-</xsl:stylesheet>]]></screen>
+</xsl:stylesheet>]]></programlisting>
 
 </webpage>
