@@ -103,6 +103,7 @@ else
 	find . -type f -name ".*.pyc"  | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "#*"  | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name ".#*"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "prj.el"  | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name ".cvsignore"  | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "Makefile*"   | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "README.CVS"   | cut -c3- >> $(TMP)/tar.exclude
