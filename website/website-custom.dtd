@@ -96,7 +96,8 @@
 
 <!ELEMENT meta EMPTY>
 <!ATTLIST meta
-	name	CDATA	#REQUIRED
+	http-equiv	CDATA	#IMPLIED
+	name	CDATA	#IMPLIED
 	content	CDATA	#REQUIRED
 >
 

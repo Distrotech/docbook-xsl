@@ -57,7 +57,14 @@
 </xsl:template>
 
 <xsl:template match="meta" mode="head.mode">
-  <meta name="{@name}" content="{@content}"/>
+  <xsl:choose>
+    <xsl:when test="@http-equiv">
+      <meta name="{@http-equiv}" content="{@content}"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <meta name="{@name}" content="{@content}"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="script" mode="head.mode">
