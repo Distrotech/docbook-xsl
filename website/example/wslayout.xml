@@ -1,0 +1,108 @@
+<!DOCTYPE webpage SYSTEM "../website.dtd">
+<webpage id="layout">
+<config param="desc" value="Navigation Layout"/>
+<config param="rcsdate" value="$Date$"/>
+<head>
+<title>Site Layout</title>
+<summary>Site Navigation Layout Setup</summary>
+</head>
+
+<para>Breaking all of the web pages into separate XML documents
+introduces a significant problem: the hierarchical structure of the website
+is no longer manifest in the source document.</para>
+
+<para>In order for the stylesheets to construct the navigation system,
+you must describe the desired hierarchy explicitly in a
+<glossterm>layout</glossterm> file. The layout file, which must
+conform to <filename>layout.dtd</filename>, identifies all of the
+pages in the website and defines how they fit into the navigational
+hierarchy. Here is simple layout file:
+</para>
+
+<programlisting><![CDATA[<?xml version="1.0"?>
+<layout>
+  <toc page="website.xml" filename="index.html">
+    <tocentry page="doc1.xml" filename="page1.html"/>
+    <tocentry page="doc2.xml" filename="page2.html"/>
+  </toc>
+</layout>]]></programlisting>
+
+<para>This website has three pages: <filename>index.html</filename>,
+generated from <filename>website.xml</filename>; 
+<filename>page1.html</filename>,
+generated from <filename>doc1.xml</filename>; and
+<filename>page2.html</filename>,
+generated from <filename>doc2.xml</filename>.</para>
+
+<para>Here's a slightly more complicated example:</para>
+
+<programlisting><![CDATA[<?xml version="1.0"?>
+<layout>
+  <toc page="website.xml" filename="index.html">
+    <tocentry page="doc1.xml" dir="subdir" filename="index.html">
+      <tocentry page="doc1.1.xml" filename="page2.html"/>
+      <tocentry page="doc1.2.xml" filename="page3.html"/>
+    </tocentry>
+    <tocentry page="doc2.xml" filename="page2.html"/>
+  </toc>
+</layout>]]></programlisting>
+
+<para>In this example, the HTML files generated from
+<filename>doc1.xml</filename>,
+<filename>doc1.1.xml</filename>, and
+<filename>doc1.2.xml</filename>
+will appear in the
+directory <filename>subdir</filename>.</para>
+
+<para>In brief, the hierarchy of <sgmltag>tocentry</sgmltag> elements
+in a <sgmltag>toc</sgmltag> describes the logical navigation hierarchy
+of the website. Each entry must identify the XML document (containing
+a <sgmltag class="starttag">webpage</sgmltag>) that it represents and
+may identify the directory and filename where the file will appear in
+the HTML website.</para>
+
+<para>By default, directories are inherited (hence
+<filename>page2.html</filename> and <filename>page3.html</filename>
+will appear in the <filename>subdir</filename> directory) which makes
+it easy to build a website that has similar logical and physical
+organization. It is not necessary for the logical and physical
+hierarchy of your website to be consistent; you can specify an absolute
+directory at any level and on any file by beginning the name with a
+slash.</para>
+
+<para>If a directory is not specified, the files will appear in the currently
+inherited directory (or in the root, if no directory is specified anywhere
+in the <sgmltag>tocentry</sgmltag> ancestry).</para>
+
+<para>If a filename is not specified, <filename>index.html</filename> will
+be used.</para>
+
+<warning>
+<para>It is possible to map two different XML documents to the same HTML
+filename. At present, the stylesheets do not detect this, but the result
+will be a broken website. Exercise caution.</para>
+</warning>
+
+<section><title>Global Parameters</title>
+
+<para>The layout file can also contain a number of global parameters:
+<sgmltag>config</sgmltag>,
+<sgmltag>script</sgmltag>,
+<sgmltag>style</sgmltag>, and
+<sgmltag>copyright</sgmltag>. For the most part, these elements behave
+as they do on individual pages, except that they apply to every page.
+</para>
+
+</section>
+
+<section><title>Multiple <sgmltag>toc</sgmltag>s</title>
+
+<para>If you put multiple <sgmltag>toc</sgmltag> elements in your
+layout file, the result will be completely separate navigational hierarchies.
+Note, however, that the restriction that a page can only appear once in
+a website prevents a page from appearing in more than one hierarchy.
+</para>
+
+</section>
+
+</webpage>

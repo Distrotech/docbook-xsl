@@ -1,6 +1,7 @@
+<!DOCTYPE webpage SYSTEM "../website.dtd">
 <webpage id="test2">
 <config param="rcsdate" value="$Date$"/>
-<config param="filename" value="formtest.html"/><head>
+<head>
 <title>Form Test</title>
 <summary>Form Test Page</summary>
 </head>

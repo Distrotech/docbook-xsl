@@ -1,26 +1,39 @@
 PROC=saxon
 PROCOPT=
+TABSTYLE=../xsl/tabular.xsl
+WEBSTYLE=../xsl/website.xsl
+TABCHUNK=../xsl/chunk-tabular.xsl
+WEBCHUNK=../xsl/chunk-website.xsl
+DESTPATH=.
+TEXTONLY=0
+
+ifeq ($(TEXTONLY),0)
+STYLESHEET=$(TABSTYLE)
+include depends.tabular
+else
+STYLESHEET=$(WEBSTYLE)
+include depends.textonly
+endif
 
 .PHONY : clean
 
-all: test
+all: website
 
-test:
-	xjparse website.xml
-ifeq ($(PROC),xt)
-	$(PROC) $(PROCOPT) website.xml ../xsl/xtchunk-website.xsl
-else
-	$(PROC) $(PROCOPT) website.xml ../xsl/chunk-website.xsl
-endif
+autolayout.xml: layout.xml
+	xjparse $(filter-out autolayout.xml,$^)
+	$(PROC) $(PROCOPT) $< ../xsl/autolayout.xsl $@
 
-tabular:
-	xnsgmls -sv -c /share/doctypes/catalog website.xml
-ifeq ($(PROC),xt)
-	$(PROC) $(PROCOPT) website.xml ../xsl/xtchunk-tabular.xsl
-else
-	$(PROC) $(PROCOPT) website.xml ../xsl/chunk-tabular.xsl
-endif
+chunk-tabular: autolayout.xml
+	$(PROC) $(PROCOPT) layout.xml $(TABCHUNK) - output-root=$(DESTPATH)
 
-clean:
-	rm -f *.html subdir/*.html
+chunk-website: autolayout.xml
+	$(PROC) $(PROCOPT) layout.xml $(WEBCHUNK) - output-root=$(DESTPATH)
 
+%.html: autolayout.xml
+	xjparse $(filter-out autolayout.xml,$^)
+	$(PROC) $(PROCOPT) $(filter-out autolayout.xml,$^) $(STYLESHEET) $@
+
+depends: autolayout.xml
+	xjparse $<
+	$(PROC) $(PROCOPT) $< ../xsl/makefile-dep.xsl depends.tabular
+	$(PROC) $(PROCOPT) $< ../xsl/makefile-dep.xsl depends.textonly prefix=txt
