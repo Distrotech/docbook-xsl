@@ -202,6 +202,11 @@
 <!ENTITY % inlineobj.char.class
 		"inlinemediaobject|inlineequation %local.inlineobj.char.class;">
 
+<!-- ...................................................................... -->
+<!-- Entities for content models .......................................... -->
+
+<!ENTITY % formalobject.title.content "title, titleabbrev?">
+
 <!-- Redeclaration placeholder ............................................ -->
 
 <!-- For redeclaring entities that are declared after this point while
@@ -494,11 +499,6 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 		%local.docinfo.char.mix;">
 <!--ENTITY % bibliocomponent.mix (see Bibliographic section, below)-->
 <!--ENTITY % person.ident.mix (see Bibliographic section, below)-->
-
-<!-- ...................................................................... -->
-<!-- Entities for content models .......................................... -->
-
-<!ENTITY % formalobject.title.content "title, titleabbrev?">
 
 <!-- ...................................................................... -->
 <!-- Entities for attributes and attribute components ..................... -->
@@ -2527,7 +2527,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 >
 <!--end of programlistingco.attlist-->]]>
 <!-- CalloutList (defined above in Lists)-->
-<!--end of informalexample.module-->]]>
+<!--end of programlistingco.module-->]]>
 
 <!ENTITY % areaspec.content.module "INCLUDE">
 <![%areaspec.content.module;[
@@ -5578,7 +5578,7 @@ OtherCredit. -->
 
 <!ENTITY % action.element "INCLUDE">
 <![%action.element;[
-<!ELEMENT action %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT action %hh; (%cptr.char.mix;)*>
 <!--end of action.element-->]]>
 
 <!ENTITY % action.attlist "INCLUDE">
@@ -5712,7 +5712,7 @@ OtherCredit. -->
 
 <!ENTITY % database.element "INCLUDE">
 <![%database.element;[
-<!ELEMENT database %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT database %hh; (%cptr.char.mix;)*>
 <!--end of database.element-->]]>
 
 <!-- Class: Type of database the element names; no default -->
@@ -5844,7 +5844,7 @@ OtherCredit. -->
 
 <!ENTITY % filename.element "INCLUDE">
 <![%filename.element;[
-<!ELEMENT filename %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT filename %hh; (%cptr.char.mix;)*>
 <!--end of filename.element-->]]>
 
 <!-- Class: Type of filename the element names; no default -->
@@ -6024,7 +6024,7 @@ OtherCredit. -->
 
 <!ENTITY % hardware.element "INCLUDE">
 <![%hardware.element;[
-<!ELEMENT hardware %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT hardware %hh; (%cptr.char.mix;)*>
 <!--end of hardware.element-->]]>
 
 <!ENTITY % hardware.attlist "INCLUDE">
@@ -6045,7 +6045,7 @@ OtherCredit. -->
 
 <!ENTITY % interface.element "INCLUDE">
 <![%interface.element;[
-<!ELEMENT interface %hh; (%smallcptr.char.mix;|accel)*>
+<!ELEMENT interface %hh; (%cptr.char.mix;|accel)*>
 <!--end of interface.element-->]]>
 
 <!-- Class: Type of the Interface item; no default -->
@@ -6069,7 +6069,7 @@ OtherCredit. -->
 
 <!ENTITY % keycap.element "INCLUDE">
 <![%keycap.element;[
-<!ELEMENT keycap %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT keycap %hh; (%cptr.char.mix;)*>
 <!--end of keycap.element-->]]>
 
 <!ENTITY % keycap.attlist "INCLUDE">
@@ -6370,7 +6370,7 @@ OtherCredit. -->
 
 <!ENTITY % option.element "INCLUDE">
 <![%option.element;[
-<!ELEMENT option %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT option %hh; (%cptr.char.mix;)*>
 <!--end of option.element-->]]>
 
 <!ENTITY % option.attlist "INCLUDE">
@@ -6410,7 +6410,7 @@ OtherCredit. -->
 
 <!ENTITY % parameter.element "INCLUDE">
 <![%parameter.element;[
-<!ELEMENT parameter %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT parameter %hh; (%cptr.char.mix;)*>
 <!--end of parameter.element-->]]>
 
 <!-- Class: Type of the Parameter; no default -->
@@ -6458,7 +6458,7 @@ OtherCredit. -->
 
 <!ENTITY % property.element "INCLUDE">
 <![%property.element;[
-<!ELEMENT property %hh; (%smallcptr.char.mix;)*>
+<!ELEMENT property %hh; (%cptr.char.mix;)*>
 <!--end of property.element-->]]>
 
 <!ENTITY % property.attlist "INCLUDE">
@@ -6631,7 +6631,7 @@ OtherCredit. -->
 
 <!ENTITY % systemitem.element "INCLUDE">
 <![%systemitem.element;[
-<!ELEMENT systemitem %hh; (%smallcptr.char.mix; | acronym)*>
+<!ELEMENT systemitem %hh; (%cptr.char.mix; | acronym)*>
 <!--end of systemitem.element-->]]>
 
 <!-- Class: Type of system item the element names; no default -->
