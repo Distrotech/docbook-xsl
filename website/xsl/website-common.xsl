@@ -325,6 +325,7 @@ node.</para>
 
 <xsl:template match="holder" mode="footer.mode">
   <xsl:apply-templates/>
+  <xsl:if test="position() != last()">, </xsl:if>
 </xsl:template>
 
 <xsl:template match="holder[@role]" mode="footer.mode">
