@@ -34,7 +34,7 @@
     </xsl:message>
   </xsl:if>
 
-  <xsl:variable name="page" select="document(@page)"/>
+  <xsl:variable name="page" select="document(@page,.)"/>
 
   <toc>
     <xsl:call-template name="tocentry"/>

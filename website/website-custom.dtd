@@ -39,12 +39,26 @@
 <!-- allow webtoc to occur anywhere a para can occur -->
 <!ENTITY % local.para.class "|webtoc">
 
+<!ENTITY % namespaces.mod SYSTEM "namespaces.mod">
+%namespaces.mod;
+
+<!-- RDDL? -->
+<!ENTITY % allowrddl "INCLUDE">
+<![%allowrddl;[
+<!ENTITY % rddl.elements "|%rddl-resource.element;">
+<!ENTITY % local.section.attrib
+	"rddl	IDREF	#IMPLIED"
+>
+]]>
+<!ENTITY % rddl.elements "">
+
 <!-- Forms? -->
 <!ENTITY % allowforms "INCLUDE">
 <![%allowforms;[
-<!ENTITY % local.para.char.mix "|html:input|html:button|html:label|html:select|html:textarea">
-<!ENTITY % local.divcomponent.mix "|html:form">
+<!ENTITY % local.para.char.mix "|%html-input.element;|%html-button.element;|%html-label.element;|%html-select.element;|%html-textarea.element; %rddl.elements;">
+<!ENTITY % local.divcomponent.mix "|%html-form.element;">
 ]]>
+<!ENTITY % local.para.char.mix "%rddl.elements;">
 
 <!-- the XML notation; this really should go in DocBook -->
 <!NOTATION XML SYSTEM "http://www.w3.org/TR/REC-xml">
@@ -77,7 +91,8 @@
 
 <!ELEMENT head (title, titleabbrev?, subtitle?, summary?, keywords?,
                (copyright | author | edition
-                | meta | script | style | abstract | revhistory)*)>
+                | meta | script | style | abstract | revhistory
+                %rddl.elements;)*)>
 
 <!ELEMENT meta EMPTY>
 <!ATTLIST meta
@@ -109,13 +124,20 @@
 
 <!ELEMENT webpage (%webpage.mix;)>
 <!ATTLIST webpage
-	xmlns:html	CDATA	#FIXED "http://www.w3.org/1999/xhtml"
-	navto	(yes|no)	"yes"
-	role	CDATA	#IMPLIED
-	id	ID	#REQUIRED
+	%html-xmlns;	CDATA	#FIXED %html-namespace;
+	%xlink-xmlns;	CDATA	#FIXED %xlink-namespace;
+	%rddl-xmlns;	CDATA	#FIXED %rddl-namespace;
+	navto		(yes|no)	"yes"
+	role		CDATA	#IMPLIED
+	id		ID	#REQUIRED
 >
 
 <!ELEMENT webtoc EMPTY>
+
+<![%allowrddl;[
+<!ENTITY % rddl.mod SYSTEM "rddl.mod">
+%rddl.mod;
+]]>
 
 <![%allowforms;[
 <!ENTITY % forms.mod SYSTEM "forms.mod">

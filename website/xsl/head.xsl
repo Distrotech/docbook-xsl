@@ -147,4 +147,9 @@
   <!--nop-->
 </xsl:template>
 
+<xsl:template match="rddl:*" mode="head.mode"
+              xmlns:rddl='http://www.rddl.org/'>
+  <!--nop-->
+</xsl:template>
+
 </xsl:stylesheet>

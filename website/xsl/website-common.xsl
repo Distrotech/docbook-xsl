@@ -419,6 +419,12 @@ node.</para>
 
 <!-- ==================================================================== -->
 
+<xsl:template match="@*" mode="copy">
+  <xsl:attribute name="{local-name(.)}">
+    <xsl:value-of select="."/>
+  </xsl:attribute>
+</xsl:template>
+
 <xsl:template match="html:*">
   <xsl:element name="{local-name(.)}" namespace="">
     <xsl:apply-templates select="@*" mode="copy"/>
@@ -426,10 +432,32 @@ node.</para>
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="@*" mode="copy">
-  <xsl:attribute name="{local-name(.)}">
-    <xsl:value-of select="."/>
-  </xsl:attribute>
+<!-- ==================================================================== -->
+
+<xsl:template match="rddl:*" xmlns:rddl='http://www.rddl.org/'>
+  <xsl:element name="{name(.)}">
+    <xsl:apply-templates select="@*" mode="copy"/>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="section[@rddl]" xmlns:rddl='http://www.rddl.org/'>
+  <xsl:variable name="rddl" select="id(@rddl)"/>
+  <xsl:choose>
+    <xsl:when test="local-name($rddl) != 'resource'">
+      <xsl:message>
+        <xsl:text>Warning: section rddl isn't an rddl:resource: </xsl:text>
+        <xsl:value-of select="@rddl"/>
+      </xsl:message>
+      <xsl:apply-imports/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:element name="{name($rddl)}">
+        <xsl:apply-templates select="$rddl/@*" mode="copy"/>
+        <xsl:apply-imports/>
+      </xsl:element>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ==================================================================== -->

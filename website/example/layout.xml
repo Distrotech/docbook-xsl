@@ -31,6 +31,7 @@
     </tocentry>
     <tocentry page="test2.xml" filename="formtest.html"/>
     <tocentry page="test3.xml" filename="test3.html"/>
+    <tocentry page="rddl.xml" filename="rddl.html"/>
   </toc>
 
   <toc page="test1.xml" filename="test1.html">
