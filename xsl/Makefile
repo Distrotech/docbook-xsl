@@ -22,7 +22,7 @@ PROJECT_HOST=docbook.sf.net
 PROJECT_BASE=/home/groups/d/do/docbook/htdocs/release/xsl
 PROJECT_USER:=`sed 's/^:.\+:\([^@]\+\)@.\+$$/\1/' CVS/Root`
 
-DIRS=common lib html fo extensions htmlhelp javahelp
+DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
 .PHONY : distrib clean doc xhtml
 
