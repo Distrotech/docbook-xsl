@@ -6,7 +6,9 @@ jars: saxon643.jar xalan25.jar
 
 saxon643.jar:
 	$(MAKE) -C saxon643/.classes
-	jar cf saxon643.jar `find saxon643/.classes/com -name "*.class" -print`
+	cd saxon643/.classes; jar cf saxon643.jar `find com -name "*.class" -print`
+	cd ../..
+	mv saxon643/.classes/saxon643.jar .
 	cp saxon643.jar saxon644.jar
 	cp saxon643.jar saxon65.jar
 	cp saxon643.jar saxon651.jar
@@ -15,7 +17,9 @@ saxon643.jar:
 
 xalan25.jar:
 	$(MAKE) -C xalan2/.classes
-	jar cf xalan25.jar `find xalan2/.classes/com -name "*.class" -print`
+	cd xalan2/.classes; jar cf xalan25.jar `find com -name "*.class" -print`
+	cd ../..
+	mv xalan2/.classes/xalan25.jar .
 
 clean:
 	$(MAKE) -C saxon643/.classes clean
