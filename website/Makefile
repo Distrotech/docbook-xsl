@@ -2,7 +2,7 @@
 
 all: website.dtd
 
-website.dtd: website-custom.dtd
+website.dtd: website-custom.dtd forms.mod
 	perl ../cvstools/flatten $< > $@
 
 distrib:
