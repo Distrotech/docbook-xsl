@@ -1,6 +1,6 @@
 <!SGML  "ISO 8879:1986"
   -- ...................................................................... --
-  -- DocBook SGML declaration V4.2 ........................................ --
+  -- DocBook SGML declaration V2.3 ........................................ --
   -- file docbook.dcl ..................................................... --
 
 CHARSET
@@ -16,9 +16,9 @@ CHARSET
                    32  95    32
                   127   1   UNUSED
 
-	BASESET
+	BASESET 
   "ISO Registration Number 100//CHARSET ECMA-94 Right Part of Latin Alphabet Nr. 1//ESC 2/13 4/1"
-	DESCSET
+	DESCSET  
                   128  32   UNUSED
                   160  96   32
 
@@ -34,7 +34,7 @@ CAPACITY SGMLREF
 	GRPCAP    1000000
 	IDCAP    32000000
 	IDREFCAP 32000000
-
+  
 SCOPE DOCUMENT
 
 SYNTAX
@@ -61,8 +61,8 @@ SYNTAX
 	NAMING
 		LCNMSTRT ""
 		UCNMSTRT ""
-		LCNMCHAR ".-_"
-		UCNMCHAR ".-_"
+		LCNMCHAR ".-"
+		UCNMCHAR ".-"
 		NAMECASE
 			GENERAL YES
 			ENTITY  NO
@@ -87,7 +87,7 @@ FEATURES
                   DATATAG  NO
                   OMITTAG  NO
                   RANK     NO
-                  SHORTTAG YES
+                  SHORTTAG YES 
 
          LINK
                   SIMPLE   NO
@@ -101,6 +101,6 @@ FEATURES
 
 APPINFO NONE
 
-  -- End of DocBook SGML declaration V4.2 ................................. --
+  -- End of DocBook SGML declaration V2.3 ................................. --
   -- ...................................................................... --
 >
