@@ -1,0 +1,547 @@
+# This file is part of DocBook NG: The "Bourbon" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/docbook-ng"
+default namespace = "http://docbook.org/docbook-ng"
+
+start |= db.setindex
+
+ubiq.inlines |= db.indexterm
+indexing.inlines |= db.indexterm
+blocks.nopara |= db.indexterm
+navigation.components |= db.index
+setindex.components |= db.setindex
+
+info.elements |= db.itermset
+
+significance.attribute = attribute significance { "normal" | "preferred" }
+zone.attribute = attribute zone { xsd:IDREFS }
+pagenum.attribute = attribute pagenum { text }
+scope.attribute = attribute scope { "all" | "global" | "local" }
+
+sortas.attribute = attribute sortas { text }
+
+# ======================================================================
+
+[
+   db:refname [ "itermset" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.itermset.attributes = empty
+
+   itermset.role.attribute = attribute role { text }
+
+   itermset.attlist =
+      itermset.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & local.itermset.attributes
+
+   db.itermset =
+      element itermset {
+         itermset.attlist,
+         indexterm.singular+
+      }
+}
+
+# ======================================================================
+
+indexterm.contentmodel =
+   db.primary?,
+   ((db.secondary,
+      ((db.tertiary, (db.see | db.seealso+)?)
+       | db.see
+       | db.seealso+)?)
+    | db.see
+    | db.seealso+)?
+
+# ======================================================================
+
+[
+   db:refname [ "indexterm" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.indexterm.singular.attributes = empty
+
+   indexterm.singular.role.attribute = attribute role { text }
+
+   indexterm.singular.attlist =
+      indexterm.singular.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & significance.attribute?
+    & zone.attribute?
+    & pagenum.attribute?
+    & scope.attribute?
+    & attribute class { "singular" }?
+    & local.indexterm.singular.attributes
+
+   indexterm.singular =
+      element indexterm {
+         indexterm.singular.attlist,
+         indexterm.contentmodel
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "indexterm" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.indexterm.startofrange.attributes = empty
+
+   indexterm.startofrange.role.attribute = attribute role { text }
+
+   indexterm.startofrange.attlist =
+      indexterm.startofrange.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & significance.attribute?
+    & zone.attribute?
+    & pagenum.attribute?
+    & scope.attribute?
+    & attribute class { "startofrange" }
+    & local.indexterm.startofrange.attributes
+
+   indexterm.startofrange =
+      element indexterm {
+         indexterm.startofrange.attlist,
+         indexterm.contentmodel
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "indexterm" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.indexterm.endofrange.attributes = empty
+
+   indexterm.endofrange.role.attribute = attribute role { text }
+
+   indexterm.endofrange.attlist =
+      indexterm.endofrange.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & attribute class { "endofrange" }
+    & attribute startref { xsd:IDREF }
+    & local.indexterm.endofrange.attributes
+
+   indexterm.endofrange =
+      element indexterm {
+         indexterm.endofrange.attlist,
+         empty
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "indexterm" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.indexterm = (indexterm.singular|indexterm.startofrange|indexterm.endofrange)
+
+}
+
+# ======================================================================
+
+[
+   db:refname [ "primary" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.primary.attributes = empty
+
+   primary.role.attribute = attribute role { text }
+
+   primary.attlist =
+      primary.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & sortas.attribute?
+    & local.primary.attributes
+
+   db.primary =
+      element primary {
+         primary.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "secondary" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.secondary.attributes = empty
+
+   secondary.role.attribute = attribute role { text }
+
+   secondary.attlist =
+      secondary.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & sortas.attribute?
+    & local.secondary.attributes
+
+   db.secondary =
+      element secondary {
+         secondary.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "tertiary" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.tertiary.attributes = empty
+
+   tertiary.role.attribute = attribute role { text }
+
+   tertiary.attlist =
+      tertiary.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & sortas.attribute?
+    & local.tertiary.attributes
+
+   db.tertiary =
+      element tertiary {
+         tertiary.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "see" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.see.attributes = empty
+
+   see.role.attribute = attribute role { text }
+
+   see.attlist =
+      see.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & local.see.attributes
+
+   db.see =
+      element see {
+         see.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "seealso" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.seealso.attributes = empty
+
+   seealso.role.attribute = attribute role { text }
+
+   seealso.attlist =
+      seealso.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & local.seealso.attributes
+
+   db.seealso =
+      element seealso {
+         seealso.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "index" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.index.attributes = empty
+
+   index.status.attribute = status.attribute
+
+   index.role.attribute = attribute role { text }
+
+   index.attlist =
+      index.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & label.attribute?
+    & index.status.attribute?
+    & local.index.attributes
+
+   index.info = docbook.info
+
+   db.index =
+      element index {
+         index.attlist,
+         index.info,
+         blocks*,
+         (db.indexdiv* | db.indexentry* | db.segmentedlist)
+      }
+}
+
+#  ======================================================================
+
+[
+   db:refname [ "setindex" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.setindex.attributes = empty
+
+   setindex.status.attribute = status.attribute
+
+   setindex.role.attribute = attribute role { text }
+
+   setindex.attlist =
+      setindex.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & label.attribute?
+    & setindex.status.attribute?
+    & local.setindex.attributes
+
+   setindex.info = docbook.info
+
+   db.setindex =
+      element setindex {
+         setindex.attlist,
+         setindex.info,
+         blocks*,
+         (db.indexdiv* | db.indexentry*)
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "indexdiv" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.indexdiv.attributes = empty
+
+   indexdiv.status.attribute = status.attribute
+
+   indexdiv.role.attribute = attribute role { text }
+
+   indexdiv.attlist =
+      indexdiv.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & label.attribute?
+    & indexdiv.status.attribute?
+    & local.indexdiv.attributes
+
+   indexdiv.info = docbook.info.titlereq
+
+   db.indexdiv =
+      element indexdiv {
+         indexdiv.attlist,
+         indexdiv.info,
+         blocks*,
+         (db.indexentry+|db.segmentedlist)
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "indexentry" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.indexentry.attributes = empty
+
+   indexentry.role.attribute = attribute role { text }
+
+   indexentry.attlist =
+      indexentry.role.attribute?
+    & common.attributes
+    & common.linking.attributes
+    & local.indexentry.attributes
+
+   db.indexentry =
+      element indexentry {
+         indexentry.attlist,
+         db.primaryie,
+         (db.seeie | db.seealsoie)*,
+         (db.secondaryie, (db.seeie | db.seealsoie | db.tertiaryie)*)*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "primaryie" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.primaryie.attributes = empty
+
+   primaryie.role.attribute = attribute role { text }
+
+   primaryie.attlist =
+      primaryie.role.attribute?
+    & common.attributes
+    & linkends.attribute?
+    & local.primaryie.attributes
+
+   db.primaryie =
+      element primaryie {
+         primaryie.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "secondaryie" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.secondaryie.attributes = empty
+
+   secondaryie.role.attribute = attribute role { text }
+
+   secondaryie.attlist =
+      secondaryie.role.attribute?
+    & common.attributes
+    & linkends.attribute?
+    & local.secondaryie.attributes
+
+   db.secondaryie =
+      element secondaryie {
+         secondaryie.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "tertiaryie" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.tertiaryie.attributes = empty
+
+   tertiaryie.role.attribute = attribute role { text }
+
+   tertiaryie.attlist =
+      tertiaryie.role.attribute?
+    & common.attributes
+    & linkends.attribute?
+    & local.tertiaryie.attributes
+
+   db.tertiaryie =
+      element tertiaryie {
+         tertiaryie.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "seeie" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.seeie.attributes = empty
+
+   seeie.role.attribute = attribute role { text }
+
+   seeie.attlist =
+      seeie.role.attribute?
+    & common.attributes
+    & linkend.attribute?
+    & local.seeie.attributes
+
+   db.seeie =
+      element seeie {
+         seeie.attlist,
+         inlines*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "seealsoie" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   local.seealsoie.attributes = empty
+
+   seealsoie.role.attribute = attribute role { text }
+
+   seealsoie.attlist =
+      seealsoie.role.attribute?
+    & common.attributes
+    & linkends.attribute?
+    & local.seealsoie.attributes
+
+   db.seealsoie =
+      element seealsoie {
+         seealsoie.attlist,
+         inlines*
+      }
+}
