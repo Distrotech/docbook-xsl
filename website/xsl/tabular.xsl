@@ -64,6 +64,10 @@
 <xsl:text>Upper-right</xsl:text>
 </xsl:template>
 
+<xsl:template name="home.navhead.separator">
+  <hr/>
+</xsl:template>
+
 <xsl:template match="webpage">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
@@ -85,7 +89,7 @@
   <html>
     <xsl:apply-templates select="head" mode="head.mode"/>
     <xsl:apply-templates select="config" mode="head.mode"/>
-    <body>
+    <body xsl:use-attribute-sets="body.attributes">
 
       <div id="{$id}" class="{name(.)}">
         <a name="{$id}"/>
@@ -135,7 +139,7 @@
                     </td>
                   </tr>
                 </table>
-                <hr/>
+                <xsl:call-template name="home.navhead.separator"/>
               </xsl:if>
 
               <xsl:if test="$autolayout/autolayout/toc[1]/@id != $id
