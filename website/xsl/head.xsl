@@ -5,7 +5,7 @@
 <xsl:template match="head" mode="head.mode">
   <xsl:variable name="nodes" select="*"/>
   <head>
-    <meta name="generator" content="Website XSL Stylesheet V{$WSVERSION}"/>
+    <meta name="generator" content="Website XSL Stylesheet V{$VERSION}"/>
     <xsl:if test="$html.stylesheet != ''">
       <link rel="stylesheet" href="{$html.stylesheet}" type="text/css">
 	<xsl:if test="$html.stylesheet.type != ''">
