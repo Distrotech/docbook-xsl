@@ -63,3 +63,5 @@ zh_tw.xml: ../../gentext/locale/zh_tw.xml $(GENSTYLE)
 
 clean:
 	rm -f *.ent *.xml
+
+realclean: clean
