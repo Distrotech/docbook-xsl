@@ -1,3 +1,0 @@
-<!ENTITY partinfo.synopsis.gen SYSTEM "synopsis.u.gen">
-<!ENTITY partinfo.children.gen SYSTEM "children.gen">
-<!ENTITY partinfo.parents.gen SYSTEM "parents.gen">
