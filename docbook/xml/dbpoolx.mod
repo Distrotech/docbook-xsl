@@ -5862,7 +5862,8 @@ OtherCredit. -->
                                 |libraryfile
                                 |directory
                                 |extension
-				|symlink)       #IMPLIED
+				|symlink
+				|partition)	#IMPLIED
 		path		CDATA		#IMPLIED
 		%moreinfo.attrib;
 		%common.attrib;
@@ -6643,6 +6644,7 @@ OtherCredit. -->
 <!ATTLIST systemitem
 		class	(groupname
                         |library
+                        |filesystem
 			|macro
 			|osname
 			|register
