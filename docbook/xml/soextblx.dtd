@@ -194,7 +194,7 @@ in useability, presentation, and possible structure information degradation.
                         pgwide          %yesorno;       #IMPLIED "
 -->
 
-<!ELEMENT %tbl.table.name; (%tbl.table.mdl;)>
+<!ELEMENT %tbl.table.name; %hh; (%tbl.table.mdl;)>
 
 <!ATTLIST %tbl.table.name;
         frame           (top|bottom|topbot|all|sides|none)      #IMPLIED
@@ -211,7 +211,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.tgroup.att    ""
 -->
 
-<!ELEMENT tgroup (%tbl.tgroup.mdl;) >
+<!ELEMENT tgroup %ho; (%tbl.tgroup.mdl;) >
 
 <!ATTLIST tgroup
         cols            NMTOKEN                                 #REQUIRED
@@ -227,7 +227,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.colspec.att   ""
 -->
 
-<!ELEMENT colspec EMPTY >
+<!ELEMENT colspec %ho; EMPTY >
 
 <!ATTLIST colspec
         colnum          NMTOKEN                                 #IMPLIED
@@ -247,7 +247,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.thead.att      ""
 -->
 
-<!ELEMENT thead (row+)>
+<!ELEMENT thead %ho; (row+)>
 
 <!ATTLIST thead
         valign          (top|middle|bottom)                     #IMPLIED
@@ -260,7 +260,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.tbody.att     ""
 -->
 
-<!ELEMENT tbody (row+)>
+<!ELEMENT tbody %ho; (row+)>
 
 <!ATTLIST tbody
         valign          (top|middle|bottom)                     #IMPLIED
@@ -274,7 +274,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.row.att       ""
 -->
 
-<!ELEMENT row (%tbl.row.mdl;)>
+<!ELEMENT row %ho; (%tbl.row.mdl;)>
 
 <!ATTLIST row
         rowsep          %yesorno;                               #IMPLIED
@@ -291,7 +291,7 @@ in useability, presentation, and possible structure information degradation.
      ENTITY % tbl.entry.att     ""
 -->
 
-<!ELEMENT entry %tbl.entry.mdl;>
+<!ELEMENT entry %ho; %tbl.entry.mdl;>
 
 <!ATTLIST entry
         colname         NMTOKEN                                 #IMPLIED
