@@ -16,7 +16,7 @@ Please use the following formal public identifier to identify this DTD:
 For example:
 
   <!DOCTYPE website PUBLIC "-//Norman Walsh//DTD Website V2.0a1//EN"
-            "http://docbook.sf.net/release/website/2.0a1/website.dtd">
+            "http://docbook.sourceforge.net/release/website/2.0a1/website.dtd">
 
 XSL Installation
 ----------------
@@ -30,7 +30,7 @@ There are several ways to process the website XML files to produce an
 HTML website.
 
 For more detailed instructions, see
-http://docbook.sf.net/release/website/example/
+http://docbook.sourceforge.net/release/website/example/
 
 Copyright
 ---------
