@@ -130,26 +130,29 @@ node.</para>
           <xsl:apply-templates select="$footers" mode="footer.link.mode"/>
         </td>
         <td width="33%" align="right">
-          <span class="footfeed">
-            <xsl:if test="$feedback.href != ''">
-              <a>
-                <xsl:choose>
-                  <xsl:when test="$feedback.with.ids != 0">
-                    <xsl:attribute name="href">
-                      <xsl:value-of select="$feedback.href"/>
-                      <xsl:value-of select="$page/@id"/>
-                    </xsl:attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:attribute name="href">
-                      <xsl:value-of select="$feedback.href"/>
-                    </xsl:attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="$feedback.link.text"/>
-              </a>
-            </xsl:if>
-          </span>
+            <xsl:choose>
+              <xsl:when test="$feedback.href != ''">
+                <span class="footfeed">
+                  <a>
+                    <xsl:choose>
+                      <xsl:when test="$feedback.with.ids != 0">
+                        <xsl:attribute name="href">
+                          <xsl:value-of select="$feedback.href"/>
+                          <xsl:value-of select="$page/@id"/>
+                        </xsl:attribute>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:attribute name="href">
+                          <xsl:value-of select="$feedback.href"/>
+                        </xsl:attribute>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:value-of select="$feedback.link.text"/>
+                  </a>
+                </span>
+              </xsl:when>
+              <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
         </td>
       </tr>
       <tr>
@@ -167,6 +170,44 @@ node.</para>
           </span>
         </td>
       </tr>
+      <xsl:if test="$sequential.links != 0">
+        <tr>
+          <xsl:variable name="prev">
+            <xsl:call-template name="prev.page"/>
+          </xsl:variable>
+          <xsl:variable name="next">
+            <xsl:call-template name="next.page"/>
+          </xsl:variable>
+          <xsl:variable name="ptoc"
+                        select="$autolayout/autolayout//*[$prev=@id]"/>
+          <xsl:variable name="ntoc"
+                        select="$autolayout/autolayout//*[$next=@id]"/>
+
+          <td align="left" valign="top">
+            <xsl:choose>
+              <xsl:when test="$prev != ''">
+                <xsl:call-template name="link.to.page">
+                  <xsl:with-param name="page" select="$ptoc"/>
+                  <xsl:with-param name="linktext" select="'Prev'"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+          </td>
+          <td>&#160;</td>
+          <td align="right" valign="top">
+            <xsl:choose>
+              <xsl:when test="$next != ''">
+                <xsl:call-template name="link.to.page">
+                  <xsl:with-param name="page" select="$ntoc"/>
+                  <xsl:with-param name="linktext" select="'Next'"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>&#160;</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
     </table>
   </div>
 </xsl:template>
@@ -477,5 +518,86 @@ node.</para>
 </xsl:template>
 
 <!-- ==================================================================== -->
+
+<xsl:template name="link.to.page">
+  <xsl:param name="page" select="ancestor-or-self::tocentry"/>
+  <xsl:param name="linktext" select="'???'"/>
+
+  <xsl:variable name="relpath">
+    <xsl:call-template name="toc-rel-path">
+      <xsl:with-param name="pageid" select="$page/@id"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="dir">
+    <xsl:choose>
+      <xsl:when test="starts-with($page/@dir, '/')">
+        <xsl:value-of select="substring($page/@dir, 2)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$page/@dir"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <a href="{$relpath}{$dir}{$filename-prefix}{$page/@filename}">
+    <xsl:if test="summary">
+      <xsl:attribute name="title">
+        <xsl:value-of select="summary"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:copy-of select="$linktext"/>
+  </a>
+</xsl:template>
+
+
+<xsl:template name="next.page">
+  <xsl:param name="page" select="ancestor-or-self::webpage"/>
+  <xsl:variable name="id" select="$page/@id"/>
+  <xsl:variable name="tocentry"
+                select="$autolayout//*[@id=$id]"/>
+  <xsl:variable name="next-following"
+                select="$tocentry/following::tocentry[1]"/>
+  <xsl:variable name="next-child"
+                select="$tocentry/descendant::tocentry[1]"/>
+
+  <xsl:variable name="nextid">
+    <xsl:choose>
+      <xsl:when test="$next-child">
+        <xsl:value-of select="$next-child/@id"/>
+      </xsl:when>
+      <xsl:when test="$next-following">
+        <xsl:value-of select="$next-following/@id"/>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="$nextid"/>
+</xsl:template>
+
+<xsl:template name="prev.page">
+  <xsl:param name="page" select="ancestor-or-self::webpage"/>
+  <xsl:variable name="id" select="$page/@id"/>
+  <xsl:variable name="tocentry"
+                select="$autolayout//*[@id=$id]"/>
+  <xsl:variable name="prev-ancestor"
+                select="($tocentry/ancestor::tocentry
+                        |$tocentry/ancestor::toc)[last()]"/>
+  <xsl:variable name="prev-sibling"
+                select="$tocentry/preceding-sibling::tocentry[1]"/>
+
+  <xsl:variable name="previd">
+    <xsl:choose>
+      <xsl:when test="$prev-sibling">
+        <xsl:value-of select="$prev-sibling/@id"/>
+      </xsl:when>
+      <xsl:when test="$prev-ancestor">
+        <xsl:value-of select="$prev-ancestor/@id"/>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="$previd"/>
+</xsl:template>
 
 </xsl:stylesheet>

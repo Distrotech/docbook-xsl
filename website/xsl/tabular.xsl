@@ -84,7 +84,8 @@
   </xsl:variable>
 
   <xsl:variable name="tocentry" select="$autolayout/autolayout//*[$id=@id]"/>
-  <xsl:variable name="toc" select="$tocentry/ancestor-or-self::toc"/>
+  <xsl:variable name="toc" select="($tocentry/ancestor-or-self::toc
+                                   |$autolayout/autolayout/toc[1])[last()]"/>
 
   <html>
     <xsl:apply-templates select="head" mode="head.mode"/>

@@ -4,15 +4,28 @@
 
 <xsl:output method="html"/>
 
-<xsl:param name="toc.spacer.graphic" select="1"/>
+<xsl:param name="nav.graphics" select="1"/>
+<xsl:param name="nav.pointer" select="1"/>
+
 <xsl:param name="toc.spacer.text">&#160;&#160;&#160;</xsl:param>
 <xsl:param name="toc.spacer.image">graphics/blank.gif</xsl:param>
-<xsl:param name="toc.pointer.graphic" select="1"/>
-<xsl:param name="toc.pointer.text">&#160;&gt;&#160;</xsl:param>
-<xsl:param name="toc.pointer.image">graphics/arrow.gif</xsl:param>
-<xsl:param name="toc.blank.graphic" select="1"/>
-<xsl:param name="toc.blank.text">&#160;&#160;&#160;</xsl:param>
-<xsl:param name="toc.blank.image">graphics/blank.gif</xsl:param>
+
+<xsl:param name="nav.icon.path">graphics/navicons/</xsl:param>
+<xsl:param name="nav.icon.extension">.gif</xsl:param>
+
+<!-- styles: folder, folder16, plusminus, triangle, arrow -->
+<xsl:param name="nav.icon.style">triangle</xsl:param>
+
+<xsl:param name="nav.text.spacer">&#160;</xsl:param>
+<xsl:param name="nav.text.current.open">+</xsl:param>
+<xsl:param name="nav.text.current.page">+</xsl:param>
+<xsl:param name="nav.text.other.open">&#160;</xsl:param>
+<xsl:param name="nav.text.other.closed">&#160;</xsl:param>
+<xsl:param name="nav.text.other.page">&#160;</xsl:param>
+
+<xsl:param name="nav.text.pointer">&lt;-</xsl:param>
+
+<!-- ==================================================================== --> 
 
 <xsl:template match="toc/title|tocentry/title|titleabbrev">
   <xsl:apply-templates/>
@@ -71,25 +84,28 @@
   <br/>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
 <xsl:template match="tocentry">
   <xsl:param name="pageid" select="@id"/>
   <xsl:param name="toclevel" select="count(ancestor::*)"/>
   <xsl:param name="relpath" select="''"/>
 
-  <xsl:variable name="dir">
-    <xsl:choose>
-      <xsl:when test="starts-with(@dir, '/')">
-        <xsl:value-of select="substring(@dir, 2)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="@dir"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
+  <xsl:variable name="page" select="."/>
+  <xsl:variable name="target"
+                select="($page/descendant-or-self::tocentry[@tocskip = '0']
+                       |$page/following::tocentry[@tocskip='0'])[1]"/>
 
   <xsl:variable name="isdescendant">
     <xsl:choose>
       <xsl:when test="ancestor::*[@id=$pageid]">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="hasdescendant">
+    <xsl:choose>
+      <xsl:when test="descendant::tocentry != ''">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -101,31 +117,119 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:call-template name="insert.spacers">
-    <xsl:with-param name="count" select="$toclevel - 1"/>
-    <xsl:with-param name="relpath" select="$relpath"/>
-  </xsl:call-template>
+  <!-- For any entry in the TOC:
+       1. It is the current page
+          a. it is a leaf             current/leaf
+          b. it is an open page       current/open
+       2. It is not the current page
+          a. it is a leaf             other/leaf
+          b. it is an open page       other/open
+          c. it is a closed page      other/closed
+  -->
+
+  <xsl:variable name="preceding-icon">
+    <xsl:value-of select="$relpath"/>
+    <xsl:value-of select="$nav.icon.path"/>
+    <xsl:value-of select="$nav.icon.style"/>
+    <xsl:choose>
+      <xsl:when test="$pageid=@id">
+        <xsl:choose>
+          <xsl:when test="$hasdescendant != 0">
+            <xsl:text>/current/open</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>/current/leaf</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$isancestor != 0">
+            <xsl:text>/other/open</xsl:text>
+          </xsl:when>
+          <xsl:when test="$hasdescendant != 0">
+            <xsl:text>/other/closed</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>/other/leaf</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="$nav.icon.extension"/>
+  </xsl:variable>
+
+  <xsl:variable name="preceding-text">
+    <xsl:choose>
+      <xsl:when test="$pageid=@id">
+        <xsl:choose>
+          <xsl:when test="$hasdescendant != 0">
+            <xsl:value-of select="$nav.text.current.open"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$nav.text.current.page"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="$isancestor != 0">
+            <xsl:value-of select="$nav.text.other.open"/>
+          </xsl:when>
+          <xsl:when test="$hasdescendant != 0">
+            <xsl:value-of select="$nav.text.other.closed"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$nav.text.other.page"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="following-icon">
+    <xsl:value-of select="$relpath"/>
+    <xsl:value-of select="$nav.icon.path"/>
+    <xsl:value-of select="$nav.icon.style"/>
+    <xsl:text>/current/pointer</xsl:text>
+    <xsl:value-of select="$nav.icon.extension"/>
+  </xsl:variable>
+
+  <xsl:variable name="following-text">
+    <xsl:value-of select="$nav.text.pointer"/>
+  </xsl:variable>
 
   <span>
-    <xsl:if test="$toclevel>1">
+    <xsl:if test="$toclevel = 2">
       <xsl:attribute name="class">
-        <xsl:text>shrink</xsl:text>
-        <xsl:value-of select="$toclevel - 1"/>
+        <xsl:text>toplevel</xsl:text>
       </xsl:attribute>
     </xsl:if>
 
+    <xsl:if test="$toclevel &gt; 2">
+      <xsl:attribute name="class">
+        <xsl:text>shrink</xsl:text>
+        <xsl:value-of select="$toclevel - 2"/>
+      </xsl:attribute>
+    </xsl:if>
+
+    <xsl:call-template name="insert.spacers">
+      <xsl:with-param name="count" select="$toclevel - 1"/>
+      <xsl:with-param name="relpath" select="$relpath"/>
+    </xsl:call-template>
+
+    <xsl:choose>
+      <xsl:when test="$nav.graphics">
+        <img src="{$preceding-icon}" alt="{$preceding-text}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$preceding-text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <xsl:choose>
       <xsl:when test="$pageid = @id">
-        <span class="xnavtoc">
-          <xsl:choose>
-            <xsl:when test="$toc.pointer.graphic != 0">
-              <img src="{$relpath}{$toc.pointer.image}"
-                   alt="{$toc.pointer.text}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$toc.pointer.text"/>
-            </xsl:otherwise>
-          </xsl:choose>
+        <span class="curpage">
           <xsl:choose>
             <xsl:when test="titleabbrev">
               <xsl:apply-templates select="titleabbrev"/>
@@ -134,58 +238,53 @@
               <xsl:apply-templates select="title"/>
             </xsl:otherwise>
           </xsl:choose>
+
+          <xsl:if test="$nav.pointer != '0'">
+            <xsl:value-of select="$nav.text.spacer"/>
+            <xsl:choose>
+              <xsl:when test="$nav.graphics = '1'">
+                <img src="{$following-icon}" alt="{$following-text}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$following-text"/>
+              </xsl:otherwise>
+            </xsl:choose>
+	  </xsl:if>
         </span>
         <br/>
       </xsl:when>
       <xsl:otherwise>
         <span>
-	  <xsl:choose>
-	    <xsl:when test="$isdescendant='0'">
-              <xsl:attribute name="class">navtoc</xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="class">ynavtoc</xsl:attribute>
-            </xsl:otherwise>
-          </xsl:choose>
-
           <xsl:choose>
-            <xsl:when test="$toc.blank.graphic != 0">
-              <img src="{$relpath}{$toc.blank.image}"
-                   alt="{$toc.blank.text}"/>
+            <xsl:when test="$isdescendant='0'">
+              <xsl:choose>
+                <xsl:when test="$isancestor='1'">
+                  <xsl:attribute name="class">ancestor</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="class">otherpage</xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="$toc.blank.text"/>
+              <!-- IS a descendant of curpage -->
+              <xsl:attribute name="class">descendant</xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
 
-<!--
-          <xsl:message>
-            <xsl:text>1: </xsl:text>
-            <xsl:value-of select="$relpath"/>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="$dir"/>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="$filename-prefix"/>
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="@filename"/>
-          </xsl:message>
--->
-
-          <a href="{$relpath}{$dir}{$filename-prefix}{@filename}">
-            <xsl:if test="summary">
-              <xsl:attribute name="title">
-                <xsl:value-of select="summary"/>
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:choose>
-              <xsl:when test="titleabbrev">
-                <xsl:apply-templates select="titleabbrev"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="title"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </a>
+          <xsl:call-template name="link.to.page">
+            <xsl:with-param name="page" select="$target"/>
+            <xsl:with-param name="linktext">
+              <xsl:choose>
+                <xsl:when test="titleabbrev">
+                  <xsl:apply-templates select="titleabbrev"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:apply-templates select="title"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
         </span>
         <br/>
       </xsl:otherwise>
@@ -205,7 +304,7 @@
   <xsl:param name="relpath"/>
   <xsl:if test="$count>0">
     <xsl:choose>
-      <xsl:when test="$toc.spacer.graphic">
+      <xsl:when test="$nav.graphics != 0">
         <img src="{$relpath}{$toc.spacer.image}" alt="{$toc.spacer.text}"/>
       </xsl:when>
       <xsl:otherwise>
