@@ -1,9 +1,6 @@
 .PHONY : distrib clean
 
-all: website.dtd test
-
-test:
-	cd example; make test
+all: website.dtd
 
 website.dtd: website-custom.dtd
 	perl ../cvstools/flatten $< > $@
@@ -17,4 +14,4 @@ newversion:
 	make distrib
 
 clean:
-	cd example; make clean
+	make -C example clean
