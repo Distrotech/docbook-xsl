@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- DocBook XML information pool module V5.0a1 ............................. -->
+<!-- DocBook XML information pool module V5.0a2 ............................. -->
 <!-- File dbpoolx.mod ..................................................... -->
 
 <!-- Copyright 1992-2000 HaL Computer Systems, Inc.,
@@ -49,7 +49,7 @@
      declaration that uses the public identifier shown below:
 
      <!ENTITY % dbpool PUBLIC
-     "-//OASIS//ELEMENTS DocBook XML Information Pool V5.0a1//EN"
+     "-//OASIS//ELEMENTS DocBook XML Information Pool V5.0a2//EN"
      "dbpoolx.mod">
      %dbpool;
 
@@ -118,7 +118,7 @@
 <!ENTITY % local.informal.class "">
 <!ENTITY % informal.class
 		"address|blockquote
-                |graphic|graphicco|mediaobject|mediaobjectco
+                |mediaobject|mediaobjectco
                 |informalequation
 		|informalexample
                 |informalfigure
@@ -200,7 +200,7 @@
 
 <!ENTITY % local.inlineobj.char.class "">
 <!ENTITY % inlineobj.char.class
-		"inlinegraphic|inlinemediaobject|inlineequation %local.inlineobj.char.class;">
+		"inlinemediaobject|inlineequation %local.inlineobj.char.class;">
 
 <!-- Redeclaration placeholder ............................................ -->
 
@@ -331,7 +331,7 @@ f. Just BlockQuote; no other informal objects.
 <!ENTITY % tabentry.mix
 		"%list.class;		|%admon.class;
 		|%linespecific.class;
-		|%para.class;		|graphic|mediaobject
+		|%para.class;		|mediaobject
 		%local.tabentry.mix;">
 
 <!ENTITY % local.glossdef.mix "">
@@ -453,7 +453,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 		|%xref.char.class;	|%gen.char.class;
 		|%link.char.class;	|%tech.char.class;
 		|%base.char.class;	|%docinfo.char.class;
-		|%other.char.class;	|inlinegraphic|inlinemediaobject
+		|%other.char.class;	|inlinemediaobject
 		%local.ndxterm.char.mix;">
 
 <!ENTITY % local.cptr.char.mix "">
@@ -461,7 +461,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 		"#PCDATA
 		|%link.char.class;	|%tech.char.class;
 		|%base.char.class;
-		|%other.char.class;	|inlinegraphic|inlinemediaobject
+		|%other.char.class;	|inlinemediaobject
 		|%ndxterm.class;        |beginpage
 		%local.cptr.char.mix;">
 
@@ -469,7 +469,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 <!ENTITY % smallcptr.char.mix
 		"#PCDATA
 					|replaceable
-					|inlinegraphic|inlinemediaobject
+					|inlinemediaobject
 		|%ndxterm.class;        |beginpage
 		%local.smallcptr.char.mix;">
 
@@ -479,7 +479,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 					|acronym|emphasis|trademark
 		|%link.char.class;
 		|%base.char.class;
-		|%other.char.class;	|inlinegraphic|inlinemediaobject
+		|%other.char.class;	|inlinemediaobject
 		|%ndxterm.class;        |beginpage
 		%local.word.char.mix;">
 
@@ -489,7 +489,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 		|%link.char.class;
 					|emphasis|trademark
 					|replaceable
-		|%other.char.class;	|inlinegraphic|inlinemediaobject
+		|%other.char.class;	|inlinemediaobject
 		|%ndxterm.class;
 		%local.docinfo.char.mix;">
 <!--ENTITY % bibliocomponent.mix (see Bibliographic section, below)-->
@@ -644,38 +644,6 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 >
 
 <!-- Semi-common attributes and other attribute entities .................. -->
-
-<!ENTITY % local.graphics.attrib "">
-
-<!-- EntityRef: Name of an external entity containing the content
-	of the graphic -->
-<!-- FileRef: Filename, qualified by a pathname if desired, 
-	designating the file containing the content of the graphic -->
-<!-- Format: Notation of the element content, if any -->
-<!-- SrcCredit: Information about the source of the Graphic -->
-<!-- Width: Same as CALS reprowid (desired width) -->
-<!-- Depth: Same as CALS reprodep (desired depth) -->
-<!-- Align: Same as CALS hplace with 'none' removed; #IMPLIED means 
-	application-specific -->
-<!-- Scale: Conflation of CALS hscale and vscale -->
-<!-- Scalefit: Same as CALS scalefit -->
-
-<!ENTITY % graphics.attrib
-	"
-	entityref	ENTITY		#IMPLIED
-	fileref 	CDATA		#IMPLIED
-	format		(%notation.class;) #IMPLIED
-	srccredit	CDATA		#IMPLIED
-	width		CDATA		#IMPLIED
-	depth		CDATA		#IMPLIED
-	align		(left
-			|right 
-			|center)	#IMPLIED
-	scale		CDATA		#IMPLIED
-	scalefit	%yesorno.attvals;
-					#IMPLIED
-	%local.graphics.attrib;"
->
 
 <!ENTITY % local.keyaction.attrib "">
 
@@ -872,8 +840,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 
 <!ENTITY % biblioentry.element "INCLUDE">
 <![%biblioentry.element;[
-<!ELEMENT biblioentry %ho; ((articleinfo
-                       | (%bibliocomponent.mix;))+)
+<!ELEMENT biblioentry %ho; (%bibliocomponent.mix;)+
                       %ubiq.exclusion;>
 <!--end of biblioentry.element-->]]>
 
@@ -915,7 +882,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 
 <!ENTITY % articleinfo.element "INCLUDE">
 <![%articleinfo.element;[
-<!ELEMENT articleinfo %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT articleinfo %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)>
 <!--end of articleinfo.element-->]]>
 
@@ -1608,7 +1575,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 
 <!ENTITY % sidebarinfo.element "INCLUDE">
 <![ %sidebarinfo.element; [
-<!ELEMENT sidebarinfo %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sidebarinfo %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)>
 <!--end of sidebarinfo.element-->]]>
 
@@ -2679,7 +2646,6 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 				|linecolumnpair
 				|other)		#IMPLIED
 		otherunits	NMTOKEN		#IMPLIED
-		coords		CDATA		#REQUIRED
 		%idreq.common.attrib;
 		%areaset.role.attrib;
 		%local.areaset.attrib;
@@ -2788,8 +2754,7 @@ d. Just Acronym, Emphasis, and Trademark; no other word elements.
 <!ENTITY % screenshot.element "INCLUDE">
 <![%screenshot.element;[
 <!ELEMENT screenshot %hh; (screeninfo?,
-                      (graphic|graphicco
-                      |mediaobject|mediaobjectco))>
+                      (mediaobject|mediaobjectco))>
 <!--end of screenshot.element-->]]>
 
 <!ENTITY % screenshot.attlist "INCLUDE">
@@ -2882,74 +2847,6 @@ in the text (no (0) value, the default)
 >
 <!--end of informalfigure.attlist-->]]>
 <!--end of informalfigure.module-->]]>
-
-<!ENTITY % graphicco.module "INCLUDE">
-<![%graphicco.module;[
-<!ENTITY % local.graphicco.attrib "">
-<!ENTITY % graphicco.role.attrib "%role.attrib;">
-
-<!ENTITY % graphicco.element "INCLUDE">
-<![%graphicco.element;[
-<!ELEMENT graphicco %hh; (areaspec, graphic, calloutlist*)>
-<!--end of graphicco.element-->]]>
-
-<!ENTITY % graphicco.attlist "INCLUDE">
-<![%graphicco.attlist;[
-<!ATTLIST graphicco
-		%common.attrib;
-		%graphicco.role.attrib;
-		%local.graphicco.attrib;
->
-<!--end of graphicco.attlist-->]]>
-<!-- AreaSpec (defined above in Examples)-->
-<!-- CalloutList (defined above in Lists)-->
-<!--end of graphicco.module-->]]>
-
-<!-- Graphical data can be the content of Graphic, or you can reference
-     an external file either as an entity (Entitref) or a filename
-     (Fileref). -->
-
-<!ENTITY % graphic.module "INCLUDE">
-<![%graphic.module;[
-<!ENTITY % local.graphic.attrib "">
-<!ENTITY % graphic.role.attrib "%role.attrib;">
-
-<!ENTITY % graphic.element "INCLUDE">
-<![%graphic.element;[
-<!ELEMENT graphic %ho; EMPTY>
-<!--end of graphic.element-->]]>
-
-<!ENTITY % graphic.attlist "INCLUDE">
-<![%graphic.attlist;[
-<!ATTLIST graphic
-		%graphics.attrib;
-		%common.attrib;
-		%graphic.role.attrib;
-		%local.graphic.attrib;
->
-<!--end of graphic.attlist-->]]>
-<!--end of graphic.module-->]]>
-
-<!ENTITY % inlinegraphic.module "INCLUDE">
-<![%inlinegraphic.module;[
-<!ENTITY % local.inlinegraphic.attrib "">
-<!ENTITY % inlinegraphic.role.attrib "%role.attrib;">
-
-<!ENTITY % inlinegraphic.element "INCLUDE">
-<![%inlinegraphic.element;[
-<!ELEMENT inlinegraphic %ho; EMPTY>
-<!--end of inlinegraphic.element-->]]>
-
-<!ENTITY % inlinegraphic.attlist "INCLUDE">
-<![%inlinegraphic.attlist;[
-<!ATTLIST inlinegraphic
-		%graphics.attrib;
-		%common.attrib;
-		%inlinegraphic.role.attrib;
-		%local.inlinegraphic.attrib;
->
-<!--end of inlinegraphic.attlist-->]]>
-<!--end of inlinegraphic.module-->]]>
 
 <!ENTITY % mediaobject.content.module "INCLUDE">
 <![ %mediaobject.content.module; [
@@ -3086,7 +2983,7 @@ in the text (no (0) value, the default)
 
 <!ENTITY % objectinfo.element "INCLUDE">
 <![ %objectinfo.element; [
-<!ELEMENT objectinfo %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT objectinfo %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)>
 <!--end of objectinfo.element-->]]>
 
@@ -3276,8 +3173,8 @@ in the text (no (0) value, the default)
 
 <!-- This PE provides a mechanism for replacing equation content, -->
 <!-- perhaps adding a new or different model (e.g., MathML) -->
-<!ENTITY % equation.content "(alt?, (graphic+|mediaobject+))">
-<!ENTITY % inlineequation.content "(alt?, (graphic+|inlinemediaobject+))">
+<!ENTITY % equation.content "(alt?, mediaobject+)">
+<!ENTITY % inlineequation.content "(alt?, inlinemediaobject+)">
 
 <!ENTITY % equation.module "INCLUDE">
 <![%equation.module;[
@@ -3393,7 +3290,7 @@ in the text (no (0) value, the default)
 <!ENTITY % tbl.table.mdl
 	"((%formalobject.title.content;),
           (%ndxterm.class;)*,
-          (graphic+|tgroup+))">
+          (mediaobject+|tgroup+))">
 
 <!-- Allow either objects or inlines; beware of REs between elements. -->
 <!ENTITY % tbl.entry.mdl "(%para.char.mix; | %tabentry.mix;)*">
@@ -3417,7 +3314,7 @@ in the text (no (0) value, the default)
 
 <!ENTITY % informaltable.element "INCLUDE">
 <![%informaltable.element;[
-<!ELEMENT informaltable %hh; (graphic+|mediaobject+|tgroup+)>
+<!ELEMENT informaltable %hh; (mediaobject+|tgroup+)>
 <!--end of informaltable.element-->]]>
 
 <!-- Frame, Colsep, and Rowsep must be repeated because
@@ -3458,7 +3355,7 @@ in the text (no (0) value, the default)
 
 <!ENTITY % synopsis.element "INCLUDE">
 <![%synopsis.element;[
-<!ELEMENT synopsis %hh; (%para.char.mix; | graphic | mediaobject | lineannotation | co)*>
+<!ELEMENT synopsis %hh; (%para.char.mix; | mediaobject | lineannotation | co)*>
 <!--end of synopsis.element-->]]>
 
 <!ENTITY % synopsis.attlist "INCLUDE">
@@ -6587,7 +6484,6 @@ OtherCredit. -->
 		| optional
 		| %base.char.class; 
 		| %other.char.class; 
-		| inlinegraphic
                 | inlinemediaobject)*>
 <!--end of replaceable.element-->]]>
 
@@ -6743,15 +6639,15 @@ OtherCredit. -->
 <!ENTITY % systemitem.attlist "INCLUDE">
 <![%systemitem.attlist;[
 <!ATTLIST systemitem
-		class	(constant
-			|groupname
+		class	(groupname
                         |library
 			|macro
 			|osname
 			|register
 			|resource
 			|systemname
-                        |username)	#IMPLIED
+                        |username
+			|newsgroup)	#IMPLIED
 		%moreinfo.attrib;
 		%common.attrib;
 		%systemitem.role.attrib;
@@ -7119,7 +7015,6 @@ OtherCredit. -->
 		| emphasis
 		| replaceable 
 		| symbol 
-		| inlinegraphic
                 | inlinemediaobject
 		| %base.char.class; 
 		| %other.char.class;)*
@@ -7142,7 +7037,6 @@ OtherCredit. -->
 		| emphasis
 		| replaceable 
 		| symbol 
-		| inlinegraphic
                 | inlinemediaobject 
 		| %base.char.class; 
 		| %other.char.class;)*
@@ -7171,7 +7065,6 @@ OtherCredit. -->
 		| %tech.char.class;
 		| %base.char.class; 
 		| %other.char.class; 
-		| inlinegraphic
                 | inlinemediaobject
 		| emphasis)*>
 <!--end of trademark.element-->]]>
@@ -7556,5 +7449,5 @@ OtherCredit. -->
 <!--end of seeseealso.module-->]]>
 <!--end of indexterm.content.module-->]]>
 
-<!-- End of DocBook XML information pool module V5.0a1 ...................... -->
+<!-- End of DocBook XML information pool module V5.0a2 ...................... -->
 <!-- ...................................................................... -->

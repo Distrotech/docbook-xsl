@@ -1,6 +1,6 @@
-README for DocBook XML V5.0a1
+README for DocBook XML V5.0a2
 
-This is DocBook XML V5.0a1, released 12 Mar 2001.
+This is DocBook XML V5.0a2, released ???
 
 For more information about DocBook, please see
 

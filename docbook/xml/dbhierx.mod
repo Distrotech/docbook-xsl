@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- DocBook XML document hierarchy module V5.0a1 ........................... -->
+<!-- DocBook XML document hierarchy module V5.0a2 ........................... -->
 <!-- File dbhierx.mod ..................................................... -->
 
 <!-- Copyright 1992-2000 HaL Computer Systems, Inc.,
@@ -43,7 +43,7 @@
      declaration that uses the public identifier shown below:
 
      <!ENTITY % dbhier PUBLIC
-     "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V5.0a1//EN"
+     "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V5.0a2//EN"
      "dbhierx.mod">
      %dbhier;
 
@@ -79,6 +79,9 @@
 
 <!ENTITY % local.refentry.class "">
 <!ENTITY % refentry.class	"refentry %local.refentry.class;">
+
+<!ENTITY % local.section.class "">
+<!ENTITY % section.class	"section %local.section.class;">
 
 <!ENTITY % local.nav.class "">
 <!ENTITY % nav.class		"toc|lot|index|glossary|bibliography 
@@ -190,8 +193,8 @@
 
 <!ENTITY % bookcomponent.content
 	"((%divcomponent.mix;)+, 
-	(sect1*|(%refentry.class;)*|simplesect*|section*))
-	| (sect1+|(%refentry.class;)+|simplesect+|section+)">
+	(sect1*|(%refentry.class;)*|simplesect*|(%section.class;)*))
+	| (sect1+|(%refentry.class;)+|simplesect+|(%section.class;)+)">
 
 <!-- ...................................................................... -->
 <!-- Set and SetInfo ...................................................... -->
@@ -232,20 +235,15 @@
 
 <!ENTITY % setinfo.element "INCLUDE">
 <![%setinfo.element;[
-<!ELEMENT setinfo %hh; ((graphic | mediaobject 
+<!ELEMENT setinfo %hh; ((mediaobject 
         | legalnotice | modespec | subjectset 
 	| keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of setinfo.element-->]]>
 
-<!-- Contents: IDs of the ToC, Books, and SetIndex that comprise 
-		the set, in the order of their appearance -->
-
-
 <!ENTITY % setinfo.attlist "INCLUDE">
 <![%setinfo.attlist;[
 <!ATTLIST setinfo
-		contents	IDREFS		#IMPLIED
 		%common.attrib;
 		%setinfo.role.attrib;
 		%local.setinfo.attrib;
@@ -300,21 +298,15 @@
 
 <!ENTITY % bookinfo.element "INCLUDE">
 <![%bookinfo.element;[
-<!ELEMENT bookinfo %hh; ((graphic | mediaobject
+<!ELEMENT bookinfo %hh; ((mediaobject
         | legalnotice | modespec | subjectset 
 	| keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of bookinfo.element-->]]>
 
-<!-- Contents: IDs of the ToC, LoTs, Prefaces, Parts, Chapters,
-		Appendixes, References, GLossary, Bibliography, and indexes
-		comprising the Book, in the order of their appearance -->
-
-
 <!ENTITY % bookinfo.attlist "INCLUDE">
 <![%bookinfo.attlist;[
 <!ATTLIST bookinfo
-		contents	IDREFS		#IMPLIED
 		%common.attrib;
 		%bookinfo.role.attrib;
 		%local.bookinfo.attrib;
@@ -723,7 +715,7 @@
 <!ENTITY % part.module "INCLUDE">
 <![%part.module;[
 
-<!-- Note that Part was to have its content model reduced in V5.0a1.  This
+<!-- Note that Part was to have its content model reduced in V5.0a2.  This
 change will not be made after all. -->
 
 <!ENTITY % local.part.attrib "">
@@ -837,7 +829,7 @@ change will not be made after all. -->
 
 <!ENTITY % appendixinfo.element "INCLUDE">
 <![ %appendixinfo.element; [
-<!ELEMENT appendixinfo %hh; ((graphic | mediaobject 
+<!ELEMENT appendixinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -861,7 +853,7 @@ change will not be made after all. -->
 
 <!ENTITY % bibliographyinfo.element "INCLUDE">
 <![ %bibliographyinfo.element; [
-<!ELEMENT bibliographyinfo %hh; ((graphic | mediaobject 
+<!ELEMENT bibliographyinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -885,7 +877,7 @@ change will not be made after all. -->
 
 <!ENTITY % chapterinfo.element "INCLUDE">
 <![ %chapterinfo.element; [
-<!ELEMENT chapterinfo %hh; ((graphic | mediaobject 
+<!ELEMENT chapterinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -909,7 +901,7 @@ change will not be made after all. -->
 
 <!ENTITY % glossaryinfo.element "INCLUDE">
 <![ %glossaryinfo.element; [
-<!ELEMENT glossaryinfo %hh; ((graphic | mediaobject 
+<!ELEMENT glossaryinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -933,7 +925,7 @@ change will not be made after all. -->
 
 <!ENTITY % indexinfo.element "INCLUDE">
 <![ %indexinfo.element; [
-<!ELEMENT indexinfo %hh; ((graphic | mediaobject 
+<!ELEMENT indexinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)>
@@ -956,7 +948,7 @@ change will not be made after all. -->
 
 <!ENTITY % setindexinfo.element "INCLUDE">
 <![ %setindexinfo.element; [
-<!ELEMENT setindexinfo %hh; ((graphic | mediaobject 
+<!ELEMENT setindexinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -980,7 +972,7 @@ change will not be made after all. -->
 
 <!ENTITY % partinfo.element "INCLUDE">
 <![ %partinfo.element; [
-<!ELEMENT partinfo %hh; ((graphic | mediaobject 
+<!ELEMENT partinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1004,7 +996,7 @@ change will not be made after all. -->
 
 <!ENTITY % prefaceinfo.element "INCLUDE">
 <![ %prefaceinfo.element; [
-<!ELEMENT prefaceinfo %hh; ((graphic | mediaobject 
+<!ELEMENT prefaceinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1028,7 +1020,7 @@ change will not be made after all. -->
 
 <!ENTITY % refentryinfo.element "INCLUDE">
 <![ %refentryinfo.element; [
-<!ELEMENT refentryinfo %hh; ((graphic | mediaobject 
+<!ELEMENT refentryinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1052,7 +1044,7 @@ change will not be made after all. -->
 
 <!ENTITY % refsect1info.element "INCLUDE">
 <![ %refsect1info.element; [
-<!ELEMENT refsect1info %hh; ((graphic | mediaobject 
+<!ELEMENT refsect1info %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1076,7 +1068,7 @@ change will not be made after all. -->
 
 <!ENTITY % refsect2info.element "INCLUDE">
 <![ %refsect2info.element; [
-<!ELEMENT refsect2info %hh; ((graphic | mediaobject 
+<!ELEMENT refsect2info %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1100,7 +1092,7 @@ change will not be made after all. -->
 
 <!ENTITY % refsect3info.element "INCLUDE">
 <![ %refsect3info.element; [
-<!ELEMENT refsect3info %hh; ((graphic | mediaobject 
+<!ELEMENT refsect3info %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1124,7 +1116,7 @@ change will not be made after all. -->
 
 <!ENTITY % refsynopsisdivinfo.element "INCLUDE">
 <![ %refsynopsisdivinfo.element; [
-<!ELEMENT refsynopsisdivinfo %hh; ((graphic | mediaobject 
+<!ELEMENT refsynopsisdivinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1148,7 +1140,7 @@ change will not be made after all. -->
 
 <!ENTITY % referenceinfo.element "INCLUDE">
 <![ %referenceinfo.element; [
-<!ELEMENT referenceinfo %hh; ((graphic | mediaobject 
+<!ELEMENT referenceinfo %hh; ((mediaobject 
 		| legalnotice | modespec 
 		| subjectset | keywordset | itermset
                 | %bibliocomponent.mix;)+)
@@ -1170,7 +1162,7 @@ change will not be made after all. -->
 
 <!ENTITY % sect1info.element "INCLUDE">
 <![%sect1info.element;[
-<!ELEMENT sect1info %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sect1info %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sect1info.element-->]]>
@@ -1189,7 +1181,7 @@ change will not be made after all. -->
 
 <!ENTITY % sect2info.element "INCLUDE">
 <![%sect2info.element;[
-<!ELEMENT sect2info %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sect2info %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sect2info.element-->]]>
@@ -1208,7 +1200,7 @@ change will not be made after all. -->
 
 <!ENTITY % sect3info.element "INCLUDE">
 <![%sect3info.element;[
-<!ELEMENT sect3info %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sect3info %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sect3info.element-->]]>
@@ -1227,7 +1219,7 @@ change will not be made after all. -->
 
 <!ENTITY % sect4info.element "INCLUDE">
 <![%sect4info.element;[
-<!ELEMENT sect4info %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sect4info %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sect4info.element-->]]>
@@ -1246,7 +1238,7 @@ change will not be made after all. -->
 
 <!ENTITY % sect5info.element "INCLUDE">
 <![%sect5info.element;[
-<!ELEMENT sect5info %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sect5info %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sect5info.element-->]]>
@@ -1276,8 +1268,8 @@ change will not be made after all. -->
 			(%sect.title.content;),
 			(%nav.class;)*,
 			(((%divcomponent.mix;)+,
- 			  ((%refentry.class;)*|section*))
-			 | (%refentry.class;)+|section+),
+ 			  ((%refentry.class;)*|(%section.class;)*))
+			 | (%refentry.class;)+|(%section.class;)+),
 			(%nav.class;)*)
 		%ubiq.inclusion;>
 <!--end of section.element-->]]>
@@ -1301,7 +1293,7 @@ change will not be made after all. -->
 
 <!ENTITY % sectioninfo.element "INCLUDE">
 <![ %sectioninfo.element; [
-<!ELEMENT sectioninfo %hh; ((graphic | mediaobject | legalnotice | modespec 
+<!ELEMENT sectioninfo %hh; ((mediaobject | legalnotice | modespec 
 	| subjectset | keywordset | itermset | %bibliocomponent.mix;)+)
 		%beginpage.exclusion;>
 <!--end of sectioninfo.element-->]]>
@@ -1624,7 +1616,7 @@ change will not be made after all. -->
 <![%index.element;[
 <!ELEMENT index %ho; (indexinfo?,
                  (%bookcomponent.title.content;)?,
-                 (%component.mix;)*,
+                 (%indexdivcomponent.mix;)*,
                  (indexdiv* | indexentry*))
 		%ndxterm.exclusion;>
 <!--end of index.element-->]]>
@@ -1642,7 +1634,7 @@ change will not be made after all. -->
 <![%setindex.element;[
 <!ELEMENT setindex %ho; (setindexinfo?,
                     (%bookcomponent.title.content;)?,
-                    (%component.mix;)*,
+                    (%indexdivcomponent.mix;)*,
                     (indexdiv* | indexentry*))
 		%beginpage.exclusion;>
 <!--end of setindex.element-->]]>
@@ -2102,6 +2094,7 @@ change will not be made after all. -->
 <![%article.attlist;[
 <!ATTLIST article
 		class		(journalarticle
+				|dissertation
 				|productsheet
 				|whitepaper
 				|techreport
@@ -2116,5 +2109,5 @@ change will not be made after all. -->
 <!--end of article.attlist-->]]>
 <!--end of article.module-->]]>
 
-<!-- End of DocBook XML document hierarchy module V5.0a1 .................... -->
+<!-- End of DocBook XML document hierarchy module V5.0a2 .................... -->
 <!-- ...................................................................... -->
