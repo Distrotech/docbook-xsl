@@ -1,7 +1,6 @@
 # this file is a -*- makefile -*- snippet
 # use it to configure docbook open repository materials build
 
-DOCBOOK_CVS=
 CVSTOOLSROOT=$(DOCBOOK_CVS)/cvstools
 XSLROOT=$(DOCBOOK_CVS)/xsl
 DSSSLROOT=$(DOCBOOK_CVS)/dsssl
@@ -31,11 +30,25 @@ RUNTRANG=$(CVSTOOLSROOT)/runtrang
 # used only when doing release builds.
 #-----------------------------------------------------------------
 
+DISTRO=$(notdir $(shell pwd))
+
 # stylesheet for generating release notes
 DOC-LINK-STYLE=   $(DOCBOOK_CVS)/xsl/docsrc/doc-link-docbook.xsl
 # browser to use for making text version of release notes
 BROWSER=w3m
 BROWSER_OPTS=-dump
+
+# determine RELVER automatically by first figuring out if VERSION
+# file is an XSL stylesheet or not, and then grabbing the version
+# number from that file
+RELVER := $(shell \
+ if grep "<xsl:stylesheet" VERSION >/dev/null; then \
+   grep "Version>.\+<" VERSION \
+   | sed 's/^[^<]*<fm:Version>\(.\+\)<\/fm:Version>$$/\1/' \
+   | tr -d "\n"; \
+ else cat VERSION; \
+ fi \
+)
 
 # the following are used to determine what version to compare to
 # in order to create the WhatsNew file
