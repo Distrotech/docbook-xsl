@@ -40,3 +40,5 @@ clean:
               titlepage.templates.xsl
 	$(RM) Makefile.param
 	echo "# foo" > Makefile.param
+
+realclean: clean

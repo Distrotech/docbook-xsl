@@ -16,3 +16,6 @@ clean:
 
 xsl-params.xsl: make-xsl-params.pl
 	perl $< > $@
+
+realclean: clean
+	rm -f xsl-params.xsl
