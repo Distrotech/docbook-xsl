@@ -333,6 +333,7 @@ will be used to indent the TOC.</para>
 </doc:attribute-set>
 
 <!-- ==================================================================== -->
+<xsl:param name="sequential.links" select="'0'"/>
 
 <doc:param name="" xmlns="">
 <refpurpose></refpurpose>
