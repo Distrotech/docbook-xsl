@@ -47,9 +47,14 @@
 
 <!ELEMENT year (#PCDATA)*>
 
-<!ELEMENT holder (#PCDATA)*>
+<!ELEMENT holder (#PCDATA|ulink)*>
 <!ATTLIST holder
 	role	CDATA	#IMPLIED
+>
+
+<!ELEMENT ulink (#PCDATA)*>
+<!ATTLIST ulink
+	url	CDATA	#REQUIRED
 >
 
 <!ELEMENT tocentry (title, titleabbrev?, summary?, tocentry*)>
