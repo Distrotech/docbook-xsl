@@ -1,3 +1,0 @@
-<!ENTITY initializer.synopsis.gen SYSTEM "synopsis.u.gen">
-<!ENTITY initializer.children.gen SYSTEM "children.gen">
-<!ENTITY initializer.parents.gen SYSTEM "parents.gen">
