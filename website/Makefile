@@ -1,5 +1,7 @@
 include ../cvstools/Makefile.incl
 ZIPVER=
+MERGEVER=
+NEWVER=
 
 .PHONY : distrib clean
 
@@ -12,10 +14,18 @@ website.dtd: website-custom.dtd forms.mod
 
 distrib:
 	$(CVS2LOG) -w
+ifeq ($MERGEVER),)
 	$(MERGELOGS) > WhatsNew
+else
+	$(MERGELOGS) -v $(MERGEVER) > WhatsNew
+endif
 
 newversion:
+ifeq ($NEWVER),)
 	$(NEXTVERSION)
+else
+	$(NEXTVERSION) -v $(NEWVER)
+endif
 	make distrib
 
 zip: distrib
