@@ -91,6 +91,8 @@ else
 	-find extensions/xsltproc -print >> $(TMP)/tar.exclude
 	-find tools -print >> $(TMP)/tar.exclude
 	-find wordml -print >> $(TMP)/tar.exclude
+	-find extensions/saxon8 -print >> $(TMP)/tar.exclude
+	-find extensions/saxon8.jar -print >> $(TMP)/tar.exclude
 	find . -print  | grep /CVS$$ | cut -c3- >> $(TMP)/tar.exclude
 	find . -print  | grep /CVS/ | cut -c3- >> $(TMP)/tar.exclude
 	find . -print  | grep /debian/ | cut -c3- >> $(TMP)/tar.exclude
