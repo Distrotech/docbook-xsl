@@ -40,6 +40,16 @@
   <!--nop-->
 </xsl:template>
 
+<xsl:template match="base" mode="head.mode">
+  <base href="{@href}">
+    <xsl:if test="@target">
+      <xsl:attribute name="target">
+        <xsl:value-of select="@target"/>
+      </xsl:attribute>
+    </xsl:if>
+  </base>
+</xsl:template>
+
 <xsl:template match="keywords" mode="head.mode">
   <meta name="keyword" content="{.}"/>
 </xsl:template>
