@@ -1,9 +1,12 @@
 .PHONY : distrib clean
 
-all: test
+all: website.dtd test
 
 test:
 	cd example; make test
+
+website.dtd: website-custom.dtd
+	perl ../cvstools/flatten $< > $@
 
 distrib:
 	cvs2log -w
