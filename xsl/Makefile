@@ -11,6 +11,9 @@ SFRELID=
 FMGO=-N
 TMP=/tmp
 BROWSER=w3m
+LFTP=lftp
+SF_UPLOAD_HOST=upload.sf.net
+SF_UPLOAD_DIR=incoming
 
 DIRS=common lib html fo extensions htmlhelp javahelp
 
@@ -115,6 +118,9 @@ else
 	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(ZIPVER).zip docbook-xsl-$(ZIPVER)
 	rm -f $(TMP)/tar.exclude
 endif
+
+upload: zip
+	$(LFTP) -e "mput -O $(SF_UPLOAD_DIR) $(TMP)/docbook-xsl-$(ZIPVER).*; quit" $(SF_UPLOAD_HOST)
 
 clean:
 	for i in $(DIRS) __bogus__; do \
