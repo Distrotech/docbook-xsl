@@ -1,0 +1,33 @@
+<refentry id="errortext.element" revision='4.2'>
+<?dbhtml filename="errortext.html"?>
+
+<refmeta>
+<indexterm><primary>elements</primary>
+<secondary>errortext</secondary></indexterm>
+<refentrytitle>errortext</refentrytitle>
+<refmiscinfo>Element</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>errortext</refname>
+<refpurpose>&errortext.purpose;</refpurpose>
+</refnamediv>
+
+&errortext.synopsis.gen;
+
+<refsect1 condition='ref.description'><title>Description</title>
+
+<para>FIXME: TBD.</para>
+
+<refsect2><title>Processing expectations</title>
+<para>FIXME: TBD.</para>
+</refsect2>
+
+&errortext.parents.gen;
+&errortext.children.gen;
+</refsect1>
+
+<refsect1 condition='ref.elem.seealso'><title>See Also</title>
+&errortext.seealso.gen;
+</refsect1>
+</refentry>
+
