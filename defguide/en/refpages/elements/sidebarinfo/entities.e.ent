@@ -1,3 +1,0 @@
-<!ENTITY sidebarinfo.synopsis.gen SYSTEM "synopsis.e.gen">
-<!ENTITY sidebarinfo.children.gen SYSTEM "children.gen">
-<!ENTITY sidebarinfo.parents.gen SYSTEM "parents.gen">
