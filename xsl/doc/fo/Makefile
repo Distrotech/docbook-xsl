@@ -15,4 +15,5 @@ param.html: param.xml
 	touch param.html
 
 clean:
-	rm -f $(HTMLFILES)
+	rm -f *.html
+	rm -f *.png
