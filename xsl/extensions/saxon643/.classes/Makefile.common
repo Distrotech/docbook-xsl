@@ -1,4 +1,4 @@
-CLASSPATH=$(CLASSBASE):/usr/local/java/saxon6/saxon.jar
+SOURCEFILES=$(shell find $(VPATH) -name '*.java')
 
 all: $(CLASSFILES)
 	-@for f in $(SUBDIRS); do \
@@ -15,21 +15,30 @@ clean:
           fi \
         done
 
-jar: all
-	jar cf ../../saxon643.jar `find com -name "*.class" -print`
+realclean: clean
+	rm -f *.incl
+	-@for f in $(SUBDIRS); do \
+          if [ "$$f" != "__PHONY__" ]; then \
+            cd $$f; make realclean; cd ..; \
+          fi \
+        done
 
 %.class : %.java
-	javac -classpath $(CLASSPATH) \
+	javac -classpath $(CLASSBASE):$(CLASSPATH) \
 		-sourcepath $(SOURCEPATH) \
 		-g -d $(CLASSBASE) \
 		$<
 
-includes:
-	classlist $(VPATH) > Makefile.incl
+Makefile.incl: $(SOURCEFILES)
+	printf "CLASSFILES=" > Makefile.incl
+	find $(VPATH) -name "*.java" -maxdepth 1 -exec basename {} \; \
+	| sed 's/\.java$$/.class /' \
+	| tr -d "\n" \
+	| sed 's/ \([^ \]\)/ \\\n\1/g' >> Makefile.incl
 	-@for f in $(SUBDIRS); do \
           if [ "$$f" != "__PHONY__" ]; then \
             if [ -d "$$f" -a -f "$$f/Makefile" ]; then \
-              cd $$f; make includes; cd ..; \
+              cd $$f; make Makefile.incl; cd ..; \
             else if [ ! -d "$$f" ]; then \
               mkdir $$f; \
               fi; \
