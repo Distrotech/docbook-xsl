@@ -16,4 +16,3 @@ param.html: param.xml
 
 clean:
 	rm -f *.html
-	rm -f *.png
