@@ -1264,12 +1264,12 @@ change will not be made after all. -->
 
 <!ENTITY % section.element "INCLUDE">
 <![ %section.element; [
-<!ELEMENT section %hh; (sectioninfo?,
+<!ELEMENT section %ho; (sectioninfo?,
 			(%sect.title.content;),
 			(%nav.class;)*,
 			(((%divcomponent.mix;)+,
- 			  ((%refentry.class;)*|(%section.class;)*))
-			 | (%refentry.class;)+|(%section.class;)+),
+ 			  ((%refentry.class;)*|(%section.class;)*|simplesect*))
+			 | (%refentry.class;)+|(%section.class;)+|simplesect+),
 			(%nav.class;)*)
 		%ubiq.inclusion;>
 <!--end of section.element-->]]>
