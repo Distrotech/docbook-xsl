@@ -105,6 +105,7 @@ else
 	find . -type f -name "Makefile*"   | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "README.CVS"   | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "catalog.xml"   | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "MANIFEST.build"   | cut -c3- >> $(TMP)/tar.exclude
 	tar cf - * --exclude-from $(TMP)/tar.exclude | (cd $(TMP)/docbook-xsl-$(ZIPVER); tar xf -)
 	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | gzip > docbook-xsl-$(ZIPVER).tar.gz
 	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | bzip2 > docbook-xsl-$(ZIPVER).tar.bz2
