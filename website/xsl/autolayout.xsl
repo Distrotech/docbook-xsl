@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-<xsl:output method="xml" indent="yes"
+<xsl:output method="xml" indent="no"
             doctype-public="-//Norman Walsh//DTD Website Auto Layout V1.0//EN"
             doctype-system="http://docbook.sourceforge.net/release/website/current/autolayout.dtd"
 />
@@ -11,6 +11,7 @@
 
 <xsl:template match="layout">
   <autolayout>
+    <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates/>
   </autolayout>
   <xsl:text>&#10;</xsl:text>
@@ -39,18 +40,21 @@
   <toc>
     <xsl:call-template name="tocentry"/>
   </toc>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="tocentry">
   <tocentry>
     <xsl:call-template name="tocentry"/>
   </tocentry>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="notoc">
   <notoc>
     <xsl:call-template name="tocentry"/>
   </notoc>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template name="tocentry">
@@ -117,7 +121,7 @@
   <xsl:attribute name="filename">
     <xsl:value-of select="$filename"/>
   </xsl:attribute>
-  <xsl:if test="@tocskip != '0'">
+  <xsl:if test="@tocskip = '1'">
     <xsl:attribute name="tocskip">
       <xsl:value-of select="@tocskip"/>
     </xsl:attribute>
@@ -133,17 +137,20 @@
       </xsl:otherwise>
     </xsl:choose>
   </title>
+  <xsl:text>&#10;</xsl:text>
 
   <xsl:if test="$page/*[1]/head/titleabbrev">
     <titleabbrev>
       <xsl:apply-templates select="$page/*[1]/head/titleabbrev"/>
     </titleabbrev>
+    <xsl:text>&#10;</xsl:text>
   </xsl:if>
 
   <xsl:if test="$page/*[1]/head/summary">
     <summary>
       <xsl:apply-templates select="$page/*[1]/head/summary"/>
     </summary>
+    <xsl:text>&#10;</xsl:text>
   </xsl:if>
 
   <xsl:apply-templates/>
