@@ -59,7 +59,7 @@
 <xsl:template match="meta" mode="head.mode">
   <xsl:choose>
     <xsl:when test="@http-equiv">
-      <meta name="{@http-equiv}" content="{@content}"/>
+      <meta http-equiv="{@http-equiv}" content="{@content}"/>
     </xsl:when>
     <xsl:otherwise>
       <meta name="{@name}" content="{@content}"/>
