@@ -1,0 +1,117 @@
+# This file is part of DocBook NG: The "Absinthe" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+
+publishing.inlines |= db.coref
+list.blocks |= db.calloutlist
+verbatim.blocks |= db.programlistingco
+verbatim.blocks |= db.screenco
+graphic.blocks |= db.mediaobjectco
+screenshot.block |= db.mediaobjectco
+computeroutput.inlines |= db.co
+verbatim.inlines |= db.co
+prompt.inlines |= db.co
+systemitem.inlines |= db.co
+
+area.units.enumtype.attribute =
+   attribute units {
+      "calspair"
+    | "linecolumn"
+    | "linecolumnpair"
+    | "linerange"
+   }?
+
+area.units.othertype.attributes =
+   attribute units { "other" },
+   attribute otherunits { xsd:NMTOKEN }
+
+area.units.attribute =
+   (area.units.enumtype.attribute | area.units.othertype.attributes)
+
+
+calloutlist.info = docbook.info.titleonly
+db.calloutlist = element calloutlist { calloutlist.info, blocks*, db.callout+ }
+
+callout.arearefs.attrib = attribute arearefs { xsd:IDREFS }
+db.callout = element callout { blocks+ }
+
+programlistingco.info = docbook.info.titleforbidden
+db.programlistingco =
+   element programlistingco {
+      programlistingco.info,
+      db.areaspec,
+      db.programlisting,
+      db.calloutlist*
+   }
+
+areaspec.units.attrib = area.units.attribute
+db.areaspec = element areaspec { (db.area | db.areaset)+ }
+
+# FIXME: are the common linking attributes used on area?
+
+ctrl:common-attributes [ element="area" attributes="common.attrib.idreq" ]
+
+area.units.attrib = area.units.attribute
+area.linkends.attrib = linkends.attribute?
+area.label.attrib = attribute label { text }?
+area.coords.attrib = attribute coords { text }
+db.area = element area { empty }
+
+ctrl:common-attributes [ element="areaset" attributes="common.attrib.idreq" ]
+
+areaset.units.attrib = area.units.attribute
+areaset.label.attrib = attribute label { text }?
+db.areaset = element areaset { db.area+ }
+
+screenco.info = docbook.info.titleforbidden
+db.screenco =
+   element screenco {
+      screenco.info,
+      db.areaspec,
+      db.screen,
+      db.calloutlist*
+   }
+
+mediaobjectco.info = docbook.info.titleforbidden
+db.mediaobjectco =
+   element mediaobjectco {
+      mediaobjectco.info,
+      db.imageobjectco,
+      (db.imageobjectco | db.textobject)*
+   }
+
+imageobjectco.info = docbook.info.titleforbidden
+db.imageobjectco =
+   element imageobjectco {
+      imageobjectco.info?,
+      db.areaspec,
+      db.imageobject,
+      db.calloutlist*
+   }
+
+# FIXME: are the common linking attributes used on co?
+
+ctrl:common-attributes [ element="co" attributes="common.attrib.idreq" ]
+
+co.linkends.attrib = linkends.attribute?
+co.label.attrib = attribute label { text }?
+db.co = element co { empty }
+
+# FIXME: are the common linking attributes used on coref?
+
+coref.label.attrib = attribute label { text }?
+coref.linkend.attrib = linkend.attribute
+
+db.coref = element coref { empty }
+

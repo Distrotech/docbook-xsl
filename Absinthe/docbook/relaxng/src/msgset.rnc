@@ -1,0 +1,52 @@
+# This file is part of DocBook NG: The "Absinthe" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+
+msgset.info = docbook.info.titleonly
+
+db.msgset = element msgset { msgset.info, (db.msgentry+|db.simplemsgentry+) }
+
+db.msgentry = element msgentry { db.msg+, db.msginfo?, db.msgexplan* }
+
+simplemsgentry.audience.attrib = attribute audience { text }
+simplemsgentry.origin.attrib = attribute origin { text }
+simplemsgentry.level.attrib = attribute level { text }
+db.simplemsgentry = element simplemsgentry { db.msgtext, db.msgexplan+ }
+
+msg.info = docbook.info.titleonly
+db.msg = element msg { msg.info, db.msgmain, (db.msgsub|db.msgrel)* }
+
+msgmain.info = docbook.info.titleonly
+db.msgmain = element msgmain { msgmain.info, db.msgtext }
+
+msgsub.info = docbook.info.titleonly
+db.msgsub = element msgsub { msgsub.info, db.msgtext }
+
+msgrel.info = docbook.info.titleonly
+db.msgrel = element msgrel { msgrel.info, db.msgtext }
+
+db.msgtext = element msgtext { blocks+ }
+
+db.msginfo = element msginfo { (db.msglevel|db.msgorig|db.msgaud)* }
+
+db.msglevel = element msglevel { docbook.text }
+
+db.msgorig = element msgorig { docbook.text }
+
+db.msgaud = element msgaud { docbook.text }
+
+msgexplan.info = docbook.info.titleonly
+db.msgexplan = element msgexplan { msgexplan.info, blocks+ }
+
+technical.blocks |= db.msgset
+

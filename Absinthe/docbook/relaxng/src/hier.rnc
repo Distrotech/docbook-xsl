@@ -1,0 +1,228 @@
+# This file is part of DocBook NG: The "Absinthe" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+# ======================================================================
+
+status.attribute = attribute status { text }
+label.attribute = attribute label { text }
+
+# ======================================================================
+
+divisions = db.part
+
+components =
+   db.dedication
+ | db.preface
+ | db.chapter
+ | db.appendix
+ | db.article
+ | db.colophon
+
+navigation.components =
+   db.toc | db.index | db.glossary | db.bibliography
+
+component.contentmodel =
+  navigation.components*, blocks.or.sections, navigation.components*
+
+# ======================================================================
+
+set.status.attrib = status.attribute?
+set.label.attrib = label.attribute?
+set.info = docbook.info.titlereq
+db.set = element set { set.info, db.toc?, (db.set|db.book)+, db.setindex? }
+
+book.status.attrib = status.attribute?
+book.label.attrib = label.attribute?
+book.info = docbook.info.titlereq
+db.book =
+   element book { book.info, (navigation.components | components | divisions)+ }
+
+dedication.status.attrib = status.attribute?
+dedication.label.attrib = label.attribute?
+dedication.info = docbook.info
+db.dedication =
+  element dedication { dedication.info, blocks+ }
+
+colophon.status.attrib = status.attribute?
+colophon.label.attrib = label.attribute?
+colophon.info = docbook.info
+db.colophon =
+   element colophon { colophon.info, blocks+ }
+
+toc.info = docbook.info.titleonly
+db.toc = element toc { toc.info, blocks*, (db.tocdiv | db.tocentry)* }
+
+tocdiv.pagenum.attrib = pagenum.attribute?
+tocdiv.linkend.attrib = linkend.attribute?
+
+tocdiv.info = docbook.info
+db.tocdiv = element tocdiv { tocdiv.info, blocks*, (db.tocdiv | db.tocentry)+ }
+
+tocentry.pagenum.attrib = pagenum.attribute?
+tocentry.linkend.attrib = linkend.attribute?
+db.tocentry = element tocentry { inlines* }
+
+appendix.status.attrib = status.attribute?
+appendix.label.attrib = label.attribute?
+appendix.info = docbook.info.titlereq
+db.appendix =
+   element appendix { appendix.info, component.contentmodel }
+
+chapter.status.attrib = status.attribute?
+chapter.label.attrib = label.attribute?
+chapter.info = docbook.info.titlereq
+db.chapter =
+   element chapter { chapter.info, component.contentmodel }
+
+part.components = navigation.components | components
+
+part.status.attrib = status.attribute?
+part.label.attrib = label.attribute?
+part.info = docbook.info.titlereq
+db.part =
+   element part {
+      part.info,
+      db.partintro?,
+      part.components+
+   }
+
+preface.status.attrib = status.attribute?
+preface.label.attrib = label.attribute?
+preface.info = docbook.info
+db.preface =
+   element preface { preface.info, component.contentmodel }
+
+partintro.status.attrib = status.attribute?
+partintro.label.attrib = label.attribute?
+
+partintro.info = docbook.info
+db.partintro =
+   element partintro { partintro.info, blocks.or.sections }
+
+sections.optional = db.section* | db.simplesect*
+
+sections.required = db.section+ | db.simplesect+
+
+blocks.or.sections =
+  (blocks+, sections.optional) | sections.required
+
+section.status.attrib = status.attribute?
+section.label.attrib = label.attribute?
+section.info = docbook.info.titlereq
+db.section =
+  element section { section.info, blocks.or.sections }
+
+simplesect.status.attrib = status.attribute?
+simplesect.label.attrib = label.attribute?
+simplesect.info = docbook.info.titlereq
+db.simplesect =
+  element simplesect { simplesect.info, blocks+ }
+
+bibliography.status.attrib = status.attribute?
+bibliography.label.attrib = label.attribute?
+bibliography.info = docbook.info
+db.bibliography =
+   element bibliography {
+      bibliography.info,
+      blocks*,
+      (db.bibliodiv+ | (db.biblioentry | db.bibliomixed)+)
+   }
+
+bibliodiv.status.attrib = status.attribute?
+bibliodiv.label.attrib = label.attribute?
+bibliodiv.info = docbook.info.titlereq
+db.bibliodiv =
+   element bibliodiv {
+      bibliodiv.info,
+      blocks*,
+      (db.biblioentry | db.bibliomixed)+
+   }
+
+glossary.status.attrib = status.attribute?
+glossary.label.attrib = label.attribute?
+glossary.info = docbook.info
+db.glossary =
+   element glossary {
+      glossary.info,
+      blocks*,
+      (db.glossdiv+ | db.glossentry+),
+      db.bibliography?
+   }
+
+glossdiv.status.attrib = status.attribute?
+glossdiv.label.attrib = label.attribute?
+glossdiv.info = docbook.info.titlereq
+db.glossdiv =
+   element glossdiv { glossdiv.info, blocks*, db.glossentry+ }
+
+index.info = docbook.info
+db.index =
+   element index {
+      index.info,
+      blocks*,
+      (db.indexdiv* | db.indexentry* | db.segmentedlist)
+   }
+
+setindex.info = docbook.info
+db.setindex =
+   element setindex { setindex.info, blocks*, (db.indexdiv* | db.indexentry*) }
+
+indexdiv.info = docbook.info.titlereq
+db.indexdiv =
+   element indexdiv { indexdiv.info, blocks*, (db.indexentry+|db.segmentedlist) }
+
+db.indexentry =
+   element indexentry {
+      db.primaryie,
+      (db.seeie | db.seealsoie)*,
+      (db.secondaryie, (db.seeie | db.seealsoie | db.tertiaryie)*)*
+   }
+
+primaryie.linkends.attrib = linkends.attribute?
+db.primaryie = element primaryie { inlines* }
+
+secondaryie.linkends.attrib = linkends.attribute?
+db.secondaryie = element secondaryie { inlines* }
+
+tertiaryie.linkends.attrib = linkends.attribute?
+db.tertiaryie = element tertiaryie { inlines* }
+
+seeie.linkend.attrib = linkend.attribute?
+db.seeie = element seeie { inlines* }
+
+seealsoie.linkends.attrib = linkends.attribute?
+db.seealsoie = element seealsoie { inlines* }
+
+db.ackno = element ackno { para.blocks+ }
+
+article.components.optional = db.section* | db.simplesect*
+article.components.required = db.section+ | db.simplesect+
+
+article.status.attrib = status.attribute?
+article.label.attrib = label.attribute?
+article.class.attrib =
+   attribute class {
+      "faq"
+    | "journalarticle"
+    | "productsheet"
+    | "specification"
+    | "techreport"
+    | "whitepaper"
+   }?
+
+article.info = docbook.info.titlereq
+db.article =
+   element article {
+      article.info,
+      navigation.components*,
+      ((blocks+, article.components.optional) | article.components.required),
+      (db.appendix | navigation.components | db.ackno)*
+   }
