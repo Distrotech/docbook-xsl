@@ -80,10 +80,12 @@
 <!NOTATION PCX		PUBLIC 
 "+//ISBN 0-7923-9432-1::Graphic Notation//NOTATION ZSoft PCX bitmap//EN">
 <!NOTATION PIC		SYSTEM "PIC">
+<!NOTATION PDF          SYSTEM "PDF">
 <!NOTATION PNG          SYSTEM "http://www.w3.org/TR/REC-png">
 <!NOTATION PS		SYSTEM "PS">
 <!NOTATION SGML		PUBLIC 
 "ISO 8879:1986//NOTATION Standard Generalized Markup Language//EN">
+<!NOTATION SVG          SYSTEM "http://www.w3.org/TR/SVG/">
 <!NOTATION TBL		SYSTEM "TBL">
 <!NOTATION TEX		PUBLIC 
 "+//ISBN 0-201-13448-9::Knuth//NOTATION The TeXbook//EN">
