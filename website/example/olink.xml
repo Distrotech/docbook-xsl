@@ -48,7 +48,7 @@ thing in it, it should look like something like this:</para>
 
 <programlisting
 ><![CDATA[<!DOCTYPE webpage PUBLIC "-//SF DocBook//DTD Website V2.0//EN"
-          SYSTEM "http://www.sf.net/docbook/release/website/2.0/website.dtd [
+          SYSTEM "http://www.sourceforge.net/docbook/release/website/2.0/website.dtd [
 <!ENTITY linking SYSTEM "olink.xml" NDATA XML>
 ]>]]></programlisting>
 
