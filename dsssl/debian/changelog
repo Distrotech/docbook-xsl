@@ -1,3 +1,10 @@
+docbook-dsssl (1.78-4) unstable; urgency=low
+
+  * postinst: minor message change
+  * update French PO translations; closes: #189224
+
+ -- Adam Di Carlo <aph@debian.org>  Wed, 28 May 2003 12:43:49 -0400
+
 docbook-dsssl (1.78-3) unstable; urgency=low
 
   * debian/templates: more translatable choices; closes: #185880
