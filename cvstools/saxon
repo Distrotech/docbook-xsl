@@ -22,7 +22,7 @@ MYDIR=`dirname $0`
 
 # identify the directory for DocBook XSL
 for dir in "/sourceforge/docbook/xsl" \
-           "$MYDIR/xsl" \
+           "$MYDIR/../xsl" \
            "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh" ; do
   if [ -d "$dir" ]; then
     DOCBOOKXSL="$dir"
@@ -138,6 +138,7 @@ DOTTEDVERSION=`echo $VERSION | sed -e 's/\([0-9]\)\([0-9]\)/\1.\2/g; s/\([0-9]\)
 ##
 ## locate saxon.jar
 ##
+if [[ $CLASSPATH != *saxon* ]]; then
 SAXON=
 for jar in "/usr/local/java/saxon-$DOTTEDVERSION/saxon.jar" \
            "/usr/local/java/saxon-$DOTTEDVERSION/saxon7.jar" \
@@ -150,13 +151,15 @@ for jar in "/usr/local/java/saxon-$DOTTEDVERSION/saxon.jar" \
            "/usr/local/java/saxon/saxon.jar" \
            "/usr/local/share/java/saxon/saxon.jar" \
            "/usr/share/java/saxon.jar"; do
-  if [ -f "$jar" -a "$SAXON" = "" ]; then
+  if [ -f "$jar" ]; then
     SAXON="$jar"
     break
   fi
 done
 if [ ! -f "$SAXON" ]; then
-  echo "warning: cannot locate Saxon JAR file" 1>&2
+  echo "error: cannot locate Saxon" 1>&2
+  exit 1
+fi
 fi
 
 ##
@@ -211,7 +214,7 @@ fi
 # first choice is xerces2
 if [ "$PARSER" = "xerces2" -o "$PARSER" = "auto" ]; then
   PARSERCLASS=`findxerces2`
-  if [ "$PARSERCLASS" ]; then
+  if [ "$PARSERCLASS" ] || [[ $CLASSPATH == *xerces* ]]; then
     DBFACTORY="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"
     SPFACTORY="-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"
   fi
@@ -235,7 +238,7 @@ if [ "$PARSER" = "crimson" ] || [ ! "$PARSERCLASS" -a "$PARSER" = "auto" ]; then
   fi
 fi
 
-if [ "$PARSER" != "native" -a ! "$PARSERCLASS" ]; then
+if [ "$PARSER" != "native" -a ! "$PARSERCLASS" ] && [[ $CLASSPATH != *xerces* ]]; then
   echo "warning: cannot locate an alternate SAX parser, PEs may not work correctly" 1>&2
 fi
 
@@ -251,7 +254,7 @@ TRANSFACTORY=com.icl.saxon.TransformerFactoryImpl
 ## FIXME: do we specifically *not* want to use the sun resolver?
 ##
 RESOLVER=`findresolver`
-if [ -f "$RESOLVER" -o -d "$RESOLVER" ]; then
+if [ -f "$RESOLVER" -o -d "$RESOLVER" ] || [[ $CLASSPATH == *xml-commons-resolver* ]]; then
   # use the apache resolver
   XARG=${XARG:--x org.apache.xml.resolver.tools.ResolvingXMLReader}
   YARG=${YARG:--y org.apache.xml.resolver.tools.ResolvingXMLReader}

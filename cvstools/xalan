@@ -116,7 +116,7 @@ else
   ## xalan 2
   ##
 
-  if [ ! "$XALAN" ]; then
+  if [ ! "$XALAN" ] && [[ $CLASSPATH != *xalan* ]]; then
     STRIKEVERSION=`echo $VERSION | sed -e 's/\([0-9]\)\([0-9]\)/\1_\2/g; s/\([0-9]\)\([0-9D]\)/\1_\2/g;'`
     DOTVERSION=`echo $VERSION | sed -e 's/\([0-9]\)\([0-9]\)/\1.\2/g; s/\([0-9]\)\([0-9D]\)/\1.\2/g;'`
     ##
@@ -169,7 +169,7 @@ else
   ## use the appropriate xerces
   ##
   XERCES=`findxerces2`
-  if [ ! "$XERCES" ]; then
+  if [ ! "$XERCES" ] && [[ $CLASSPATH != *xerces* ]]; then
     echo "cannot locate Xerces 2" 1>&2
     exit 1
   fi
@@ -179,7 +179,7 @@ else
   ##
   if $USERESOLVER; then
     RESOLVER=`findresolver`
-    if [ ${RESOLVER/sun/} != ${RESOLVER} ]; then
+    if [ $RESOLVER ] && [ ${RESOLVER/sun/} != ${RESOLVER} ]; then
       # guess this is the sun resolver
       RESOLVERS="-URIRESOLVER com.sun.resolver.tools.CatalogResolver -ENTITYRESOLVER com.sun.resolver.tools.CatalogResolver"
     else
@@ -199,5 +199,5 @@ CLASSPATH=`fixclasspath "$NDWEXT:$XALAN:$JAXP:$RESOLVER:$XERCES:$CLASSPATH"`
 if [ ${VERBOSE} ] && ${VERBOSE}; then
   echo java $MEMORY $SAXPARSER org.apache.xalan.xslt.Process $RESOLVERS $@
 fi
-exec java -cp $CLASSPATH $MEMORY $SAXPARSER org.apache.xalan.xslt.Process $RESOLVERS $@
+exec java -Xbootclasspath/p:$CLASSPATH -cp $CLASSPATH $MEMORY $SAXPARSER org.apache.xalan.xslt.Process $RESOLVERS $@
 

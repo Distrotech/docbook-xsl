@@ -82,7 +82,7 @@ if (open (F, $entfile)) {
 	    warn "Extra entity declaration: $param\n";
 	    $ok = 0;
 	}
-	if ($pfile !~ /^.*$param\.xml$/) {
+	if ($pfile !~ /^.*$param\.xml/) {
 	    warn "Incorrect system identifier for $param: $pfile\n";
 	    $ok = 0;
 	}

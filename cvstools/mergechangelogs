@@ -150,7 +150,8 @@ sub last_version {
 	my $minor = $3;
 
 	if ($minor == 0) {
-	    die "Can\'t calculate preceding from $version.\n";
+	    $middle--;
+	    $minor++;
 	} else {
 	    $minor--;
 	}

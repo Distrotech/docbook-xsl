@@ -1,11 +1,11 @@
 # this file is a -*- makefile -*- snippet
 # use it to configure docbook open repository materials build
 
-CVSROOT=/sourceforge/docbook
-CVSTOOLSROOT=$(CVSROOT)/cvstools
-XSLROOT=$(CVSROOT)/xsl
-DSSSLROOT=$(CVSROOT)/dsssl
-WEBSITEROOT=$(CVSROOT)/website
+DOCBOOK_CVS=/sandbox
+CVSTOOLSROOT=$(DOCBOOK_CVS)/cvstools
+XSLROOT=$(DOCBOOK_CVS)/xsl
+DSSSLROOT=$(DOCBOOK_CVS)/dsssl
+WEBSITEROOT=$(DOCBOOK_CVS)/website
 CVS2LOG=$(CVSTOOLSROOT)/cvs2log
 FLATTEN=$(CVSTOOLSROOT)/flatten
 MERGELOGS=$(CVSTOOLSROOT)/mergechangelogs
