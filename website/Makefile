@@ -14,7 +14,7 @@ website.dtd: website-custom.dtd forms.mod
 
 distrib:
 	$(CVS2LOG) -w
-ifeq ($MERGEVER),)
+ifeq ($(MERGEVER),)
 	$(MERGELOGS) > WhatsNew
 else
 	$(MERGELOGS) -v $(MERGEVER) > WhatsNew
