@@ -76,6 +76,9 @@
       <xsl:when test="@filename">
         <xsl:value-of select="@filename"/>
       </xsl:when>
+      <xsl:when test="/layout/config[@param='default-filename']">
+        <xsl:value-of select="(/layout/config[@param='default-filename'])[1]/@value"/>
+      </xsl:when>
       <xsl:otherwise>index.html</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -114,6 +117,11 @@
   <xsl:attribute name="filename">
     <xsl:value-of select="$filename"/>
   </xsl:attribute>
+  <xsl:if test="@tocskip != '0'">
+    <xsl:attribute name="tocskip">
+      <xsl:value-of select="@tocskip"/>
+    </xsl:attribute>
+  </xsl:if>
 
   <title>
     <xsl:choose>
