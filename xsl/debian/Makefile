@@ -13,7 +13,7 @@ PRINTF_OPTS=
 MYDATE:=$(shell LANG=C date -R)
 CHANGEDESC=Auto-built pre-packaging of new upstream release. This is NOT the official Debian package for the $(RELVER) release.
 
-COPYRIGHT_HEADER:=This package was debianized by $(PACKAGEREMAIL)\non $(MYDATE).\n\nIt was built by the DocBook Project at the same time as the\nstandard DocBook XSL stylesheet release. Non-Debian builds of the\npackage can be downloaded from the DocBook Project site.\n\n  http://sourceforge.net/projects/docbook/\n\nUpstream Authors: Norman Walsh <ndw@nwalsh.com> and members of\nthe DocBook Project <$(PACKAGEREMAIL)>\n\n\n
+COPYRIGHT_HEADER:=This package was debianized by $(EMAIL)\non $(MYDATE).\n\nIt was built by the DocBook Project at the same time as the\nstandard DocBook XSL stylesheet release. Non-Debian builds of the\npackage can be downloaded from the DocBook Project site.\n\n  http://sourceforge.net/projects/docbook/\n\nUpstream Authors: Norman Walsh <ndw@nwalsh.com> and members of\nthe DocBook Project <$(EMAIL)>\n\n\n
 
 README_HEADER=\n----------------------------------------------------------------------\nThis file was copied from the official Debian package. Bug reports\nabout this [version $(RELVER)-$(DEBVER)] unoffical package should NOT be\nreported to the Debian bug tracking system or the official\nmaintainer. Instead, report them here:\n\n  http://sourceforge.net/tracker/?func=add&group_id=21935&atid=373747\n\nSet the Group field to \"Packaging problem\".\n----------------------------------------------------------------------\n\n
 
