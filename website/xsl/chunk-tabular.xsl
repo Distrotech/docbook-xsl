@@ -6,7 +6,7 @@
                 version="1.0">
 
 <xsl:import href="tabular.xsl"/>
-<xsl:import href="/sourceforge/docbook/xsl/html/chunker.xsl"/>
+<xsl:import href="../../xsl/html/chunker.xsl"/>
 <xsl:include href="chunk-common.xsl"/>
 
 </xsl:stylesheet>

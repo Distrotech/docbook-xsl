@@ -17,7 +17,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:import href="/share/xsl/docbook/xhtml/docbook.xsl"/>
+<xsl:import href="../../xsl/xhtml/docbook.xsl"/>
 <xsl:import href="xbel.xsl"/>
 <xsl:include href="VERSION"/>
 <xsl:include href="param.xsl"/>
