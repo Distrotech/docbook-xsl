@@ -6646,6 +6646,11 @@ OtherCredit. -->
 			|register
 			|resource
 			|systemname
+			|domainname
+			|fqdomainname
+			|ipaddress
+			|netmask
+			|etheraddress
                         |username
 			|newsgroup)	#IMPLIED
 		%moreinfo.attrib;
