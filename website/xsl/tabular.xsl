@@ -129,8 +129,7 @@
 
               <xsl:if test="$autolayout/autolayout/toc[1]/@id = $id">
                 <table border="0" summary="home page extra headers"
-                       cellpadding="0" cellspacing="0"
-                       width="100%">
+                       cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                     <td width="50%" valign="middle" align="left">
                       <xsl:call-template name="home.navhead"/>
