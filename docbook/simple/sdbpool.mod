@@ -1,12 +1,12 @@
 <!-- ...................................................................... -->
-<!-- Simplified DocBook Information Pool V1.0b2 ......................... -->
+<!-- Simplified DocBook Information Pool V1.0 ............................. -->
 <!-- File sdbpool.mod ..................................................... -->
 
-<!-- Copyright 1992-2001 HaL Computer Systems, Inc.,
+<!-- Copyright 1992-2002 HaL Computer Systems, Inc.,
      O'Reilly & Associates, Inc., ArborText, Inc., Fujitsu Software
-     Corporation, Norman Walsh, Sun Microsystems, Inc. and the
-     Organization for the Advancement of Structured Information Standards
-     (OASIS).
+     Corporation, Norman Walsh, Sun Microsystems, Inc., and the
+     Organization for the Advancement of Structured Information
+     Standards (OASIS).
 
      $Id$
 
@@ -138,7 +138,6 @@
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
 		 		        |%descobj.class;
-		                        |beginpage
 		%local.listpreamble.mix;">
 
 <!-- Character-level mixtures ............................................. -->
@@ -149,7 +148,7 @@
 <!ENTITY % local.para.char.mix "">
 <!ENTITY % para.char.mix
 		"#PCDATA
-					|%gen.char.class;
+		|%xref.char.class;	|%gen.char.class;
 		|%link.char.class;	|%tech.char.class;
 					|%inlineobj.char.class;
 		%local.para.char.mix;">
@@ -157,7 +156,7 @@
 <!ENTITY % local.title.char.mix "">
 <!ENTITY % title.char.mix
 		"#PCDATA
-					|%gen.char.class;
+		|%xref.char.class;	|%gen.char.class;
 		|%link.char.class;	|%tech.char.class;
 					|%docinfo.char.class;
 					|%inlineobj.char.class;
@@ -200,5 +199,5 @@
 
 <!ENTITY % programlisting.content "%para.char.mix; | lineannotation">
 
-<!-- End of Simplified DocBook Information Pool V1.0b2 .................. -->
+<!-- End of Simplified DocBook Information Pool V1.0 ...................... -->
 <!-- ...................................................................... -->

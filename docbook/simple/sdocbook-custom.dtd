@@ -1,12 +1,12 @@
 <!-- ...................................................................... -->
-<!-- Simplified DocBook DTD V1.0b2 ...................................... -->
+<!-- Simplified DocBook DTD V1.0 .......................................... -->
 <!-- File sdocbook-custom.dtd ............................................. -->
 
-<!-- Copyright 1992-2001 HaL Computer Systems, Inc.,
+<!-- Copyright 1992-2002 HaL Computer Systems, Inc.,
      O'Reilly & Associates, Inc., ArborText, Inc., Fujitsu Software
-     Corporation, Norman Walsh, Sun Microsystems, Inc. and the
-     Organization for the Advancement of Structured Information Standards
-     (OASIS).
+     Corporation, Norman Walsh, Sun Microsystems, Inc., and the
+     Organization for the Advancement of Structured Information
+     Standards (OASIS).
 
      $Id$
 
@@ -30,16 +30,16 @@
 
 <!-- ...................................................................... -->
 
-<!-- This is the driver file for V1.0b2 of the Simplified DocBook XML DTD.
+<!-- This is the driver file for V1.0 of the Simplified DocBook XML DTD.
      Please use the following formal public identifier to identify it:
 
-     "-//OASIS//DTD Simplified DocBook XML V1.0b2//EN"
+     "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 
      For example:
 
      <!DOCTYPE article
-               PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0b2//EN"
-      "http://www.oasis-open.org/docbook/xml/simple/1.0b2/sdocbook.dtd"
+               PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+      "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd"
      [...]>
 -->
 
@@ -101,7 +101,7 @@
 <!-- Character-level classes .............................................. -->
 
 <!ENTITY % local.xref.char.class "">
-<!ENTITY % xref.char.class "">
+<!ENTITY % xref.char.class "footnoteref|xref %local.xref.char.class;">
 
 <!ENTITY % local.gen.char.class "">
 <!ENTITY % gen.char.class
@@ -110,7 +110,7 @@
 
 <!ENTITY % local.link.char.class "">
 <!ENTITY % link.char.class
-		"footnoteref|xref|link|ulink %local.link.char.class;">
+		"link|ulink %local.link.char.class;">
 
 <!ENTITY % local.tech.char.class "">
 <!ENTITY % tech.char.class
@@ -180,6 +180,12 @@
 		|%person.ident.mix;
 		%local.bibliocomponent.mix;">
 
+<!ENTITY % local.info.class "">
+<!ENTITY % info.class
+		"mediaobject | legalnotice
+		 | subjectset | keywordset | %bibliocomponent.mix;
+                 %local.info.class;">
+
 <!ENTITY % dbpool.redecl.module "INCLUDE">
 <!ENTITY % rdbpool SYSTEM "sdbpool.mod">
 
@@ -194,11 +200,13 @@
 <!ENTITY % section.element "IGNORE">
 <!ENTITY % sectioninfo.element "IGNORE">
 <!ENTITY % authorgroup.element "IGNORE">
+<!ENTITY % author.element "IGNORE">
+<!ENTITY % editor.element "IGNORE">
+<!ENTITY % othercredit.element "IGNORE">
 <!ENTITY % para.element "IGNORE">
 <!ENTITY % informaltable.element "IGNORE">
 <!ENTITY % replaceable.element "IGNORE">
 <!ENTITY % trademark.element "IGNORE">
-<!ENTITY % systemitem.element "IGNORE">
 <!ENTITY % article.element "IGNORE">
 <!ENTITY % articleinfo.element "IGNORE">
 <!ENTITY % appendix.element "IGNORE">
@@ -206,10 +214,19 @@
 <!ENTITY % sidebar.element "IGNORE">
 <!ENTITY % programlisting.element "IGNORE">
 <!ENTITY % literallayout.element "IGNORE">
+<!ENTITY % itemizedlist.element "IGNORE">
+<!ENTITY % orderedlist.element "IGNORE">
+<!ENTITY % variablelist.element "IGNORE">
+<!ENTITY % example.element "IGNORE">
+<!ENTITY % figure.element "IGNORE">
+<!ENTITY % legalnotice.element "IGNORE">
+<!ENTITY % systemitem.element "IGNORE">
+<!ENTITY % computeroutput.element "IGNORE">
+<!ENTITY % userinput.element "IGNORE">
 
-<!ENTITY % cals.table.module "IGNORE">
-<!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-                   "../xml/docbookx.dtd"
+<!ENTITY % cals.table.module "INCLUDE">
+<!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
 >
 %docbook;
 
@@ -236,6 +253,21 @@
 <!ENTITY % simple.authorgroup.element "INCLUDE">
 <![%simple.authorgroup.element;[
 <!ELEMENT authorgroup ((author|editor|corpauthor|othercredit)+)>
+]]>
+
+<!ENTITY % simple.author.element "INCLUDE">
+<![%simple.author.element;[
+<!ELEMENT author ((%person.ident.mix;)+)>
+]]>
+
+<!ENTITY % simple.editor.element "INCLUDE">
+<![%simple.editor.element;[
+<!ELEMENT editor ((%person.ident.mix;)+)>
+]]>
+
+<!ENTITY % simple.othercredit.element "INCLUDE">
+<![%simple.othercredit.element;[
+<!ELEMENT othercredit ((%person.ident.mix;)+)>
 ]]>
 
 <!ENTITY % simple.affiliation.element "INCLUDE">
@@ -267,11 +299,6 @@
 		| %tech.char.class;
 		| inlinemediaobject
 		| emphasis)*>
-]]>
-
-<!ENTITY % simple.systemitem.element "INCLUDE">
-<![%simple.systemitem.element;[
-<!ELEMENT systemitem (%cptr.char.mix;)*>
 ]]>
 
 <!ENTITY % simple.article.element "INCLUDE">
@@ -327,5 +354,56 @@
 <!ELEMENT literallayout (%para.char.mix; | lineannotation)*>
 ]]>
 
-<!-- End of Simplified DocBook DTD V1.0b2 ............................... -->
+<!ENTITY % simple.itemizedlist.element "INCLUDE">
+<![%simple.itemizedlist.element;[
+<!ELEMENT itemizedlist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, listitem+)>
+]]>
+
+<!ENTITY % simple.orderedlist.element "INCLUDE">
+<![%simple.orderedlist.element;[
+<!ELEMENT orderedlist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, listitem+)>
+]]>
+
+<!ENTITY % simple.variablelist.element "INCLUDE">
+<![%simple.variablelist.element;[
+<!ELEMENT variablelist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, varlistentry+)>
+]]>
+
+<!ENTITY % simple.example.element "INCLUDE">
+<![%simple.example.element;[
+<!ELEMENT example ((%formalobject.title.content;), (%example.mix;)+)
+		>
+]]>
+
+<!ENTITY % simple.figure.element "INCLUDE">
+<![%simple.figure.element;[
+<!ELEMENT figure ((%formalobject.title.content;),
+                       (%figure.mix; | %link.char.class;)+)>
+]]>
+
+<!ENTITY % simple.legalnotice.element "INCLUDE">
+<![%simple.legalnotice.element;[
+<!ELEMENT legalnotice (title?, (%legalnotice.mix;)+)
+		>
+]]>
+
+<!ENTITY % simple.systemitem.element "INCLUDE">
+<![%simple.systemitem.element;[
+<!ELEMENT systemitem (%cptr.char.mix; | acronym)*>
+]]>
+
+<!ENTITY % simple.computeroutput.element "INCLUDE">
+<![%simple.computeroutput.element;[
+<!ELEMENT computeroutput %ho; (%cptr.char.mix;)*>
+]]>
+
+<!ENTITY % simple.userinput.element "INCLUDE">
+<![%simple.userinput.element;[
+<!ELEMENT userinput %ho; (%cptr.char.mix;)*>
+]]>
+
+<!-- End of Simplified DocBook DTD V1.0 ................................... -->
 <!-- ...................................................................... -->
