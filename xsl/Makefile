@@ -9,12 +9,16 @@ RELVER := $(shell grep "<fm:Version" VERSION | sed "s/ *<\/\?fm:Version>//g")
 TAGVER := $(shell echo "V$(RELVER)" | sed "s/\.//g")
 SFRELID=
 FMGO=-N
+TMP=/tmp
+BROWSER=w3m
 
-DIRS=common html fo extensions htmlhelp javahelp
+DIRS=common lib html fo extensions htmlhelp javahelp
 
 .PHONY : distrib clean doc xhtml
 
-all:	xhtml RELEASE-NOTES.html
+all:	base xhtml docsrc
+
+base:
 	for i in $(DIRS) __bogus__; do \
 		if [ $$i != __bogus__ ] ; then \
 			echo "$(MAKE) -C $$i"; $(MAKE) -C $$i; \
@@ -25,19 +29,20 @@ RELEASE-NOTES.html: RELEASE-NOTES.xml
 	$(XJPARSE) $<
 	$(XSLT) $< docsrc/doc-link-docbook.xsl $@
 
-RELEASE-NOTES.pdf: RELEASE-NOTES.xml
-	$(XSLT) $< fo/docbook.xsl RELEASE-NOTES.fo
-	xep RELEASE-NOTES.fo
-	rm -f RELEASE-NOTES.fo
+RELEASE-NOTES.txt: RELEASE-NOTES.html
+	$(BROWSER) -dump $< > $@
 
 xhtml:
 	$(MAKE) -C xhtml
+
+docsrc:
+	$(MAKE) -C docsrc
 
 doc:
 	$(MAKE) -C docsrc
 	$(MAKE) -C doc
 
-distrib: all doc
+distrib: all doc RELEASE-NOTES.html RELEASE-NOTES.txt
 	$(CVS2LOG) -w
 ifeq ($(DIFFVER),)
 	$(MERGELOGS) > WhatsNew
@@ -65,38 +70,64 @@ freshmeat:
 ifeq ($(SFRELID),)
 	@echo "You must specify the sourceforge release identifier in SFRELID"
 else
-	$(XSLT) VERSION VERSION /tmp/fm-docbook-xsl sf-relid=$(SFRELID)
-	grep -v "<?xml" /tmp/fm-docbook-xsl | freshmeat-submit $(FMGO)
+	$(XSLT) VERSION VERSION $(TMP)/fm-docbook-xsl sf-relid=$(SFRELID)
+	grep -v "<?xml" $(TMP)/fm-docbook-xsl | freshmeat-submit $(FMGO)
 endif
 
 zip:
 ifeq ($(ZIPVER),)
 	@echo You must specify ZIPVER for the zip target
 else
-	rm -rf /tmp/docbook-xsl-$(ZIPVER)
-	rm -f /tmp/tar.exclude
-	rm -f /tmp/docbook-xsl-$(ZIPVER).tar.gz
-	rm -f /tmp/docbook-xsl-$(ZIPVER).zip
-	mkdir /tmp/docbook-xsl-$(ZIPVER)
-	touch /tmp/tar.exclude
-	find . -print  | grep /CVS$$ | cut -c3- >> /tmp/tar.exclude
-	find . -print  | grep /CVS/ | cut -c3- >> /tmp/tar.exclude
-	find . -print  | grep /debian/ | cut -c3- >> /tmp/tar.exclude
-	find . -print  | grep .classes | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name "*~"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name ".*~"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name ".*.pyc"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name "#*"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name ".#*"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name ".cvsignore"  | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name "Makefile*"   | cut -c3- >> /tmp/tar.exclude
-	find . -type f -name "README.CVS"   | cut -c3- >> /tmp/tar.exclude
-	tar cf - * --exclude-from /tmp/tar.exclude | (cd /tmp/docbook-xsl-$(ZIPVER); tar xf -)
-	cd /tmp && tar cf - docbook-xsl-$(ZIPVER) | gzip > docbook-xsl-$(ZIPVER).tar.gz
-	cd /tmp && zip -rpD docbook-xsl-$(ZIPVER).zip docbook-xsl-$(ZIPVER)
-	rm -f tar.exclude
+	find . -type f | xargs chmod 0644
+	find . -type d | xargs chmod 0755
+	chmod 0755 fo/pdf2index docsrc/make-xsl-params.pl INSTALL
+	rm -rf $(TMP)/docbook-xsl-$(ZIPVER)
+	rm -f $(TMP)/tar.exclude
+	rm -f $(TMP)/docbook-xsl-$(ZIPVER).tar.gz
+	rm -f $(TMP)/docbook-xsl-$(ZIPVER).tar.bz2
+	rm -f $(TMP)/docbook-xsl-$(ZIPVER).zip
+	umask 022; mkdir $(TMP)/docbook-xsl-$(ZIPVER)
+	touch $(TMP)/tar.exclude
+	-find extensions/xsltproc -print >> $(TMP)/tar.exclude
+	-find tools -print >> $(TMP)/tar.exclude
+	-find wordml -print >> $(TMP)/tar.exclude
+	find . -print  | grep /CVS$$ | cut -c3- >> $(TMP)/tar.exclude
+	find . -print  | grep /CVS/ | cut -c3- >> $(TMP)/tar.exclude
+	find . -print  | grep /debian/ | cut -c3- >> $(TMP)/tar.exclude
+	find . -print  | grep .classes | cut -c3- >> $(TMP)/tar.exclude
+	find . -print  | grep '^.\+\(/all\)\|\(/jar\)$$' | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "*~"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name ".*~"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name ".*.pyc"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "#*"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name ".#*"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name ".cvsignore"  | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "Makefile*"   | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "README.CVS"   | cut -c3- >> $(TMP)/tar.exclude
+	find . -type f -name "catalog.xml"   | cut -c3- >> $(TMP)/tar.exclude
+	tar cf - * --exclude-from $(TMP)/tar.exclude | (cd $(TMP)/docbook-xsl-$(ZIPVER); tar xf -)
+	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | gzip > docbook-xsl-$(ZIPVER).tar.gz
+	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | bzip2 > docbook-xsl-$(ZIPVER).tar.bz2
+	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(ZIPVER).zip docbook-xsl-$(ZIPVER)
+	rm -f $(TMP)/tar.exclude
 endif
 
 clean:
-	$(MAKE) -C doc clean
-	$(MAKE) -C docsrc clean
+	for i in $(DIRS) __bogus__; do \
+		if [ $$i != __bogus__ ] ; then \
+			echo "$(MAKE) clean -C $$i"; $(MAKE) clean -C $$i; \
+		fi \
+	done
+	$(MAKE) clean -C xhtml
+	$(MAKE) clean -C doc
+	$(MAKE) clean -C docsrc
+
+realclean: clean
+	for i in $(DIRS) __bogus__; do \
+		if [ $$i != __bogus__ ] ; then \
+			echo "$(MAKE) realclean -C $$i"; $(MAKE) realclean -C $$i; \
+		fi \
+	done
+	$(MAKE) realclean -C xhtml
+	$(MAKE) realclean -C doc
+	$(MAKE) realclean -C docsrc
