@@ -16,10 +16,12 @@ all:
 
 ifeq ($(TEXTONLY),0)
 STYLESHEET=$(TABSTYLE)
+STYLECHUNK=$(TABCHUNK)
 STYLEOPT=
 include depends.tabular
 else
 STYLESHEET=$(WEBSTYLE)
+STYLECHUNK=$(WEBCHUNK)
 STYLEOPT=filename-prefix=txt
 include depends.textonly
 endif
@@ -29,11 +31,8 @@ autolayout.xml: layout.xml
 	$(PROC) $(PROCOPT) $< ../xsl/autolayout.xsl $@
 	make depends
 
-chunk-tabular: autolayout.xml
-	$(PROC) $(PROCOPT) layout.xml $(TABCHUNK) - output-root=$(DESTPATH)
-
-chunk-website: autolayout.xml
-	$(PROC) $(PROCOPT) layout.xml $(WEBCHUNK) - output-root=$(DESTPATH)
+chunk: autolayout.xml
+	$(PROC) $(PROCOPT) autolayout.xml $(STYLECHUNK) - output-root=$(DESTPATH)
 
 %.html: autolayout.xml
 	xjparse $(filter-out autolayout.xml,$^)
