@@ -25,6 +25,31 @@
 <xsl:param name="admon.graphics.path">graphics/</xsl:param>
 <xsl:param name="admon.graphics.extension">.gif</xsl:param>
 
+<xsl:attribute-set name="table.properties">
+  <xsl:attribute name="border">0</xsl:attribute>
+  <xsl:attribute name="cellpadding">0</xsl:attribute>
+  <xsl:attribute name="cellspacing">0</xsl:attribute>
+  <xsl:attribute name="width">100%</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.navigation.cell.properties">
+  <xsl:attribute name="valign">top</xsl:attribute>
+  <xsl:attribute name="align">left</xsl:attribute>
+  <!-- width is set with $navotocwidth -->
+  <xsl:attribute name="bgcolor">
+    <xsl:value-of select="$navbgcolor"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.body.cell.properties">
+  <xsl:attribute name="valign">top</xsl:attribute>
+  <xsl:attribute name="align">left</xsl:attribute>
+  <!-- width is set with $navobodywidth -->
+  <xsl:attribute name="bgcolor">
+    <xsl:value-of select="$textbgcolor"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <!-- ==================================================================== -->
 
 <xsl:template match="/">
@@ -65,15 +90,19 @@
       <div id="{$id}" class="{name(.)}">
         <a name="{$id}"/>
 
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <table xsl:use-attribute-sets="table.properties">
           <xsl:if test="$nav.table.summary!=''">
             <xsl:attribute name="summary">
               <xsl:value-of select="$nav.table.summary"/>
             </xsl:attribute>
           </xsl:if>
           <tr>
-            <td width="{$navtocwidth}" bgcolor="{$navbgcolor}"
-                valign="top" align="left">
+            <td xsl:use-attribute-sets="table.navigation.cell.properties">
+              <xsl:if test="$navtocwidth != ''">
+                <xsl:attribute name="width">
+                  <xsl:value-of select="$navtocwidth"/>
+                </xsl:attribute>
+              </xsl:if>
               <xsl:choose>
                 <xsl:when test="$toc">
                   <p class="navtoc">
@@ -85,18 +114,13 @@
                 <xsl:otherwise>&#160;</xsl:otherwise>
               </xsl:choose>
             </td>
-<!--
-            <td bgcolor="{$textbgcolor}">&#160;</td>
--->
-            <td align="left" valign="top"
-                bgcolor="{$textbgcolor}">
+
+            <td xsl:use-attribute-sets="table.body.cell.properties">
               <xsl:if test="$navbodywidth != ''">
                 <xsl:attribute name="width">
                   <xsl:value-of select="$navbodywidth"/>
                 </xsl:attribute>
               </xsl:if>
-
-<!--                style="padding-left: 10px" -->
 
               <xsl:if test="$autolayout/autolayout/toc[1]/@id = $id">
                 <table border="0" summary="home page extra headers"
