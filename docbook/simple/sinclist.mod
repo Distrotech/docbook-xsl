@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- Simplified DocBook Include Module V1.0CR2 ........................... -->
+<!-- Simplified DocBook Include Module V1.1 ............................... -->
 <!-- File sinclist.mod .................................................... -->
 
 <!-- Copyright 1992-2002 HaL Computer Systems, Inc.,
@@ -33,7 +33,6 @@
 <!ENTITY % issn.module "IGNORE">
 <!ENTITY % pagenums.module "IGNORE">
 <!ENTITY % simplelist.content.module "IGNORE">
-<!ENTITY % anchor.module "IGNORE">
 <!ENTITY % procedure.content.module "IGNORE">
 <!ENTITY % publisher.module "IGNORE">
 <!ENTITY % printhistory.module "IGNORE">
@@ -45,7 +44,6 @@
 <!ENTITY % biblioentry.module "IGNORE">
 <!ENTITY % glossary.content.module "IGNORE">
 <!ENTITY % glossentry.content.module "IGNORE">
-<!ENTITY % ssscript.module "IGNORE">
 <!ENTITY % caution.element "IGNORE">
 <!ENTITY % caution.attlist "IGNORE">
 <!ENTITY % important.element "IGNORE">
@@ -131,8 +129,8 @@
 <!ENTITY % msgorig.module "IGNORE">
 <!ENTITY % msgaud.module "IGNORE">
 <!ENTITY % msgexplan.module "IGNORE">
-<!ENTITY % qandset.content.module "IGNORE">
-<!ENTITY % qandset.module "IGNORE">
+<!ENTITY % qandaset.content.module "IGNORE">
+<!ENTITY % qandaset.module "IGNORE">
 <!ENTITY % qandadiv.module "IGNORE">
 <!ENTITY % qandaentry.module "IGNORE">
 <!ENTITY % question.module "IGNORE">
@@ -299,5 +297,27 @@
 <!ENTITY % setindexinfo.module "IGNORE">
 <!ENTITY % sidebarinfo.module "IGNORE">
 
-<!-- End of Simplified DocBook Include Module V1.0CR2 .................... -->
+<!-- new in 4.2 -->
+<!ENTITY % blockinfo.module "IGNORE">
+<!ENTITY % refsectioninfo.module "IGNORE">
+<!ENTITY % refsection.module "IGNORE">
+<!ENTITY % personname.module "IGNORE">
+<!ENTITY % personblurb.module "IGNORE">
+<!ENTITY % bibliocoverage.module "IGNORE">
+<!ENTITY % biblioid.module "IGNORE">
+<!ENTITY % bibliorelation.module "IGNORE">
+<!ENTITY % bibliosource.module "IGNORE">
+<!ENTITY % citebiblioid.module "IGNORE">
+<!ENTITY % coref.module "IGNORE">
+<!ENTITY % errortext.module "IGNORE">
+
+<!-- new in 4.3 -->
+<!ENTITY % code.module "IGNORE">
+<!ENTITY % corpcredit.module "IGNORE">
+<!ENTITY % stepalternatives.module "IGNORE">
+<!ENTITY % task.content.module "IGNORE">
+<!ENTITY % uri.module "IGNORE">
+<!ENTITY % allow.html.tables "INCLUDE">
+
+<!-- End of Simplified DocBook Include Module V1.1 ........................ -->
 <!-- ...................................................................... -->

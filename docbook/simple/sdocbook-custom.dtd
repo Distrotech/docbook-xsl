@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- Simplified DocBook DTD V1.0CR2 ...................................... -->
+<!-- Simplified DocBook DTD V1.1 .......................................... -->
 <!-- File sdocbook-custom.dtd ............................................. -->
 
 <!-- Copyright 1992-2002 HaL Computer Systems, Inc.,
@@ -30,16 +30,16 @@
 
 <!-- ...................................................................... -->
 
-<!-- This is the driver file for V1.0CR2 of the Simplified DocBook XML DTD.
+<!-- This is the driver file for V1.1 of the Simplified DocBook XML DTD.
      Please use the following formal public identifier to identify it:
 
-     "-//OASIS//DTD Simplified DocBook XML V1.0CR2//EN"
+     "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
 
      For example:
 
      <!DOCTYPE article
-               PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0CR2//EN"
-      "http://www.oasis-open.org/docbook/xml/simple/1.0CR2/sdocbook.dtd"
+               PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+      "http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd"
      [...]>
 -->
 
@@ -91,7 +91,7 @@
 		"sidebar %local.compound.class;">
 
 <!ENTITY % local.genobj.class "">
-<!ENTITY % genobj.class "">
+<!ENTITY % genobj.class "anchor %local.genobj.class;">
 
 <!ENTITY % local.descobj.class "">
 <!ENTITY % descobj.class
@@ -123,13 +123,17 @@
 		%local.tech.char.class;">
 
 <!ENTITY % local.base.char.class "">
-<!ENTITY % base.char.class "">
+<!ENTITY % base.char.class "anchor %local.base.char.class;">
 
 <!ENTITY % local.docinfo.char.class "">
 <!ENTITY % docinfo.char.class
 		"author|corpauthor|othercredit
 		|revhistory
 		%local.docinfo.char.class;">
+
+<!ENTITY % local.other.char.class "">
+<!ENTITY % other.char.class
+		"subscript|superscript %local.other.char.class;">
 
 <!ENTITY % local.inlineobj.char.class "">
 <!ENTITY % inlineobj.char.class
@@ -144,6 +148,7 @@
 <!ENTITY % common.attrib
 	"id		ID		#IMPLIED
 	lang		CDATA		#IMPLIED
+        remap           CDATA           #IMPLIED
 	revisionflag	(changed
 			|added
 			|deleted
@@ -154,6 +159,7 @@
 <!ENTITY % idreq.common.attrib
 	"id		ID		#REQUIRED
 	lang		CDATA		#IMPLIED
+        remap           CDATA           #IMPLIED
 	revisionflag	(changed
 			|added
 			|deleted
@@ -180,6 +186,12 @@
 		|%person.ident.mix;
 		%local.bibliocomponent.mix;">
 
+<!ENTITY % local.info.class "">
+<!ENTITY % info.class
+		"mediaobject | legalnotice
+		 | subjectset | keywordset | %bibliocomponent.mix;
+                 %local.info.class;">
+
 <!ENTITY % dbpool.redecl.module "INCLUDE">
 <!ENTITY % rdbpool SYSTEM "sdbpool.mod">
 
@@ -194,6 +206,9 @@
 <!ENTITY % section.element "IGNORE">
 <!ENTITY % sectioninfo.element "IGNORE">
 <!ENTITY % authorgroup.element "IGNORE">
+<!ENTITY % author.element "IGNORE">
+<!ENTITY % editor.element "IGNORE">
+<!ENTITY % othercredit.element "IGNORE">
 <!ENTITY % para.element "IGNORE">
 <!ENTITY % informaltable.element "IGNORE">
 <!ENTITY % replaceable.element "IGNORE">
@@ -205,10 +220,22 @@
 <!ENTITY % sidebar.element "IGNORE">
 <!ENTITY % programlisting.element "IGNORE">
 <!ENTITY % literallayout.element "IGNORE">
+<!ENTITY % itemizedlist.element "IGNORE">
+<!ENTITY % orderedlist.element "IGNORE">
+<!ENTITY % variablelist.element "IGNORE">
+<!ENTITY % example.element "IGNORE">
+<!ENTITY % figure.element "IGNORE">
+<!ENTITY % legalnotice.element "IGNORE">
+<!ENTITY % systemitem.element "IGNORE">
+<!ENTITY % computeroutput.element "IGNORE">
+<!ENTITY % userinput.element "IGNORE">
+<!ENTITY % blockquote.element  "IGNORE">
+<!ENTITY % subscript.element "IGNORE">
+<!ENTITY % superscript.element "IGNORE">
 
 <!ENTITY % cals.table.module "INCLUDE">
-<!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-                   "../xml/docbookx.dtd"
+<!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+                   "http://docbook.org/xml/4.3/docbookx.dtd"
 >
 %docbook;
 
@@ -237,6 +264,21 @@
 <!ELEMENT authorgroup ((author|editor|corpauthor|othercredit)+)>
 ]]>
 
+<!ENTITY % simple.author.element "INCLUDE">
+<![%simple.author.element;[
+<!ELEMENT author ((%person.ident.mix;)+)>
+]]>
+
+<!ENTITY % simple.editor.element "INCLUDE">
+<![%simple.editor.element;[
+<!ELEMENT editor ((%person.ident.mix;)+)>
+]]>
+
+<!ENTITY % simple.othercredit.element "INCLUDE">
+<![%simple.othercredit.element;[
+<!ELEMENT othercredit ((%person.ident.mix;)+)>
+]]>
+
 <!ENTITY % simple.affiliation.element "INCLUDE">
 <![%simple.affiliation.element;[
 <!ELEMENT affiliation (jobtitle?, orgname?)>
@@ -249,13 +291,23 @@
 
 <!ENTITY % simple.informaltable.element "INCLUDE">
 <![%simple.informaltable.element;[
-<!ELEMENT informaltable (mediaobject+|tgroup+) %tbl.table.excep;>
+
+<![%allow.html.tables;[
+<!ENTITY % informaltable.table.mdl
+	"((mediaobject+|tgroup+)
+          |(caption, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+)))">
+]]>
+<!ENTITY % informaltable.table.mdl
+	"(mediaobject+|tgroup+)">
+
+<!ELEMENT informaltable (%informaltable.table.mdl;) %tbl.table.excep;>
 ]]>
 
 <!ENTITY % simple.replaceable.element "INCLUDE">
 <![%simple.replaceable.element;[
 <!ELEMENT replaceable (#PCDATA 
-		| %link.char.class; 
+		| %link.char.class;
+                | %base.char.class;
 		| inlinemediaobject)*>
 ]]>
 
@@ -321,5 +373,79 @@
 <!ELEMENT literallayout (%para.char.mix; | lineannotation)*>
 ]]>
 
-<!-- End of Simplified DocBook DTD V1.0CR2 ............................... -->
+<!ENTITY % simple.itemizedlist.element "INCLUDE">
+<![%simple.itemizedlist.element;[
+<!ELEMENT itemizedlist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, listitem+)>
+]]>
+
+<!ENTITY % simple.orderedlist.element "INCLUDE">
+<![%simple.orderedlist.element;[
+<!ELEMENT orderedlist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, listitem+)>
+]]>
+
+<!ENTITY % simple.variablelist.element "INCLUDE">
+<![%simple.variablelist.element;[
+<!ELEMENT variablelist ((%formalobject.title.content;)?,
+ 			    (%listpreamble.mix;)*, varlistentry+)>
+]]>
+
+<!ENTITY % simple.example.element "INCLUDE">
+<![%simple.example.element;[
+<!ELEMENT example ((%formalobject.title.content;), (%example.mix;)+)
+		>
+]]>
+
+<!ENTITY % simple.figure.element "INCLUDE">
+<![%simple.figure.element;[
+<!ELEMENT figure ((%formalobject.title.content;),
+                       (%figure.mix; | %link.char.class;)+)>
+]]>
+
+<!ENTITY % simple.legalnotice.element "INCLUDE">
+<![%simple.legalnotice.element;[
+<!ELEMENT legalnotice (title?, (%legalnotice.mix;)+)
+		>
+]]>
+
+<!ENTITY % simple.systemitem.element "INCLUDE">
+<![%simple.systemitem.element;[
+<!ELEMENT systemitem (%cptr.char.mix; | acronym)*>
+]]>
+
+<!ENTITY % simple.computeroutput.element "INCLUDE">
+<![%simple.computeroutput.element;[
+<!ELEMENT computeroutput %ho; (%cptr.char.mix;)*>
+]]>
+
+<!ENTITY % simple.userinput.element "INCLUDE">
+<![%simple.userinput.element;[
+<!ELEMENT userinput %ho; (%cptr.char.mix;)*>
+]]>
+
+<!ENTITY % simple.blockquote.element "INCLUDE">
+<![%simple.blockquote.element;[
+<!ELEMENT blockquote %ho; (title?, attribution?, (%component.mix;)+)>
+]]>
+
+<!ELEMENT subscript  (#PCDATA
+		| %link.char.class;
+		| emphasis
+		| replaceable
+                | inlinemediaobject
+		| %base.char.class;
+		| %other.char.class;)*
+		>
+
+<!ELEMENT superscript  (#PCDATA
+		| %link.char.class;
+		| emphasis
+		| replaceable
+                | inlinemediaobject
+		| %base.char.class;
+		| %other.char.class;)*
+		>
+
+<!-- End of Simplified DocBook DTD V1.1 ................................... -->
 <!-- ...................................................................... -->

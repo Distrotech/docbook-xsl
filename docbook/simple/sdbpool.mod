@@ -1,5 +1,5 @@
 <!-- ...................................................................... -->
-<!-- Simplified DocBook Information Pool V1.0CR2 ......................... -->
+<!-- Simplified DocBook Information Pool V1.1 ............................. -->
 <!-- File sdbpool.mod ..................................................... -->
 
 <!-- Copyright 1992-2002 HaL Computer Systems, Inc.,
@@ -34,7 +34,7 @@
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
 		|%formal.class;		|%compound.class;
-					|%descobj.class;
+		|%genobj.class;		|%descobj.class;
 		%local.component.mix;">
 
 <!ENTITY % local.sidebar.mix "">
@@ -43,6 +43,7 @@
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
 		|%formal.class;
+		|%genobj.class;
 		%local.sidebar.mix;">
 
 <!ENTITY % local.qandaset.mix "">
@@ -51,6 +52,7 @@
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
 		|%formal.class;
+		|%genobj.class;
 		%local.qandaset.mix;">
 
 <!ENTITY % local.revdescription.mix "">
@@ -59,6 +61,7 @@
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
 		|%formal.class;
+		|%genobj.class;
 		%local.revdescription.mix;">
 
 <!ENTITY % local.footnote.mix "">
@@ -137,8 +140,7 @@
 		"                  	 %admon.class;
 		|%linespecific.class;
 		|%para.class;		|%informal.class;
-		 		        |%descobj.class;
-		                        |beginpage
+		|%genobj.class;		|%descobj.class;
 		%local.listpreamble.mix;">
 
 <!-- Character-level mixtures ............................................. -->
@@ -151,7 +153,8 @@
 		"#PCDATA
 		|%xref.char.class;	|%gen.char.class;
 		|%link.char.class;	|%tech.char.class;
-					|%inlineobj.char.class;
+                |%base.char.class;
+		|%other.char.class;	|%inlineobj.char.class;
 		%local.para.char.mix;">
 
 <!ENTITY % local.title.char.mix "">
@@ -159,15 +162,17 @@
 		"#PCDATA
 		|%xref.char.class;	|%gen.char.class;
 		|%link.char.class;	|%tech.char.class;
+                |%base.char.class;
 					|%docinfo.char.class;
-					|%inlineobj.char.class;
+		|%other.char.class;	|%inlineobj.char.class;
 		%local.title.char.mix;">
 
 <!ENTITY % local.cptr.char.mix "">
 <!ENTITY % cptr.char.mix
 		"#PCDATA
 		|%link.char.class;	|%tech.char.class;
-					|inlinemediaobject
+                |%base.char.class;
+		|%other.char.class;	|inlinemediaobject
 		%local.cptr.char.mix;">
 
 <!ENTITY % local.smallcptr.char.mix "">
@@ -182,7 +187,8 @@
 		"#PCDATA
 					|acronym|emphasis|trademark
 		|%link.char.class;
-					|inlinemediaobject
+                |%base.char.class;
+		|%other.char.class;	|inlinemediaobject
 		%local.word.char.mix;">
 
 <!ENTITY % local.docinfo.char.mix "">
@@ -191,14 +197,19 @@
 		|%link.char.class;
 					|emphasis|trademark
 					|replaceable
-					|inlinemediaobject
+		|%other.char.class;	|inlinemediaobject
 		%local.docinfo.char.mix;">
 
 <!ENTITY % tbl.table.excep "">
+<![%allow.html.tables;[
+<!ENTITY % tbl.table.mdl
+	"((title, (mediaobject+|tgroup+))
+          |(caption, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+)))">
+]]>
 <!ENTITY % tbl.table.mdl
 	"(title, (mediaobject+|tgroup+))">
 
 <!ENTITY % programlisting.content "%para.char.mix; | lineannotation">
 
-<!-- End of Simplified DocBook Information Pool V1.0CR2 .................. -->
+<!-- End of Simplified DocBook Information Pool V1.1 ...................... -->
 <!-- ...................................................................... -->

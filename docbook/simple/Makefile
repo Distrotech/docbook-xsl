@@ -1,14 +1,24 @@
 include ../../cvstools/Makefile.incl
 
 MODULES=sdbcent.mod sdbhier.mod sdbpool.mod sinclist.mod
+VERSION=
+FMGO=-N
 
 all: sdocbook.dtd sdocbookref.dtd
 
 test:
-	$(XJPARSE) testcust.xml
-	$(XJPARSE) testrefcust.xml
-	$(XJPARSE) test.xml
-	$(XJPARSE) testcss.xml
+	$(XJPARSE) tests/testcust.xml
+	$(XJPARSE) tests/testrefcust.xml
+	$(XJPARSE) tests/test.xml
+	$(XJPARSE) tests/testcss.xml
+
+freshmeat:
+ifeq ($(VERSION),)
+	@echo "You must specify the version (VERSION)"
+else
+	$(XSLT) freshmeat.xsl freshmeat.xsl /tmp/fm-docbook-simple version=$(VERSION)
+	grep -v "<?xml" /tmp/fm-docbook-simple | freshmeat-submit $(FMGO)
+endif
 
 sdocbook.dtd: sdocbook-custom.dtd $(MODULES)
 	$(XJPARSE) tests/testcust.xml
@@ -22,13 +32,13 @@ doc: sdocbook.dtd
 	dtdparse --title "Simplified DocBook DTD" \
                  --output sdocbook.xml \
                  --decl /usr/lib/sgml/declaration/xml.dcl \
-                 --public "-//OASIS//DTD Simplified DocBook XML V1.0CR2//EN" \
-                 --system "http://www.oasis-open.org/docbook/xml/simple/1.0CR2/sdocbook.dtd" \
+                 --public "-//OASIS//DTD Simplified DocBook XML V$(VERSION)//EN" \
+                 --system "http://docbook.org/xml/simple/$(VERSION)/sdocbook.dtd" \
                  --nounexpanded sdocbook.dtd
 	dtdformat --html --noentities --nonotations sdocbook.xml
 
 refdoc: sdocbookref.dtd
-	dtdparse --title "Simplified DocBook RefEntry DTD" --output sdocbookref.xml --decl /usr/lib/sgml/declaration/xml.dcl --public "-//OASIS//DTD Simplified DocBook RefEntry XML V1.0CR2//EN" --system "http://www.oasis-open.org/docbook/xml/simple/1.0CR2/sdocbookref.dtd" --nounexpanded sdocbookref.dtd
+	dtdparse --title "Simplified DocBook RefEntry DTD" --output sdocbookref.xml --decl /usr/lib/sgml/declaration/xml.dcl --public "-//OASIS//DTD Simplified DocBook RefEntry XML V$(VERSION)//EN" --system "http://docbook.org/xml/simple/$(VERSION)/sdocbookref.dtd" --nounexpanded sdocbookref.dtd
 	dtdformat --html --noentities --nonotations sdocbookref.xml
 
 clean:
