@@ -17,7 +17,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:import href="http://docbook.sourceforge.net/release/xsl/snapshot/xhtml/docbook.xsl"/>
+<xsl:import href="http://docbook.sourceforge.net/release/xsl/snapshot/html/docbook.xsl"/>
 <xsl:import href="xbel.xsl"/>
 <xsl:include href="VERSION"/>
 <xsl:include href="param.xsl"/>
@@ -340,12 +340,6 @@ node.</para>
 <xsl:template match="holder" mode="footer.mode">
   <xsl:apply-templates/>
   <xsl:if test="position() != last()">, </xsl:if>
-</xsl:template>
-
-<xsl:template match="holder[@role]" mode="footer.mode">
-  <a href="{@role}">
-    <xsl:apply-templates/>
-  </a>
 </xsl:template>
 
 <!-- ==================================================================== -->
