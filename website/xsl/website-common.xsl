@@ -94,6 +94,20 @@ node.</para>
   <xsl:variable name="toc" select="($tocentry/ancestor-or-self::toc[1]
                                    | $autolayout//toc[1])[last()]"/>
 
+  <xsl:variable name="feedback">
+    <xsl:choose>
+      <xsl:when test="$page/config[@param='feedback.href']">
+        <xsl:value-of select="($page/config[@param='feedback.href'])[1]/@value"/>
+      </xsl:when>
+      <xsl:when test="$autolayout/autolayout/config[@param='feedback.href']">
+        <xsl:value-of select="($autolayout/autolayout/config[@param='feedback.href'])[1]/@value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$feedback.href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div class="navfoot">
     <xsl:if test="$footer.hr != 0"><hr/></xsl:if>
     <table width="100%" border="0" summary="Footer navigation">
@@ -131,19 +145,19 @@ node.</para>
         </td>
         <td width="33%" align="right">
             <xsl:choose>
-              <xsl:when test="$feedback.href != ''">
+              <xsl:when test="$feedback != ''">
                 <span class="footfeed">
                   <a>
                     <xsl:choose>
                       <xsl:when test="$feedback.with.ids != 0">
                         <xsl:attribute name="href">
-                          <xsl:value-of select="$feedback.href"/>
+                          <xsl:value-of select="$feedback"/>
                           <xsl:value-of select="$page/@id"/>
                         </xsl:attribute>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:attribute name="href">
-                          <xsl:value-of select="$feedback.href"/>
+                          <xsl:value-of select="$feedback"/>
                         </xsl:attribute>
                       </xsl:otherwise>
                     </xsl:choose>
