@@ -52,6 +52,7 @@
 
 <!ELEMENT tocentry ((title|titleabbrev|summary)*, tocentry*)>
 <!ATTLIST tocentry
+	id		ID	#IMPLIED
 	page		CDATA	#IMPLIED
 	href		CDATA	#IMPLIED
 	dir		CDATA	#IMPLIED

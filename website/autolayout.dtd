@@ -60,9 +60,10 @@
 <!ELEMENT tocentry (title, titleabbrev?, summary?, tocentry*)>
 <!ATTLIST tocentry
 	id		CDATA	#REQUIRED
-	page		CDATA	#REQUIRED
+	page		CDATA	#IMPLIED
+	href		CDATA	#IMPLIED
 	dir		CDATA	#IMPLIED
-	filename	CDATA	#REQUIRED
+	filename	CDATA	#IMPLIED
 	tocskip		(0|1)	"0"
 >
 
