@@ -10,6 +10,8 @@
 
 <!ELEMENT title ANY>
 
+<!ELEMENT titleabbrev ANY>
+
 <!ELEMENT summary (#PCDATA)*>
 
 <!ELEMENT config EMPTY>
@@ -46,6 +48,7 @@
 	page		CDATA	#REQUIRED
 	dir		CDATA	#IMPLIED
 	filename	CDATA	#REQUIRED
+	tocskip		(0|1)	"0"
 >
 
 <!ELEMENT notoc (title, titleabbrev?, summary?)>
