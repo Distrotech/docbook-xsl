@@ -45,3 +45,5 @@ clean:
 			echo "$(MAKE) -C $$i clean"; $(MAKE) -C $$i clean; \
 		fi \
 	done
+
+realclean: clean
