@@ -1,7 +1,0 @@
-\*CVS*
-\*Makefile
-\*exclude.txt
-\*.swp
-\*~
-\*doc/*.xsl
-\*manifest
