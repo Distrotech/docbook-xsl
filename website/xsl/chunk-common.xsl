@@ -16,12 +16,7 @@
   <xsl:apply-templates select="toc|notoc" mode="make"/>
 </xsl:template>
 
-<xsl:template match="toc" mode="make">
-  <xsl:call-template name="make.tocentry"/>
-  <xsl:apply-templates select="tocentry" mode="make"/>
-</xsl:template>
-
-<xsl:template match="tocentry|notoc" mode="make">
+<xsl:template match="toc|tocentry|notoc" mode="make">
   <xsl:call-template name="make.tocentry"/>
   <xsl:apply-templates select="tocentry" mode="make"/>
 </xsl:template>
@@ -58,12 +53,29 @@
     <xsl:value-of select="$filename"/>
   </xsl:variable>
 
-  <xsl:if test="not(sweb:exists($srcFile))">
-    <xsl:message terminate="yes">
-      <xsl:value-of select="$srcFile"/>
-      <xsl:text> does not exist.</xsl:text>
-    </xsl:message>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="function-available('sweb:exists')">
+      <xsl:if test="not(sweb:exists($srcFile))">
+        <xsl:message terminate="yes">
+          <xsl:value-of select="$srcFile"/>
+          <xsl:text> does not exist.</xsl:text>
+        </xsl:message>
+      </xsl:if>
+    </xsl:when>
+    <xsl:when test="function-available('xweb:exists')">
+      <xsl:if test="not(xweb:exists($srcFile))">
+        <xsl:message terminate="yes">
+          <xsl:value-of select="$srcFile"/>
+          <xsl:text> does not exist.</xsl:text>
+        </xsl:message>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message terminate="yes">
+        <xsl:text>Fail: this stylesheet relies on the exists() extension function</xsl:text>
+      </xsl:message>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <xsl:variable name="output-file">
     <xsl:value-of select="$output-root"/>
@@ -71,10 +83,34 @@
     <xsl:value-of select="$targetFile"/>
   </xsl:variable>
 
+  <xsl:variable name="needsUpdate">
+    <xsl:choose>
+      <xsl:when test="function-available('sweb:needsUpdate')">
+        <xsl:choose>
+          <xsl:when test="$rebuild-all != 0
+                          or sweb:needsUpdate($autolayout-file, $output-file)
+                          or sweb:needsUpdate($srcFile, $output-file)">
+            <xsl:text>1</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="function-available('xweb:needsUpdate')">
+        <xsl:choose>
+          <xsl:when test="$rebuild-all != 0
+                          or xweb:needsUpdate($autolayout-file, $output-file)
+                          or xweb:needsUpdate($srcFile, $output-file)">
+            <xsl:text>1</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
-    <xsl:when test="$rebuild-all != 0
-                    or sweb:needsUpdate($autolayout-file, $output-file)
-                    or sweb:needsUpdate($srcFile, $output-file)">
+    <xsl:when test="$needsUpdate != 0">
       <xsl:message>
         <xsl:text>Update: </xsl:text>
         <xsl:value-of select="$output-file"/>
@@ -82,7 +118,7 @@
         <xsl:value-of select="$srcFile"/>
       </xsl:message>
 
-      <xsl:variable name="webpage" select="document($srcFile)"/>
+      <xsl:variable name="webpage" select="document($srcFile,.)"/>
       <xsl:variable name="content">
         <xsl:apply-templates select="$webpage/webpage"/>
       </xsl:variable>
