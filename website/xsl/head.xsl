@@ -117,13 +117,26 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <link rel="stylesheet" href="{$relpath}{@src}">
-    <xsl:if test="@type">
-      <xsl:attribute name="type">
-	<xsl:value-of select="@type"/>
-      </xsl:attribute>
-    </xsl:if>
-  </link>
+  <xsl:choose>
+    <xsl:when test="starts-with(@src, '/')">
+      <link rel="stylesheet" href="{@src}">
+        <xsl:if test="@type">
+          <xsl:attribute name="type">
+            <xsl:value-of select="@type"/>
+          </xsl:attribute>
+        </xsl:if>
+      </link>
+    </xsl:when>
+    <xsl:otherwise>
+      <link rel="stylesheet" href="{$relpath}{@src}">
+        <xsl:if test="@type">
+          <xsl:attribute name="type">
+            <xsl:value-of select="@type"/>
+          </xsl:attribute>
+        </xsl:if>
+      </link>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="abstract" mode="head.mode">
