@@ -7,16 +7,31 @@
 # fail if no CLASSPATH set
 if [ -z "$CLASSPATH" ]; then
   cat <<- EOF
-$0: error: CLASSPATH not set. Stopping.
+`basename $0`: error: CLASSPATH not set. Stopping.
 
-Before invoking the $0 script, you must set the Java CLASSPATH environment
-variable in the environment from which the script runs, and it must contain
-absolute pathnames for the following:
+Before invoking `basename $0`, you must set the Java CLASSPATH
+environment variable in the environment from which the script
+runs, and it must contain absolute pathnames for the following:
 
   - Saxon or Xalan2 jar file or classes
   - Xerces jar file(s) or classes
   - Apache XML Commons Resolver jar file or classes
   - directory containing CatalogManager.properties file
+EOF
+  exit 1
+fi
+
+# fail if no DOCBOOK_CVS set
+if [ -z "$DOCBOOK_CVS" ]; then
+  cat <<- EOF
+`basename $0`: error: DOCBOOK_CVS not set. Stopping.
+
+Before invoking `basename $0`, you must set the DOCBOOK_CVS
+environment variable in the environment from which the script
+runs. The value of DOCBOOK_CVS should be the absolute path to the
+base of a DocBook Project CVS working directory that contains the
+various DocBook Project modules; that is, such that the modules
+can be found in \$DOCBOOK_CVS/xsl, \$DOCBOOK_CVS/website, etc.
 EOF
   exit 1
 fi
@@ -27,7 +42,9 @@ SITEUSER=`whoami`
 SITEBASE=/home/groups/d/do/docbook/htdocs/snapshots
 SITEHOST=docbook.sourceforge.net
 RELEASEVERSION=snapshot
-TMP=/tmp
+if [ -z "$TMP" ]; then
+  TMP=/tmp
+fi
 # default timeout waiting for lock file to clear is 1200 seconds (20 mins)
 LOCK_TIMEOUT=1200
 
@@ -99,7 +116,7 @@ while getopts ":b:d:hl:p:rst:u:v:z:" opt; do
          done ;;
     b  ) BUILDDIR=$OPTARG ;;
     l  ) LOGDIR=$OPTARG ;;
-    t  ) DBKTMP=$OPTARG ;;
+    t  ) TMP=$OPTARG ;;
     v  ) RELEASEVERSION=$OPTARG ;;
     u  ) SITEUSER=$OPTARG
          OVERRIDE_CVSUSER=1 ;;
@@ -221,18 +238,12 @@ else
     cvs update -d -P $DISTRO || exit 1
     echo
 
-    echo "Building $DISTRO stylesheets..."
-    echo
-
+    # if this module has a "common" dir, it means it's probably
+    # relying on the "gentext" stuff, so make "gentext" first
     if [ -d $DISTRO/common ]; then
-      make $DISTRO-files -C gentext
-    fi
-    make -C $DISTRO || exit 1
-    if [ -d $DISTRO/demo ]; then
-      make -C $DISTRO/demo   || exit 1
-    fi
-    if [ -d $DISTRO/tests ]; then
-      make -C $DISTRO/tests  || exit 1
+      echo "Making gentext..."
+      echo
+      make -C gentext $DISTRO-files
     fi
 
     echo
@@ -273,7 +284,7 @@ EOF
     fi
     if [ "$UPLOAD" = "yes" ]; then
 
-    make ZIPVER=$RELEASEVERSION zip -C $DISTRO || exit 1
+    make zip -C $DISTRO ZIPVER=$RELEASEVERSION TMP=$TMP || exit 1
 
     cat <<- EOF > $TMP/line.tmp
 
