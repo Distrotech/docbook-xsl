@@ -4,6 +4,8 @@
 
 <xsl:output method="html"/>
 
+<xsl:param name="max.toc.width" select="7"/>
+
 <xsl:template match="toc/title|tocentry/title|titleabbrev">
   <xsl:apply-templates/>
 </xsl:template>
@@ -167,10 +169,34 @@
   <xsl:param name="pageid" select="@id"/>
   <xsl:param name="relpath" select="''"/>
 
-  <xsl:apply-templates select="tocentry">
-    <xsl:with-param name="pageid" select="$pageid"/>
-    <xsl:with-param name="relpath" select="$relpath"/>
-  </xsl:apply-templates>
+  <xsl:choose>
+    <xsl:when test="count(tocentry) &gt; $max.toc.width">
+      <xsl:variable name="cur"
+                    select="tocentry[descendant-or-self::*[@id=$pageid]]"/>
+      <xsl:variable name="half" select="$max.toc.width div 2"/>
+      <xsl:variable name="nodes"
+                    select="$cur/preceding-sibling::tocentry[position() &lt; $half]
+                            | $cur
+                            | $cur/following-sibling::tocentry[position() &lt; $half]"/>
+      <xsl:if test="count($cur/preceding-sibling::tocentry) &gt; $half">
+        <xsl:text>...</xsl:text>
+      </xsl:if>
+      <xsl:apply-templates select="$nodes">
+        <xsl:with-param name="pageid" select="$pageid"/>
+        <xsl:with-param name="relpath" select="$relpath"/>
+      </xsl:apply-templates>
+      <xsl:if test="count($cur/following-sibling::tocentry) &gt; $half">
+        <xsl:text> | ...</xsl:text>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="tocentry">
+        <xsl:with-param name="pageid" select="$pageid"/>
+        <xsl:with-param name="relpath" select="$relpath"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+
   <br/>
 
   <!-- if the current page isn't in this list, keep digging... -->
