@@ -3,14 +3,15 @@ include ../cvstools/Makefile.incl
 CVS2LOG=../cvstools/cvs2log
 NEXTVER=
 DIFFVER=
-ZIPVER=
 CVSCHECK = $(shell cvs -n update 2>&1 | grep -v ^cvs | cut -c3-)
 RELVER := $(shell grep "<fm:Version" VERSION | sed "s/ *<\/\?fm:Version>//g")
 TAGVER := $(shell echo "V$(RELVER)" | sed "s/\.//g")
+DEBVER := 0+pre1
 SFRELID=
 FMGO=-N
 TMP=/tmp
 BROWSER=w3m
+SUDO=sudo
 LFTP=lftp
 SCP=scp
 SCP_OPTS=
@@ -19,8 +20,10 @@ SSH_OPTS=
 SF_UPLOAD_HOST=upload.sf.net
 SF_UPLOAD_DIR=incoming
 PROJECT_HOST=docbook.sf.net
-PROJECT_BASE=/home/groups/d/do/docbook/htdocs/release/xsl
+PROJECT_BASE=/home/groups/d/do/docbook
+RELEASE_BASE:=$(PROJECT_BASE)/htdocs/release/xsl
 PROJECT_USER:=`sed 's/^:.\+:\([^@]\+\)@.\+$$/\1/' CVS/Root`
+DEBIAN_BASE:=$(PROJECT_BASE)/htdocs/debian
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
@@ -105,25 +108,26 @@ else
 endif
 
 zip:
-ifeq ($(ZIPVER),)
-	@echo You must specify ZIPVER for the zip target
+ifeq ($(RELVER),)
+	@echo You must specify RELVER for the zip target
 	exit 1
 else
 	find . -type f | xargs chmod 0644
 	find . -type d | xargs chmod 0755
 	chmod 0755 fo/pdf2index docsrc/make-xsl-params.pl INSTALL
-	rm -rf $(TMP)/docbook-xsl-$(ZIPVER)
+	rm -rf $(TMP)/docbook-xsl-$(RELVER)
 	rm -f $(TMP)/tar.exclude
-	rm -f $(TMP)/docbook-xsl-$(ZIPVER).tar.gz
-	rm -f $(TMP)/docbook-xsl-$(ZIPVER).tar.bz2
-	rm -f $(TMP)/docbook-xsl-$(ZIPVER).zip
-	umask 022; mkdir $(TMP)/docbook-xsl-$(ZIPVER)
+	rm -f $(TMP)/docbook-xsl-$(RELVER).tar.gz
+	rm -f $(TMP)/docbook-xsl-$(RELVER).tar.bz2
+	rm -f $(TMP)/docbook-xsl-$(RELVER).zip
+	umask 022; mkdir $(TMP)/docbook-xsl-$(RELVER)
 	touch $(TMP)/tar.exclude
+	-find debian -print >> $(TMP)/tar.exclude
 	-find extensions/xsltproc -print >> $(TMP)/tar.exclude
-	-find tools -print >> $(TMP)/tar.exclude
-	-find wordml -print >> $(TMP)/tar.exclude
 	-find extensions/saxon8 -print >> $(TMP)/tar.exclude
 	-find extensions/saxon8.jar -print >> $(TMP)/tar.exclude
+	-find tools -print >> $(TMP)/tar.exclude
+	-find wordml -print >> $(TMP)/tar.exclude
 	find . -print  | grep /CVS$$ | cut -c3- >> $(TMP)/tar.exclude
 	find . -print  | grep /CVS/ | cut -c3- >> $(TMP)/tar.exclude
 	find . -print  | grep /debian/ | cut -c3- >> $(TMP)/tar.exclude
@@ -140,29 +144,51 @@ else
 	find . -type f -name "README.CVS"   | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "catalog.xml"   | cut -c3- >> $(TMP)/tar.exclude
 	find . -type f -name "MANIFEST.build"   | cut -c3- >> $(TMP)/tar.exclude
-	tar cf - * --exclude-from $(TMP)/tar.exclude | (cd $(TMP)/docbook-xsl-$(ZIPVER); tar xf -)
-	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | gzip > docbook-xsl-$(ZIPVER).tar.gz
-	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(ZIPVER) | bzip2 > docbook-xsl-$(ZIPVER).tar.bz2
-	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(ZIPVER).zip docbook-xsl-$(ZIPVER)
+	tar cf - * --exclude-from $(TMP)/tar.exclude | (cd $(TMP)/docbook-xsl-$(RELVER); tar xf -)
+	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(RELVER) | gzip > docbook-xsl-$(RELVER).tar.gz
+	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(RELVER) | bzip2 > docbook-xsl-$(RELVER).tar.bz2
+	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(RELVER).zip docbook-xsl-$(RELVER)
 	rm -f $(TMP)/tar.exclude
 endif
 
 install: zip
-	-$(LFTP) -e "mput -O $(SF_UPLOAD_DIR) $(TMP)/docbook-xsl-$(ZIPVER).*; quit" $(SF_UPLOAD_HOST)
-	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl-$(ZIPVER).tar.bz2 $(PROJECT_USER)@$(PROJECT_HOST):$(PROJECT_BASE)/
+	-$(LFTP) -e "mput -O $(SF_UPLOAD_DIR) $(TMP)/docbook-xsl-$(RELVER).*; quit" $(SF_UPLOAD_HOST)
+	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl-$(RELVER).tar.bz2 $(PROJECT_USER)@$(PROJECT_HOST):$(RELEASE_BASE)/
 	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
 	  "(\
 	   umask 002; \
-	   cd $(PROJECT_BASE); \
-	   rm -rf $(ZIPVER); \
-	   tar xfj docbook-xsl-$(ZIPVER).tar.bz2; \
-	   mv docbook-xsl-$(ZIPVER) $(ZIPVER); \
-	   rm -rf docbook-xsl-$(ZIPVER).tar.bz2; \
-	   chmod -R g+w $(ZIPVER); \
+	   cd $(RELEASE_BASE); \
+	   rm -rf $(RELVER); \
+	   tar xfj docbook-xsl-$(RELVER).tar.bz2; \
+	   mv docbook-xsl-$(RELVER) $(RELVER); \
+	   rm -rf docbook-xsl-$(RELVER).tar.bz2; \
+	   chmod -R g+w $(RELVER); \
 	   rm -f current; \
-	   ln -s $(ZIPVER) current; \
-	   cd $(ZIPVER)/doc; \
+	   ln -s $(RELVER) current; \
+	   cd $(RELVER)/doc; \
 	   ln -s ../images; \
+	   )"
+
+deb: zip
+	cp -pR debian $(TMP)/docbook-xsl-$(RELVER)
+	cd $(TMP)/docbook-xsl-$(RELVER); \
+	$(SUDO) $(MAKE) -C debian              RELVER=$(RELVER) DEBVER=$(DEBVER); \
+	$(SUDO) $(MAKE) -f debian/rules binary RELVER=$(RELVER); \
+	$(SUDO) $(MAKE) -f debian/rules clean  RELVER=$(RELVER)
+
+uploaddeb: deb
+	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
+	  "(\
+	   cd $(DEBIAN_BASE); \
+	   rm -rf docbook-xsl_*; \
+	   )"
+	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl_$(RELVER)-$(DEBVER)_all.deb $(PROJECT_USER)@$(PROJECT_HOST):$(DEBIAN_BASE)/
+	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
+	  "(\
+	   umask 002; \
+	   export PATH=$(PROJECT_BASE)/bin:$$PATH; \
+	   cd $(DEBIAN_BASE); \
+	   dpkg-scanpackages unstable /dev/null | gzip -9c > unstable/Packages.gz; \
 	   )"
 
 clean:
