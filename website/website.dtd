@@ -14,8 +14,8 @@
 
 -->
 
-<!-- allow xlinks to occur anywhere a para can occur -->
-<!ENTITY % local.para.class "|xlink|webtoc">
+<!-- allow webtoc to occur anywhere a para can occur -->
+<!ENTITY % local.para.class "|webtoc">
 
 <!-- Forms? -->
 <!ENTITY % allowforms "INCLUDE">
@@ -27,17 +27,6 @@
 <!ENTITY % docbook PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                    "http://docbook.org/xml/4.1.2/docbookx.dtd">
 %docbook;
-
-<!ELEMENT xlink (%para.char.mix;)*>
-<!ATTLIST xlink
-	xml:link	CDATA	#FIXED "simple"
-	href		CDATA	#REQUIRED
-	role		CDATA	#IMPLIED
-	title		CDATA	#IMPLIED
-	content-role	CDATA	#IMPLIED
-	show		(embed | replace | new)	"replace"
-	actuate		(user | auto)	"user"
->
 
 <!ENTITY % webpage.mix "(config*, head, (%bookcomponent.content;),
                         appendix*, bibliography*, glossary*)">
@@ -54,21 +43,18 @@
 
 <!ELEMENT script (#PCDATA)>
 <!ATTLIST script
-	class	(local|global)	"local"
 	src	CDATA	#IMPLIED
 	language	CDATA	#IMPLIED
 >
 
 <!ELEMENT style (#PCDATA)>
 <!ATTLIST style
-	class	(local|global)	"local"
 	src	CDATA	#IMPLIED
 	type	CDATA	#IMPLIED
 >
 
 <!ELEMENT config EMPTY>
 <!ATTLIST config
-	class	(html|print)	"html"
 	param	CDATA	#REQUIRED
 	value	CDATA	#REQUIRED
 	altval	CDATA	#IMPLIED
@@ -77,19 +63,9 @@
 <!ELEMENT summary (%word.char.mix;)*>
 <!ELEMENT keywords (#PCDATA)>
 
-<!ELEMENT website (homepage, webpage*)>
-<!ATTLIST website
-	xmlns:html	CDATA	#FIXED "http://www.w3.org/1999/xhtml"
->
-
-<!ELEMENT homepage ((%webpage.mix;),webpage*)>
-<!ATTLIST homepage
-	role	CDATA	#IMPLIED
-	id	ID	#IMPLIED
->
-
-<!ELEMENT webpage ((%webpage.mix;),webpage*)>
+<!ELEMENT webpage (%webpage.mix;)>
 <!ATTLIST webpage
+	xmlns:html	CDATA	#FIXED "http://www.w3.org/1999/xhtml"
 	navto	(yes|no)	"yes"
 	role	CDATA	#IMPLIED
 	id	ID	#IMPLIED
