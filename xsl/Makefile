@@ -27,7 +27,7 @@ DEBIAN_BASE:=$(PROJECT_BASE)/htdocs/debian
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
-.PHONY : distrib clean doc xhtml
+.PHONY: distrib clean doc xhtml
 
 all:	checkclasspath base xhtml docsrc
 
@@ -149,6 +149,7 @@ else
 	umask 022; cd $(TMP) && tar cf - docbook-xsl-$(RELVER) | bzip2 > docbook-xsl-$(RELVER).tar.bz2
 	umask 022; cd $(TMP) && zip -q -rpD docbook-xsl-$(RELVER).zip docbook-xsl-$(RELVER)
 	rm -f $(TMP)/tar.exclude
+	touch zip
 endif
 
 install: zip
@@ -169,20 +170,25 @@ install: zip
 	   ln -s ../images; \
 	   )"
 
-deb: zip
-	cp -pR debian $(TMP)/docbook-xsl-$(RELVER)
+debdepends: zip
+	$(SUDO) rm -f $(TMP)/docbook-xsl_$(RELVER)-$(DEBVER)_all.deb; \
+	$(SUDO) cp -pR debian $(TMP)/docbook-xsl-$(RELVER); \
 	cd $(TMP)/docbook-xsl-$(RELVER); \
-	$(SUDO) $(MAKE) -C debian              RELVER=$(RELVER) DEBVER=$(DEBVER); \
-	$(SUDO) $(MAKE) -f debian/rules binary RELVER=$(RELVER); \
-	$(SUDO) $(MAKE) -f debian/rules clean  RELVER=$(RELVER)
+	$(MAKE) -C debian RELVER=$(RELVER) DEBVER=$(DEBVER)
+	touch debdepends
 
-uploaddeb: deb
+deb: debdepends
+	cd $(TMP)/docbook-xsl-$(RELVER); \
+	$(SUDO) $(MAKE) -f debian/rules binary RELVER=$(RELVER)
+	touch deb
+
+debupload: deb
 	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
 	  "(\
-	   cd $(DEBIAN_BASE); \
+	   cd $(DEBIAN_BASE)/unstable; \
 	   rm -rf docbook-xsl_*; \
 	   )"
-	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl_$(RELVER)-$(DEBVER)_all.deb $(PROJECT_USER)@$(PROJECT_HOST):$(DEBIAN_BASE)/
+	$(SCP) $(SCP_OPTS) $(TMP)/docbook-xsl_$(RELVER)-$(DEBVER)_all.deb $(PROJECT_USER)@$(PROJECT_HOST):$(DEBIAN_BASE)/unstable/
 	$(SSH) $(SSH_OPTS)-l $(PROJECT_USER) $(PROJECT_HOST) \
 	  "(\
 	   umask 002; \
@@ -191,7 +197,11 @@ uploaddeb: deb
 	   dpkg-scanpackages unstable /dev/null | gzip -9c > unstable/Packages.gz; \
 	   )"
 
-clean:
+debclean:
+	$(SUDO) rm -rf $(TMP)/docbook-xsl-$(RELVER)/debian
+	rm -rf zip debdepends deb
+
+clean: debclean
 	for i in $(DIRS) __bogus__; do \
 		if [ $$i != __bogus__ ] ; then \
 			echo "$(MAKE) clean -C $$i"; $(MAKE) clean -C $$i; \
