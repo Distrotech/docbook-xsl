@@ -274,6 +274,7 @@
 
           <xsl:call-template name="link.to.page">
             <xsl:with-param name="page" select="$target"/>
+            <xsl:with-param name="relpath" select="$relpath"/>
             <xsl:with-param name="linktext">
               <xsl:choose>
                 <xsl:when test="titleabbrev">
