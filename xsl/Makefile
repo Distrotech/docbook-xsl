@@ -4,7 +4,7 @@ CVS2LOG=../cvstools/cvs2log
 NEXTVER=
 DIFFVER=
 ZIPVER=
-CVSCHECK := $(shell cvs -n update 2>&1 | grep -v ^cvs | cut -c3-)
+CVSCHECK = $(shell cvs -n update 2>&1 | grep -v ^cvs | cut -c3-)
 RELVER := $(shell grep "<fm:Version" VERSION | sed "s/ *<\/\?fm:Version>//g")
 TAGVER := $(shell echo "V$(RELVER)" | sed "s/\.//g")
 SFRELID=
@@ -26,7 +26,23 @@ DIRS=common lib html fo extensions htmlhelp javahelp
 
 .PHONY : distrib clean doc xhtml
 
-all:	base xhtml docsrc
+all:	checkclasspath base xhtml docsrc
+
+checkclasspath:
+ifeq ($(CLASSPATH),)
+	cat <<- EOF\
+	error: CLASSPATH not set. Stopping.\
+	\
+	You must set the Java CLASSPATH environment variable and it must\
+	contain absolute pathnames for the following:\
+	\
+	  - Saxon or Xalan2 jar file or classes\
+	  - Xerces jar file(s) or classes\
+	  - Apache XML Commons Resolver jar file or classes\
+	  - directory containing CatalogManager.properties file\
+	EOF\
+	exit 1
+endif
 
 base:
 	for i in $(DIRS) __bogus__; do \
