@@ -37,6 +37,17 @@
 <!ENTITY % local.divcomponent.mix "|html:form">
 ]]>
 
+<!-- the XML notation; this really should go in DocBook -->
+<!NOTATION XML SYSTEM "http://www.w3.org/TR/REC-xml">
+<!ENTITY % local.notation.class "">
+<!ENTITY % notation.class
+		"BMP| CGM-CHAR | CGM-BINARY | CGM-CLEAR | DITROFF | DVI
+		| EPS | EQN | FAX | GIF | GIF87a | GIF89a 
+		| JPG | JPEG | IGES | PCX
+		| PIC | PNG | PS | SGML | XML | TBL | TEX | TIFF | WMF | WPG
+		| linespecific
+		%local.notation.class;">
+
 <!-- Now that individual XML pages are possible; it makes sense to use the -->
 <!-- simple subset for maximum utility in sending these pages across the -->
 <!-- web directly. -->
