@@ -1,6 +1,0 @@
-<simplelist type="inline">
-<member><sgmltag>guimenu</sgmltag></member>
-<member><sgmltag>guimenuitem</sgmltag></member>
-<member><sgmltag>menuchoice</sgmltag></member>
-<member><sgmltag>shortcut</sgmltag></member>
-</simplelist>
