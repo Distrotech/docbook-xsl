@@ -307,7 +307,8 @@ EOF
       LatestChanges \
       $SITEUSER@$SITEHOST:$SITEBASE
     ssh -l $SITEUSER $SITEHOST \
-     "(umask 002; \
+     "( \
+      umask 002; \
       cd $SITEBASE; \
       rm -f docbook-$DISTRO-$RELEASEVERSION.log; \
       rm -rf $DISTRO; \
@@ -320,9 +321,7 @@ EOF
       rm -rf /tmp/docbook-$DISTRO-$RELEASEVERSION; \
       rm -rf $DISTRO/tools; \
       rm -rf $DISTRO/RELEASE-NOTES.* ; \
-      mkdir -p $DISTRO/doc ; \
-      cd $DISTRO/doc ; \
-      ln -s ../images )"
+      )"
 
     rm -rf $TMP/docbook-$DISTRO*$RELEASEVERSION.tar.bz2
     rm -rf $TMP/docbook-$DISTRO*$RELEASEVERSION.tar.gz
