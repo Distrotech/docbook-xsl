@@ -12,7 +12,7 @@ DISTRIB_DEPENDS = doc RELEASE-NOTES.txt
 # value of ZIP_EXCLUDES is a space-separated list of any file or
 # directory names (shell wildcards OK) that should be excluded
 # from the zip file and tarball for the release
-DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml MANIFEST.build
+DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
