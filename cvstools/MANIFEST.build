@@ -1,5 +1,4 @@
 Makefile.incl
-docbook-build
 flatten
 mergechangelogs
 paramchk
