@@ -1,7 +1,7 @@
 # $Id$
 
 include ../cvstools/Makefile.incl
-include ../cvstools/Release-vars.mk
+include ../releasetools/Variables.mk
 
 DISTRO=xsl
 
@@ -13,6 +13,10 @@ DISTRIB_DEPENDS = doc RELEASE-NOTES.txt
 # directory names (shell wildcards OK) that should be excluded
 # from the zip file and tarball for the release
 DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml
+
+# to make sure that executable bit is retained after packaging,
+# you need to explicitly list any executable files here
+EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl install.sh
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
@@ -57,4 +61,4 @@ realclean: clean
 	$(MAKE) realclean -C doc
 	$(MAKE) realclean -C docsrc
 
-include ../cvstools/Release-targets.mk
+include ../releasetools/Targets.mk
