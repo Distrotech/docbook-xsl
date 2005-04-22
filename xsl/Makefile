@@ -18,6 +18,10 @@ DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml
 # you need to explicitly list any executable files here
 EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl install.sh
 
+# list of pathname+URIs to test for catalog support
+URILIST = \
+./\ http://docbook.sourceforge.net/release/xsl/current/
+
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
 .PHONY: distrib clean doc xhtml
