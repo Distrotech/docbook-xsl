@@ -20,7 +20,7 @@ EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl install.sh
 
 # list of pathname+URIs to test for catalog support
 URILIST = \
-./\ http://docbook.sourceforge.net/release/xsl/current/
+./\ http://docbook.sourceforge.net/release/xsl/current/
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
