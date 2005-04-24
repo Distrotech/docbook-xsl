@@ -1,0 +1,54 @@
+# This file is part of DocBook NG: The "Lillet" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+db.ubiq.inlines |= db.annotation
+db.all.blocks |= db.annotation
+
+db.annotations.attribute = attribute annotations { text }
+
+db.common.attributes &= db.annotations.attribute?
+db.common.idreq.attributes &= db.annotations.attribute?
+
+# ======================================================================
+
+[
+   db:refname [ "annotation" ]
+   db:refpurpose [ "An annotation" ]
+]
+div {
+   ctrl:exclude [ from="db.annotation" exclude="db.annotation" ]
+
+   db.annotation.role.attribute = attribute role { text }
+   db.annotation.annotates.attribute = attribute annotates { text }
+
+   db.annotation.attlist =
+      db.annotation.role.attribute?
+    & db.annotation.annotates.attribute?
+    & db.common.attributes
+
+   db.annotation.info = db._info.title.only
+
+   db.annotation =
+      element annotation {
+         db.annotation.attlist,
+         db.annotation.info,
+         db.all.blocks+
+      }
+}
+
