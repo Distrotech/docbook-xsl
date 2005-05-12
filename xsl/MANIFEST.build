@@ -1,5 +1,4 @@
 Makefile
-common/Makefile
 doc/Makefile
 doc/fo/Makefile
 doc/html/Makefile
