@@ -61,11 +61,6 @@ clean:
 	$(MAKE) clean -C docsrc
 
 realclean: clean
-	for i in $(DIRS) __bogus__; do \
-		if [ $$i != __bogus__ ] ; then \
-			echo "$(MAKE) realclean -C $$i"; $(MAKE) realclean -C $$i; \
-		fi \
-	done
 	$(MAKE) realclean -C xhtml
 	$(MAKE) realclean -C doc
 	$(MAKE) realclean -C docsrc
