@@ -7,12 +7,12 @@ DISTRO=xsl
 
 # value of DISTRIB_DEPENDS is a space-separated list of any
 # targets for this distro's "distrib" target to depend on
-DISTRIB_DEPENDS = doc RELEASE-NOTES.txt
+DISTRIB_DEPENDS = doc
 
 # value of ZIP_EXCLUDES is a space-separated list of any file or
 # directory names (shell wildcards OK) that should be excluded
 # from the zip file and tarball for the release
-DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml
+DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml extensions/build
 
 # value of DISTRIB_PACKAGES is a space-separated list of any
 # directory names that should be packaged as separate zip/tar
@@ -59,10 +59,5 @@ clean:
 	$(MAKE) clean -C xhtml
 	$(MAKE) clean -C doc
 	$(MAKE) clean -C docsrc
-
-realclean: clean
-	$(MAKE) realclean -C xhtml
-	$(MAKE) realclean -C doc
-	$(MAKE) realclean -C docsrc
 
 include ../releasetools/Targets.mk
