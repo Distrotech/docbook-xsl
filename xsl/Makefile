@@ -7,7 +7,7 @@ DISTRO=xsl
 
 # value of DISTRIB_DEPENDS is a space-separated list of any
 # targets for this distro's "distrib" target to depend on
-DISTRIB_DEPENDS = doc
+DISTRIB_DEPENDS = website slides doc
 
 # value of ZIP_EXCLUDES is a space-separated list of any file or
 # directory names (shell wildcards OK) that should be excluded
@@ -50,6 +50,16 @@ doc:
 	$(MAKE) -C docsrc
 	$(MAKE) -C doc
 
+website:
+	$(MAKE) -C ../website/xsl
+	cp -pR ../website/xsl website
+
+slides:
+	$(MAKE) -C ../slides/xsl
+	cp -pR ../slides/xsl slides/
+	cp -pR ../slides/graphics slides/
+	cp -pR ../slides/browser slides/
+
 clean:
 	for i in $(DIRS) __bogus__; do \
 		if [ $$i != __bogus__ ] ; then \
@@ -59,5 +69,6 @@ clean:
 	$(MAKE) clean -C xhtml
 	$(MAKE) clean -C doc
 	$(MAKE) clean -C docsrc
+	$(RM) -r website
 
 include ../releasetools/Targets.mk
