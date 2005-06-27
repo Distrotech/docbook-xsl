@@ -29,7 +29,7 @@ URILIST = \
 
 DIRS=common lib html fo manpages extensions htmlhelp javahelp
 
-.PHONY: distrib clean doc xhtml
+.PHONY: distrib clean doc xhtml $(NEWSFILE) install.sh
 
 all: base xhtml docsrc
 
