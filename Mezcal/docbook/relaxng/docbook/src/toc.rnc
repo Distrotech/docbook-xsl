@@ -1,0 +1,98 @@
+# This file is part of DocBook NG: The "Mezcal" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+db.navigation.components |= db.toc
+db.toc.components |= db.toc
+
+# ======================================================================
+
+[
+   db:refname [ "toc" ]
+   db:refpurpose [ "A table of contents" ]
+]
+div {
+
+   db.toc.role.attribute = attribute role { text }
+
+   db.toc.attlist =
+      db.toc.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.toc.info = db._info.title.only
+
+   db.toc =
+      element toc {
+         db.toc.attlist,
+         db.toc.info,
+         db.all.blocks*,
+         (db.tocdiv | db.tocentry)*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "tocdiv" ]
+   db:refpurpose [ "" ]
+]
+div {
+
+   db.tocdiv.role.attribute = attribute role { text }
+   db.tocdiv.pagenum.attribute = attribute pagenum { text }
+
+   db.tocdiv.attlist =
+      db.tocdiv.role.attribute?
+    & db.common.attributes
+    & db.tocdiv.pagenum.attribute?
+    & db.linkend.attribute?
+
+   db.tocdiv.info = db._info
+
+   db.tocdiv =
+      element tocdiv {
+         db.tocdiv.attlist,
+         db.tocdiv.info,
+         db.all.blocks*,
+         (db.tocdiv | db.tocentry)+
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "tocentry" ]
+   db:refpurpose [ "A component title in a table of contents" ]
+]
+div {
+
+   db.tocentry.role.attribute = attribute role { text }
+   db.tocentry.pagenum.attribute = attribute pagenum { text }
+
+   db.tocentry.attlist =
+      db.tocentry.role.attribute?
+    & db.common.attributes
+    & db.tocentry.pagenum.attribute?
+    & db.linkend.attribute?
+
+   db.tocentry =
+      element tocentry {
+         db.tocentry.attlist,
+         db.all.inlines*
+      }
+}
+

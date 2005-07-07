@@ -1,0 +1,172 @@
+# This file is part of DocBook NG: The "Mezcal" Release.
+
+# This schema is a "work-in-progress". It validates a DocBook-like grammar that
+# may, in some incarnation, form the basis for DocBook V.next. Or it may not.
+# At the moment, it's just an exploration by Norm. It has utterly no normative
+# value at all.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from DocBook XML V4.3
+# Release: $Id$
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+db.list.blocks |= db.qandaset
+
+# ======================================================================
+
+[
+   db:refname [ "qandaset" ]
+   db:refpurpose [ "A question-and-answer set" ]
+]
+div {
+
+   db.qandaset.role.attribute = attribute role { text }
+
+   db.qandaset.defaultlabel.enumeration = "none" | "number" | "qanda"
+   db.qandaset.defaultlabel.attribute =
+      attribute defaultlabel { db.qandaset.defaultlabel.enumeration }
+
+   db.qandaset.attlist =
+      db.qandaset.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+    & db.qandaset.defaultlabel.attribute?
+
+   db.qandaset.info = db._info.title.only
+
+   db.qandaset =
+      element qandaset {
+         db.qandaset.attlist,
+         db.qandaset.info,
+         db.all.blocks*,
+         (db.qandadiv+ | db.qandaentry+)
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "qandadiv" ]
+   db:refpurpose [ "A titled division in a QandASet" ]
+]
+div {
+
+   db.qandadiv.role.attribute = attribute role { text }
+
+   db.qandadiv.attlist =
+      db.qandadiv.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.qandadiv.info = db._info.title.only
+
+   db.qandadiv =
+      element qandadiv {
+         db.qandadiv.attlist,
+         db.qandadiv.info,
+         db.all.blocks*,
+         (db.qandadiv+ | db.qandaentry+)
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "qandaentry" ]
+   db:refpurpose [ "A question/answer set within a QandASet" ]
+]
+div {
+
+   db.qandaentry.role.attribute = attribute role { text }
+
+   db.qandaentry.attlist =
+      db.qandaentry.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.qandaentry.info = db._info.title.forbidden
+
+   db.qandaentry =
+      element qandaentry {
+         db.qandaentry.attlist,
+         db.qandaentry.info,
+         db.question,
+         db.answer*
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "question" ]
+   db:refpurpose [ "A question in a QandASet" ]
+]
+div {
+
+   db.question.role.attribute = attribute role { text }
+
+   db.question.attlist =
+      db.question.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.question =
+      element question {
+         db.question.attlist,
+         db.label?,
+         db.all.blocks+
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "answer" ]
+   db:refpurpose [ "An answer to a question posed in a QandASet" ]
+]
+div {
+
+   db.answer.role.attribute = attribute role { text }
+
+   db.answer.attlist =
+      db.answer.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.answer =
+      element answer {
+         db.answer.attlist,
+         db.label?,
+         db.all.blocks+
+      }
+}
+
+# ======================================================================
+
+[
+   db:refname [ "label" ]
+   db:refpurpose [ "A label on a Question or Answer" ]
+]
+div {
+
+   db.label.role.attribute = attribute role { text }
+
+   db.label.attlist =
+      db.label.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+
+   db.label =
+      element label {
+         db.label.attlist,
+         db._text
+      }
+}
+
