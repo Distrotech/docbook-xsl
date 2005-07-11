@@ -14,6 +14,8 @@
 
      ******************************************************************** -->
 
+<xsl:param name="man.string.subst.map.enabled">0</xsl:param>
+
 <!-- * This file contains named templates that are related to things -->
 <!-- * other than just assembling the actual text of the main text flow -->
 <!-- * of each man page. This "other" stuff currently amounts to: -->
@@ -206,11 +208,20 @@
     <!-- * a double backslash, to prevent it from being interpreted as -->
     <!-- * a roff escape -->
     <xsl:variable name="adjusted.content">
+      <xsl:choose>
+        <xsl:when test="$man.string.subst.map.enabled != 0">
       <xsl:call-template name="apply-string-subst-map">
         <xsl:with-param name="content" select="$content"/>
         <xsl:with-param name="map.contents"
                         select="exsl:node-set($man.string.subst.map)/*"/>
       </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="replace-entities">
+            <xsl:with-param name="content" select="$content"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <!-- * Optionally, apply a character map to replace Unicode -->
@@ -287,5 +298,314 @@
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template name="replace-entities">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="replace-trademark">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-servicemark">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-registered">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-copyright">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-rsquo">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-lsquo">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-rdquo">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-ldquo">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-nbsp">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-apostrophe">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-an-break-flag">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-an-no-space-flag">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-an-trap">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-dash">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-comment-start">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-roman-start">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-ital-start">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-bold-start">
+  <xsl:with-param name="content">
+  <xsl:call-template name="replace-backslash">
+  <xsl:with-param name="content" select="$content"/>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+  </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template name="replace-backslash">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'\'"/>
+    <xsl:with-param name="replacement" select="'\\'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- * after replacing backslashes, we need to restore -->
+<!-- * single-backslashes in all roff requests (because the -->
+<!-- * backslash substitution above doubled them) -->
+
+<xsl:template name="replace-bold-start">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'\\fB'"/>
+    <xsl:with-param name="replacement" select="'\fB'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-ital-start">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'\\fI'"/>
+    <xsl:with-param name="replacement" select="'\fI'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-roman-start">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'\\fR'"/>
+    <xsl:with-param name="replacement" select="'\fR'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-comment-start">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'.\\'"/>
+    <xsl:with-param name="replacement">.\"</xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<!-- * although the groff docs do not make it clear, it appears that -->
+<!-- * the only way to get a non-breaking hyphen in roff is to put a -->
+<!-- * backslash in front of it; and, unfortunately, groff is not smart -->
+<!-- * about where it breaks things (for example, it'll break an -->
+<!-- * argument for a command across a line, if that argument contains -->
+<!-- * a dash/hyphen); so, we must globally change all hyphens to "\-" -->
+
+<xsl:template name="replace-dash">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'-'"/>
+    <xsl:with-param name="replacement" select="'\-'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- * now we need to restore single-hypens in all roff requests -->
+<!-- * (because dash substitution added backslashes before them) -->
+
+<xsl:template name="replace-an-trap">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'.it 1 an\-trap'"/>
+    <xsl:with-param name="replacement" select="'.it 1 an-trap'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-an-no-space-flag">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'.nr an\-no\-space\-flag 1'"/>
+    <xsl:with-param name="replacement" select="'.nr an-no-space-flag 1'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-an-break-flag">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'.nr an\-break\-flag 1'"/>
+    <xsl:with-param name="replacement" select="'.nr an-break-flag 1'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<!-- * an apostrophe at the beginning of a line gets interpreted as a -->
+<!-- * roff request (groff(7) says it is "the non-breaking control -->
+<!-- * character"); so we must add backslash before any apostrophe -->
+<!-- * found at the start of a line -->
+<xsl:template name="replace-apostrophe">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target">&#10;'</xsl:with-param>
+    <xsl:with-param name="replacement">&#10;\'</xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<!-- * The remaining substitutions are all for characters that -->
+<!-- * the DocBook XSL stylesheets themselves generate under -->
+<!-- * certain circumstances; so we deal with them here so -->
+<!-- * that we can ensure they will always be replaced, even -->
+<!-- * if man.charmap.enabled is zero. -->
+
+<!-- * A no-break space can be written two ways in roff; the difference, -->
+<!-- * according to the "Page Motions" node in the groff info page, ixsl: -->
+<!-- * -->
+<!-- *   "\ " = -->
+<!-- *   An unbreakable and unpaddable (i.e. not expanded during filling) -->
+<!-- *   space. -->
+<!-- * -->
+<!-- *   "\~" = -->
+<!-- *   An unbreakable space that stretches like a normal -->
+<!-- *   inter-word space when a line is adjusted."  -->
+<!-- * -->
+<!-- * Unfortunately, roff seems to do some weird things with long -->
+<!-- * lines that only have words separated by "\~" spaces, so it's -->
+<!-- * safer just to stick with the "\ " space -->
+<xsl:template name="replace-nbsp">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x00a0;'"/>
+    <xsl:with-param name="replacement" select="'\ '"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-ldquo">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x201c;'"/>
+    <xsl:with-param name="replacement" select="'\(lq'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-rdquo">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x201d;'"/>
+    <xsl:with-param name="replacement" select="'\(rq'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-lsquo">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x2018;'"/>
+    <xsl:with-param name="replacement" select="'\(oq'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-rsquo">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x2019;'"/>
+    <xsl:with-param name="replacement" select="'\(cq'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-copyright">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x00a9;'"/>
+    <xsl:with-param name="replacement" select="'\(co'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-registered">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x00ae;'"/>
+    <xsl:with-param name="replacement" select="'\(rg'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replace-servicemark">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x2120;'"/>
+    <xsl:with-param name="replacement" select="'(SM)'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- * trademark -->
+<!-- * we don't do "\(tm" because for console output -->
+<!-- * because groff just renders that as "tm"; that is: -->
+<!-- * -->
+<!-- *   Product&#x2122; -> Producttm -->
+<!-- * -->
+<!-- * So we just make it to "(TM)" instead; thus: -->
+<!-- * -->
+<!-- *   Product&#x2122; -> Product(TM) -->
+<xsl:template name="replace-trademark">
+  <xsl:param name="content" select="''"/>
+  <xsl:call-template name="string.subst">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="target" select="'&#x2122;'"/>
+    <xsl:with-param name="replacement" select="'(TM)'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 </xsl:stylesheet>
