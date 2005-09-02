@@ -12,7 +12,7 @@ DISTRIB_DEPENDS = website slides doc
 # value of ZIP_EXCLUDES is a space-separated list of any file or
 # directory names (shell wildcards OK) that should be excluded
 # from the zip file and tarball for the release
-DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml extensions/build
+DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml extensions/build/
 
 # value of DISTRIB_PACKAGES is a space-separated list of any
 # directory names that should be packaged as separate zip/tar
@@ -22,6 +22,9 @@ DISTRIB_PACKAGES = doc
 # to make sure that executable bit is retained after packaging,
 # you need to explicitly list any executable files here
 DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl
+
+# location of XSL stylesheet for generating catalog.xml file
+DISTRIB_MAKECATALOG = common/make-catalog.xsl
 
 # list of pathname+URIs to test for catalog support
 URILIST = \
