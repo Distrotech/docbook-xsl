@@ -23,9 +23,6 @@ DISTRIB_PACKAGES = doc
 # you need to explicitly list any executable files here
 DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl
 
-# location of XSL stylesheet for generating catalog.xml file
-DISTRIB_MAKECATALOG = common/make-catalog.xsl
-
 # list of pathname+URIs to test for catalog support
 URILIST = \
 ./\ http://docbook.sourceforge.net/release/xsl/current/
