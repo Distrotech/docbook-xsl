@@ -1,5 +1,7 @@
 #!/usr/bin/perl -- # -*- Perl -*-
 
+# $Id$
+
 $dtd = shift @ARGV || die;
 
 select(STDERR); $| = 1;
