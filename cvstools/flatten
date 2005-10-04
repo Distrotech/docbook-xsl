@@ -45,31 +45,43 @@ $pass = 2;
 @dirstack = ('.');
 &read_dtd($dtd);
 
+sub resolve_uri {
+  my($dtd) = shift;
+  # ------------------------------------------------------------
+  #                      ** HACK ALERT **
+  # ------------------------------------------------------------
+  # This subroutine invokes xmlcatalog(1) and tries to parse
+  # standard output from that to resolve system IDs that contain
+  # remote URIs. This really ought to be done using Perl; and it
+  # should be made to read the XML_CATALOG_FILES env variable and
+  # deal with the case where there are multiple catalog files.
+  #
+  $catalog = "/etc/xml/catalog";
+  print STDERR "Finding $dtd...\n";
+  $found = `xmlcatalog $catalog $dtd > /dev/null 2>&1 ; echo \$?`;
+  if ($found == "0") {
+    $path = `xmlcatalog $catalog $dtd`;
+    $path =~ s#^file[:/]+(/.+)$#$1#;
+    chomp($path);
+    print STDERR "Found   " . $path; 
+    $dtd = $path;
+    return $dtd;
+  } else {
+    print STDERR "\nFatal: xmlcatalog utility not found. Stopping." . "\n";
+    exit 1;
+  }
+}
+
 sub read_dtd {
     my($dtd) = shift;
     my($totsize);
     local(*F, $_);
 
-    # use xmlcatalog to try to resolve remote URIs
-    # 
-    # this would be better if it read the value of the
-    # XML_CATALOG_FILES env variable and were able to deal with
-    # the case where there are multiple catalog files...
-    #
-    $catalog = "/etc/xml/catalog";
-    if ($dtd =~ /^http.+$/ || $dtd =~ /^http.+$/) {
-      print STDERR "Attempting to resolve remote URI to local path...\n\n";
-      $found = `xmlcatalog $catalog $dtd > /dev/null 2>&1 ; echo \$?`;
-      if ($found == "0") {
-        $path = `xmlcatalog $catalog $dtd`;
-        $path =~ s#^file[:/]+(/.+)$#$1#;
-        chomp($path);
-        print STDERR "Found " . $path . "\n"; 
-        $dtd = $path;
-      } else {
-        print STDERR `xmlcatalog $catalog $dtd` . "\n";
-        exit 1;
-      }
+    if ($dtd =~ /^http.+$/) {
+      # remote URI specified for DTD, so we need to do catalog
+      # lookup on that URI to find what local system path the URI
+      # maps to, then replace the value of $dtd with that path
+      $dtd = &resolve_uri($dtd);
     }
 
     if (! -f $dtd) {
