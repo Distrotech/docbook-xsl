@@ -12,7 +12,7 @@ DISTRIB_DEPENDS = website slides doc install.sh
 # value of ZIP_EXCLUDES is a space-separated list of any file or
 # directory names (shell wildcards OK) that should be excluded
 # from the zip file and tarball for the release
-DISTRIB_EXCLUDES = extensions/xsltproc saxon8 wordml extensions/build/
+DISTRIB_EXCLUDES = extensions/xsltproc saxon8 extensions/build/
 
 # value of DISTRIB_PACKAGES is a space-separated list of any
 # directory names that should be packaged as separate zip/tar
@@ -27,7 +27,7 @@ DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl
 URILIST = \
 ./\ http://docbook.sourceforge.net/release/xsl/current/
 
-DIRS=common lib html fo manpages extensions htmlhelp javahelp
+DIRS=common lib html fo manpages extensions htmlhelp javahelp wordml
 
 .PHONY: distrib clean doc xhtml $(NEWSFILE)
 
