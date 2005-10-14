@@ -22,4 +22,4 @@ XSLTOPT=
 XSLTPROC=
 RUNTRANG=$(CVSTOOLSROOT)/runtrang
 CLDR_DIR=$(DOCBOOK_CVS)/contrib/cldr
-XMLFORMAT_DIR=$(DOCBOOK_CVS)/contrib/tools/xmlformat
+XMLFORMAT_DIR=$(DOCBOOK_CVS)/contrib/tools/xmlformat/xmlformat-1.03
