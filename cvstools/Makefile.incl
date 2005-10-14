@@ -1,5 +1,5 @@
 # this file is a -*- makefile -*- snippet
-# use it to configure docbook open repository materials build
+# use it to configure DocBook Project builds
 
 CVSTOOLSROOT=$(DOCBOOK_CVS)/cvstools
 XSLROOT=$(DOCBOOK_CVS)/xsl
@@ -21,3 +21,4 @@ XSLT=$(CVSTOOLSROOT)/xslt
 XSLTOPT=
 XSLTPROC=
 RUNTRANG=$(CVSTOOLSROOT)/runtrang
+CLDR_DIR=$(DOCBOOK_CVS)/contrib/cldr
