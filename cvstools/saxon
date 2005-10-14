@@ -168,6 +168,7 @@ fi
 if [ ! "$NDWEXT" ]; then
   for ext in "$DOCBOOKXSL/extensions/saxon$EXTVERSION/.classes" \
              "$DOCBOOKXSL/extensions/saxon$EXTVERSION.jar" \
+             "/usr/share/java/docbook-xsl-saxon65.jar" \
              "/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/extensions/saxon$EXTVERSION.jar" ; do
     if [ -d $ext -o -f $ext ]; then
       NDWEXT=$ext;
