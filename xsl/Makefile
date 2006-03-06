@@ -27,7 +27,7 @@ DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl
 URILIST = \
 ./\ http://docbook.sourceforge.net/release/xsl/current/
 
-DIRS=common lib html fo manpages extensions htmlhelp javahelp wordml
+DIRS=extensions common lib html fo manpages htmlhelp javahelp wordml
 
 .PHONY: distrib clean doc xhtml $(NEWSFILE)
 
