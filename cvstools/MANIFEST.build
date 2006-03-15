@@ -1,6 +1,4 @@
 Makefile.incl
 flatten
 paramchk
-saxon
-xalan
 xjparse
