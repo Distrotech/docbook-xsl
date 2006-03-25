@@ -21,7 +21,7 @@ DISTRIB_PACKAGES = doc
 
 # to make sure that executable bit is retained after packaging,
 # you need to explicitly list any executable files here
-DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl
+DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl install.sh
 
 # list of pathname+URIs to test for catalog support
 URILIST = \
