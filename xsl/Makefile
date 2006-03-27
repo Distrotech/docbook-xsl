@@ -5,6 +5,10 @@ include ../releasetools/Variables.mk
 
 DISTRO=xsl
 
+# DISTRIB_PARAMS_FILES is a list of filenames that contain
+# documented params for this distro
+DISTRIB_PARAMS_FILES = $(shell for file in $$(find . -name "param.xsl"); do readlink -f $$file; done | grep -v xhtml)
+
 # value of DISTRIB_DEPENDS is a space-separated list of any
 # targets for this distro's "distrib" target to depend on
 DISTRIB_DEPENDS = website slides doc install.sh
@@ -29,7 +33,7 @@ URILIST = \
 
 DIRS=extensions common lib html fo manpages htmlhelp javahelp wordml
 
-.PHONY: distrib clean doc xhtml $(NEWSFILE)
+.PHONY: distrib clean doc xhtml
 
 all: base xhtml docsrc
 
