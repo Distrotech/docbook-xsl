@@ -5,10 +5,6 @@ include ../releasetools/Variables.mk
 
 DISTRO=xsl
 
-# DISTRIB_PARAMS_FILES is a list of filenames that contain
-# documented params for this distro
-DISTRIB_PARAMS_FILES = $(shell for file in $$(find . -name "param.xsl"); do readlink -f $$file; done | grep -v xhtml)
-
 # value of DISTRIB_DEPENDS is a space-separated list of any
 # targets for this distro's "distrib" target to depend on
 DISTRIB_DEPENDS = website slides doc install.sh
@@ -25,7 +21,7 @@ DISTRIB_PACKAGES = doc
 
 # to make sure that executable bit is retained after packaging,
 # you need to explicitly list any executable files here
-DISTRIB_EXECUTABLES = fo/pdf2index docsrc/make-xsl-params.pl install.sh
+DISTRIB_EXECUTABLES = fo/pdf2index install.sh
 
 # list of pathname+URIs to test for catalog support
 URILIST = \
