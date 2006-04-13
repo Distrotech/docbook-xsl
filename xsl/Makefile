@@ -25,7 +25,7 @@ DISTRIB_EXECUTABLES = fo/pdf2index install.sh
 
 # list of pathname+URIs to test for catalog support
 URILIST = \
-./\ http://docbook.sourceforge.net/release/xsl/current/
+.\ http://docbook.sourceforge.net/release/xsl/current/
 
 DIRS=extensions common lib html fo manpages htmlhelp javahelp wordml
 
