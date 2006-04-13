@@ -56,9 +56,9 @@ website:
 
 slides:
 	$(MAKE) -C ../slides/xsl
-	cp -pR ../slides/xsl slides/
-	cp -pR ../slides/graphics slides/
-	cp -pR ../slides/browser slides/
+	cp -pR ../slides/xsl slides
+	cp -pR ../slides/graphics slides
+	cp -pR ../slides/browser slides
 
 clean:
 	for i in $(DIRS) __bogus__; do \
