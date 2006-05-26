@@ -1,0 +1,4 @@
+doc
+*.jar
+build
+build2
