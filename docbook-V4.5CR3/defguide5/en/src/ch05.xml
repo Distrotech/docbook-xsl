@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="gin" xml:id="app-customizing">
+<?dbhtml filename="ch05.html"?>
+<title>Customizing DocBook</title>
+<info>
+<pubdate>$Date$</pubdate>
+<releaseinfo>$Revision$</releaseinfo>
+</info>
+ 
+<para><indexterm xml:id="customDocBookch05" class="startofrange" significance="normal"><primary>customizing</primary>
+  <secondary>DocBook DTD</secondary></indexterm><indexterm xml:id="DocBookcustomch05" class="startofrange" significance="normal"><primary>DocBook DTD</primary>
+  <secondary>customizing</secondary>
+</indexterm>For the applications you have in mind, DocBook <quote>out
+of the box</quote> may not be exactly what you need. Perhaps you need
+additional inline elements or perhaps you want to remove elements that
+you never want your authors to use. By design, DocBook makes this sort
+of customization easy.</para>
+
+<para><indexterm significance="normal"><primary>attributes</primary>
+  <secondary>DocBook DTD, customizing</secondary>
+</indexterm><indexterm significance="normal"><primary>elements</primary>
+  <secondary>DocBook DTD, customizing</secondary>
+</indexterm>This chapter explains how to make your own
+<firstterm>customization layer</firstterm>. You might do this in order
+to:
+</para>
+
+<itemizedlist>
+<listitem><para>Add new elements</para></listitem>
+<listitem><para>Remove elements</para></listitem>
+<listitem><para>Change the structure of existing elements</para></listitem>
+<listitem><para>Add new attributes</para></listitem>
+<listitem><para>Remove attributes</para></listitem>
+<listitem><para>Broaden the range of values allowed in an
+attribute</para></listitem>
+<listitem><para>Narrow the range of values in an attribute to a
+specific list or a fixed value</para></listitem>
+</itemizedlist>
+
+<para><indexterm significance="normal"><primary>extensions, DocBook DTD</primary>
+</indexterm><indexterm significance="normal"><primary>environment</primary>
+<secondary>DocBook extensions, affecting</secondary>
+</indexterm>You can use customization layers to extend DocBook or
+subset it. Creating a <acronym>DTD</acronym> that is a strict subset
+of DocBook means that all of your instances are still completely valid
+DocBook instances, which may be important to your tools and
+stylesheets, and to other people with whom you share documents. An
+<firstterm>extension</firstterm> adds new structures, or changes the
+<acronym>DTD</acronym> in a way that is not compatible with DocBook.
+Extensions can be very useful, but might have a great impact on your
+environment.
+</para>
+
+<para>Customization layers can be as small as restricting an attribute
+value or as large as adding an entirely different hierarchy on top of
+the inline elements.
+</para>
+
+<section xml:id="ch05-shouldi"><info><title>Should You Do This?</title></info>
+
+<para><indexterm significance="normal"><primary>stylesheets</primary>
+  <secondary>DTD extension, effects</secondary>
+</indexterm>Changing a <acronym>DTD</acronym> can have a wide-ranging
+impact on the tools and stylesheets that you use. It can have an
+impact on your authors and on your legacy documents. This is
+especially true if you make an extension. If you rely on your support
+staff to install and maintain your authoring and publishing tools,
+check with them before you invest a lot of time modifying the
+<acronym>DTD</acronym>. There may be additional issues that are
+outside your immediate control. Proceed with caution.
+</para>
+
+<para>That said, DocBook is designed to be easy to modify. This
+chapter assumes that you are comfortable with
+<acronym>SGML</acronym>/<acronym>XML</acronym> <acronym>DTD</acronym>
+syntax, but the examples presented should be a good springboard to
+learning the syntax if it's not already familiar to you.
+</para>
+</section>
+
+<section xml:id="s-notdocbook"><info><title>If You Change DocBook,
+It's Not DocBook Anymore!</title></info>
+
+<para><indexterm significance="normal">
+  <primary>public identifiers</primary>
+  <secondary>DocBook DTD</secondary>
+  <tertiary>altering</tertiary>
+</indexterm>Startig with DocBook V5.0, DocBook is identified by its namespace,
+<uri>http://docbook.org/ns/docbook</uri>. The particular version of
+DocBook to which an element conforms is identified by its
+<tag class='attribute'>version</tag> attribute. If the element does not
+specify a version, the version of the closest ancestor DocBook
+element that does specify a version is assumed. The 
+<tag class='attribute'>version</tag> attribute is required on the root
+DocBook element.</para>
+
+<para>If you make any changes to the DocBook schema, it is imperative
+that you provide an alternative version identifier that you use for
+the schema and the modules you changed. The license agreement under
+which DocBook is distributed gives you complete freedom to change,
+modify, reuse, and generally hack the schema in any way you want,
+except that you must not call your alterations <quote>DocBook</quote>.
+</para>
+
+<para>The following format is recommended:</para>
+
+<screen><replaceable>base_version</replaceable>-[subset|extension|variant] (<replaceable>name</replaceable>[-<replaceable>version</replaceable>])+</screen>
+
+<para>For example, version 1.0 of Acme Corporation's extension of
+DocBook V5.0 could be identified as
+“<literal>5.0-extension&#160;acme-1.0</literal>”.</para>
+
+<para>A document that relied on the version 3.2 of Example
+Corporation's subset of DocBook V5.0, MathML 2.0, and SVG 1.1 could be
+identified as:
+“<literal>5.0-subset&#160;example-3.2 mathml-2.0 svg-1.1</literal>”.</para>
+
+<para>If your schema is a proper subset, you can advertise this status
+by using the <literal>subset</literal> keyword in the version. If
+your schema contains any markup model extensions, you
+can advertise this status by using the <literal>extension</literal>
+keyword. If you'd rather not characterize your variant specifically as
+a subset or an extension, you can leave out this field entirely or,
+if you prefer, use the <literal>variant</literal> keyword.
+</para>
+</section>
+
+<section xml:id="ch05-layers">
+<info>
+  <title>Customization Layers</title>
+</info>
+
+<para>FIXME: discuss customizing DocBook V5.0</para>
+</section>
+</chapter>
