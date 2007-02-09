@@ -2,6 +2,7 @@
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0"
           version="5.0" xml:id="man.string.subst.map">
 <refmeta>
 <refentrytitle>man.string.subst.map</refentrytitle>
@@ -38,41 +39,41 @@
   <!-- * because the groff docs say that's the correct thing to do; also -->
   <!-- * because testing shows that "\\" doesn't always work as expected; -->
   <!-- * for example, "\\" within a table seems to mess things up -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="\" newstring="\e"/>
+  <ss:substitution oldstring="\" newstring="\e"/>
   <!-- * fix bad font-request capitalization in .SH (stylesheet artifact) -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▓FB" newstring="\fB"/>
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▓FI" newstring="\fI"/>
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▓FR" newstring="\fR"/>
+  <ss:substitution oldstring="▓FB" newstring="\fB"/>
+  <ss:substitution oldstring="▓FI" newstring="\fI"/>
+  <ss:substitution oldstring="▓FR" newstring="\fR"/>
   <!-- * remove no-break marker at beginning of line (stylesheet artifact) --> 
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▒▀" newstring="▒"/>
+  <ss:substitution oldstring="▒▀" newstring="▒"/>
   <!-- * replace U+2580 no-break marker (stylesheet-added) w/ no-break space -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▀" newstring="\ "/>
+  <ss:substitution oldstring="▀" newstring="\ "/>
   <!-- * replace U+2593 marker with backslash --> 
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▓" newstring="\"/>
+  <ss:substitution oldstring="▓" newstring="\"/>
   <!-- * escape dashes in content (only at line beginnings) -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="&#10;." newstring="&#10;\&amp;."/>
+  <ss:substitution oldstring="&#10;." newstring="&#10;\&amp;."/>
   <!-- * replace U+2302 marker with dot -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="⌂" newstring="."/>
+  <ss:substitution oldstring="⌂" newstring="."/>
   <!-- * escape dashes in content -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="-" newstring="\-"/>
+  <ss:substitution oldstring="-" newstring="\-"/>
   <!-- * replace U+2591 marker with dash -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="░" newstring="-"/>
+  <ss:substitution oldstring="░" newstring="-"/>
 
   <!-- ==================================================================== -->
 
   <!-- * squeeze multiple newlines before a roff request  -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="&#10;&#10;." newstring="&#10;."/>
+  <ss:substitution oldstring="&#10;&#10;." newstring="&#10;."/>
   <!-- * remove any .sp occurences that directly follow a .PP  -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring=".PP&#10;.sp" newstring=".PP"/>
+  <ss:substitution oldstring=".PP&#10;.sp" newstring=".PP"/>
   <!-- * squeeze multiple newlines after start of no-fill (verbatim) env. -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring=".nf&#10;&#10;" newstring=".nf&#10;"/>
+  <ss:substitution oldstring=".nf&#10;&#10;" newstring=".nf&#10;"/>
   <!-- * squeeze multiple newlines after REstoring margin -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring=".RE&#10;&#10;" newstring=".RE&#10;"/>
+  <ss:substitution oldstring=".RE&#10;&#10;" newstring=".RE&#10;"/>
   <!-- * an apostrophe at the beginning of a line gets interpreted as a -->
   <!-- * roff request (groff(7) says it is "the non-breaking control -->
   <!-- * character"); so we must add backslash before any apostrophe -->
   <!-- * found at the start of a line -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="&#10;'" newstring="&#10;\'"/>
+  <ss:substitution oldstring="&#10;'" newstring="&#10;\'"/>
   <!-- * -->
   <!-- * non-breaking space -->
   <!-- * -->
@@ -90,32 +91,32 @@
   <!-- * Unfortunately, roff seems to do some weird things with long -->
   <!-- * lines that only have words separated by "\~" spaces, so it's -->
   <!-- * safer just to stick with the "\ " space -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring=" " newstring="\ "/>
+  <ss:substitution oldstring=" " newstring="\ "/>
   <!-- * x2008 is a "punctuation space"; we must replace it here because, -->
   <!-- * for certain reasons, the stylesheets add it before and after -->
   <!-- * every Parameter in Funcprototype output -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring=" " newstring=" "/>
+  <ss:substitution oldstring=" " newstring=" "/>
   <!-- * -->
   <!-- * Now deal with some other characters that are added by the -->
   <!-- * stylesheets during processing. -->
   <!-- * -->
   <!-- * bullet -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="•" newstring="\(bu"/>
+  <ss:substitution oldstring="•" newstring="\(bu"/>
   <!-- * left double quote -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="“" newstring="\(lq"/>
+  <ss:substitution oldstring="“" newstring="\(lq"/>
   <!-- * right double quote -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="”" newstring="\(rq"/>
+  <ss:substitution oldstring="”" newstring="\(rq"/>
   <!-- * left single quote -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="‘" newstring="\(oq"/>
+  <ss:substitution oldstring="‘" newstring="\(oq"/>
   <!-- * right single quote -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="’" newstring="\(cq"/>
+  <ss:substitution oldstring="’" newstring="\(cq"/>
   <!-- * copyright sign -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="©" newstring="\(co"/>
+  <ss:substitution oldstring="©" newstring="\(co"/>
   <!-- * registered sign -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="®" newstring="\(rg"/>
+  <ss:substitution oldstring="®" newstring="\(rg"/>
   <!-- * servicemark... -->
   <!-- * There is no groff equivalent for it. -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="℠" newstring="(SM)"/>
+  <ss:substitution oldstring="℠" newstring="(SM)"/>
   <!-- * trademark... -->
   <!-- * We don't do "\(tm" because for console output, -->
   <!-- * groff just renders that as "tm"; that is: -->
@@ -125,13 +126,13 @@
   <!-- * So we just make it to "(TM)" instead; thus: -->
   <!-- * -->
   <!-- *   Product&#x2122; -> Product(TM) -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="™" newstring="(TM)"/>
+  <ss:substitution oldstring="™" newstring="(TM)"/>
 
   <!-- ==================================================================== -->
 
   <!-- * we use U+2592 as a marker for the newline before output of <sbr>; -->
   <!-- * so we now need to replace U+2592 marker with a real newline -->
-  <ss:substitution xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0" oldstring="▒" newstring="&#10;"/>
+  <ss:substitution oldstring="▒" newstring="&#10;"/>
 
 </xsl:param>
 </src:fragment>
