@@ -1,13 +1,9 @@
 include ../../../cvstools/Makefile.incl
-TTLTEMPLATEXSL=../../../xsl/template/titlepage.xsl
 
-PARAMPROF=.param.profiled
-PARAMSTRIP=.param.stripped
+ALLTARGETS=plain-titlepage.xsl
+TTLTEMPLATEXSL=$(DOCBOOK_SVN)/xsl/template/titlepage.xsl
 
-all: plain-titlepage.xsl
+include ../../Makefile.incl
 
 %.xsl: %.xml
 	$(XSLT) $< $(TTLTEMPLATEXSL) $@
-
-clean:
-	rm -f plain-titlepage.xsl

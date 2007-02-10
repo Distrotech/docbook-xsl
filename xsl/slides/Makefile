@@ -2,12 +2,12 @@ include ../../cvstools/Makefile.incl
 
 .PHONY: fo xhtml
 
-PARAMPROF=.param.profiled
-PARAMSTRIP=.param.stripped
-
+ALLTARGETS=base param.xsl
+PROFILECONDITION=slides
+CLEANTARGETS=base-clean
 DIRS = fo xhtml
 
-all: base param.xsl
+include ../Makefile.incl
 
 base:
 	for i in $(DIRS) __bogus__; do \
@@ -19,20 +19,7 @@ base:
 %.xsl: %.xml
 	$(XSLT) $< $(TTLTEMPLATEXSL) $@
 
-param.xsl: param.xweb
-	$(XSLT) $< ../../xsl/profiling/profile.xsl $(PARAMPROF) profile.condition=html
-	$(XSLT) $(PARAMPROF) ../../xsl/profiling/strip-attributes.xsl $(PARAMSTRIP) attributes=condition
-ifeq ($(ADDNEWLINE),)
-	$(XSLT) $(PARAMSTRIP) ../../litprog/xtangle.xsl $@
-else
-	$(XSLT) $(PARAMSTRIP) ../../litprog/xtangle.xsl $@.tmp
-	$(XSLT) $@.tmp $(ADDNEWLINE) $@
-	$(RM) $@.tmp
-endif
-	$(RM) $(PARAMPROF) $(PARAMSTRIP)
-
-clean: 
-	$(RM) param.xsl
+base-clean: 
 	for i in $(DIRS) __bogus__; do \
 		if [ $$i != __bogus__ ] ; then \
 			echo "$(MAKE) -C $$i clean"; $(MAKE) -C $$i clean; \
