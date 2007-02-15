@@ -15,7 +15,7 @@
 <refsynopsisdiv>
 <src:fragment xml:id="ebnf.assignment.frag">
 <xsl:param condition="html" name="ebnf.assignment">
-<code>::=</code>
+<code xmlns="">::=</code>
 </xsl:param>
 <xsl:param xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" condition="fo" name="ebnf.assignment">
   <fo:inline font-family="{$monospace.font.family}">
