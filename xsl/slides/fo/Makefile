@@ -1,9 +1,11 @@
 include ../../../cvstools/Makefile.incl
 
-ALLTARGETS=plain-titlepage.xsl
 TTLTEMPLATEXSL=$(DOCBOOK_SVN)/xsl/template/titlepage.xsl
 
-include ../../Makefile.incl
+all: plain-titlepage.xsl
 
 %.xsl: %.xml
 	$(XSLT) $< $(TTLTEMPLATEXSL) $@
+
+clean: 
+	$(RM) plain-titlepage.xsl

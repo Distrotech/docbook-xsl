@@ -1,6 +1,7 @@
 include ../../cvstools/Makefile.incl
 
-ALLTARGETS=param.xsl
+XSLFILES=param.xsl
+ALLTARGETS=$(XSLFILES)
 PROFILECONDITION=website
 
 include ../Makefile.incl

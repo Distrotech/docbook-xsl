@@ -1,13 +1,14 @@
 include ../../cvstools/Makefile.incl
 
-.PHONY: fo xhtml
-
-ALLTARGETS=base param.xsl
+XSLFILES=param.xsl
+ALLTARGETS=base $(XSLFILES)
 PROFILECONDITION=slides
 CLEANTARGETS=base-clean
 DIRS = fo xhtml
 
 include ../Makefile.incl
+
+.PHONY: fo xhtml
 
 base:
 	for i in $(DIRS) __bogus__; do \
@@ -16,10 +17,7 @@ base:
 		fi \
 	done
 
-%.xsl: %.xml
-	$(XSLT) $< $(TTLTEMPLATEXSL) $@
-
-base-clean: 
+base-clean:
 	for i in $(DIRS) __bogus__; do \
 		if [ $$i != __bogus__ ] ; then \
 			echo "$(MAKE) -C $$i clean"; $(MAKE) -C $$i clean; \
