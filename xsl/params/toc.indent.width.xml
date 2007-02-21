@@ -1,11 +1,12 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
           xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
           version="5.0" xml:id="toc.indent.width">
 <refmeta>
 <refentrytitle>toc.indent.width</refentrytitle>
-<refmiscinfo class="other" otherclass="type">float</refmiscinfo>
+<refmiscinfo class="other" otherclass="datatype">float</refmiscinfo>
 </refmeta>
 <refnamediv>
 <refname>toc.indent.width</refname>

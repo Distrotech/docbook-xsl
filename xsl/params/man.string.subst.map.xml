@@ -1,12 +1,13 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
           xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
           xmlns:ss="http://docbook.sf.net/xmlns/string.subst/1.0"
           version="5.0" xml:id="man.string.subst.map">
 <refmeta>
 <refentrytitle>man.string.subst.map</refentrytitle>
-<refmiscinfo class="other" otherclass="type">string</refmiscinfo>
+<refmiscinfo class="other" otherclass="datatype">string</refmiscinfo>
 </refmeta>
 <refnamediv>
 <refname>man.string.subst.map</refname>

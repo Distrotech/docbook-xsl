@@ -1,11 +1,12 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
           xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
           version="5.0" xml:id="column.gap.front">
 <refmeta>
 <refentrytitle>column.gap.front</refentrytitle>
-<refmiscinfo class="other" otherclass="type">length</refmiscinfo>
+<refmiscinfo class="other" otherclass="datatype">length</refmiscinfo>
 </refmeta>
 <refnamediv>
 <refname>column.gap.front</refname>

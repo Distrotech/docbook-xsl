@@ -1,11 +1,12 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
           xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
           xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
           version="5.0" xml:id="default.units">
 <refmeta>
 <refentrytitle>default.units</refentrytitle>
-<refmiscinfo class="other" otherclass="type">list</refmiscinfo>
+<refmiscinfo class="other" otherclass="datatype">list</refmiscinfo>
 <refmiscinfo role="value">cm</refmiscinfo>
 <refmiscinfo role="value">mm</refmiscinfo>
 <refmiscinfo role="value">in</refmiscinfo>
