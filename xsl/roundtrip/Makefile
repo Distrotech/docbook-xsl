@@ -1,6 +1,6 @@
 include ../../cvstools/Makefile.incl
 
-XSLFILES=param.xl
+XSLFILES=param.xsl
 ALLTARGETS=$(XSLFILES)
 PROFILECONDITION=roundtrip
 
