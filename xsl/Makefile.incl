@@ -1,5 +1,3 @@
-include ../../cvstools/Makefile.incl
-
 PARAMPROF=.param.profiled
 PARAMSTRIP=.param.stripped
 PARAMDBKNS=.param.dbkns
@@ -34,6 +32,6 @@ profile-docbook.xsl: docbook.xsl $(DOCBOOK_SVN)/xsl/profiling/xsl2profile.xsl
 	$(XSLT) $< $(DOCBOOK_SVN)/xsl/profiling/xsl2profile.xsl $@
 
 clean: $(CLEANTARGETS)
-	$(RM) $(ALLTARGETS)
+	$(RM) $(XSLFILES)
 	$(RM) Makefile.param
 	echo "# foo" > Makefile.param

@@ -1,6 +1,7 @@
 include ../../cvstools/Makefile.incl
 
-ALLTARGETS=param.xsl html-synop.xsl
+XSLFILES=param.xsl html-synop.xsl
+ALLTARGETS=$(XSLFILES)
 PROFILECONDITION=manpages
 HTML2ROFF=../tools/xsl/build/html2roff.xsl
 

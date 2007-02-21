@@ -1,6 +1,7 @@
 include ../../cvstools/Makefile.incl
 
-ALLTARGETS=param.xsl profile-docbook.xsl titlepage.templates.xsl
+XSLFILES=param.xsl profile-docbook.xsl titlepage.templates.xsl
+ALLTARGETS=$(XSLFILES)
 PROFILECONDITION=fo
 
 include ../Makefile.incl

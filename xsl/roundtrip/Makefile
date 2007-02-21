@@ -1,6 +1,7 @@
 include ../../cvstools/Makefile.incl
 
-ALLTARGETS=param.xsl
+XSLFILES=param.xl
+ALLTARGETS=$(XSLFILES)
 PROFILECONDITION=roundtrip
 
 # Change this to where you are storing your roundtripping stylesheets
