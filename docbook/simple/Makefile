@@ -1,5 +1,6 @@
 include ../../buildtools/Makefile.incl
 
+XJPARSE=/home/ndw/bin/xjparse
 MODULES=sdbcent.mod sdbhier.mod sdbpool.mod sinclist.mod
 VERSION=
 FMGO=-N
