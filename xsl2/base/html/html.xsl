@@ -216,6 +216,50 @@ of the stylesheet is inserted directly.</para>
 
 <!-- ====================================================================== -->
 
+<doc:template name="t:head" xmlns="http://docbook.org/ns/docbook">
+<refpurpose>Template for generating the head element</refpurpose>
+
+<refdescription>
+<para>This template is called to generate the HTML head for the
+primary result document.</para>
+</refdescription>
+</doc:template>
+
+<xsl:template name="t:head">
+  <xsl:param name="root" as="element()"
+	     select="if ($rootid != '')
+                     then key('id',$rootid)[1]
+		     else /*[1]"/>
+  <head>
+    <title>
+      <xsl:choose>
+	<xsl:when test="$root/db:info/db:title">
+	  <xsl:value-of select="$root/db:info/db:title"/>
+	</xsl:when>
+	<xsl:when test="$root/db:refmeta/db:refentrytitle">
+	  <xsl:value-of select="$root/db:refmeta/db:refentrytitle"/>
+	</xsl:when>
+	<xsl:when test="$root/db:refmeta/db:refnamediv/db:refname">
+	  <xsl:value-of select="$root/db:refmeta/db:refnamediv/db:refname"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:text>???</xsl:text>
+	  <xsl:message>
+	    <xsl:text>Warning: no title for root element: </xsl:text>
+	    <xsl:value-of select="local-name($root)"/>
+	  </xsl:message>
+	</xsl:otherwise>
+      </xsl:choose>
+    </title>
+    <xsl:call-template name="t:head-meta"/>
+    <xsl:call-template name="t:head-links"/>
+    <xsl:call-template name="css-style"/>
+    <xsl:call-template name="javascript"/>
+  </head>
+</xsl:template>
+
+<!-- ====================================================================== -->
+
 <doc:template name="t:head-meta" xmlns="http://docbook.org/ns/docbook">
 <refpurpose>Template for inserting metadata in the head</refpurpose>
 
