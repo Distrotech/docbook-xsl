@@ -106,6 +106,52 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="xml.language.attribute">
+	<xsl:param name="node" select="."/>
+
+	<xsl:variable name="language">
+		<xsl:choose>
+			<xsl:when test="$l10n.gentext.language != ''">
+				<xsl:value-of select="$l10n.gentext.language"/>
+			</xsl:when>
+
+			<xsl:otherwise>
+				<!-- can't do this one step: attributes are unordered! -->
+				<xsl:variable name="lang-scope"
+											select="$node/ancestor-or-self::*
+															[@lang or @xml:lang][1]"/>
+				<xsl:variable name="lang-attr"
+											select="($lang-scope/@lang | $lang-scope/@xml:lang)[1]"/>
+
+				<xsl:choose>
+					<xsl:when test="string($lang-attr) = ''">
+						<xsl:value-of select="$l10n.gentext.default.language"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$lang-attr"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+
+	<xsl:if test="$language != ''">
+		<xsl:attribute name="xml:lang">
+			<xsl:choose>
+				<xsl:when test="$l10n.lang.value.rfc.compliant != 0">
+					<xsl:value-of select="translate($language, '_', '-')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$language"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:attribute>
+	</xsl:if>
+
+	<!-- FIXME: This is sort of hack, but it was the easiest way to add at least partial support for dir attribute -->
+	<xsl:copy-of select="ancestor-or-self::*[@dir][1]/@dir"/>
+</xsl:template>
+
 <xsl:template name="language.attribute">
   <xsl:param name="node" select="."/>
 
