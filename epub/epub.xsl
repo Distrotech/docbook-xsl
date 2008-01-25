@@ -49,6 +49,8 @@
 <xsl:include href="ncx.xsl"/>
 <xsl:include href="pages.xsl"/>
 
+<xsl:param name="ade.extensions" select="0"/>
+
 <xsl:template match="*" mode="process.root">
   <xsl:call-template name="user.preroot"/>
   <xsl:call-template name="root.messages"/>
