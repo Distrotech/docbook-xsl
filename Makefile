@@ -1,7 +1,7 @@
 # $Id$
 
-include ../buildtools/Makefile.incl
-include ../releasetools/Variables.mk
+include $(DOCBOOK_SVN)/buildtools/Makefile.incl
+include $(DOCBOOK_SVN)/releasetools/Variables.mk
 
 # The -E0 switch on xjparse gets passed on to the XML Commons
 # resolver and causes all error message from the resolver to be
@@ -120,5 +120,5 @@ docsrc-clean:
 	$(MAKE) -C docsrc release-clean
 
 include Makefile.tests
-include ../releasetools/Targets.mk
-include ../releasetools/xslns.mk
+include $(DOCBOOK_SVN)/releasetools/Targets.mk
+include $(DOCBOOK_SVN)/releasetools/xslns.mk
