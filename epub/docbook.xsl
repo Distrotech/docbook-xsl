@@ -7,6 +7,17 @@
 
 	<xsl:import href="../xhtml-1_1/chunk.xsl" />
 	<xsl:param name="ade.extensions" select="0"/>
+	<xsl:param name="epub.autolabel" select="'1'"/> <!-- TODO: Document this in params -->
+	<xsl:param name="manifest.in.base.dir" select="'1'"/> <!-- TODO: Document this in params; is '1' correct? -->
+
+	<xsl:param name="epub.oebps.dir" select="'OEBPS/'"/> 
+  <xsl:param name="base.dir" select="$epub.oebps.dir"/>
+
+	<xsl:param name="epub.ncx.filename" select="'toc.ncx'"/> 
+	<xsl:param name="epub.container.filename" select="'container.xml'"/> 
+	<xsl:param name="epub.opf.filename" select="'content.opf'"/> 
+
+	<xsl:param name="epub.metainf.dir" select="'META-INF/'"/> 
 
   <!-- Per Bob Stayton:
        """Process your documents with the css.decoration parameter set to zero. 
@@ -99,6 +110,7 @@
 							<xsl:apply-templates select="/"
 								mode="process.root" />
 							<xsl:call-template name="ncx" />
+							<xsl:call-template name="container" />
 						</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -106,13 +118,41 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template name="container">
+		<xsl:call-template name="write.chunk">
+			<xsl:with-param name="filename">
+        <xsl:value-of select="$epub.metainf.dir" />
+				<xsl:value-of select="$epub.container.filename" />
+			</xsl:with-param>
+			<xsl:with-param name="method" select="'xml'" />
+			<xsl:with-param name="encoding" select="'utf-8'" />
+			<xsl:with-param name="indent" select="'yes'" />
+			<xsl:with-param name="quiet" select="$chunk.quietly" />
+			<xsl:with-param name="content">
+        <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+          <rootfiles>
+            <rootfile>
+              <xsl:attribute name="full-path">
+                <xsl:value-of select="$epub.opf.filename"/>
+              </xsl:attribute>
+              <xsl:attribute name="media-type">
+                <xsl:text>application/oebps-package+xml</xsl:text>
+              </xsl:attribute>
+            </rootfile>  
+          </rootfiles>  
+        </container>  
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
+  <!-- TODO: Does this get made twice? Look in toc.ncx -->
 	<xsl:template name="ncx">
 		<xsl:call-template name="write.chunk">
 			<xsl:with-param name="filename">
 				<xsl:if test="$manifest.in.base.dir != 0">
 					<xsl:value-of select="$base.dir" />
 				</xsl:if>
-				<xsl:value-of select="'toc.ncx'" />
+				<xsl:value-of select="$epub.ncx.filename" />
 			</xsl:with-param>
 			<xsl:with-param name="method" select="'xml'" />
 			<xsl:with-param name="encoding" select="'utf-8'" />
@@ -131,7 +171,7 @@
 					<xsl:choose>
 						<xsl:when test="$rootid != ''">
 							<xsl:variable name="title">
-								<xsl:if test="$epub.autolabel=1">
+								<xsl:if test="$epub.autolabel != 0">
 									<xsl:variable name="label.markup">
 										<xsl:apply-templates
 											select="key('id',$rootid)" mode="label.markup" />

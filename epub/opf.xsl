@@ -86,7 +86,13 @@
 		</xsl:variable>
 		
 		<xsl:call-template name="write.chunk">
-			<xsl:with-param name="filename" select="'./epub/OEBPS/content.opf'"/>
+			<xsl:with-param name="filename">
+				<xsl:if test="$manifest.in.base.dir != 0">
+					<xsl:value-of select="$base.dir" />
+				</xsl:if>
+        <xsl:value-of select="$epub.oebps" />
+        <xsl:value-of select="$epub.opf.filename" />
+      </xsl:with-param>  
 			<xsl:with-param name="content" select="$content"/>
       <xsl:with-param name="quiet" select="$chunk.quietly"/>
 		</xsl:call-template>

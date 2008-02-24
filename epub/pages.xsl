@@ -2,6 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
+  <xsl:param name="oebps.full.dir">
+    <xsl:if test="$manifest.in.base.dir != 0">
+      <xsl:value-of select="$base.dir" />
+    </xsl:if>
+    <xsl:value-of select="$epub.oebps.dir" />
+  </xsl:param>
+
 	<xsl:template match="book" mode="xhtml">
 	<!-- generate content -->
 	
@@ -36,7 +43,10 @@
         </html>
       </xsl:variable>
 	  <xsl:call-template name="write.chunk">
-      <xsl:with-param name="filename" select="'./epub/OEBPS/authors.xhtml'"/>
+      <xsl:with-param name="filename"> 
+        <xsl:value-of select="$eobps.full.dir" />
+        <xsl:value-of select="'authors.xhtml'" />
+      </xsl:with-param>  
       <xsl:with-param name="content" select="$content"/>
       <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	  </xsl:call-template>
@@ -84,7 +94,10 @@
         </html>
       </xsl:variable>
 	  <xsl:call-template name="write.chunk">
-      <xsl:with-param name="filename" select="'./epub/OEBPS/titlepage.xhtml'"/>
+      <xsl:with-param name="filename">
+        <xsl:value-of select="$eobps.full.dir" />
+        <xsl:value-of select="'titlepage.xhtml'" />
+      </xsl:with-param>  
       <xsl:with-param name="content" select="$content"/>
       <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	  </xsl:call-template>
@@ -111,7 +124,10 @@
       </html>
 	</xsl:variable>
 	<xsl:call-template name="write.chunk">
-		<xsl:with-param name="filename" select="'./epub/OEBPS/dedication.xhtml'"/>
+		<xsl:with-param name="filename">
+        <xsl:value-of select="$eobps.full.dir" />
+        <xsl:value-of select="'dedication.xhtml'" />
+      </xsl:with-param>  
 		<xsl:with-param name="content" select="$content"/>
     <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	</xsl:call-template>
@@ -163,7 +179,7 @@
   <xsl:template match="preface|colophon" mode="xhtml">
 	<xsl:call-template name="write.xhtml">
 		<xsl:with-param name="title" select="title[1]"/>
-		<xsl:with-param name="filename" select="concat('./epub/OEBPS/', @id, '.xhtml')"/>
+		<xsl:with-param name="filename" select="concat($oebps.full.dir, @id, '.xhtml')"/>
 	</xsl:call-template>
   </xsl:template>
   
@@ -171,7 +187,7 @@
 	<xsl:call-template name="write.xhtml">
 		<xsl:with-param name="chapnum" select="concat('PART ',count(preceding-sibling::part)+1)"/>
 		<xsl:with-param name="title" select="title[1]"/>
-		<xsl:with-param name="filename" select="concat('./epub/OEBPS/', @id, '.xhtml')"/>
+		<xsl:with-param name="filename" select="concat($oebps.full.dir, @id, '.xhtml')"/>
 		<xsl:with-param name="apply-selection" select="partintro/*"/>
 	</xsl:call-template>
     <xsl:apply-templates select="preface|chapter|appendix|colophon"/>
@@ -181,7 +197,7 @@
 	<xsl:call-template name="write.xhtml">
 		<xsl:with-param name="chapnum" select="concat('CHAPTER ',count(preceding::chapter)+1)"/>
 		<xsl:with-param name="title" select="title[1]"/>
-		<xsl:with-param name="filename" select="concat('./epub/OEBPS/', @id, '.xhtml')"/>
+		<xsl:with-param name="filename" select="concat($oebps.full.dir, @id, '.xhtml')"/>
 	</xsl:call-template>
   </xsl:template>
   
@@ -189,7 +205,7 @@
 	<xsl:call-template name="write.xhtml">
 		<xsl:with-param name="chapnum" select="concat('APPENDIX ', @label)"/>
 		<xsl:with-param name="title" select="title[1]"/>
-		<xsl:with-param name="filename" select="concat('./epub/OEBPS/', @id, '.xhtml')"/>
+		<xsl:with-param name="filename" select="concat($oebps.full.dir, @id, '.xhtml')"/>
 	</xsl:call-template>
 	</xsl:template>
   

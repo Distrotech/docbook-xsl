@@ -26,7 +26,13 @@
 			</ncx>
 		</xsl:variable>
 		<xsl:call-template name="write.chunk">
-			<xsl:with-param name="filename" select="'./epub/OEBPS/toc.ncx'"/>
+			<xsl:with-param name="filename">
+        <xsl:if test="$manifest.in.base.dir != 0">
+          <xsl:value-of select="$base.dir" />
+        </xsl:if>
+        <xsl:value-of select="$epub.oebps.dir" />
+        <xsl:value-of select="$epub.ncx.filename"/>
+      </xsl:with-param>
 			<xsl:with-param name="content" select="$content"/>
       <xsl:with-param name="quiet" select="$chunk.quietly"/>
 		</xsl:call-template>
