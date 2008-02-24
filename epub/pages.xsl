@@ -36,8 +36,9 @@
         </html>
       </xsl:variable>
 	  <xsl:call-template name="write.chunk">
-		<xsl:with-param name="filename" select="'./epub/OEBPS/authors.xhtml'"/>
-		<xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="filename" select="'./epub/OEBPS/authors.xhtml'"/>
+      <xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	  </xsl:call-template>
 
     </xsl:if>
@@ -83,8 +84,9 @@
         </html>
       </xsl:variable>
 	  <xsl:call-template name="write.chunk">
-		<xsl:with-param name="filename" select="'./epub/OEBPS/titlepage.xhtml'"/>
-		<xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="filename" select="'./epub/OEBPS/titlepage.xhtml'"/>
+      <xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	  </xsl:call-template>
 
   </xsl:template>
@@ -111,6 +113,7 @@
 	<xsl:call-template name="write.chunk">
 		<xsl:with-param name="filename" select="'./epub/OEBPS/dedication.xhtml'"/>
 		<xsl:with-param name="content" select="$content"/>
+    <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	</xsl:call-template>
 
   </xsl:template>
@@ -153,6 +156,7 @@
 	<xsl:call-template name="write.chunk">
 		<xsl:with-param name="filename" select="$filename"/>
 		<xsl:with-param name="content" select="$content"/>
+    <xsl:with-param name="quiet" select="$chunk.quietly"/>
 	</xsl:call-template>
 </xsl:template>
 	
