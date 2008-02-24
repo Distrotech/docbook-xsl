@@ -7,7 +7,12 @@
 
 	<xsl:import href="../xhtml-1_1/chunk.xsl" />
 	<xsl:param name="ade.extensions" select="0"/>
-	
+
+  <!-- Per Bob Stayton:
+       """Process your documents with the css.decoration parameter set to zero. 
+          That will avoid the use of style attributes in XHTML elements where they are not permitted."""
+       http://www.sagehill.net/docbookxsl/OtherOutputForms.html#StrictXhtmlValid -->
+  <xsl:param name="css.decoration" select="0"/>
 
 	<xsl:template match="/">
 		<!-- * Get a title for current doc so that we let the user -->
