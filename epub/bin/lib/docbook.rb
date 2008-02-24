@@ -5,7 +5,7 @@ module DocBook
     XSLT_PROCESSOR = "xsltproc"
     OUTPUT_DIR = ".epubtmp/"
 
-    att_reader :output_dir
+    attr_reader :output_dir
 
     def initialize(docbook_file, output_dir=OUTPUT_DIR)
       @docbook_file = docbook_file
@@ -20,9 +20,8 @@ module DocBook
       cmd = "#{XSLT_PROCESSOR} --xinclude --stringparam chunk.quietly #{chunk_quietly} --stringparam base.dir #{@output_dir} #{STYLESHEET} #{@docbook_file}"
       STDERR.puts cmd if $DEBUG
       success = system(cmd)
-      unless success
-        raise "Could not render as .epub to #{output_file}"
-      end
+      raise "Could not render as .epub to #{output_file}" unless success
+      File.open(output_file, "w") {|f| f.puts }
     end
 
     def self.invalid?(file)
@@ -33,6 +32,7 @@ module DocBook
       if output == "No errors or warnings detected\n" # TODO wow.. this isn't fragile
         return false
       else  
+        STDERR.puts output if $DEBUG
         return output
       end  
     end
