@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:ng="http://docbook.org/docbook-ng"
-	xmlns:db="http://docbook.org/ns/docbook"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"  
+  xmlns:db="http://docbook.org/ns/docbook"
 	xmlns:exsl="http://exslt.org/common" version="1.0"
-	exclude-result-prefixes="exsl db ng">
+	exclude-result-prefixes="exsl db ng dc">
 
 	<xsl:import href="../xhtml-1_1/chunk.xsl" />
 	<xsl:param name="ade.extensions" select="0"/>
@@ -15,7 +16,7 @@
 
 	<xsl:param name="epub.ncx.filename" select="'toc.ncx'"/> 
 	<xsl:param name="epub.container.filename" select="'container.xml'"/> 
-	<xsl:param name="epub.opf.filename" select="'content.opf'"/> 
+	<xsl:param name="epub.opf.filename" select="concat($epub.oebps.dir, 'content.opf')"/> 
 
 	<xsl:param name="epub.metainf.dir" select="'META-INF/'"/> 
 
@@ -110,12 +111,67 @@
 							<xsl:apply-templates select="/"
 								mode="process.root" />
 							<xsl:call-template name="ncx" />
+							<xsl:call-template name="opf" />
 							<xsl:call-template name="container" />
 						</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="opf">
+    <xsl:variable name="package-id"><xsl:value-of select="concat(name(/*), 'id')"/></xsl:variable>
+    <xsl:variable name="unique-id">
+      <xsl:choose>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/biblioid"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/biblioid"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/invpartnumber"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/invpartnumber"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/issn"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/issn"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/issuenum"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/issuenum"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/productnumber"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/productnumber"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/pubsnumber"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/pubsnumber"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/seriesvolnums"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/seriesvolnums"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/volumenum"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/volumenum"/> </xsl:when>
+        <xsl:when test="/*/*[contains(name(.), 'info')]/isbn"> <xsl:value-of select="/*/*[contains(name(.), 'info')]/isbn"/> </xsl:when>
+      </xsl:choose>  
+      <xsl:text>_</xsl:text>
+      <xsl:value-of select="/*/@id"/>
+    </xsl:variable>
+    <xsl:variable name="doc.title">
+			<xsl:call-template name="get.doc.title" />
+    </xsl:variable>
+		<xsl:call-template name="write.chunk">
+			<xsl:with-param name="filename">
+				<xsl:value-of select="$epub.opf.filename" />
+			</xsl:with-param>
+			<xsl:with-param name="method" select="'xml'" />
+			<xsl:with-param name="encoding" select="'utf-8'" />
+			<xsl:with-param name="indent" select="'yes'" />
+			<xsl:with-param name="quiet" select="$chunk.quietly" />
+			<xsl:with-param name="content">
+        <package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                version="2.0">
+          <xsl:attribute name="unique-identifier"> <xsl:value-of select="$package-id"/> </xsl:attribute>
+          <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"  xmlns:opf="http://www.idpf.org/2007/opf">
+            <xsl:element name="dc:identifier">
+              <xsl:attribute name="id"> <xsl:value-of select="$package-id"/> </xsl:attribute>
+              <xsl:value-of select="$unique-id"/>
+            </xsl:element>
+
+            <xsl:element name="dc:title">
+              <xsl:value-of select="normalize-space($doc.title)"/>
+            </xsl:element>
+
+            <xsl:apply-templates select="/*/*[contains(name(.), 'info')]/author|
+                                         /*/*[contains(name(.), 'info')]/corpauthor|
+                                         /*/*[contains(name(.), 'info')]/authorgroup/author" 
+                                 mode="opf.metadata"/>        
+          </metadata>
+
+        </package>  
+			</xsl:with-param>
+		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="container">
@@ -145,7 +201,6 @@
 		</xsl:call-template>
 	</xsl:template>
 
-  <!-- TODO: Does this get made twice? Look in toc.ncx -->
 	<xsl:template name="ncx">
 		<xsl:call-template name="write.chunk">
 			<xsl:with-param name="filename">
@@ -276,6 +331,17 @@
 		</navPoint>
 
 	</xsl:template>
+
+  <xsl:template match="author|corpauthor" mode="opf.metadata">
+    <xsl:variable name="n">
+      <xsl:call-template name="person.name">
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:element name="dc:creator">
+      <xsl:value-of select="normalize-space(string($n))"/>
+    </xsl:element>
+  </xsl:template>
 
 	<xsl:template match="text()" mode="ncx" />
 </xsl:stylesheet>
