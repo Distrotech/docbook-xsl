@@ -3,6 +3,7 @@ lib = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(lib) if File.exist?(lib)
 
 require 'tmpdir'
+require 'fileutils'
 
 require 'rubygems'
 require 'spec'
@@ -14,12 +15,16 @@ describe DocBook::Epub do
     filedir = File.expand_path(File.join(File.dirname(__FILE__), 'files'))
     exampledir = File.expand_path(File.join(File.dirname(__FILE__), 'examples'))
     @valid_epub = File.join(exampledir, "AMasqueOfDays.epub")
-    @tmpdir = Dir::tmpdir()
+    @tmpdir = File.join(Dir::tmpdir(), "epubspec"); Dir.mkdir(@tmpdir)
 
     @simple_bookfile = File.join(filedir, "book.001.xml")
-    @simple_epub = DocBook::Epub.new(@simple_bookfile)
+    @simple_epub = DocBook::Epub.new(@simple_bookfile, @tmpdir)
     @rendered_simple_epubfile  = File.join(@tmpdir, "testepub.epub")
-    @simple_epub.render_to_file(@rendered_simple_epubfile)
+    $DEBUG = true
+    @simple_epub.render_to_file(@rendered_simple_epubfile, $DEBUG)
+
+    keep_one = true
+    FileUtils.copy(@rendered_simple_epubfile, ".t.epub") if keep_one
   end
 
   it "should be able to be created" do
@@ -42,6 +47,12 @@ describe DocBook::Epub do
   it "should create a file after rendering" do
     @rendered_simple_epubfile.should satisfy {|rse| File.exist?(rse)}
   end
+
+  it "should have the correct mimetype after rendering" do
+    header = File.read(@rendered_simple_epubfile, 200)
+    regex = Regexp.quote(DocBook::Epub::MIMETYPE)
+    header.should match(/#{regex}/)
+  end     
 
   it "should be valid .epub after rendering" do
     pending(".epub validity is what we're working toward...") {
@@ -69,7 +80,6 @@ describe DocBook::Epub do
   end
 
   after(:all) do
-    # delete tmpdir
-    File.delete(@rendered_simple_epubfile) rescue Errno::ENOENT
+    FileUtils.rm_r(@tmpdir, :force => true)
   end  
 end
