@@ -26,6 +26,9 @@
        http://www.sagehill.net/docbookxsl/OtherOutputForms.html#StrictXhtmlValid -->
   <xsl:param name="css.decoration" select="0"/>
 
+  <!-- no navigation in .epub -->
+  <xsl:param name="suppress.navigation" select="'1'"/> 
+
 	<xsl:template match="/">
 		<!-- * Get a title for current doc so that we let the user -->
 		<!-- * know what document we are processing at this point. -->
@@ -149,9 +152,10 @@
 			<xsl:with-param name="indent" select="'yes'" />
 			<xsl:with-param name="quiet" select="$chunk.quietly" />
 			<xsl:with-param name="content">
-        <package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                version="2.0">
+        <package xmlns="http://www.idpf.org/2007/opf" 
+                 xmlns:dc="http://purl.org/dc/elements/1.1/"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 version="2.0">
           <xsl:attribute name="unique-identifier"> <xsl:value-of select="$package-id"/> </xsl:attribute>
           <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"  xmlns:opf="http://www.idpf.org/2007/opf">
             <xsl:element name="dc:identifier">
@@ -167,7 +171,14 @@
                                          /*/*[contains(name(.), 'info')]/corpauthor|
                                          /*/*[contains(name(.), 'info')]/authorgroup/author" 
                                  mode="opf.metadata"/>        
+            <xsl:apply-templates select="/*/*[contains(name(.), 'info')]/publisher/publishername" mode="opf.metadata"/>
+            <xsl:element name="dc:language">
+              <xsl:call-template name="l10n.language"/>
+            </xsl:element>
+
           </metadata>
+          <xsl:call-template name="opf.manifest"/>
+          <xsl:call-template name="opf.spine"/>
 
         </package>  
 			</xsl:with-param>
@@ -189,7 +200,8 @@
           <rootfiles>
             <rootfile>
               <xsl:attribute name="full-path">
-                <xsl:value-of select="$epub.opf.filename"/>
+                <!-- TODO: Figure out how to get this to work right with generation but also not be hardcoded -->
+                <xsl:value-of select="'OEBPS/content.opf'"/>
               </xsl:attribute>
               <xsl:attribute name="media-type">
                 <xsl:text>application/oebps-package+xml</xsl:text>
@@ -295,6 +307,7 @@
 		</xsl:call-template>
 	</xsl:template>
 
+  <!-- TODO: Are we certain of this match list? -->
 	<xsl:template
 		match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
 		mode="ncx">
@@ -322,7 +335,7 @@
 			<xsl:value-of select="generate-id(.)"/>
 		</xsl:variable>
 
-		<navPoint id="{$id}" playOrder="0">
+		<navPoint id="{$id}" playOrder="0" xmlns="http://www.daisy.org/z3986/2005/ncx/">
 			<navLabel>
 				<text><xsl:value-of select="normalize-space($title)"/></text>
 			</navLabel>
@@ -343,5 +356,122 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="publishername" mode="opf.metadata">
+    <xsl:element name="dc:publisher">
+      <xsl:value-of select="."/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="copyright" mode="opf.metadata">
+    <xsl:variable name="copyright.date">
+      <xsl:call-template name="copyright.years">
+        <xsl:with-param name="years" select="year"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:element name="dc:date">
+      <xsl:value-of select="$copyright.data"/>
+    </xsl:element>
+    <xsl:element name="dc:rights">
+      <xsl:text>Copyright </xsl:text>
+      <xsl:value-of select="year[1]"/>
+      <xsl:text>, </xsl:text>
+      <xsl:value-of select="holder[1]"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="opf.spine">
+    <spine xmlns="http://www.idpf.org/2007/opf" >
+      <xsl:apply-templates select="/*/*|
+                                   /*/part/*" mode="opf.spine"/>
+    </spine>          
+  </xsl:template>
+
+  <xsl:template match="*" mode="opf.spine">
+    <xsl:variable name="is.chunk">
+      <xsl:call-template name="chunk">
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:if test="$is.chunk = 1">
+      <itemref xmlns="http://www.idpf.org/2007/opf" >
+        <xsl:attribute name="idref">
+          <xsl:value-of select="generate-id(.)"/>
+        </xsl:attribute>
+      </itemref>  
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="opf.manifest">
+    <manifest xmlns="http://www.idpf.org/2007/opf" 
+              xmlns:dc="http://purl.org/dc/elements/1.1/"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <!-- TODO: Figure out how to get this to work right with generation but also not be hardcoded -->
+      <item id="toc" media-type="application/x-dtbncx+xml">
+        <xsl:attribute name="href"><xsl:value-of select="$epub.ncx.filename"/> </xsl:attribute>
+      </item>  
+			<xsl:apply-templates select="//part|
+                                   //reference|
+                                   //preface|
+                                   //chapter|
+                                   //bibliography|
+                                   //appendix|
+                                   //article|
+                                   //glossary|
+                                   //section|
+                                   //sect1|
+                                   //sect2|
+                                   //sect3|
+                                   //sect4|
+                                   //sect5|
+                                   //refentry|
+                                   //colophon|
+                                   //bibliodiv|
+                                   //index" 
+                           mode="opf.manifest"/>
+    </manifest>
+  </xsl:template>
+
+  <!-- TODO: Are we certain of this match list? -->
+	<xsl:template
+		match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
+		mode="opf.manifest">
+		<xsl:variable name="href">
+			<xsl:call-template name="href.target.with.base.dir">
+				<xsl:with-param name="context" select="/" />
+				<!-- Generate links relative to the location of root file/toc.xml file -->
+			</xsl:call-template>
+		</xsl:variable>
+
+		<xsl:variable name="id">
+			<xsl:value-of select="generate-id(.)"/>
+		</xsl:variable>
+
+    <xsl:variable name="is.chunk">
+      <xsl:call-template name="chunk">
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:if test="$is.chunk = 1">
+      <item id="{$id}" href="{$href}" media-type="application/xhtml+xml" xmlns="http://www.idpf.org/2007/opf"/> 
+    </xsl:if>  
+  </xsl:template>  
+
 	<xsl:template match="text()" mode="ncx" />
+  <xsl:template name="html.head">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    <xsl:variable name="this" select="."/>
+    <xsl:variable name="home" select="/*[1]"/>
+    <xsl:variable name="up" select="parent::*"/>
+
+    <head xmlns="http://www.w3.org/1999/xhtml">
+      <xsl:call-template name="system.head.content"/>
+      <xsl:call-template name="head.content"/>
+
+      <xsl:call-template name="user.head.content"/>
+    </head>
+  </xsl:template>
+
 </xsl:stylesheet>

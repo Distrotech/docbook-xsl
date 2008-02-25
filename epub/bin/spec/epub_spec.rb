@@ -20,7 +20,6 @@ describe DocBook::Epub do
     @simple_bookfile = File.join(filedir, "book.001.xml")
     @simple_epub = DocBook::Epub.new(@simple_bookfile, @tmpdir)
     @rendered_simple_epubfile  = File.join(@tmpdir, "testepub.epub")
-    $DEBUG = true
     @simple_epub.render_to_file(@rendered_simple_epubfile, $DEBUG)
 
     keep_one = true
@@ -55,12 +54,10 @@ describe DocBook::Epub do
   end     
 
   it "should be valid .epub after rendering" do
-    pending(".epub validity is what we're working toward...") {
-      @rendered_simple_epubfile.should_not satisfy {|rse| 
-        invalidity = DocBook::Epub.invalid?(rse)
-        STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
-        invalidity
-      }  
+    @rendered_simple_epubfile.should_not satisfy {|rse| 
+      invalidity = DocBook::Epub.invalid?(rse)
+      STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
+      invalidity
     }  
   end
 

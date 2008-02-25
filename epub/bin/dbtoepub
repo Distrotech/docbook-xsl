@@ -1,9 +1,13 @@
 #!/usr/bin/env ruby
+lib = File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
+$LOAD_PATH.unshift(lib) if File.exist?(lib)
 
 # Keith Fahlgren
 # Sat Feb 23 17:22:35 PST 2008
 
 require 'optparse'
+
+require 'docbook'
 
 verbose = false
 debug = false
