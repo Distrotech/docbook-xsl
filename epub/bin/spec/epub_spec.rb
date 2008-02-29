@@ -14,6 +14,8 @@ require 'spec'
 
 require 'docbook'
 
+$DEBUG = false
+
 describe DocBook::Epub do
   before(:all) do
     @filedir = File.expand_path(File.join(File.dirname(__FILE__), 'files'))
@@ -26,28 +28,12 @@ describe DocBook::Epub do
     @simple_epub = DocBook::Epub.new(@simple_bookfile, @tmpdir)
     @simple_epubfile  = File.join(@tmpdir, "testepub.epub")
     @simple_epub.render_to_file(@simple_epubfile, $DEBUG)
-    
-    @article_epub = DocBook::Epub.new(File.join(@testdocsdir, "article.006.xml"), @tmpdir)
-    @article_epubfile  = File.join(@tmpdir, "testepub.epub")
-    @article_epub.render_to_file(@article_epubfile, $DEBUG)
-
-    @article_nosects_epub = DocBook::Epub.new(File.join(@testdocsdir, "admonitions.001.xml"), @tmpdir)
-    @article_nosects_epubfile = File.join(@tmpdir, "nosects.epub")
-    @article_nosects_epub.render_to_file(@article_nosects_epubfile, $DEBUG)
-
-    @graphic_epub = DocBook::Epub.new(File.join(@filedir, "onegraphic.xml"), @tmpdir)
-    @graphic_epubfile  = File.join(@tmpdir, "graphicepub.epub")
-    @graphic_epub.render_to_file(@graphic_epubfile, $DEBUG)
 
     @manygraphic_epub = DocBook::Epub.new(File.join(@filedir, "manygraphics.xml"), @tmpdir)
     @manygraphic_epubfile  = File.join(@tmpdir, "manygraphicepub.epub")
     @manygraphic_epub.render_to_file(@manygraphic_epubfile, $DEBUG)
 
-    $DEBUG = false
-    FileUtils.copy(@article_nosects_epubfile, ".as.epub") if $DEBUG
-    FileUtils.copy(@article_epubfile, ".a.epub") if $DEBUG
     FileUtils.copy(@simple_epubfile, ".t.epub") if $DEBUG
-    FileUtils.copy(@graphic_epubfile, ".g.epub") if $DEBUG
     FileUtils.copy(@manygraphic_epubfile, ".mg.epub") if $DEBUG
   end
 
@@ -79,11 +65,22 @@ describe DocBook::Epub do
   end     
 
   it "should be valid .epub after rendering an article" do
-    @article_epubfile.should be_valid_epub  
+    article_epub = DocBook::Epub.new(File.join(@testdocsdir, "article.006.xml"), @tmpdir)
+    article_epubfile  = File.join(@tmpdir, "testartepub.epub")
+    article_epub.render_to_file(article_epubfile, $DEBUG)
+    article_epubfile.should be_valid_epub  
+
+    FileUtils.copy(article_epubfile, ".a.epub") if $DEBUG
   end
 
   it "should be valid .epub after rendering an article without sections" do
-    @article_nosects_epubfile.should be_valid_epub  
+    article_nosects_epub = DocBook::Epub.new(File.join(@testdocsdir, "admonitions.001.xml"), @tmpdir)
+    article_nosects_epubfile = File.join(@tmpdir, "nosects.epub")
+    article_nosects_epub.render_to_file(article_nosects_epubfile, $DEBUG)
+    FileUtils.copy(article_nosects_epubfile, ".as.epub") if $DEBUG
+
+    article_nosects_epubfile.should be_valid_epub  
+
   end
 
 
@@ -92,7 +89,13 @@ describe DocBook::Epub do
   end
 
   it "should be valid .epub after rendering a book even if it has one graphic" do
-    @graphic_epubfile.should be_valid_epub  
+    graphic_epub = DocBook::Epub.new(File.join(@filedir, "onegraphic.xml"), @tmpdir)
+    graphic_epubfile  = File.join(@tmpdir, "graphicepub.epub")
+    graphic_epub.render_to_file(graphic_epubfile, $DEBUG)
+
+    FileUtils.copy(graphic_epubfile, ".g.epub") if $DEBUG
+
+    graphic_epubfile.should be_valid_epub  
   end
 
   it "should be valid .epub after rendering a book even if it has many graphics" do
@@ -103,6 +106,8 @@ describe DocBook::Epub do
     dupedgraphic_epub = DocBook::Epub.new(File.join(@filedir, "dupedgraphics.xml"), @tmpdir)
     dupedgraphic_epubfile  = File.join(@tmpdir, "dupedgraphicepub.epub")
     dupedgraphic_epub.render_to_file(dupedgraphic_epubfile, $DEBUG)
+    FileUtils.copy(dupedgraphic_epubfile, ".duped.epub") if $DEBUG
+
     dupedgraphic_epubfile.should be_valid_epub  
   end
 

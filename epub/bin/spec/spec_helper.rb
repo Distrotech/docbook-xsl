@@ -10,7 +10,7 @@ class BeValidEpub
   
   def matches?(epubfile)
     invalidity = DocBook::Epub.invalid?(epubfile)
-    @message = "INVALIDITY: #{invalidity}" 
+    @message = invalidity
     # remember backward logic here
     if invalidity
       return false

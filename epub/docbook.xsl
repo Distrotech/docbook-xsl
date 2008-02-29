@@ -42,6 +42,8 @@
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:key name="image-filerefs" match="graphic|inlinegraphic|imagedata" use="@fileref"/>
+
   <xsl:template match="/">
     <!-- * Get a title for current doc so that we let the user -->
     <!-- * know what document we are processing at this point. -->
@@ -524,7 +526,6 @@
   <xsl:template match="graphic[not(@format)]|
                        inlinegraphic[not(@format)]|
                        imagedata[not(@format)]"
-                priority="0"
                 mode="opf.manifest">        
     <xsl:variable name="filename">
       <xsl:choose>
@@ -583,24 +584,27 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
+    <xsl:variable name="fr" select="@fileref"/>
     <xsl:if test="$format != ''">
-      <item xmlns="http://www.idpf.org/2007/opf"> 
-        <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
-        <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
-        <xsl:attribute name="media-type">
-          <xsl:value-of select="$format"/>
-        </xsl:attribute>
-      </item>  
+      <!-- only do this if we're the first file to match -->
+      <!-- TODO: Why can't this be simple equality?? (I couldn't get it to work) -->
+      <xsl:if test="generate-id(.) = generate-id(key('image-filerefs', $fr)[1])">
+        <item xmlns="http://www.idpf.org/2007/opf"> 
+          <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
+          <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
+          <xsl:attribute name="media-type">
+            <xsl:value-of select="$format"/>
+          </xsl:attribute>
+        </item>  
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
   <!-- TODO: Remove hardcoding -->
-  <xsl:template match="graphic[@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']|
-                       inlinegraphic[@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']|
-                       imagedata[@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']"
-                mode="opf.manifest"
-                priority="1">
+  <xsl:template match="graphic[@format][@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']|
+                       inlinegraphic[@format][@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']|
+                       imagedata[@format][@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a' or @format = 'JPEG' or @format = 'JPG' or @format = 'PNG' or @format = 'SVG']"
+                mode="opf.manifest">
     <xsl:variable name="filename">
       <xsl:choose>
         <xsl:when test="contains(name(.), 'graphic')">
@@ -620,28 +624,33 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>  
-    <item xmlns="http://www.idpf.org/2007/opf"> 
-      <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
-      <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
-      <xsl:attribute name="media-type">
+    <xsl:variable name="fr" select="@fileref"/>
+    <!-- only do this if we're the first file to match -->
+    <!-- TODO: Why can't this be simple equality?? (I couldn't get it to work) -->
+    <xsl:if test="generate-id(.) = generate-id(key('image-filerefs', $fr)[1])">
+      <item xmlns="http://www.idpf.org/2007/opf"> 
+        <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
+        <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
+        <xsl:attribute name="media-type">
 
-        <xsl:choose>
-          <!-- TODO: What is GIF87a? -->
-          <xsl:when test="@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a'">
-            <xsl:text>image/gif</xsl:text>
-          </xsl:when>
-          <xsl:when test="@format = 'JPEG' or @format = 'JPG'">
-            <xsl:text>image/jpeg</xsl:text>
-          </xsl:when>
-          <xsl:when test="@format = 'PNG'">
-            <xsl:text>image/png</xsl:text>
-          </xsl:when>
-          <xsl:when test="@format = 'SVG'">
-            <xsl:text>image/svg+xml</xsl:text>
-          </xsl:when>
-        </xsl:choose>
-      </xsl:attribute>
-    </item>  
+          <xsl:choose>
+            <!-- TODO: What is GIF87a? -->
+            <xsl:when test="@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a'">
+              <xsl:text>image/gif</xsl:text>
+            </xsl:when>
+            <xsl:when test="@format = 'JPEG' or @format = 'JPG'">
+              <xsl:text>image/jpeg</xsl:text>
+            </xsl:when>
+            <xsl:when test="@format = 'PNG'">
+              <xsl:text>image/png</xsl:text>
+            </xsl:when>
+            <xsl:when test="@format = 'SVG'">
+              <xsl:text>image/svg+xml</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:attribute>
+      </item>  
+    </xsl:if>
   </xsl:template>
 
   <!-- TODO: Are we certain of this match list? -->
