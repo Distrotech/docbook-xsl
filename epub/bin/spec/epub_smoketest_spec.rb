@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+spec = File.expand_path(File.dirname(__FILE__))
+$LOAD_PATH.unshift(spec) if File.exist?(spec)
+require 'spec/spec_helper'
+
 lib = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(lib) if File.exist?(lib)
 
@@ -24,11 +28,7 @@ describe DocBook::Epub do
       epub_file = File.join(@tmpdir, "smoketest.epub")
       epub.render_to_file(epub_file, $DEBUG)
       FileUtils.copy(epub_file, ".smt.epub") if $DEBUG
-      epub_file.should_not satisfy {|ef|
-        invalidity = DocBook::Epub.invalid?(ef)
-        STDERR.puts "INVALIDITY: #{invalidity} on #{xml_file}" if invalidity && $DEBUG
-        invalidity
-      }  
+      epub_file.should be_valid_epub  
     }  
   end
 
