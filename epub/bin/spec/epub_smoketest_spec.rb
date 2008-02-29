@@ -14,7 +14,7 @@ describe DocBook::Epub do
   before(:all) do
     @testdocsdir = File.expand_path(File.join(File.dirname(__FILE__), 'testdocs'))
     @tmpdir = File.join(Dir::tmpdir(), "epubspec"); Dir.mkdir(@tmpdir)
-    $DEBUG = true
+    $DEBUG = false
   end
 
   it "should be able to render a valid .epub for each test document in the DocBook testdocs repo" do

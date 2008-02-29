@@ -16,7 +16,7 @@ describe DocBook::Epub do
     @testdocsdir = File.expand_path(File.join(File.dirname(__FILE__), 'testdocs'))
     exampledir = File.expand_path(File.join(File.dirname(__FILE__), 'examples'))
     @valid_epub = File.join(exampledir, "AMasqueOfDays.epub")
-    @tmpdir = File.join(Dir::tmpdir(), "epubspec"); Dir.mkdir(@tmpdir)
+    @tmpdir = File.join(Dir::tmpdir(), "epubspec"); Dir.mkdir(@tmpdir) rescue Errno::EEXIST
 
     @simple_bookfile = File.join(@testdocsdir, "book.001.xml")
     @simple_epub = DocBook::Epub.new(@simple_bookfile, @tmpdir)
@@ -39,7 +39,7 @@ describe DocBook::Epub do
     @manygraphic_epubfile  = File.join(@tmpdir, "manygraphicepub.epub")
     @manygraphic_epub.render_to_file(@manygraphic_epubfile, $DEBUG)
 
-    $DEBUG = true
+    $DEBUG = false
     FileUtils.copy(@article_nosects_epubfile, ".as.epub") if $DEBUG
     FileUtils.copy(@article_epubfile, ".a.epub") if $DEBUG
     FileUtils.copy(@simple_epubfile, ".t.epub") if $DEBUG
@@ -127,6 +127,22 @@ describe DocBook::Epub do
 
   it "should confirm that a valid .epub file is valid" do
     @valid_epub.should_not satisfy {|ve| DocBook::Epub.invalid?(ve)}
+  end
+
+  it "should not include PDFs in rendered epub files as valid image inclusions" do
+    begin
+      tmpdir = File.join(Dir::tmpdir(), "epubinclusiontest"); Dir.mkdir(tmpdir) rescue Errno::EEXIST
+
+      success = system("unzip -q -d #{File.expand_path(tmpdir)} -o #{File.expand_path(@manygraphic_epubfile)}")
+      raise "Could not unzip #{@manygraphic_epubfile}" unless success
+      glob = Dir.glob(File.join(tmpdir, "**", "*.*"))
+      pdfs_in_glob = glob.find_all {|file| file =~ /\.pdf/i}
+      pdfs_in_glob.should be_empty
+    rescue => e
+      raise e
+    ensure
+      FileUtils.rm_r(tmpdir, :force => true)
+    end  
   end
 
   after(:all) do

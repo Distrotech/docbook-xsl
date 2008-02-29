@@ -77,15 +77,19 @@ module DocBook
       image_references = get_image_refs()
       new_images = []
       image_references.each {|img|
-        img_new_filename = File.join(@oebps_dir, img)
-        img_full = File.join(File.expand_path(File.dirname(@docbook_file)), img)
+        # TODO: It'd be cooler if we had a filetype lookup rather than just
+        # extension
+        if img =~ /\.(svg|png|gif|jpe?g|svg)/i
+          img_new_filename = File.join(@oebps_dir, img)
+          img_full = File.join(File.expand_path(File.dirname(@docbook_file)), img)
 
-        # TODO: What to rescue for these two?
-        FileUtils.mkdir_p(File.dirname(img_new_filename)) 
-        puts(img_full + ": " + img_new_filename) if $DEBUG
-        FileUtils.cp(img_full, img_new_filename)
-        @to_delete << img_new_filename
-        new_images << img_full
+          # TODO: What to rescue for these two?
+          FileUtils.mkdir_p(File.dirname(img_new_filename)) 
+          puts(img_full + ": " + img_new_filename) if $DEBUG
+          FileUtils.cp(img_full, img_new_filename)
+          @to_delete << img_new_filename
+          new_images << img_full
+        end
       }  
       return new_images
     end
