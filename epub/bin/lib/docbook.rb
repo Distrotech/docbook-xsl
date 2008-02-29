@@ -67,7 +67,7 @@ module DocBook
       meta  = File.basename(@meta_dir)
       oebps  = File.basename(@oebps_dir)
       images = copy_images()
-      zip_cmd = "cd #{@output_dir} &&  #{ZIPPER} #{quiet} -X -r  #{output_file} #{mimetype_filename} #{meta} #{oebps} #{images}"
+      zip_cmd = "cd #{@output_dir} &&  #{ZIPPER} #{quiet} -X -r  #{File.expand_path(output_file)} #{mimetype_filename} #{meta} #{oebps} #{images}"
       puts zip_cmd if $DEBUG
       success = system(zip_cmd)
       raise "Could not bundle into .epub file to #{output_file}" unless success
