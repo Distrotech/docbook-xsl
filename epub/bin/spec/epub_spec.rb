@@ -13,17 +13,33 @@ require 'docbook'
 describe DocBook::Epub do
   before(:all) do
     filedir = File.expand_path(File.join(File.dirname(__FILE__), 'files'))
+    @testdocsdir = File.expand_path(File.join(File.dirname(__FILE__), 'testdocs'))
     exampledir = File.expand_path(File.join(File.dirname(__FILE__), 'examples'))
     @valid_epub = File.join(exampledir, "AMasqueOfDays.epub")
     @tmpdir = File.join(Dir::tmpdir(), "epubspec"); Dir.mkdir(@tmpdir)
 
-    @simple_bookfile = File.join(filedir, "book.001.xml")
+    @simple_bookfile = File.join(@testdocsdir, "book.001.xml")
     @simple_epub = DocBook::Epub.new(@simple_bookfile, @tmpdir)
-    @rendered_simple_epubfile  = File.join(@tmpdir, "testepub.epub")
-    @simple_epub.render_to_file(@rendered_simple_epubfile, $DEBUG)
+    @simple_epubfile  = File.join(@tmpdir, "testepub.epub")
+    @simple_epub.render_to_file(@simple_epubfile, $DEBUG)
+    
+    @article_epub = DocBook::Epub.new(File.join(@testdocsdir, "article.006.xml"), @tmpdir)
+    @article_epubfile  = File.join(@tmpdir, "testepub.epub")
+    @article_epub.render_to_file(@article_epubfile, $DEBUG)
 
-    keep_one = true
-    FileUtils.copy(@rendered_simple_epubfile, ".t.epub") if keep_one
+    @article_nosects_epub = DocBook::Epub.new(File.join(@testdocsdir, "admonitions.001.xml"), @tmpdir)
+    @article_nosects_epubfile = File.join(@tmpdir, "nosects.epub")
+    @article_nosects_epub.render_to_file(@article_nosects_epubfile, $DEBUG)
+
+    @graphic_epub = DocBook::Epub.new(File.join(filedir, "onegraphic.xml"), @tmpdir)
+    @graphic_epubfile  = File.join(@tmpdir, "graphicepub.epub")
+    @graphic_epub.render_to_file(@graphic_epubfile, $DEBUG)
+
+    $DEBUG = false
+    FileUtils.copy(@article_nosects_epubfile, ".as.epub") if $DEBUG
+    FileUtils.copy(@article_epubfile, ".a.epub") if $DEBUG
+    FileUtils.copy(@simple_epubfile, ".t.epub") if $DEBUG
+    FileUtils.copy(@graphic_epubfile, ".g.epub") if $DEBUG
   end
 
   it "should be able to be created" do
@@ -44,18 +60,43 @@ describe DocBook::Epub do
   end
 
   it "should create a file after rendering" do
-    @rendered_simple_epubfile.should satisfy {|rse| File.exist?(rse)}
+    @simple_epubfile.should satisfy {|rse| File.exist?(rse)}
   end
 
   it "should have the correct mimetype after rendering" do
-    header = File.read(@rendered_simple_epubfile, 200)
+    header = File.read(@simple_epubfile, 200)
     regex = Regexp.quote(DocBook::Epub::MIMETYPE)
     header.should match(/#{regex}/)
   end     
 
-  it "should be valid .epub after rendering" do
-    @rendered_simple_epubfile.should_not satisfy {|rse| 
+  it "should be valid .epub after rendering an article" do
+    @article_epubfile.should_not satisfy {|rse| 
       invalidity = DocBook::Epub.invalid?(rse)
+      STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
+      invalidity
+    }  
+  end
+
+  it "should be valid .epub after rendering an article without sections" do
+    @article_nosects_epubfile.should_not satisfy {|ef| 
+      invalidity = DocBook::Epub.invalid?(ef)
+      STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG && invalidity
+      invalidity
+    }  
+  end
+
+
+  it "should be valid .epub after rendering a book" do
+    @simple_epubfile.should_not satisfy {|rse| 
+      invalidity = DocBook::Epub.invalid?(rse)
+      STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
+      invalidity
+    }  
+  end
+
+  it "should be valid .epub after rendering a book even if it has graphics" do
+    @graphic_epubfile.should_not satisfy {|rge| 
+      invalidity = DocBook::Epub.invalid?(rge)
       STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
       invalidity
     }  
@@ -72,7 +113,6 @@ describe DocBook::Epub do
   end
 
   it "should confirm that a valid .epub file is valid" do
-    $DEBUG = true
     @valid_epub.should_not satisfy {|ve| DocBook::Epub.invalid?(ve)}
   end
 
