@@ -446,6 +446,8 @@
   <xsl:template name="opf.spine">
 
     <spine xmlns="http://www.idpf.org/2007/opf" toc="{$epub.toc.id}">
+      <!-- TODO: be nice to have a idref="coverpage" here -->
+      <!-- TODO: be nice to have a idref="titlepage" here -->
       <xsl:if test="$article.no.chunks != '0'">
         <xsl:apply-templates select="/*" mode="opf.spine"/>
       </xsl:if>
@@ -479,6 +481,8 @@
       <item id="{$epub.toc.id}" media-type="application/x-dtbncx+xml">
         <xsl:attribute name="href"><xsl:value-of select="$epub.ncx.filename"/> </xsl:attribute>
       </item>  
+      <!-- TODO: be nice to have a id="coverpage" here -->
+      <!-- TODO: be nice to have a id="titlepage" here -->
       <xsl:apply-templates select="//part|
                                    //reference|
                                    //preface|
