@@ -55,7 +55,7 @@ module DocBook
       db2epub_cmd = "#{XSLT_PROCESSOR} #{options} #{STYLESHEET} #{@docbook_file}"
       STDERR.puts db2epub_cmd if $DEBUG
       success = system(db2epub_cmd)
-      raise "Could not render as .epub to #{output_file}" unless success
+      raise "Could not render as .epub to #{output_file} (#{db2epub_cmd})" unless success
       @to_delete << Dir["#{@meta_dir}/*"]
       @to_delete << Dir["#{@oebps_dir}/*"]
     end  

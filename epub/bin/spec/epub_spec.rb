@@ -35,11 +35,16 @@ describe DocBook::Epub do
     @graphic_epubfile  = File.join(@tmpdir, "graphicepub.epub")
     @graphic_epub.render_to_file(@graphic_epubfile, $DEBUG)
 
-    $DEBUG = false
+    @manygraphic_epub = DocBook::Epub.new(File.join(filedir, "manygraphics.xml"), @tmpdir)
+    @manygraphic_epubfile  = File.join(@tmpdir, "manygraphicepub.epub")
+    @manygraphic_epub.render_to_file(@manygraphic_epubfile, $DEBUG)
+
+    $DEBUG = true
     FileUtils.copy(@article_nosects_epubfile, ".as.epub") if $DEBUG
     FileUtils.copy(@article_epubfile, ".a.epub") if $DEBUG
     FileUtils.copy(@simple_epubfile, ".t.epub") if $DEBUG
     FileUtils.copy(@graphic_epubfile, ".g.epub") if $DEBUG
+    FileUtils.copy(@manygraphic_epubfile, ".mg.epub") if $DEBUG
   end
 
   it "should be able to be created" do
@@ -94,8 +99,16 @@ describe DocBook::Epub do
     }  
   end
 
-  it "should be valid .epub after rendering a book even if it has graphics" do
+  it "should be valid .epub after rendering a book even if it has one graphic" do
     @graphic_epubfile.should_not satisfy {|rge| 
+      invalidity = DocBook::Epub.invalid?(rge)
+      STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
+      invalidity
+    }  
+  end
+
+  it "should be valid .epub after rendering a book even if it has many graphics" do
+    @manygraphic_epubfile.should_not satisfy {|rge| 
       invalidity = DocBook::Epub.invalid?(rge)
       STDERR.puts "INVALIDITY: #{invalidity}" if $DEBUG
       invalidity

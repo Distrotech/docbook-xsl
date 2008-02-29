@@ -433,7 +433,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:element name="dc:date">
-      <xsl:value-of select="$copyright.data"/>
+      <xsl:value-of select="$copyright.date"/>
     </xsl:element>
     <xsl:element name="dc:rights">
       <xsl:text>Copyright </xsl:text>
@@ -627,10 +627,10 @@
 
         <xsl:choose>
           <!-- TODO: What is GIF87a? -->
-          <xsl:when test="@format = 'GIF' | @format = 'GIF87a' | @format = 'GIF89a'">
+          <xsl:when test="@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a'">
             <xsl:text>image/gif</xsl:text>
           </xsl:when>
-          <xsl:when test="@format = 'JPEG' | @format = 'JPG'">
+          <xsl:when test="@format = 'JPEG' or @format = 'JPG'">
             <xsl:text>image/jpeg</xsl:text>
           </xsl:when>
           <xsl:when test="@format = 'PNG'">
@@ -685,6 +685,127 @@
 
       <xsl:call-template name="user.head.content"/>
     </head>
+  </xsl:template>
+
+  <!-- we can't deal with no img/@alt, because it's required. Try grabbing a title before it instead (hopefully meaningful) -->
+  <xsl:template name="process.image.attributes">
+    <xsl:param name="alt"/>
+    <xsl:param name="html.width"/>
+    <xsl:param name="html.depth"/>
+    <xsl:param name="longdesc"/>
+    <xsl:param name="scale"/>
+    <xsl:param name="scalefit"/>
+    <xsl:param name="scaled.contentdepth"/>
+    <xsl:param name="scaled.contentwidth"/>
+    <xsl:param name="viewport"/>
+
+    <xsl:choose>
+      <xsl:when test="@contentwidth or @contentdepth">
+        <!-- ignore @width/@depth, @scale, and @scalefit if specified -->
+        <xsl:if test="@contentwidth and $scaled.contentwidth != ''">
+          <xsl:attribute name="width">
+            <xsl:value-of select="$scaled.contentwidth"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@contentdepth and $scaled.contentdepth != ''">
+          <xsl:attribute name="height">
+            <xsl:value-of select="$scaled.contentdepth"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:when>
+
+      <xsl:when test="number($scale) != 1.0">
+        <!-- scaling is always uniform, so we only have to specify one dimension -->
+        <!-- ignore @scalefit if specified -->
+        <xsl:attribute name="width">
+          <xsl:value-of select="$scaled.contentwidth"/>
+        </xsl:attribute>
+      </xsl:when>
+
+      <xsl:when test="$scalefit != 0">
+        <xsl:choose>
+          <xsl:when test="contains($html.width, '%')">
+            <xsl:choose>
+              <xsl:when test="$viewport != 0">
+                <!-- The *viewport* will be scaled, so use 100% here! -->
+                <xsl:attribute name="width">
+                  <xsl:value-of select="'100%'"/>
+                </xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="width">
+                  <xsl:value-of select="$html.width"/>
+                </xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+
+          <xsl:when test="contains($html.depth, '%')">
+            <!-- HTML doesn't deal with this case very well...do nothing -->
+          </xsl:when>
+
+          <xsl:when test="$scaled.contentwidth != '' and $html.width != ''                         and $scaled.contentdepth != '' and $html.depth != ''">
+            <!-- scalefit should not be anamorphic; figure out which direction -->
+            <!-- has the limiting scale factor and scale in that direction -->
+            <xsl:choose>
+              <xsl:when test="$html.width div $scaled.contentwidth &gt;                             $html.depth div $scaled.contentdepth">
+                <xsl:attribute name="height">
+                  <xsl:value-of select="$html.depth"/>
+                </xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="width">
+                  <xsl:value-of select="$html.width"/>
+                </xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+
+          <xsl:when test="$scaled.contentwidth != '' and $html.width != ''">
+            <xsl:attribute name="width">
+              <xsl:value-of select="$html.width"/>
+            </xsl:attribute>
+          </xsl:when>
+
+          <xsl:when test="$scaled.contentdepth != '' and $html.depth != ''">
+            <xsl:attribute name="height">
+              <xsl:value-of select="$html.depth"/>
+            </xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+    </xsl:choose>
+
+    <xsl:attribute name="alt">
+      <xsl:choose>
+        <xsl:when test="$alt != ''">
+          <xsl:value-of select="normalize-space($alt)"/>
+        </xsl:when>
+        <xsl:when test="preceding::title[1]">
+          <xsl:value-of select="normalize-space(preceding::title[1])"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>(missing alt)</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+
+    <xsl:if test="$longdesc != ''">
+      <xsl:attribute name="longdesc">
+        <xsl:value-of select="$longdesc"/>
+      </xsl:attribute>
+    </xsl:if>
+
+    <xsl:if test="@align and $viewport = 0">
+      <xsl:attribute name="align">
+        <xsl:choose>
+          <xsl:when test="@align = 'center'">middle</xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@align"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
