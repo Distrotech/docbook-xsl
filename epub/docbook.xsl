@@ -4,7 +4,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"  
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:exsl="http://exslt.org/common" version="1.0"
-  exclude-result-prefixes="exsl db ng dc">
+  exclude-result-prefixes="exsl db ng">
 
   <xsl:import href="../xhtml-1_1/docbook.xsl" />
   <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
@@ -173,12 +173,12 @@
       <xsl:with-param name="indent" select="'yes'" />
       <xsl:with-param name="quiet" select="$chunk.quietly" />
       <xsl:with-param name="content">
-        <package xmlns="http://www.idpf.org/2007/opf" 
-                 xmlns:dc="http://purl.org/dc/elements/1.1/"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 version="2.0">
+        <xsl:element name="package">
+          <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
+          <xsl:attribute name="version">2.0</xsl:attribute>
           <xsl:attribute name="unique-identifier"> <xsl:value-of select="$package-id"/> </xsl:attribute>
-          <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"  xmlns:opf="http://www.idpf.org/2007/opf">
+
+          <xsl:element name="metadata">
             <xsl:element name="dc:identifier">
               <xsl:attribute name="id"> <xsl:value-of select="$package-id"/> </xsl:attribute>
               <xsl:value-of select="$unique-id"/>
@@ -197,11 +197,11 @@
               <xsl:call-template name="l10n.language"/>
             </xsl:element>
 
-          </metadata>
+          </xsl:element>
           <xsl:call-template name="opf.manifest"/>
           <xsl:call-template name="opf.spine"/>
 
-        </package>  
+        </xsl:element>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -217,9 +217,13 @@
       <xsl:with-param name="indent" select="'yes'" />
       <xsl:with-param name="quiet" select="$chunk.quietly" />
       <xsl:with-param name="content">
-        <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-          <rootfiles>
-            <rootfile>
+        <xsl:element name="container">
+          <xsl:attribute name="xmlns">urn:oasis:names:tc:opendocument:xmlns:container</xsl:attribute>
+          <xsl:attribute name="version">1.0</xsl:attribute>
+          <xsl:element name="rootfiles">
+            <xsl:attribute name="xmlns">urn:oasis:names:tc:opendocument:xmlns:container</xsl:attribute>
+            <xsl:element name="rootfile">
+              <xsl:attribute name="xmlns">urn:oasis:names:tc:opendocument:xmlns:container</xsl:attribute>
               <xsl:attribute name="full-path">
                 <!-- TODO: Figure out how to get this to work right with generation but also not be hardcoded -->
                 <xsl:value-of select="'OEBPS/content.opf'"/>
@@ -227,9 +231,9 @@
               <xsl:attribute name="media-type">
                 <xsl:text>application/oebps-package+xml</xsl:text>
               </xsl:attribute>
-            </rootfile>  
-          </rootfiles>  
-        </container>  
+            </xsl:element>
+          </xsl:element>
+        </xsl:element>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -247,21 +251,33 @@
       <xsl:with-param name="indent" select="'yes'" />
       <xsl:with-param name="quiet" select="$chunk.quietly" />
       <xsl:with-param name="content">
-        <ncx version="2005-1" xmlns="http://www.daisy.org/z3986/2005/ncx/">
-          <head>
+        <xsl:element name="ncx">
+          <xsl:attribute name="version">2005-1</xsl:attribute>
+          <xsl:attribute name="xmlns">http://www.daisy.org/z3986/2005/ncx/</xsl:attribute>
+          <xsl:element name="head">
             <xsl:if test="/*/*[contains(name(.), 'info')]/isbn"> 
-              <meta name="dtb:uid">
+              <xsl:element name="meta">
+                <xsl:attribute name="name">dtb:uid</xsl:attribute>
                 <xsl:attribute name="content">
                   <xsl:text>isbn:</xsl:text>
                   <xsl:value-of select="/*/*[contains(name(.), 'info')]/isbn"/> 
                 </xsl:attribute>
-              </meta>  
+              </xsl:element>
             </xsl:if>
             <!-- TODO What are these hardcoded values? -->
-            <meta name="dtb:depth" content="-1" />
-            <meta name="dtb:totalPageCount" content="0" />
-            <meta name="dtb:maxPageNumber" content="0" />
-          </head>
+            <xsl:element name="meta">
+              <xsl:attribute name="name">dtb:depth</xsl:attribute>
+              <xsl:attribute name="content">-1</xsl:attribute>
+            </xsl:element>
+            <xsl:element name="meta">
+              <xsl:attribute name="name">dtb:totalPageCount</xsl:attribute>
+              <xsl:attribute name="content">0</xsl:attribute>
+            </xsl:element>
+            <xsl:element name="meta">
+              <xsl:attribute name="name">dtb:maxPageNumber</xsl:attribute>
+              <xsl:attribute name="content">0</xsl:attribute>
+            </xsl:element>
+          </xsl:element>
           <xsl:choose>
             <xsl:when test="$rootid != ''">
               <xsl:variable name="title">
@@ -280,12 +296,12 @@
                   <xsl:with-param name="object" select="key('id',$rootid)" />
                 </xsl:call-template>
               </xsl:variable>
-              <docTitle>
-                <text><xsl:value-of select="normalize-space($title)" /></text>  
-              </docTitle>
-              <navMap>
+              <xsl:element name="docTitle">
+                <xsl:element name="text"><xsl:value-of select="normalize-space($title)" />  </xsl:element>
+              </xsl:element>
+              <xsl:element name="navMap">
                 <xsl:apply-templates select="key('id',$rootid)/*" mode="ncx" />
-              </navMap>
+              </xsl:element>
             </xsl:when>
             <xsl:otherwise>
               <xsl:variable name="title">
@@ -304,10 +320,12 @@
                   <xsl:with-param name="object" select="/" />
                 </xsl:call-template>
               </xsl:variable>
-              <docTitle>
-                <text><xsl:value-of select="normalize-space($title)" /></text>
-              </docTitle>
-              <navMap>
+              <xsl:element name="docTitle">
+                <xsl:element name="text">
+                  <xsl:value-of select="normalize-space($title)" />
+                </xsl:element>
+              </xsl:element>
+              <xsl:element name="navMap">
                 <xsl:choose>
                   <xsl:when test="$only.one.chunk != '0'">
                     <xsl:apply-templates select="/*" mode="ncx" />
@@ -316,11 +334,11 @@
                     <xsl:apply-templates select="/*/*" mode="ncx" />
                   </xsl:otherwise>
                 </xsl:choose>
-              </navMap>
+              </xsl:element>
             </xsl:otherwise>
 
           </xsl:choose>
-        </ncx>
+        </xsl:element>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -392,7 +410,11 @@
                                   preceding::index)"/>
     </xsl:variable>
 
-    <navPoint id="{$id}" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+    <xsl:element name="navPoint">
+      <xsl:attribute name="xmlns">http://www.daisy.org/z3986/2005/ncx/</xsl:attribute>
+      <xsl:attribute name="id">
+        <xsl:value-of select="$id"/>
+      </xsl:attribute>
 
       <xsl:attribute name="playOrder">
         <xsl:choose>
@@ -407,12 +429,16 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
-      <navLabel>
-        <text><xsl:value-of select="normalize-space($title)"/></text>
-      </navLabel>
-      <content src="{$href}"/>
+      <xsl:element name="navLabel">
+        <xsl:element name="text"><xsl:value-of select="normalize-space($title)"/> </xsl:element>
+      </xsl:element>
+      <xsl:element name="content">
+        <xsl:attribute name="src">
+          <xsl:value-of select="$href"/>
+        </xsl:attribute>
+      </xsl:element>
       <xsl:apply-templates select="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
-    </navPoint>
+    </xsl:element>
 
   </xsl:template>
 
@@ -452,7 +478,12 @@
 
   <xsl:template name="opf.spine">
 
-    <spine xmlns="http://www.idpf.org/2007/opf" toc="{$epub.toc.id}">
+    <xsl:element name="spine">
+      <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
+      <xsl:attribute name="toc">
+        <xsl:value-of select="$epub.toc.id"/>
+      </xsl:attribute>
+
       <!-- TODO: be nice to have a idref="coverpage" here -->
       <!-- TODO: be nice to have a idref="titlepage" here -->
       <xsl:if test="$only.one.chunk != '0'">
@@ -461,7 +492,7 @@
       <xsl:apply-templates select="/*/*|
                                    /*/part/*" mode="opf.spine"/>
                                    
-    </spine>          
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="*" mode="opf.spine">
@@ -472,22 +503,24 @@
     </xsl:variable>
 
     <xsl:if test="$is.chunk = 1">
-      <itemref xmlns="http://www.idpf.org/2007/opf" >
+      <xsl:element name="itemref">
+        <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
         <xsl:attribute name="idref">
           <xsl:value-of select="generate-id(.)"/>
         </xsl:attribute>
-      </itemref>  
+      </xsl:element>
     </xsl:if>
   </xsl:template>
 
   <xsl:template name="opf.manifest">
-    <manifest xmlns="http://www.idpf.org/2007/opf" 
-              xmlns:dc="http://purl.org/dc/elements/1.1/"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsl:element name="manifest">
+      <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
       <!-- TODO: Figure out how to get this to work right with generation but also not be hardcoded -->
-      <item id="{$epub.toc.id}" media-type="application/x-dtbncx+xml">
+      <xsl:element name="item">
+        <xsl:attribute name="id"> <xsl:value-of select="$epub.toc.id"/> </xsl:attribute>
+        <xsl:attribute name="media-type">application/x-dtbncx+xml</xsl:attribute>
         <xsl:attribute name="href"><xsl:value-of select="$epub.ncx.filename"/> </xsl:attribute>
-      </item>  
+      </xsl:element>
       <!-- TODO: be nice to have a id="coverpage" here -->
       <!-- TODO: be nice to have a id="titlepage" here -->
       <xsl:apply-templates select="//part|
@@ -513,7 +546,7 @@
                                    //mediaobject|
                                    //inlinemediaobject" 
                            mode="opf.manifest"/>
-    </manifest>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="mediaobject|
@@ -594,13 +627,14 @@
       <!-- only do this if we're the first file to match -->
       <!-- TODO: Why can't this be simple equality?? (I couldn't get it to work) -->
       <xsl:if test="generate-id(.) = generate-id(key('image-filerefs', $fr)[1])">
-        <item xmlns="http://www.idpf.org/2007/opf"> 
+        <xsl:element name="item">
+          <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
           <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
           <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
           <xsl:attribute name="media-type">
             <xsl:value-of select="$format"/>
           </xsl:attribute>
-        </item>  
+        </xsl:element>
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -633,7 +667,8 @@
     <!-- only do this if we're the first file to match -->
     <!-- TODO: Why can't this be simple equality?? (I couldn't get it to work) -->
     <xsl:if test="generate-id(.) = generate-id(key('image-filerefs', $fr)[1])">
-      <item xmlns="http://www.idpf.org/2007/opf"> 
+      <xsl:element name="item">
+        <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
         <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
         <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
         <xsl:attribute name="media-type">
@@ -654,7 +689,7 @@
             </xsl:when>
           </xsl:choose>
         </xsl:attribute>
-      </item>  
+      </xsl:element>
     </xsl:if>
   </xsl:template>
 
@@ -680,7 +715,12 @@
     </xsl:variable>
 
     <xsl:if test="$is.chunk = 1">
-      <item id="{$id}" href="{$href}" media-type="application/xhtml+xml" xmlns="http://www.idpf.org/2007/opf"/> 
+      <xsl:element name="item">
+        <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
+        <xsl:attribute name="id"> <xsl:value-of select="$id"/> </xsl:attribute>
+        <xsl:attribute name="href"> <xsl:value-of select="$href"/> </xsl:attribute>
+        <xsl:attribute name="media-type">application/xhtml+xml</xsl:attribute>
+      </xsl:element>
     </xsl:if>  
   </xsl:template>  
 
