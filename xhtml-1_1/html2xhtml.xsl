@@ -18,6 +18,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+
 <xsl:template match="xsl:stylesheet" >
   <xsl:variable name="a">
       <xsl:element name="dummy" namespace="http://www.w3.org/1999/xhtml"/>
@@ -93,6 +94,7 @@
 </xsl:template>
 
 <xsl:template match="td/xsl:attribute[@name='width']"/>
+<xsl:template match="td/@width"/>
 
 <xsl:template match="hr">
 	<xsl:element name="hr" namespace="http://www.w3.org/1999/xhtml"/>
@@ -225,14 +227,22 @@
   <xsl:choose>
     <xsl:when test="namespace-uri(.) = ''">
       <xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
-        <xsl:copy-of select="@*"/>
+        <xsl:for-each select="@*">
+          <xsl:if test="local-name(.) != 'width'">
+            <xsl:attribute name="{local-name(.)}"><xsl:value-of select="."/></xsl:attribute>
+          </xsl:if>
+        </xsl:for-each>
         <xsl:apply-templates/>
       </xsl:element>
     </xsl:when>
     <xsl:otherwise>
       <xsl:copy>
 
-        <xsl:copy-of select="@*"/>
+        <xsl:for-each select="@*">
+          <xsl:if test="local-name(.) != 'width'">
+            <xsl:attribute name="{local-name(.)}"><xsl:value-of select="."/></xsl:attribute>
+          </xsl:if>
+        </xsl:for-each>
         <xsl:apply-templates/>
       </xsl:copy>
     </xsl:otherwise>

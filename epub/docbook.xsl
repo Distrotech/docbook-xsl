@@ -6,7 +6,10 @@
   xmlns:exsl="http://exslt.org/common" version="1.0"
   exclude-result-prefixes="exsl db ng dc">
 
-  <xsl:import href="../xhtml-1_1/chunk.xsl" />
+  <xsl:import href="../xhtml-1_1/docbook.xsl" />
+  <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
+  <xsl:include href="../xhtml-1_1/chunk-code.xsl" />
+
   <xsl:param name="ade.extensions" select="0"/>
   <xsl:param name="epub.autolabel" select="'1'"/> <!-- TODO: Document this in params -->
   <xsl:param name="manifest.in.base.dir" select="'1'"/> <!-- TODO: Document this in params; is '1' correct? -->
@@ -31,9 +34,12 @@
   <!-- no navigation in .epub -->
   <xsl:param name="suppress.navigation" select="'1'"/> 
 
-  <xsl:variable name="article.no.chunks">
+  <xsl:variable name="only.one.chunk">
     <xsl:choose>
       <xsl:when test="/article[not(sect1) or not(section)]">
+        <xsl:text>1</xsl:text>
+      </xsl:when>
+      <xsl:when test="/bibliography">
         <xsl:text>1</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -303,7 +309,7 @@
               </docTitle>
               <navMap>
                 <xsl:choose>
-                  <xsl:when test="$article.no.chunks != '0'">
+                  <xsl:when test="$only.one.chunk != '0'">
                     <xsl:apply-templates select="/*" mode="ncx" />
                   </xsl:when>
                   <xsl:otherwise>
@@ -328,7 +334,6 @@
                        chapter|
                        bibliography|
                        appendix|
-                       article|
                        glossary|
                        section|
                        sect1|
@@ -391,7 +396,7 @@
 
       <xsl:attribute name="playOrder">
         <xsl:choose>
-          <xsl:when test="$article.no.chunks != '0'">
+          <xsl:when test="$only.one.chunk != '0'">
             <xsl:value-of select="$order + 1"/>
           </xsl:when>
           <xsl:otherwise>
@@ -450,7 +455,7 @@
     <spine xmlns="http://www.idpf.org/2007/opf" toc="{$epub.toc.id}">
       <!-- TODO: be nice to have a idref="coverpage" here -->
       <!-- TODO: be nice to have a idref="titlepage" here -->
-      <xsl:if test="$article.no.chunks != '0'">
+      <xsl:if test="$only.one.chunk != '0'">
         <xsl:apply-templates select="/*" mode="opf.spine"/>
       </xsl:if>
       <xsl:apply-templates select="/*/*|
@@ -655,7 +660,7 @@
 
   <!-- TODO: Are we certain of this match list? -->
   <xsl:template
-    match="book|article|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
+    match="book|article|part|reference|preface|chapter|bibliography|appendix|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
     mode="opf.manifest">
     <xsl:variable name="href">
       <xsl:call-template name="href.target.with.base.dir">
@@ -696,6 +701,7 @@
     </head>
   </xsl:template>
 
+  <!-- OVERRIDES xhtml-1_1/graphics.xsl -->
   <!-- we can't deal with no img/@alt, because it's required. Try grabbing a title before it instead (hopefully meaningful) -->
   <xsl:template name="process.image.attributes">
     <xsl:param name="alt"/>
@@ -785,6 +791,7 @@
       </xsl:when>
     </xsl:choose>
 
+    <!-- AN OVERRIDE -->
     <xsl:attribute name="alt">
       <xsl:choose>
         <xsl:when test="$alt != ''">
@@ -798,6 +805,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
+    <!-- END OF OVERRIDE -->
 
     <xsl:if test="$longdesc != ''">
       <xsl:attribute name="longdesc">
@@ -815,6 +823,137 @@
         </xsl:choose>
       </xsl:attribute>
     </xsl:if>
+  </xsl:template>
+  
+  <!-- OVERRIDES xhtml-1_1/chunk-common.xsl   -->
+  <!-- make a bibliography always a chunk -->
+  <!-- TODO: Confirm that above isn't a mistake -->
+  <xsl:template name="chunk"
+                priority="1">       
+    <xsl:param name="node" select="."/>
+    <!-- returns 1 if $node is a chunk -->
+
+    <!-- ==================================================================== -->
+    <!-- What's a chunk?
+
+        The root element
+        appendix
+        article
+        bibliography  ### NO LONGER TRUE in article or part or book
+        book
+        chapter
+        colophon
+        glossary      in article or part or book
+        index         in article or part or book
+        part
+        preface
+        refentry
+        reference
+        sect{1,2,3,4,5}  if position()>1 && depth < chunk.section.depth
+        section          if position()>1 && depth < chunk.section.depth
+        set
+        setindex
+                                                                              -->
+    <!-- ==================================================================== -->
+
+  <!--
+    <xsl:message>
+      <xsl:text>chunk: </xsl:text>
+      <xsl:value-of select="name($node)"/>
+      <xsl:text>(</xsl:text>
+      <xsl:value-of select="$node/@id"/>
+      <xsl:text>)</xsl:text>
+      <xsl:text> csd: </xsl:text>
+      <xsl:value-of select="$chunk.section.depth"/>
+      <xsl:text> cfs: </xsl:text>
+      <xsl:value-of select="$chunk.first.sections"/>
+      <xsl:text> ps: </xsl:text>
+      <xsl:value-of select="count($node/parent::section)"/>
+      <xsl:text> prs: </xsl:text>
+      <xsl:value-of select="count($node/preceding-sibling::section)"/>
+    </xsl:message>
+  -->
+
+    <xsl:choose>
+      <xsl:when test="not($node/parent::*)">1</xsl:when>
+
+      <xsl:when test="local-name($node) = 'sect1'                     and $chunk.section.depth &gt;= 1                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::sect1) &gt; 0)">
+        <xsl:text>1</xsl:text>
+      </xsl:when>
+      <xsl:when test="local-name($node) = 'sect2'                     and $chunk.section.depth &gt;= 2                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::sect2) &gt; 0)">
+        <xsl:call-template name="chunk">
+          <xsl:with-param name="node" select="$node/parent::*"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="local-name($node) = 'sect3'                     and $chunk.section.depth &gt;= 3                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::sect3) &gt; 0)">
+        <xsl:call-template name="chunk">
+          <xsl:with-param name="node" select="$node/parent::*"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="local-name($node) = 'sect4'                     and $chunk.section.depth &gt;= 4                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::sect4) &gt; 0)">
+        <xsl:call-template name="chunk">
+          <xsl:with-param name="node" select="$node/parent::*"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="local-name($node) = 'sect5'                     and $chunk.section.depth &gt;= 5                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::sect5) &gt; 0)">
+        <xsl:call-template name="chunk">
+          <xsl:with-param name="node" select="$node/parent::*"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="local-name($node) = 'section'                     and $chunk.section.depth &gt;= count($node/ancestor::section)+1                     and ($chunk.first.sections != 0                          or count($node/preceding-sibling::section) &gt; 0)">
+        <xsl:call-template name="chunk">
+          <xsl:with-param name="node" select="$node/parent::*"/>
+        </xsl:call-template>
+      </xsl:when>
+
+      <xsl:when test="local-name($node)='preface'">1</xsl:when>
+      <xsl:when test="local-name($node)='chapter'">1</xsl:when>
+      <xsl:when test="local-name($node)='appendix'">1</xsl:when>
+      <xsl:when test="local-name($node)='article'">1</xsl:when>
+      <xsl:when test="local-name($node)='part'">1</xsl:when>
+      <xsl:when test="local-name($node)='reference'">1</xsl:when>
+      <xsl:when test="local-name($node)='refentry'">1</xsl:when>
+      <xsl:when test="local-name($node)='index' and ($generate.index != 0 or count($node/*) &gt; 0)                     and (local-name($node/parent::*) = 'article'                     or local-name($node/parent::*) = 'book'                     or local-name($node/parent::*) = 'part'                     )">1</xsl:when>
+      <!-- AN OVERRIDE -->
+      <xsl:when test="local-name($node)='bibliography'">1</xsl:when>
+      <!-- END OF OVERRIDE -->
+      <xsl:when test="local-name($node)='glossary'                     and (local-name($node/parent::*) = 'article'                     or local-name($node/parent::*) = 'book'                     or local-name($node/parent::*) = 'part'                     )">1</xsl:when>
+      <xsl:when test="local-name($node)='colophon'">1</xsl:when>
+      <xsl:when test="local-name($node)='book'">1</xsl:when>
+      <xsl:when test="local-name($node)='set'">1</xsl:when>
+      <xsl:when test="local-name($node)='setindex'">1</xsl:when>
+      <xsl:when test="local-name($node)='legalnotice'                     and $generate.legalnotice.link != 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- OVERRIDES xhtml-1_1/chunk-code.xsl   -->
+  <!-- Add chunking for bibliography as root element -->
+  <!-- AN OVERRIDE --> 
+  <xsl:template match="set|
+                       book|
+                       part|
+                       preface|
+                       chapter|
+                       appendix|
+                       article|
+                       reference|
+                       refentry|
+                       book/glossary|
+                       article/glossary|
+                       part/glossary|
+                       bibliography|
+                       colophon"
+                priority="1">       
+  <!-- END OF OVERRIDE --> 
+    <xsl:choose>
+      <xsl:when test="$onechunk != 0 and parent::*">
+        <xsl:apply-imports/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="process-chunk-element"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
