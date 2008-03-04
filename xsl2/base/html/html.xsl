@@ -232,29 +232,14 @@ primary result document.</para>
 		     else /*[1]"/>
   <head>
     <title>
-      <xsl:choose>
-	<xsl:when test="$root/db:info/db:title">
-	  <xsl:value-of select="$root/db:info/db:title"/>
-	</xsl:when>
-	<xsl:when test="$root/db:refmeta/db:refentrytitle">
-	  <xsl:value-of select="$root/db:refmeta/db:refentrytitle"/>
-	</xsl:when>
-	<xsl:when test="$root/db:refmeta/db:refnamediv/db:refname">
-	  <xsl:value-of select="$root/db:refmeta/db:refnamediv/db:refname"/>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:text>???</xsl:text>
-	  <xsl:message>
-	    <xsl:text>Warning: no title for root element: </xsl:text>
-	    <xsl:value-of select="local-name($root)"/>
-	  </xsl:message>
-	</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="f:title($root)"/>
     </title>
+    <xsl:call-template name="t:system-head-content"/>
     <xsl:call-template name="t:head-meta"/>
     <xsl:call-template name="t:head-links"/>
     <xsl:call-template name="css-style"/>
     <xsl:call-template name="javascript"/>
+    <xsl:call-template name="t:user-head-content"/>
   </head>
 </xsl:template>
 
