@@ -8,6 +8,7 @@ It's just a bogus mess right now.</para>
 <refentry xml:id="date-format"/>
 <refentry xml:id="gYearMonth-format"/>
 <refentry xml:id="gYear-format"/>
+<refentry xml:id="verbosity"/>
 <refentry xml:id="docbook.css"/>
 <refentry xml:id="docbook.css.inline"/>
 <refentry xml:id="annotation.js"/>

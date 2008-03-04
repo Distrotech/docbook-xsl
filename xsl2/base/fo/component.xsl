@@ -19,9 +19,7 @@
 		select="$titlepages/*[node-name(.) = node-name(current())
 			              and @t:side='verso'][1]"/>
 
-  <xsl:variable name="master-reference">
-    <xsl:call-template name="t:select-pagemaster"/>
-  </xsl:variable>
+  <xsl:variable name="master-reference" select="f:select-pagemaster(.)"/>
 
   <fo:page-sequence hyphenate="{$hyphenate}"
                     master-reference="{$master-reference}">
@@ -65,11 +63,11 @@
     </xsl:attribute>
     -->
 
-    <xsl:apply-templates select="." mode="t:running-head-mode">
+    <xsl:apply-templates select="." mode="m:running-head-mode">
       <xsl:with-param name="master-reference" select="$master-reference"/>
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="." mode="t:running-foot-mode">
+    <xsl:apply-templates select="." mode="m:running-foot-mode">
       <xsl:with-param name="master-reference" select="$master-reference"/>
     </xsl:apply-templates>
 
