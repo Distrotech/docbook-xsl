@@ -13,9 +13,11 @@
 <xsl:key name="id" match="*" use="@xml:id"/>
 <xsl:param name="save.normalized.xml" select="()"/>
 
-<xsl:template name="format-docbook">
+<xsl:template name="cleanup-docbook" as="document-node()">
+  <xsl:param name="root" select="/"/>
+
   <xsl:if test="$verbosity &gt; 2">
-    <xsl:message>Formatting: <xsl:value-of select="base-uri(/)"/></xsl:message>
+    <xsl:message>Processing: <xsl:value-of select="base-uri($root)"/></xsl:message>
   </xsl:if>
 
   <!-- Phase 1 makes three changes to the input document:
@@ -38,11 +40,11 @@
   </xsl:if>
   <xsl:variable name="phase1">
     <xsl:choose>
-      <xsl:when test="*[1]/namespace::* = $docbook-namespace">
-	<xsl:apply-templates mode="mp:justcopy"/>
+      <xsl:when test="$root/*[1]/namespace::* = $docbook-namespace">
+	<xsl:apply-templates select="$root" mode="mp:justcopy"/>
       </xsl:when>
       <xsl:otherwise>
-	<xsl:apply-templates mode="mp:fixnamespace"/>
+	<xsl:apply-templates select="$root" mode="mp:fixnamespace"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -96,10 +98,17 @@
     </xsl:result-document>
   </xsl:if>
 
+  <xsl:sequence select="$phase3"/>
+</xsl:template>
+
+<xsl:template name="format-docbook">
+  <xsl:variable name="doc" as="document-node()">
+    <xsl:call-template name="cleanup-docbook"/>
+  </xsl:variable>
   <xsl:if test="$verbosity &gt; 3">
     <xsl:message>Styling...</xsl:message>
   </xsl:if>
-  <xsl:apply-templates select="$phase3"/>
+  <xsl:apply-templates select="$doc"/>
 </xsl:template>
 
 <!-- ============================================================ -->
