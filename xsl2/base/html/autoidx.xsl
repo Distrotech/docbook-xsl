@@ -164,7 +164,10 @@
   <xsl:if test="$refs/db:secondary or $refs[not(db:secondary)]/*[self::db:seealso]">
     <dd>
       <dl>
-	<!-- If there's more than one seealso, is this group-by reasonable? -->
+	<xsl:if test="count(db:seealso) &gt; 1">
+	  <xsl:message>Multiple see also's not supported: only using first</xsl:message>
+	</xsl:if>
+
 	<xsl:for-each-group select="$refs[db:seealso]"
 			    group-by="concat(&primary;, &sep;, &sep;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
@@ -172,7 +175,7 @@
 	    <xsl:with-param name="role" select="$role"/>
 	    <xsl:with-param name="type" select="$type"/>
 	    <xsl:with-param name="lang" select="$lang"/>
-	    <xsl:sort select="fn:upper-case(db:seealso)" lang="{$lang}"/>
+	    <xsl:sort select="fn:upper-case(db:seealso[1])" lang="{$lang}"/>
 	  </xsl:apply-templates>
 	</xsl:for-each-group>
 	<xsl:for-each-group select="$refs[db:secondary]" 
@@ -227,7 +230,10 @@
   <xsl:if test="$refs/db:tertiary or $refs[not(db:tertiary)]/*[self::db:seealso]">
     <dd>
       <dl>
-	<!-- If there's more than one seealso, is this group-by reasonable? -->
+	<xsl:if test="count(db:seealso) &gt; 1">
+	  <xsl:message>Multiple see also's not supported: only using first</xsl:message>
+	</xsl:if>
+
 	<xsl:for-each-group select="$refs[db:seealso]" 
 			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
@@ -235,7 +241,7 @@
 	    <xsl:with-param name="role" select="$role"/>
 	    <xsl:with-param name="type" select="$type"/>
 	    <xsl:with-param name="lang" select="$lang"/>
-	    <xsl:sort select="fn:upper-case(seealso)" lang="{$lang}"/>
+	    <xsl:sort select="fn:upper-case(db:seealso[1])" lang="{$lang}"/>
 	  </xsl:apply-templates>
 	</xsl:for-each-group>
 
@@ -291,7 +297,10 @@
   <xsl:if test="$refs/db:seealso">
     <dd>
       <dl>
-	<!-- If there's more than one seealso, is this group-by reasonable? -->
+	<xsl:if test="count(db:seealso) &gt; 1">
+	  <xsl:message>Multiple see also's not supported: only using first</xsl:message>
+	</xsl:if>
+
 	<xsl:for-each-group select="$refs[db:seealso]"
 			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &tertiary;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
@@ -299,7 +308,7 @@
 	    <xsl:with-param name="role" select="$role"/>
 	    <xsl:with-param name="type" select="$type"/>
 	    <xsl:with-param name="lang" select="$lang"/>
-	    <xsl:sort select="fn:upper-case(db:seealso)" lang="{$lang}"/>
+	    <xsl:sort select="fn:upper-case(db:seealso[1])" lang="{$lang}"/>
 	  </xsl:apply-templates>
 	</xsl:for-each-group>
       </dl>
