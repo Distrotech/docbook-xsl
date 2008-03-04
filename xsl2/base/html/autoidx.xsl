@@ -85,12 +85,7 @@
     </xsl:if>
   </xsl:variable>
 
-  <xsl:variable name="lang">
-    <xsl:call-template name="l10n-language">
-      <xsl:with-param name="target" select="$scope"/>
-      <xsl:with-param name="xref-context" select="false()"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:variable name="lang" select="f:l10n-language($scope)"/>
 
   <div class="index">
     <xsl:for-each-group select="//db:indexterm[&scope;][not(@class = 'endofrange')]"
@@ -169,8 +164,9 @@
   <xsl:if test="$refs/db:secondary or $refs[not(db:secondary)]/*[self::db:seealso]">
     <dd>
       <dl>
+	<!-- If there's more than one seealso, is this group-by reasonable? -->
 	<xsl:for-each-group select="$refs[db:seealso]"
-			    group-by="concat(&primary;, &sep;, &sep;, &sep;, db:seealso)">
+			    group-by="concat(&primary;, &sep;, &sep;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
 	    <xsl:with-param name="scope" select="$scope"/>
 	    <xsl:with-param name="role" select="$role"/>
@@ -231,8 +227,9 @@
   <xsl:if test="$refs/db:tertiary or $refs[not(db:tertiary)]/*[self::db:seealso]">
     <dd>
       <dl>
+	<!-- If there's more than one seealso, is this group-by reasonable? -->
 	<xsl:for-each-group select="$refs[db:seealso]" 
-			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &sep;, db:seealso)">
+			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
 	    <xsl:with-param name="scope" select="$scope"/>
 	    <xsl:with-param name="role" select="$role"/>
@@ -294,8 +291,9 @@
   <xsl:if test="$refs/db:seealso">
     <dd>
       <dl>
+	<!-- If there's more than one seealso, is this group-by reasonable? -->
 	<xsl:for-each-group select="$refs[db:seealso]"
-			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &tertiary;, &sep;, db:seealso)">
+			    group-by="concat(&primary;, &sep;, &secondary;, &sep;, &tertiary;, &sep;, db:seealso[1])">
 	  <xsl:apply-templates select="." mode="m:index-seealso">
 	    <xsl:with-param name="scope" select="$scope"/>
 	    <xsl:with-param name="role" select="$role"/>
