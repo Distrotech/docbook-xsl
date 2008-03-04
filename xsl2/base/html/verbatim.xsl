@@ -16,22 +16,14 @@
 <xsl:include href="../common/verbatim.xsl"/>
 
 <xsl:template match="db:programlistingco">
-  <xsl:variable name="cleanedup" as="element()+">
-    <xsl:apply-templates select="." mode="m:verbatim-phase-1"/>
-  </xsl:variable>
-
-  <xsl:apply-templates select="$cleanedup/db:programlisting"
-		       mode="m:verbatim"/>
+  <!-- FIXME: this doesn't do anything to process the areas!? -->
+  <xsl:apply-templates select="db:programlisting" mode="m:verbatim"/>
   <xsl:apply-templates select="db:calloutlist"/>
 </xsl:template>
 
-<xsl:template match="db:programlisting|db:address|db:screen|db:synopsis
-		     |db:literallayout">
-  <xsl:variable name="cleanedup" as="element()">
-    <xsl:apply-templates select="." mode="m:verbatim-phase-1"/>
-  </xsl:variable>
-
-  <xsl:apply-templates select="$cleanedup" mode="m:verbatim"/>
+<xsl:template
+    match="db:programlisting|db:address|db:screen|db:synopsis|db:literallayout">
+  <xsl:apply-templates select="." mode="m:verbatim"/>
 </xsl:template>
 
 <!-- ============================================================ -->
