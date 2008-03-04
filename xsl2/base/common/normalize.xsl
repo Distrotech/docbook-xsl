@@ -34,8 +34,9 @@
       <xsl:value-of select="()"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="document($glossary.collection, .)"
-			   mode="m:cleanup"/>
+      <xsl:call-template name="cleanup-docbook">
+	<xsl:with-param name="root" select="document($glossary.collection,.)"/>
+      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:variable>
@@ -46,8 +47,9 @@
       <xsl:value-of select="()"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="document($bibliography.collection)"
-			   mode="m:cleanup"/>
+      <xsl:call-template name="cleanup-docbook">
+	<xsl:with-param name="root" select="document($bibliography.collection,.)"/>
+      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:variable>
@@ -460,6 +462,18 @@ if appropriate</refpurpose>
       <xsl:value-of select="unparsed-text(db:textdata/@fileref)"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- CALS tables are normalized here so that they're in the right context later -->
+<xsl:template match="db:tgroup" mode="m:normalize">
+  <xsl:apply-templates select="." mode="m:cals-phase-1"/>
+</xsl:template>
+
+<!-- Verbatim environments are normalized here too -->
+<xsl:template
+    match="db:programlisting|db:address|db:screen|db:synopsis|db:literallayout"
+    mode="m:normalize">
+  <xsl:apply-templates select="." mode="m:verbatim-phase-1"/>
 </xsl:template>
 
 <xsl:template match="*" mode="m:normalize"
