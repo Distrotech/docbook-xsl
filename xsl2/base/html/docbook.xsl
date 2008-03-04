@@ -60,7 +60,6 @@
 <xsl:output name="final" method="xhtml" encoding="utf-8" indent="yes"/>
 
 <xsl:param name="stylesheet.result.type" select="'xhtml'"/>
-<xsl:param name="input" select="/"/>
 
 <xsl:template match="/">
   <xsl:variable name="root" as="element()"
