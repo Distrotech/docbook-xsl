@@ -185,13 +185,14 @@
       <xsl:call-template name="calsTable"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:copy>
+      <!-- do not use xsl:copy because of XHTML's needs -->
+      <table>
         <xsl:copy-of select="@*[not(local-name()='id')]"/>
         <xsl:attribute name="id">
           <xsl:call-template name="object.id"/>
         </xsl:attribute>
         <xsl:call-template name="htmlTable"/>
-      </xsl:copy>
+      </table>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
