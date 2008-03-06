@@ -34,7 +34,7 @@
   <!-- no navigation in .epub -->
   <xsl:param name="suppress.navigation" select="'1'"/> 
 
-  <xsl:variable name="only.one.chunk">
+  <xsl:variable name="root.is.a.chunk">
     <xsl:choose>
       <xsl:when test="/*[not(self::book)][not(sect1) or not(section)]">
         <xsl:text>1</xsl:text>
@@ -338,7 +338,7 @@
               </xsl:element>
               <xsl:element name="navMap">
                 <xsl:choose>
-                  <xsl:when test="$only.one.chunk != '0'">
+                  <xsl:when test="$root.is.a.chunk != '0'">
                     <xsl:apply-templates select="/*" mode="ncx" />
                   </xsl:when>
                   <xsl:otherwise>
@@ -403,6 +403,7 @@
       <xsl:value-of select="$depth +
                                   count(preceding::part|
                                   preceding::reference|
+                                  preceding::book[parent::set]|
                                   preceding::preface|
                                   preceding::chapter|
                                   preceding::bibliography|
@@ -429,7 +430,10 @@
 
       <xsl:attribute name="playOrder">
         <xsl:choose>
-          <xsl:when test="$only.one.chunk != '0'">
+          <xsl:when test="/*[self::set]">
+            <xsl:value-of select="$order"/>
+          </xsl:when>
+          <xsl:when test="$root.is.a.chunk != '0'">
             <xsl:value-of select="$order + 1"/>
           </xsl:when>
           <xsl:otherwise>
@@ -448,7 +452,7 @@
           <xsl:value-of select="$href"/>
         </xsl:attribute>
       </xsl:element>
-      <xsl:apply-templates select="set/book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
+      <xsl:apply-templates select="book[parent::set]|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
     </xsl:element>
 
   </xsl:template>
@@ -497,7 +501,7 @@
 
       <!-- TODO: be nice to have a idref="coverpage" here -->
       <!-- TODO: be nice to have a idref="titlepage" here -->
-      <xsl:if test="$only.one.chunk != '0'">
+      <xsl:if test="$root.is.a.chunk != '0'">
         <xsl:apply-templates select="/*" mode="opf.spine"/>
       </xsl:if>
       <xsl:apply-templates select="/*/*|
@@ -513,7 +517,7 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:if test="$is.chunk = 1">
+    <xsl:if test="$is.chunk != 0">
       <xsl:element name="itemref">
         <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
         <xsl:attribute name="idref">
@@ -535,6 +539,8 @@
       <!-- TODO: be nice to have a id="coverpage" here -->
       <!-- TODO: be nice to have a id="titlepage" here -->
       <xsl:apply-templates select="//part|
+                                   /set|
+                                   /set/book|
                                    //reference|
                                    //preface|
                                    //chapter|
@@ -706,7 +712,7 @@
 
   <!-- TODO: Are we certain of this match list? -->
   <xsl:template
-    match="book|article|part|reference|preface|chapter|bibliography|appendix|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
+    match="set|book[parent::set]|article|part|reference|preface|chapter|bibliography|appendix|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
     mode="opf.manifest">
     <xsl:variable name="href">
       <xsl:call-template name="href.target.with.base.dir">
@@ -725,7 +731,7 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:if test="$is.chunk = 1">
+    <xsl:if test="$is.chunk != 0">
       <xsl:element name="item">
         <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
         <xsl:attribute name="id"> <xsl:value-of select="$id"/> </xsl:attribute>
