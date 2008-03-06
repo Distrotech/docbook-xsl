@@ -222,27 +222,29 @@
   </xsl:element>
 </xsl:template>
 
-<xsl:template match="*">
+<xsl:template match="img[@border]">
+  <xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
+    <xsl:for-each select="@*">
+      <xsl:if test="local-name(.) != 'border'">
+        <xsl:attribute name="{name(.)}"><xsl:value-of select="."/></xsl:attribute>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
 
+
+<xsl:template match="*">
   <xsl:choose>
     <xsl:when test="namespace-uri(.) = ''">
       <xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
-        <xsl:for-each select="@*">
-          <xsl:if test="local-name(.) != 'width'">
-            <xsl:attribute name="{local-name(.)}"><xsl:value-of select="."/></xsl:attribute>
-          </xsl:if>
-        </xsl:for-each>
+        <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
       </xsl:element>
     </xsl:when>
     <xsl:otherwise>
       <xsl:copy>
-
-        <xsl:for-each select="@*">
-          <xsl:if test="local-name(.) != 'width'">
-            <xsl:attribute name="{local-name(.)}"><xsl:value-of select="."/></xsl:attribute>
-          </xsl:if>
-        </xsl:for-each>
+        <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
       </xsl:copy>
     </xsl:otherwise>
