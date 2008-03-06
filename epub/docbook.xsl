@@ -36,7 +36,7 @@
 
   <xsl:variable name="only.one.chunk">
     <xsl:choose>
-      <xsl:when test="/article[not(sect1) or not(section)]">
+      <xsl:when test="/*[not(self::book)][not(sect1) or not(section)]">
         <xsl:text>1</xsl:text>
       </xsl:when>
       <xsl:when test="/bibliography">
@@ -264,6 +264,17 @@
                 </xsl:attribute>
               </xsl:element>
             </xsl:if>
+            <!-- TODO: be nice to have a name="cover" here for .mobi-->
+            <!-- Via Martin Goerner: On covers: the IDPF2.0 standard unfortunately does not have a provision for
+            covers. We had to add one and we did so in conjunction with the IDPF and
+            various publishers. The tag chosen to define the covers is:
+            <meta name="cover" content="-reference to a manifest item-">
+            Then, we also added a bit of logic to get rid cleanly of the HTML cover
+            people usually add because the logical cover is not specced by the IDPF. So,
+            if the HTML cover item is marked linear="no" AND there is a guide item of
+            type="cover" pointing to it AND there is a logical cover specified in a
+            <meta name="cover"> tag, THEN, the HTML cover is discarded. -->
+
             <!-- TODO What are these hardcoded values? -->
             <xsl:element name="meta">
               <xsl:attribute name="name">dtb:depth</xsl:attribute>
@@ -437,7 +448,7 @@
           <xsl:value-of select="$href"/>
         </xsl:attribute>
       </xsl:element>
-      <xsl:apply-templates select="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
+      <xsl:apply-templates select="set/book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
     </xsl:element>
 
   </xsl:template>
