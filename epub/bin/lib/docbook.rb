@@ -5,6 +5,10 @@ module DocBook
   class Epub
     CHECKER = "epubcheck"
     STYLESHEET = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', "docbook.xsl"))
+    CALLOUT_PATH = File.join('images', 'callouts')
+    CALLOUT_FULL_PATH = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', CALLOUT_PATH))
+    CALLOUT_LIMIT = 15
+    CALLOUT_EXT = ".png"
     XSLT_PROCESSOR = "xsltproc"
     OUTPUT_DIR = ".epubtmp"
     MIMETYPE = "application/epub+zip"
@@ -47,11 +51,14 @@ module DocBook
 
     private
     def render_to_epub(output_file, verbose)  
-      chunk_quietly =  "--stringparam chunk.quietly " + (verbose ? '0' : '1')
-      base =  "--stringparam base.dir #{@oebps_dir}/" 
-      meta =  "--stringparam epub.metainf.dir #{@meta_dir}/" 
-      oebps =  "--stringparam epub.oebps.dir #{@oebps_dir}/" 
-      options = "--xinclude #{chunk_quietly} #{base} #{meta} #{oebps}"
+      chunk_quietly = "--stringparam chunk.quietly " + (verbose ? '0' : '1')
+      callout_path =  "--stringparam callout.graphics.path #{CALLOUT_PATH}/"
+      callout_limit = "--stringparam callout.graphics.number.limit #{CALLOUT_LIMIT}"
+      callout_ext =   "--stringparam callout.graphics.extension #{CALLOUT_EXT}" 
+      base =          "--stringparam base.dir #{@oebps_dir}/" 
+      meta =          "--stringparam epub.metainf.dir #{@meta_dir}/" 
+      oebps =         "--stringparam epub.oebps.dir #{@oebps_dir}/" 
+      options = "--xinclude #{chunk_quietly} #{callout_path} #{callout_limit} #{callout_ext} #{base} #{meta} #{oebps}"
       db2epub_cmd = "#{XSLT_PROCESSOR} #{options} #{STYLESHEET} #{@docbook_file}"
       STDERR.puts db2epub_cmd if $DEBUG
       success = system(db2epub_cmd)
@@ -67,10 +74,28 @@ module DocBook
       meta  = File.basename(@meta_dir)
       oebps  = File.basename(@oebps_dir)
       images = copy_images()
-      zip_cmd = "cd #{@output_dir} &&  #{ZIPPER} #{quiet} -X -r  #{File.expand_path(output_file)} #{mimetype_filename} #{meta} #{oebps} #{images}"
+      callouts = copy_callouts()
+      zip_cmd = "cd #{@output_dir} &&  #{ZIPPER} #{quiet} -X -r  #{File.expand_path(output_file)} #{mimetype_filename} #{meta} #{oebps} #{images} #{callouts}"
       puts zip_cmd if $DEBUG
       success = system(zip_cmd)
       raise "Could not bundle into .epub file to #{output_file}" unless success
+    end
+
+    def copy_callouts
+      new_callout_images = []
+      if has_callouts?
+        calloutglob = "#{CALLOUT_FULL_PATH}/*#{CALLOUT_EXT}"
+        Dir.glob(calloutglob).each {|img|
+          img_new_filename = File.join(@oebps_dir, CALLOUT_PATH, File.basename(img))
+
+          # TODO: What to rescue for these two?
+          FileUtils.mkdir_p(File.dirname(img_new_filename)) 
+          FileUtils.cp(img, img_new_filename)
+          @to_delete << img_new_filename
+          new_callout_images << img
+        }  
+      end  
+      return new_callout_images
     end
 
     def copy_images
@@ -119,6 +144,18 @@ module DocBook
         end  
       end
       return image_refs
+    end  
+
+    # Returns true if the document has code callouts
+    def has_callouts?
+      parser = REXML::Parsers::PullParser.new(File.new(@docbook_file))
+      while parser.has_next?
+        el = parser.pull
+        if el.start_element? and (el[0] == "calloutlist")
+          return true
+        end  
+      end
+      return false
     end  
   end
 end

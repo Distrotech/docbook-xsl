@@ -10,6 +10,7 @@
   <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
   <xsl:include href="../xhtml-1_1/chunk-code.xsl" />
 
+
   <xsl:param name="ade.extensions" select="0"/>
   <xsl:param name="epub.autolabel" select="'1'"/> <!-- TODO: Document this in params -->
   <xsl:param name="manifest.in.base.dir" select="'1'"/> <!-- TODO: Document this in params; is '1' correct? -->
@@ -30,6 +31,11 @@
           That will avoid the use of style attributes in XHTML elements where they are not permitted."""
        http://www.sagehill.net/docbookxsl/OtherOutputForms.html#StrictXhtmlValid -->
   <xsl:param name="css.decoration" select="0"/>
+
+  <xsl:param name="callout.graphics" select="1"/>
+  <xsl:param name="callout.graphics.extension">.png</xsl:param>
+  <xsl:param name="callout.graphics.number.limit" select="15"/>
+  <xsl:param name="callout.graphics.path" select="'images/callouts/'"/>
 
   <!-- no navigation in .epub -->
   <xsl:param name="suppress.navigation" select="'1'"/> 
@@ -563,7 +569,84 @@
                                    //mediaobject|
                                    //inlinemediaobject" 
                            mode="opf.manifest"/>
+      <xsl:call-template name="opf.calloutlist"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="opf.calloutlist">
+    <xsl:variable name="format">
+      <xsl:call-template name="guess-media-type">
+        <xsl:with-param name="ext" select="$callout.graphics.extension"/>
+      </xsl:call-template>
+    </xsl:variable>  
+    <xsl:if test="(//calloutlist)">
+      <xsl:call-template name="opf.reference.callout">
+        <xsl:with-param name="conum" select="1"/>
+        <xsl:with-param name="format" select="$format"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="opf.reference.callout">
+    <xsl:param name="conum"/>
+    <xsl:param name="format"/>
+
+    <xsl:variable name="filename" select="concat($callout.graphics.path, $conum, $callout.graphics.extension)"/>
+
+    <xsl:element name="item">
+      <xsl:attribute name="xmlns">http://www.idpf.org/2007/opf</xsl:attribute>
+      <xsl:attribute name="id"> <xsl:value-of select="concat(generate-id(.), 'callout', $conum)"/> </xsl:attribute>
+      <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
+      <xsl:attribute name="media-type">
+        <xsl:value-of select="$format"/>
+      </xsl:attribute>
+    </xsl:element>
+    <xsl:if test="($conum &lt; $callout.graphics.number.limit)">
+      <xsl:call-template name="opf.reference.callout">
+        <xsl:with-param name="conum" select="$conum + 1"/>
+        <xsl:with-param name="format" select="$format"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="guess-media-type">
+    <xsl:param name="ext"></xsl:param>
+    <xsl:choose>
+      <xsl:when test="contains($ext, '.gif')">
+        <xsl:text>image/gif</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.GIF')">
+        <xsl:text>image/gif</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.png')">
+        <xsl:text>image/png</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.PNG')">
+        <xsl:text>image/png</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.jpeg')">
+        <xsl:text>image/jpeg</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.JPEG')">
+        <xsl:text>image/jpeg</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.jpg')">
+        <xsl:text>image/jpeg</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.JPG')">
+        <xsl:text>image/jpeg</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.svg')">
+        <xsl:text>image/svg+xml</xsl:text>
+      </xsl:when>
+      <xsl:when test="contains($ext, '.SVG')">
+        <xsl:text>image/svg+xml</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- we failed -->
+        <xsl:text></xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="mediaobject|
@@ -602,42 +685,9 @@
       </xsl:choose>
     </xsl:variable>  
     <xsl:variable name="format"> 
-      <xsl:choose>
-        <xsl:when test="contains(@fileref, '.gif')">
-          <xsl:text>image/gif</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.GIF')">
-          <xsl:text>image/gif</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.png')">
-          <xsl:text>image/png</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.PNG')">
-          <xsl:text>image/png</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.jpeg')">
-          <xsl:text>image/jpeg</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.JPEG')">
-          <xsl:text>image/jpeg</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.jpg')">
-          <xsl:text>image/jpeg</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.JPG')">
-          <xsl:text>image/jpeg</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.svg')">
-          <xsl:text>image/svg+xml</xsl:text>
-        </xsl:when>
-        <xsl:when test="contains(@fileref, '.SVG')">
-          <xsl:text>image/svg+xml</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <!-- we failed -->
-          <xsl:text></xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="guess-media-type">
+        <xsl:with-param name="ext" select="@fileref"/>
+      </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="fr" select="@fileref"/>
     <xsl:if test="$format != ''">
@@ -689,22 +739,9 @@
         <xsl:attribute name="id"> <xsl:value-of select="generate-id(.)"/> </xsl:attribute>
         <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
         <xsl:attribute name="media-type">
-
-          <xsl:choose>
-            <!-- TODO: What is GIF87a? -->
-            <xsl:when test="@format = 'GIF' or @format = 'GIF87a' or @format = 'GIF89a'">
-              <xsl:text>image/gif</xsl:text>
-            </xsl:when>
-            <xsl:when test="@format = 'JPEG' or @format = 'JPG'">
-              <xsl:text>image/jpeg</xsl:text>
-            </xsl:when>
-            <xsl:when test="@format = 'PNG'">
-              <xsl:text>image/png</xsl:text>
-            </xsl:when>
-            <xsl:when test="@format = 'SVG'">
-              <xsl:text>image/svg+xml</xsl:text>
-            </xsl:when>
-          </xsl:choose>
+          <xsl:call-template name="guess-media-type">
+            <xsl:with-param name="ext" select="@fileref"/>
+          </xsl:call-template>
         </xsl:attribute>
       </xsl:element>
     </xsl:if>
