@@ -150,6 +150,13 @@
 	</xsl:copy>
 </xsl:template>
 
+<xsl:template match="xsl:attribute[@name='align']">
+  <xsl:element name="xsl:attribute">
+    <xsl:attribute name="name">style</xsl:attribute>
+    <xsl:element name="xsl:text">text-align: </xsl:element>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
 <xsl:template match="xsl:attribute[@name='type']">
 	<xsl:choose>
 		<xsl:when test="ancestor::ol"/>
