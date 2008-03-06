@@ -17,7 +17,7 @@ require 'docbook'
 $DEBUG = true
 
 TESTDOCSDIR = File.expand_path(File.join(File.dirname(__FILE__), 'testdocs'))
-NUMBER_TO_TEST = 5
+NUMBER_TO_TEST = 15
 
 describe DocBook::Epub do
 
@@ -26,7 +26,7 @@ describe DocBook::Epub do
     
   end
 
-  Dir["#{TESTDOCSDIR}/set*.[0-9][0-9][0-9].xml"].sort_by { rand }[0..(NUMBER_TO_TEST-1)].each do |xml_file|
+  Dir["#{TESTDOCSDIR}/docbook*.[0-9][0-9][0-9].xml"].sort_by { rand }[0..(NUMBER_TO_TEST-1)].each do |xml_file|
   #Dir["#{TESTDOCSDIR}/*.[0-9][0-9][0-9].xml"].sort_by { rand }[0..(NUMBER_TO_TEST-1)].each do |xml_file|
     it "should be able to render a valid .epub for the test document #{xml_file}" do
       epub = DocBook::Epub.new(xml_file, @tmpdir)

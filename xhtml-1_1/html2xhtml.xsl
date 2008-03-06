@@ -94,7 +94,6 @@
 </xsl:template>
 
 <xsl:template match="td/xsl:attribute[@name='width']"/>
-<xsl:template match="td/@width"/>
 
 <xsl:template match="hr">
 	<xsl:element name="hr" namespace="http://www.w3.org/1999/xhtml"/>
@@ -233,6 +232,16 @@
   </xsl:element>
 </xsl:template>
 
+<xsl:template match="td[@width]">
+  <xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
+    <xsl:for-each select="@*">
+      <xsl:if test="local-name(.) != 'width'">
+        <xsl:attribute name="{name(.)}"><xsl:value-of select="."/></xsl:attribute>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
 
 <xsl:template match="*">
   <xsl:choose>
