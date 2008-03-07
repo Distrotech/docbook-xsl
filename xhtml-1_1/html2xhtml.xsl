@@ -150,6 +150,14 @@
 	</xsl:copy>
 </xsl:template>
 
+<xsl:template match="xsl:attribute[@name='bgcolor']">
+  <xsl:element name="xsl:attribute">
+    <xsl:attribute name="name">style</xsl:attribute>
+    <xsl:element name="xsl:text">background-color: </xsl:element>
+    <xsl:apply-templates/>
+  </xsl:element>
+</xsl:template>
+
 <xsl:template match="xsl:attribute[@name='align']">
   <xsl:element name="xsl:attribute">
     <xsl:attribute name="name">style</xsl:attribute>
@@ -157,6 +165,7 @@
     <xsl:apply-templates/>
   </xsl:element>
 </xsl:template>
+
 <xsl:template match="xsl:attribute[@name='type']">
 	<xsl:choose>
 		<xsl:when test="ancestor::ol"/>
