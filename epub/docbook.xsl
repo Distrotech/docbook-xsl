@@ -886,19 +886,21 @@
     </xsl:choose>
 
     <!-- AN OVERRIDE -->
-    <xsl:attribute name="alt">
-      <xsl:choose>
-        <xsl:when test="$alt != ''">
-          <xsl:value-of select="normalize-space($alt)"/>
-        </xsl:when>
-        <xsl:when test="preceding::title[1]">
-          <xsl:value-of select="normalize-space(preceding::title[1])"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>(missing alt)</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+    <xsl:if test="not(@format ='SVG')">
+      <xsl:attribute name="alt">
+        <xsl:choose>
+          <xsl:when test="$alt != ''">
+            <xsl:value-of select="normalize-space($alt)"/>
+          </xsl:when>
+          <xsl:when test="preceding::title[1]">
+            <xsl:value-of select="normalize-space(preceding::title[1])"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>(missing alt)</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:if>
     <!-- END OF OVERRIDE -->
 
     <xsl:if test="$longdesc != ''">

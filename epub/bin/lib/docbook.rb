@@ -104,7 +104,7 @@ module DocBook
       image_references.each {|img|
         # TODO: It'd be cooler if we had a filetype lookup rather than just
         # extension
-        if img =~ /\.(svg|png|gif|jpe?g|svg)/i
+        if img =~ /\.(svg|png|gif|jpe?g|xml)/i
           img_new_filename = File.join(@oebps_dir, img)
           img_full = File.join(File.expand_path(File.dirname(@docbook_file)), img)
 
