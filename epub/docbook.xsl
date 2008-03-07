@@ -615,31 +615,31 @@
       <xsl:when test="contains($ext, '.gif')">
         <xsl:text>image/gif</xsl:text>
       </xsl:when>
-      <xsl:when test="contains($ext, '.GIF')">
+      <xsl:when test="contains($ext, 'GIF')">
         <xsl:text>image/gif</xsl:text>
       </xsl:when>
       <xsl:when test="contains($ext, '.png')">
         <xsl:text>image/png</xsl:text>
       </xsl:when>
-      <xsl:when test="contains($ext, '.PNG')">
+      <xsl:when test="contains($ext, 'PNG')">
         <xsl:text>image/png</xsl:text>
       </xsl:when>
       <xsl:when test="contains($ext, '.jpeg')">
         <xsl:text>image/jpeg</xsl:text>
       </xsl:when>
-      <xsl:when test="contains($ext, '.JPEG')">
+      <xsl:when test="contains($ext, 'JPEG')">
         <xsl:text>image/jpeg</xsl:text>
       </xsl:when>
       <xsl:when test="contains($ext, '.jpg')">
         <xsl:text>image/jpeg</xsl:text>
       </xsl:when>
-      <xsl:when test="contains($ext, '.JPG')">
+      <xsl:when test="contains($ext, 'JPG')">
         <xsl:text>image/jpeg</xsl:text>
       </xsl:when>
       <xsl:when test="contains($ext, '.svg')">
         <xsl:text>image/svg+xml</xsl:text>
       </xsl:when>
-      <xsl:when test="contains($ext, '.SVG')">
+      <xsl:when test="contains($ext, 'SVG')">
         <xsl:text>image/svg+xml</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -740,7 +740,7 @@
         <xsl:attribute name="href"> <xsl:value-of select="$filename"/> </xsl:attribute>
         <xsl:attribute name="media-type">
           <xsl:call-template name="guess-media-type">
-            <xsl:with-param name="ext" select="@fileref"/>
+            <xsl:with-param name="ext" select="@format"/>
           </xsl:call-template>
         </xsl:attribute>
       </xsl:element>
