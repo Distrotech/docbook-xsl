@@ -248,6 +248,55 @@
   </xsl:element>
 </xsl:template>
 
+<!-- Sadly, strict XHTML doesn't let us override list values (though we could figure out 
+     with a more nuanced template than what is done below whether we could fix it with a 
+     list-style @style instruction in CSS -->
+<xsl:template match="li/xsl:if[@test = '@override']">
+  <xsl:element name="xsl:if">
+    <xsl:attribute name="test">@override</xsl:attribute>
+    <xsl:element name="xsl:message">
+      <xsl:element name="xsl:text">
+        <xsl:text>@override attribute cannot be set in strict XHTML output for listitem: </xsl:text>
+      </xsl:element>
+      <xsl:element name="xsl:value-of">
+        <xsl:attribute name="select">
+          <xsl:text>@override</xsl:text>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:element>
+  </xsl:element>
+</xsl:template>
+
+<!-- again, forbidden by XHTML, but this one could just be a CSS choice (maybe line-height?) -->
+<xsl:template match="ol/xsl:if[contains(@test, '@spacing=') and contains(@test, 'compact')]|
+                     ul/xsl:if[contains(@test, '@spacing=') and contains(@test, 'compact')]">
+  <xsl:element name="xsl:if">
+    <xsl:attribute name="test">@spacing='compact'</xsl:attribute>
+    <xsl:element name="xsl:message">
+      <xsl:element name="xsl:text">
+        <xsl:text>Compact spacing via @spacing attribute cannot be set in strict XHTML output for listitem: </xsl:text>
+      </xsl:element>
+      <xsl:element name="xsl:value-of">
+        <xsl:attribute name="select">
+          <xsl:text>@spacing</xsl:text>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:element>
+  </xsl:element>
+</xsl:template>
+
+<!-- @start forbidden in XHTML -->
+<xsl:template match='ol/xsl:if[contains(@test, "$start") and contains(@test, "!= &apos;1&apos;")]'>
+  <xsl:element name="xsl:if">
+    <xsl:attribute name="test">$start != '1'</xsl:attribute>
+    <xsl:element name="xsl:message">
+      <xsl:element name="xsl:text">
+        <xsl:text>Strict XHTML does not allow setting @start attribute for lists! </xsl:text>
+      </xsl:element>
+    </xsl:element>
+  </xsl:element>
+</xsl:template>
+
 <xsl:template match="td[@width]">
   <xsl:element name="{local-name(.)}" namespace="http://www.w3.org/1999/xhtml">
     <xsl:for-each select="@*">
