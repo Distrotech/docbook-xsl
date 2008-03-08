@@ -567,6 +567,7 @@
                                    //graphic|
                                    //inlinegraphic|
                                    //mediaobject|
+                                   //mediaobjectco|
                                    //inlinemediaobject" 
                            mode="opf.manifest"/>
       <xsl:call-template name="opf.calloutlist"/>
@@ -650,9 +651,17 @@
   </xsl:template>
 
   <xsl:template match="mediaobject|
+                       mediaobjectco|
                        inlinemediaobject" 
                 mode="opf.manifest">
-    <xsl:apply-templates select="imageobject/imagedata" 
+    <xsl:apply-templates select="imageobject/imagedata"
+                         mode="opf.manifest"/>              
+  </xsl:template>
+
+  <xsl:template match="mediaobjectco"
+                mode="opf.manifest">
+    <xsl:message>Warning: mediaobjectco almost certain will not render as expected in .epub </xsl:message>
+    <xsl:apply-templates select="imageobjectco/imageobject/imagedata" 
                          mode="opf.manifest"/>              
   </xsl:template>
 

@@ -8,6 +8,7 @@ $LOAD_PATH.unshift(lib) if File.exist?(lib)
 
 require 'tmpdir'
 require 'fileutils'
+include Enumerable
 
 require 'rubygems'
 require 'spec'
@@ -24,8 +25,8 @@ describe DocBook::Epub do
     @tmpdir = File.join(Dir::tmpdir(), "epubspecsmoke"); Dir.mkdir(@tmpdir) rescue Errno::EEXIST
   end
 
-  Dir["#{TESTDOCSDIR}/[a-z]*.[0-9][0-9][0-9].xml"].each do |xml_file|
-    it "should be able to render a valid .epub for the test document #{xml_file}" do
+  Dir["#{TESTDOCSDIR}/[a-z]*.[0-9][0-9][0-9].xml"].each_with_index do |xml_file, ix|
+    it "should be able to render a valid .epub for the test document #{xml_file} [#{ix}]" do
       epub = DocBook::Epub.new(xml_file, @tmpdir)
       epub_file = File.join(@tmpdir, File.basename(xml_file, ".xml") + ".epub")
       epub.render_to_file(epub_file, $DEBUG)
