@@ -4,7 +4,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"  
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:exsl="http://exslt.org/common" version="1.0"
-  exclude-result-prefixes="exsl db ng">
+  exclude-result-prefixes="exsl db ng dc">
 
   <xsl:import href="../xhtml-1_1/docbook.xsl" />
   <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
@@ -382,6 +382,7 @@
                        refentry|
                        colophon|
                        bibliodiv|
+                       setindex|
                        index"
                 mode="ncx">
     <xsl:variable name="depth" select="count(ancestor::*)"/>
@@ -461,7 +462,7 @@
           <xsl:value-of select="$href"/>
         </xsl:attribute>
       </xsl:element>
-      <xsl:apply-templates select="book[parent::set]|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index" mode="ncx"/>
+      <xsl:apply-templates select="book[parent::set]|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|setindex|index" mode="ncx"/>
     </xsl:element>
 
   </xsl:template>
@@ -568,6 +569,7 @@
                                    //colophon|
                                    //bibliodiv|
                                    //index|
+                                   //setindex|
                                    //graphic|
                                    //inlinegraphic|
                                    //mediaobject|
@@ -584,7 +586,7 @@
         <xsl:with-param name="ext" select="$callout.graphics.extension"/>
       </xsl:call-template>
     </xsl:variable>  
-    <xsl:if test="(//calloutlist)">
+    <xsl:if test="(//calloutlist|//co)">
       <xsl:call-template name="opf.reference.callout">
         <xsl:with-param name="conum" select="1"/>
         <xsl:with-param name="format" select="$format"/>
@@ -782,6 +784,7 @@
             refentry|
             colophon|
             bibliodiv|
+            setindex|
             index"
       mode="opf.manifest">
     <xsl:variable name="href">
