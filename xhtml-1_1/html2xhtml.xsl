@@ -308,6 +308,68 @@
   </xsl:element>
 </xsl:template>
 
+<!-- support for CSS selection of valid XHTML ol @style attributes for substeps-->
+<xsl:template match="xsl:template[@match='substeps']">
+  <xsl:copy>
+    <xsl:copy-of select="@*"/>
+    <xsl:element name="xsl:variable">
+      <xsl:attribute name="name">numeration</xsl:attribute>
+      <xsl:element name="xsl:call-template">
+        <xsl:attribute name="name">procedure.step.numeration</xsl:attribute>
+      </xsl:element>
+    </xsl:element>
+    <xsl:element name="xsl:variable">
+      <xsl:attribute name="name">cssstyle</xsl:attribute>
+      <xsl:element name="xsl:choose">
+        <xsl:element name="xsl:when">
+          <xsl:attribute name="test">$numeration = '1'</xsl:attribute>
+          <xsl:text>decimal</xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:when">
+          <xsl:attribute name="test">$numeration = 'a'</xsl:attribute>
+          <xsl:text>lower-alpha</xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:when">
+          <xsl:attribute name="test">$numeration = 'i'</xsl:attribute>
+          <xsl:text>lower-roman</xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:when">
+          <xsl:attribute name="test">$numeration = 'A'</xsl:attribute>
+          <xsl:text>upper-alpha</xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:when">
+          <xsl:attribute name="test">$numeration = 'I'</xsl:attribute>
+          <xsl:text>upper-roman</xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:otherwise">
+          <xsl:element name="xsl:message">
+            <xsl:text>Warning: unknown procedure.step.numeration value: </xsl:text>
+            <xsl:element name="xsl:value-of">
+              <xsl:attribute name="select">$numeration</xsl:attribute>
+            </xsl:element>
+          </xsl:element>
+        </xsl:element>
+      </xsl:element>
+    </xsl:element>
+
+    <xsl:element name="xsl:call-template">
+      <xsl:attribute name="name">anchor</xsl:attribute>
+    </xsl:element>
+    <xsl:element name="ol" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:element name="xsl:attribute">
+        <xsl:attribute name="name">style</xsl:attribute>
+        <xsl:element name="xsl:text">
+          <xsl:text>list-style-type: </xsl:text>
+        </xsl:element>
+        <xsl:element name="xsl:value-of">
+          <xsl:attribute name="select">$cssstyle</xsl:attribute>
+        </xsl:element>
+      </xsl:element>
+      <xsl:element name="xsl:apply-templates"/>
+    </xsl:element>
+  </xsl:copy>
+</xsl:template>
+
 <xsl:template match="*">
   <xsl:choose>
     <xsl:when test="namespace-uri(.) = ''">

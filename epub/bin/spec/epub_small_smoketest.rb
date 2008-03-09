@@ -25,7 +25,7 @@ describe DocBook::Epub do
     @tmpdir = File.join(Dir::tmpdir(), "epubspecsmoke"); Dir.mkdir(@tmpdir) rescue Errno::EEXIST
   end
 
-  # TODO procedure, olink, legalnotice, index, cmdsynopsis, refentry, screen,
+  # TODO olink, index, cmdsynopsis, refentry, screen,
   # stepalternatives, table
 
   Dir["#{TESTDOCSDIR}/*.[0-9][0-9][0-9].xml"].sort_by { rand }[0..(NUMBER_TO_TEST-1)].each do |xml_file|

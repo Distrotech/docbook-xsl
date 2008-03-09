@@ -45,6 +45,9 @@
       <xsl:when test="/*[not(self::book)][not(sect1) or not(section)]">
         <xsl:text>1</xsl:text>
       </xsl:when>
+      <xsl:when test="/book[*[last()][self::bookinfo]]">
+        <xsl:text>1</xsl:text>
+      </xsl:when>
       <xsl:when test="/bibliography">
         <xsl:text>1</xsl:text>
       </xsl:when>
@@ -545,6 +548,7 @@
       <!-- TODO: be nice to have a id="coverpage" here -->
       <!-- TODO: be nice to have a id="titlepage" here -->
       <xsl:apply-templates select="//part|
+                                   //book[*[last()][self::bookinfo]]|
                                    /set|
                                    /set/book|
                                    //reference|
@@ -758,8 +762,28 @@
 
   <!-- TODO: Are we certain of this match list? -->
   <xsl:template
-    match="set|book[parent::set]|article|part|reference|preface|chapter|bibliography|appendix|glossary|section|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
-    mode="opf.manifest">
+      match="set|
+            book[parent::set]|
+            book[*[last()][self::bookinfo]]|
+            article|
+            part|
+            reference|
+            preface|
+            chapter|
+            bibliography|
+            appendix|
+            glossary|
+            section|
+            sect1|
+            sect2|
+            sect3|
+            sect4|
+            sect5|
+            refentry|
+            colophon|
+            bibliodiv|
+            index"
+      mode="opf.manifest">
     <xsl:variable name="href">
       <xsl:call-template name="href.target.with.base.dir">
         <xsl:with-param name="context" select="/" />
