@@ -3,8 +3,12 @@
   xmlns:ng="http://docbook.org/docbook-ng"
   xmlns:dc="http://purl.org/dc/elements/1.1/"  
   xmlns:db="http://docbook.org/ns/docbook"
-  xmlns:exsl="http://exslt.org/common" version="1.0"
-  exclude-result-prefixes="exsl db ng dc">
+  xmlns:exsl="http://exslt.org/common" 
+  xmlns:stext="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory"
+  xmlns:xtext="xalan://com.nwalsh.xalan.Text"
+  version="1.0"
+  extension-element-prefixes="stext xtext"
+  exclude-result-prefixes="exsl db ng dc stext xtext">
 
   <xsl:import href="../xhtml-1_1/docbook.xsl" />
   <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
@@ -1088,5 +1092,55 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <!-- OVERRIDES xhtml-1_1/graphics.xsl   -->
+  <!-- Do _NOT_ output any xlink garbage, so if you don't have 
+       processor with extensions, you're screwed and we're terminating -->
+  <xsl:template match="inlinegraphic">
+    <xsl:variable name="filename">
+      <xsl:choose>
+        <xsl:when test="@entityref">
+          <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="@fileref"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:call-template name="anchor"/>
+
+    <xsl:choose>
+      <xsl:when test="@format='linespecific'">
+        <xsl:choose>
+          <xsl:when test="$use.extensions != '0'                         and $textinsert.extension != '0'">
+            <xsl:choose>
+              <xsl:when test="element-available('stext:insertfile')">
+                <stext:insertfile href="{$filename}" encoding="{$textdata.default.encoding}"/>
+              </xsl:when>
+              <xsl:when test="element-available('xtext:insertfile')">
+                <xtext:insertfile href="{$filename}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:message terminate="yes">
+                  <xsl:text>No insertfile extension available.</xsl:text>
+                </xsl:message>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- AN OVERRIDE --> 
+            <xsl:message terminate="yes">
+              <xsl:text>No insertfile extension available. Use a different processor (with extensions) or turn on $use.extensions and $textinsert.extension (see docs for more).  </xsl:text>
+            </xsl:message>
+            <!-- END OF OVERRIDE --> 
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="process.image"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>  
 
 </xsl:stylesheet>
