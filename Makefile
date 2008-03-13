@@ -87,6 +87,7 @@ base:
 
 xhtml:
 	$(MAKE) -C xhtml
+	$(MAKE) -C xhtml-1_1
 
 docsrc: base 
 	$(MAKE) -C docsrc
@@ -112,6 +113,7 @@ clean:
 	done
 	$(RM) -r extensions
 	$(MAKE) clean -C xhtml
+	$(MAKE) clean -C xhtml-1_1
 	$(MAKE) clean -C doc
 	$(MAKE) clean -C docsrc
 	$(MAKE) clean -C tests
