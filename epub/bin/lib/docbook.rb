@@ -10,7 +10,7 @@ module DocBook
     CALLOUT_LIMIT = 15
     CALLOUT_EXT = ".png"
     XSLT_PROCESSOR = "xsltproc"
-    OUTPUT_DIR = ".epubtmp"
+    OUTPUT_DIR = ".epubtmp#{Time.now.to_f.to_s}"
     MIMETYPE = "application/epub+zip"
     META_DIR = "META-INF"
     OEBPS_DIR = "OEBPS"

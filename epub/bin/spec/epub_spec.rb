@@ -142,6 +142,27 @@ describe DocBook::Epub do
     end  
   end
 
+  it "should include a TOC link in rendered epub files for <book>s" do
+    begin
+      tmpdir = File.join(Dir::tmpdir(), "epubtoctest"); Dir.mkdir(tmpdir) rescue Errno::EEXIST
+      
+      epub = DocBook::Epub.new(File.join(@testdocsdir, "book.002.xml"), @tmpdir)
+      epubfile = File.join(tmpdir, "toclink.epub")
+      epub.render_to_file(epubfile, $DEBUG)
+
+      success = system("unzip -q -d #{File.expand_path(tmpdir)} -o #{epubfile}")
+      raise "Could not unzip #{epubfile}" unless success
+      glob = Dir.glob(File.join(tmpdir, "**", "*.opf"))
+      toc_links = glob.find_all {|opf_file| File.open(opf_file).readlines.to_s =~ /type=["']toc["']/}
+      puts File.open(glob.first).readlines.to_s if $DEBUG
+      toc_links.should_not be_empty
+    rescue => e
+      raise e
+    ensure
+      FileUtils.rm_r(tmpdir, :force => true)
+    end  
+  end
+
   after(:all) do
     FileUtils.rm_r(@tmpdir, :force => true)
   end  
