@@ -78,7 +78,7 @@ div {
 
 [
    db:refname [ "glossentry" ]
-   db:refpurpose [ "An entry in a Glossary or GlossList" ]
+   db:refpurpose [ "An entry in a glossary or glosslist" ]
 ]
 div {
 
@@ -111,7 +111,7 @@ div {
 
 [
    db:refname [ "glossdef" ]
-   db:refpurpose [ "A definition in a GlossEntry" ]
+   db:refpurpose [ "A definition in a glossentry" ]
 ]
 div {
 
@@ -180,7 +180,7 @@ div {
 
 [
    db:refname [ "glossseealso" ]
-   db:refpurpose [ "A cross-reference from one GlossEntry to another" ]
+   db:refpurpose [ "A cross-reference from one glossentry to another" ]
 ]
 div {
 
@@ -321,7 +321,7 @@ div {
 
 [
    db:refname [ "glossdiv" ]
-   db:refpurpose [ "A division in a Glossary" ]
+   db:refpurpose [ "A division in a glossary" ]
 ]
 div {
 
