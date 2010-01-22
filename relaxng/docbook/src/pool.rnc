@@ -222,7 +222,7 @@ db.xlink.title.attribute =
    [
       db:refpurpose [ "Identifies the XLink title of the link" ]
    ]
-   attribute xlink:title { text }?
+   attribute xlink:title { text }
 
 db.xlink.show.enumeration =
    ## An application traversing to the ending resource should load it in a new window, frame, pane, or other relevant presentation context.
@@ -563,7 +563,7 @@ ctrl:other-attribute [ name="db.biblio.class.attribute"
                        other-name="db.biblio.class-other.attributes" ]
 
 db.biblio.class.enumeration =
-   ## A document object identifier.
+   ## A digital object identifier.
    "doi"
  | ## An international standard book number.
    "isbn"
@@ -3027,7 +3027,7 @@ div {
 
 [
    db:refname [ "authorgroup" ]
-   db:refpurpose [ "Wrapper for author information when a document has multiple authors or collabarators" ]
+   db:refpurpose [ "Wrapper for author information when a document has multiple authors or collaborators" ]
 ]
 div {
 
@@ -3869,7 +3869,7 @@ div {
 
 [
    db:refname [ "firstname" ]
-   db:refpurpose [ "The first name of a person" ]
+   db:refpurpose [ "A given name of a person" ]
 ]
 div {
 
@@ -3891,7 +3891,7 @@ div {
 
 [
    db:refname [ "surname" ]
-   db:refpurpose [ "A family name; in western cultures the last name" ]
+   db:refpurpose [ "An inherited or family name; in western cultures the last name" ]
 ]
 div {
 
@@ -3935,7 +3935,7 @@ div {
 
 [
    db:refname [ "othername" ]
-   db:refpurpose [ "A component of a persons name that is not a first name, surname, or lineage" ]
+   db:refpurpose [ "A component of a person's name that is not a first name, surname, or lineage" ]
 ]
 div {
 
@@ -4771,7 +4771,7 @@ div {
 
 [
    db:refname [ "superscript" ]
-   db:refpurpose [ "A superscript (as in x^2, the mathematical notation for x multiplied by itself)" ]
+   db:refpurpose [ "A superscript (as in x" db:subscript [ "2" ] ", the mathematical notation for x multiplied by itself)" ]
 ]
 div {
 
@@ -4951,7 +4951,7 @@ div {
 
    db.olink.localinfo.attribute =
       [
-         db:refpurpose [ "Holds additional information that may be used by the applicatoin when resolving the link" ]
+         db:refpurpose [ "Holds additional information that may be used by the application when resolving the link" ]
       ]
       attribute localinfo { text }
 
