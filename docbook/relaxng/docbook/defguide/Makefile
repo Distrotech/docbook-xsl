@@ -10,9 +10,9 @@ SRCS = defguide.rnc
 
 BINARY = defguide.rnd
 
-all:: defguide.rng defguide.rnc defguide.dtd
+all:: defguide.rng defguide.rnc
 
-clean:: ; rm -f defguide.rng defguide.rnc defguide.dtd
+clean:: ; rm -f defguide.rng defguide.rnc
 
 $(_OUTTOP)/defguide/defguide.rng: src/annotations.rnc src/bibliography.rnc \
              src/callouts.rnc src/calstbl.rnc dbforms/htmlform.rnc \
@@ -21,7 +21,7 @@ $(_OUTTOP)/defguide/defguide.rng: src/annotations.rnc src/bibliography.rnc \
              src/index.rnc src/math.rnc src/mathml.rnc \
              src/msgset.rnc src/pool.rnc src/qandaset.rnc \
              src/refentry.rnc src/refsect1.rnc src/sect1.rnc \
-             src/svg.rnc src/tasks.rnc src/toc.rnc \
+             src/svg.rnc src/tasks.rnc src/toc.rnc src/topic.rnc src/assembly-core.rnc \
              docbookxi/xinclude.rnc src/xlink.rnc
 
 include _footer.mak
@@ -31,6 +31,3 @@ defguide.rng: $(basename $(defguide_BINARY)).rnx
 
 defguide.rnc: defguide.rng
 	$(RUNTRANG) $< $@
-
-defguide.dtd: $(basename $(defguide_BINARY)).dtx defguide.rnc
-	$(XSLTPROC) -output $@ $(TOOLS)/xml2dtd.xsl $<
