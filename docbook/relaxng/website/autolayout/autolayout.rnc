@@ -1,0 +1,21 @@
+# This file is part of Website NG
+
+# This schema is a reinterpretation of "Website" in the NG framework.
+#
+# Release: $Id$
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+include "../../simple/sdocbook.rnc" {
+   start = ws.autolayout
+}
+
+include "../src/autolayout.rnc"
+include "../src/layout.rnc"
+include "../src/webpages.rnc"

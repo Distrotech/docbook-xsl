@@ -1,0 +1,66 @@
+# This file is part of Website NG
+
+# This schema is a reinterpretation of "Website" in the NG framework.
+#
+# Author: Norman Walsh, <ndw@nwalsh.com>
+# Source: Derived from Website 2.6.0
+# Release: $Id: webpages.rnc 4681 2005-04-24 17:57:35Z nwalsh $
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+[
+   db:refname [ "webpage" ]
+   db:refpurpose [ "A page in a website" ]
+]
+div {
+
+   ws.webpage.role.attribute = attribute role { text }
+   ws.webpage.navto.attribute = attribute navto { "yes" | "no" }
+
+   ws.webpage.optional.components = db.section*
+   ws.webpage.required.components = db.section+
+
+   ws.webpage.attlist =
+      ws.webpage.role.attribute?
+    & ws.webpage.navto.attribute?
+    & db.common.idreq.attributes
+
+   ws.webpage =
+      element webpage {
+         ws.webpage.attlist,
+         ws.config*,
+         ws.head,
+         ((db.all.blocks+,
+            ws.webpage.optional.components)
+          | ws.webpage.required.components),
+         db.appendix*,
+         db.bibliography*
+      }
+}
+
+# ============================================================
+
+[
+   db:refname [ "webtoc" ]
+   db:refpurpose [ "Marks the location of a TOC in a webpage" ]
+]
+div {
+
+   ws.webtoc.role.attribute = attribute role { text }
+
+   ws.webtoc.attlist =
+      ws.webtoc.role.attribute?
+    & db.common.attributes
+
+   ws.webtoc =
+      element webtoc {
+         ws.webtoc.attlist,
+         empty
+      }
+}

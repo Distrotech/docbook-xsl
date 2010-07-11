@@ -1,0 +1,51 @@
+# This file is part of Website NG
+
+# This schema is a reinterpretation of "Website" in the NG framework.
+#
+# Release: $Id$
+#
+# ======================================================================
+
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace rng  = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace db = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+[
+   db:refname [ "layout" ]
+   db:refpurpose [ "An ordering of webpages in a website" ]
+]
+div {
+      
+   ws.layout.page.attribute = attribute page { text }
+
+   ws.layout.tocentry.attlist =
+     ws.layout.page.attribute
+
+   ws.layout.tocentry.components =
+      ws.layout.tocentry.attlist
+   
+   ws.layout.tocentry =
+      element tocentry {
+        ws.layout.tocentry.components
+      }
+   
+   ws.layout.notoc = 
+      element notoc {
+        ws.layout.tocentry.components,
+      }
+
+   ws.layout.toc = 
+      element toc {
+	empty
+        ws.layout.toc.tocentry+,
+      }
+
+   ws.layout =
+      element layout {
+         ws.config*,
+         ws.head,
+         ws.layout.toc
+      }
+}
