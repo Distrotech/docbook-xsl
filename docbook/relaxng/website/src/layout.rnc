@@ -10,42 +10,112 @@ namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
 namespace rng  = "http://relaxng.org/ns/structure/1.0"
 namespace s = "http://www.ascc.net/xml/schematron"
 namespace db = "http://docbook.org/ns/docbook"
-default namespace = "http://docbook.org/ns/docbook"
+namespace lo = "http://docbook.org/ns/website-layout"
+default namespace = "http://docbook.org/ns/website-layout"
 
 [
    db:refname [ "layout" ]
    db:refpurpose [ "An ordering of webpages in a website" ]
 ]
 div {
-      
-   ws.layout.page.attribute = attribute page { text }
 
-   ws.layout.tocentry.attlist =
-     ws.layout.page.attribute
+  ws.layout.attlist = 
+    db.common.attributes
 
-   ws.layout.tocentry.components =
-      ws.layout.tocentry.attlist
-   
-   ws.layout.tocentry =
-      element tocentry {
-        ws.layout.tocentry.components
-      }
-   
-   ws.layout.notoc = 
-      element notoc {
-        ws.layout.tocentry.components,
-      }
-
-   ws.layout.toc = 
-      element toc {
-	empty
-        ws.layout.toc.tocentry+,
-      }
-
-   ws.layout =
-      element layout {
-         ws.config*,
-         ws.head,
-         ws.layout.toc
-      }
+  ws.layout =
+    element layout {
+      ws.layout.attlist,
+      ws.config*,
+      ws.head,
+      ws.layout.toc+,
+      ws.layout.notoc*
+    }
 }
+  
+ws.layout.page.attribute = 
+  attribute page { 
+    text 
+  }
+
+ws.layout.outdir.attribute = 
+  attribute outdir { 
+    text 
+  }
+
+ws.layout.filename.attribute = 
+  attribute filename { 
+    text 
+  }
+
+[
+   db:refname [ "toc" ]
+   db:refpurpose [ "Website's main navigation" ]
+]
+div {
+
+  ws.layout.toc.attlist = 
+    db.common.attributes
+    & ws.layout.page.attribute
+    & ws.layout.outdir.attribute?
+    & ws.layout.filename.attribute?
+
+  ws.layout.toc =
+    element toc {
+      ws.layout.toc.attlist,
+      ws.layout.tocentry*,
+      ws.layout.tocentry.metadata?
+    }
+}
+
+[
+   db:refname [ "notoc" ]
+   db:refpurpose [ "A standalone page in a website" ]
+]
+div {
+
+  ws.layout.notoc.attlist =
+    ws.layout.toc.attlist
+
+  ws.layout.notoc =
+    element notoc {
+      ws.layout.notoc.attlist,
+      ws.layout.tocentry.metadata?
+    }
+}
+
+ws.layout.href.attribute = 
+  attribute href { 
+    text 
+  }
+
+ws.layout.tocskip.attribute = 
+  attribute tocskip { "yes" | "no" }
+
+ws.layout.tocentry.metadata =
+  db.title?
+  & db.titleabbrev?
+  & db.subtitle?
+  & ws.summary?
+
+[
+   db:refname [ "tocentry" ]
+   db:refpurpose [ "A page in a website" ]
+]
+div {
+
+  ws.layout.tocentry.attlist = 
+    db.common.attributes
+    & ws.layout.page.attribute?
+    & ws.layout.outdir.attribute?
+    & ws.layout.filename.attribute?
+    & ws.layout.href.attribute?
+    & ws.layout.tocskip.attribute?
+
+  ws.layout.tocentry =
+    element tocentry {
+      ws.layout.tocentry.attlist,
+      ws.layout.tocentry*,
+      ws.layout.tocentry.metadata?
+    }
+}
+
