@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<layout xmlns="http://docbook.org/website/ns/layout"
+	xmlns:db="http://docbook.org/ns/docbook">
+  <db:head>
+    <db:title>The DocBook Project</db:title>
+    <db:summary>
+      The DocBook Project supports the open-source development of a 
+      variety of DocBook resources, including the DocBook XSL stylesheets.
+    </db:summary>
+  </db:head>
+  <toc page="index.xml">
+  </toc>
+</layout>

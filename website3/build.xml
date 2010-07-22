@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ***********************************************************************
+     DocBook Website Build Instructions
+
+     Author: Sina K. Heshmati
+     Release $Id$
+     ***********************************************************************-->
+
+<project name="DocBook Website" basedir=".">
+
+<property file="build.properties"/>
+
+<!--
+    ===========================================================================
+    Task Definitions
+    ===========================================================================
+-->
+
+<taskdef name="jing"
+	 classname="com.thaiopensource.relaxng.util.JingTask"
+	 classpath="${jing.jar}"/>
+
+<taskdef name="xslt2"
+	 classname="net.sf.saxon.ant.AntTransform">
+  <classpath>
+    <pathelement location="${saxon.jar}"/>
+    <pathelement location="${saxon-ant.jar}"/>
+  </classpath>
+</taskdef>
+
+<!-- 
+     ==========================================================================
+     Auxiliary Targets
+     ==========================================================================
+-->
+
+
+<!-- 
+     ==========================================================================
+     Build Example
+     ==========================================================================
+-->
+<target name="gen-autolayout"
+	description="Process the layout file to generate autolayout">
+  <xslt2 style="${autolayout.xsl}"
+	 in="${example.layout.xml}"
+	 out="${example.autolayout.xml}"/>
+</target>
+
+<target name="build-example" 
+	description="Build the example website"
+	depends="gen-autolayout">
+</target>
+
+<!-- 
+     ==========================================================================
+     Standard Targets
+     ==========================================================================
+-->
+
+</project>
