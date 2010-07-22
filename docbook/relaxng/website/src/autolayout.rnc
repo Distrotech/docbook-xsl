@@ -10,18 +10,22 @@ namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
 namespace rng  = "http://relaxng.org/ns/structure/1.0"
 namespace s = "http://www.ascc.net/xml/schematron"
 namespace db = "http://docbook.org/ns/docbook"
-default namespace = "http://docbook.org/ns/docbook"
+namespace lo = "http://docbook.org/website/ns/layout"
+namespace al = "http://docbook.org/website/ns/autolayout"
+default namespace = "http://docbook.org/website/ns/autolayout"
 
 [
    db:refname [ "autolayout" ]
-   db:refpurpose [ "A generated and more elaborate layout" ]
+   db:refpurpose [ "An extended structure of a website based on its layout" ]
 ]
 div {
-      
-   ws.autolayout =
-      element autolayout {
-         ws.config*,
-         ws.head,
-         ws.layout.toc
-      }
+
+  ws.autolayout =
+    element autolayout {
+      ws.layout.attlist,
+      ws.config*,
+      ws.head,
+      ws.layout.toc+,
+      ws.layout.notoc*
+    }
 }

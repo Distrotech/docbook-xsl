@@ -7,8 +7,8 @@
 # ======================================================================
 
 namespace db = "http://docbook.org/ns/docbook"
-namespace lo = "http://docbook.org/ns/website-layout"
-default namespace = "http://docbook.org/ns/website-layout"
+namespace lo = "http://docbook.org/website/ns/layout"
+default namespace = "http://docbook.org/website/ns/layout"
 
 include "../src/layout.rnc"
 include "../src/webpages.rnc"
