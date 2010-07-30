@@ -136,25 +136,19 @@
 
   <xsl:call-template name="t:call-layout-begin-inner-hooks"/>
 
-  <xsl:choose>
-    <xsl:when test="db:title">
-      <xsl:apply-templates select="db:title" mode="m:clone-layout"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <db:title>
-	<xsl:apply-templates select="$page/*[1]/db:head/db:title"/>
-      </db:title>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="t:layout-tocentry-required-element">
+    <xsl:with-param name="tag" select="'db:title'"/>
+    <xsl:with-param name="in-layout" select="db:title"/>
+    <xsl:with-param name="in-webpage" select="$page/*[1]/db:head/db:title"/>
+  </xsl:call-template>
 
-  <xsl:call-template name="t:layout-tocentry-optional-metadata">
+  <xsl:call-template name="t:layout-tocentry-optional-element">
     <xsl:with-param name="tag" select="'db:titleabbrev'"/>
     <xsl:with-param name="in-layout" select="db:titleabbrev"/>
     <xsl:with-param name="in-webpage" select="$page/*[1]/db:head/db:titleabbrev"/>
   </xsl:call-template>
 
-  <xsl:call-template name="t:layout-tocentry-optional-metadata">
+  <xsl:call-template name="t:layout-tocentry-optional-element">
     <xsl:with-param name="tag" select="'db:summary'"/>
     <xsl:with-param name="in-layout" select="db:summary"/>
     <xsl:with-param name="in-webpage" select="$page/*[1]/db:head/db:summary"/>
@@ -166,7 +160,7 @@
 
 </xsl:template>
 
-<xsl:template name="t:layout-tocentry-optional-metadata">
+<xsl:template name="t:layout-tocentry-optional-element">
   <xsl:param name="tag"/>
   <xsl:param name="in-layout"/>
   <xsl:param name="in-webpage"/>
@@ -183,6 +177,22 @@
     </xsl:choose>
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="t:layout-tocentry-required-element">
+  <xsl:param name="tag"/>
+  <xsl:param name="in-layout"/>
+  <xsl:param name="in-webpage"/>
+  <xsl:choose>
+    <xsl:when test="$in-layout">
+      <xsl:apply-templates select="$in-layout" mode="m:clone-layout"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:element name="{$tag}">
+	<xsl:apply-templates select="$in-webpage"/>
+      </xsl:element>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="m:calculate-outdir">
