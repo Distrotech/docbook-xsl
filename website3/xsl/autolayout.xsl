@@ -134,7 +134,7 @@
     <xsl:value-of select="$filename"/>
   </xsl:attribute>
 
-  <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="t:call-layout-begin-inner-hooks"/>
 
   <xsl:choose>
     <xsl:when test="db:title">
@@ -161,6 +161,8 @@
   </xsl:call-template>
 
   <xsl:apply-templates select="lo:tocentry"/>
+
+  <xsl:call-template name="t:call-layout-end-inner-hooks"/>
 
 </xsl:template>
 
@@ -209,6 +211,37 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="t:call-layout-begin-inner-hooks">
+  <xsl:param name="context" select="local-name(.)"/>
+  <xsl:choose>
+    <xsl:when test="$context = 'toc'">
+      <xsl:call-template name="t:layout-toc-begin-inner"/>
+    </xsl:when>
+    <xsl:when test="$context = 'notoc'">
+      <xsl:call-template name="t:layout-notoc-begin-inner"/>
+    </xsl:when>
+    <xsl:when test="$context = 'tocentry'">
+      <xsl:call-template name="t:layout-tocentry-begin-inner"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="t:call-layout-end-inner-hooks">
+  <xsl:param name="context" select="local-name(.)"/>
+  <xsl:choose>
+    <xsl:when test="$context = 'toc'">
+      <xsl:call-template name="t:layout-toc-end-inner"/>
+    </xsl:when>
+    <xsl:when test="$context = 'notoc'">
+      <xsl:call-template name="t:layout-notoc-end-inner"/>
+    </xsl:when>
+    <xsl:when test="$context = 'tocentry'">
+      <xsl:call-template name="t:layout-tocentry-end-inner"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <!-- Hooks -->
 
