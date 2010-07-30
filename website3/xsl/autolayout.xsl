@@ -10,7 +10,7 @@
 		xmlns:fn="http://www.w3.org/2005/xpath-functions"
 		xmlns:ghost="http://docbook.org/ns/docbook/ephemeral"
 		xmlns:db="http://docbook.org/ns/docbook"
-		exclude-result-prefixes="h lo al f t m fn ghost db"
+		exclude-result-prefixes="h lo al f t m fn ghost"
 		version="2.0">
 
   <!-- ********************************************************************
@@ -124,9 +124,11 @@
     <xsl:value-of select="$id"/>
   </xsl:attribute>
 
-  <xsl:attribute name="outdir">
-    <xsl:value-of select="$outdir"/>
-  </xsl:attribute>
+  <xsl:if test="$outdir != ''">
+    <xsl:attribute name="outdir">
+      <xsl:value-of select="$outdir"/>
+    </xsl:attribute>
+  </xsl:if>
 
   <xsl:attribute name="filename">
     <xsl:value-of select="$filename"/>
