@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webpage xmlns="http://docbook.org/ns/docbook"
+	 xml:id="home">
+  <head>
+    <title>The DocBook Project</title>
+    <summary>The DocBook Project's Homepage</summary>
+  </head>
+  <webtoc/>
+</webpage>

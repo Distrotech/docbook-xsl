@@ -9,5 +9,18 @@
     </db:summary>
   </db:head>
   <toc page="index.xml">
+    <tocentry page="about/index.xml" outdir="about"/>
+    <tocentry page="schema/index.xml" outdir="schema"/>
+    <tocentry page="tools/index.xml" outdir="tools">
+      <tocentry page="tools/xsl/index.xml" outdir="xsl">
+	<tocentry page="tools/xsl/html.xml" outdir="html"/>
+	<tocentry page="tools/xsl/fo.xml" outdir="fo"/>
+      </tocentry>
+      <tocentry page="tools/xsl2/index.xml" outdir="xsl2">
+	<tocentry page="tools/xsl2/html.xml" outdir="html"/>
+	<tocentry page="tools/xsl2/fo.xml" outdir="fo"/>
+      </tocentry>
+    </tocentry>
   </toc>
+  <notoc page="sitemap.xml"/>
 </layout>
