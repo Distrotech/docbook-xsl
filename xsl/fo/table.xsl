@@ -1270,9 +1270,18 @@
 <!-- Expand this template to add properties to any cell's block -->
 <xsl:template name="table.cell.block.properties">
   <!-- highlight this entry? -->
-  <xsl:if test="ancestor::thead or ancestor::tfoot">
-    <xsl:attribute name="font-weight">bold</xsl:attribute>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="ancestor::thead or ancestor::tfoot">
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:when>
+    <!-- Make row headers bold too -->
+    <xsl:when test="ancestor::tbody and 
+                    (ancestor::table[@rowheader = 'firstcol'] or
+                    ancestor::informaltable[@rowheader = 'firstcol']) and
+                    ancestor-or-self::entry[1][count(preceding-sibling::entry) = 0]">
+      <xsl:attribute name="font-weight">bold</xsl:attribute>
+    </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="entry|entrytbl" name="sentry" mode="span">
@@ -1463,11 +1472,9 @@
         <xsl:variable name="colwidth">
           <xsl:call-template name="calc.column.width"/>
         </xsl:variable>
-        <xsl:if test="$colwidth != 'proportional-column-width(1)'">
           <xsl:attribute name="column-width">
             <xsl:value-of select="$colwidth"/>
           </xsl:attribute>
-        </xsl:if>
       </fo:table-column>
     </xsl:when>
     <xsl:otherwise>
@@ -1503,11 +1510,9 @@
                 </xsl:with-param>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:if test="$colwidth != 'proportional-column-width(1)'">
               <xsl:attribute name="column-width">
                 <xsl:value-of select="$colwidth"/>
               </xsl:attribute>
-            </xsl:if>
           </fo:table-column>
         </xsl:when>
         <xsl:otherwise>

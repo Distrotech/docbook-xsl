@@ -32,7 +32,7 @@ zip-ns: zip
 	$(DOCBOOK_SVN)/docbook/relaxng/tools/db4-upgrade.xsl \
 	$(TMP)/docbook-$(DISTRO)-ns-$(ZIPVER)/webhelp/docsrc/readme.xml 
 # Turn off validation in webhelp:
-	sed -i "s/validate=true/validate=false/" \
+	sed -i "s/validate-against-dtd=true/validate-against-dtd=false/" \
 	  $(TMP)/docbook-$(DISTRO)-ns-$(ZIPVER)/webhelp/build.properties
 
 # change branch info

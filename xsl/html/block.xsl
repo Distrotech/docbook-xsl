@@ -238,13 +238,7 @@
   <div>
     <xsl:call-template name="common.html.attributes"/>
     <xsl:call-template name="anchor"/>
-    <xsl:call-template name="formal.object.heading">
-      <xsl:with-param name="title">
-        <xsl:apply-templates select="." mode="title.markup">
-          <xsl:with-param name="allow-anchors" select="'1'"/>
-        </xsl:apply-templates>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="sidebar.titlepage"/>
     <xsl:apply-templates/>
   </div>
 </xsl:template>
@@ -530,10 +524,7 @@
 <!-- ==================================================================== -->
 
 <xsl:template match="ackno|acknowledgements[parent::article]">
-  <p>
-    <xsl:call-template name="common.html.attributes"/>
-    <xsl:apply-templates/>
-  </p>
+  <xsl:call-template name="block.object"/>
 </xsl:template>
 
 <!-- ==================================================================== -->
