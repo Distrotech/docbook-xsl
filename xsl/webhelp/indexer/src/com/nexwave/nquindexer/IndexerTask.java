@@ -61,6 +61,9 @@ public class IndexerTask{
 	// Indexing features: words to remove
 	private ArrayList<String> cleanUpStrings = null;	
 	private ArrayList<String> cleanUpChars = null;
+
+	//Html extension
+	private String htmlExtension = "html";
 	
 	// Constructor
 	public IndexerTask() {
@@ -74,6 +77,18 @@ public class IndexerTask{
     public void setHtmldir(String htmldir) {
         this.htmldir = htmldir;
     }
+
+     /**
+     * Set the extension in which html files are generated
+     * @param htmlExtension The extension in wich html files are generated
+     */
+    public void setHtmlextension(String htmlExtension) {
+		this.htmlExtension = htmlExtension;
+		//Trim the starting "."
+		if(this.htmlExtension.startsWith(".")) {
+			this.htmlExtension = this.htmlExtension.substring(1);
+		}
+	}
 
     /**
      * setter for "indexerLanguage" attribute from ANT
@@ -184,8 +199,7 @@ public class IndexerTask{
 		
 
 		// Get the list of all html files but the tocs, covers and indexes
-		//DirList nsiDoc = new DirList(inputDir, "^(?!(toc|index|search|frameset|ix01)).*\\.html$", 1);
-		DirList nsiDoc = new DirList(inputDir, "^.*\\.html?$", 1);
+        DirList nsiDoc = new DirList(inputDir, "^.*\\." + htmlExtension + "?$", 1);
 		htmlFiles = nsiDoc.getListFiles();
 		// Check if found html files
 		if (htmlFiles.isEmpty()) {
