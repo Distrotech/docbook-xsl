@@ -11,12 +11,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-/*
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-
-*/
 
 
 import com.nexwave.nsidita.DirList;
@@ -30,8 +26,7 @@ import com.nexwave.nsidita.DocFileInfo;
  * @author N. Quaine
  * @author Kasun Gajasinghe <http://kasunbg.blogspot.com>
  */
-public class IndexerTask{
-//public class IndexerTask extends Task {
+public class IndexerTask extends Task {
 
 	// messages
 	private String txt_no_inputdir = "Input directory not found:";
@@ -68,7 +63,6 @@ public class IndexerTask{
 	// Constructor
 	public IndexerTask() {
 		super();
-
 	}
 	/** The setter for the "htmldir" attribute (parameter of the task)
 	 * @param htmldir
@@ -119,14 +113,11 @@ public class IndexerTask{
             IndexerTask.indexerLanguage = "@@"; //fail-safe mechanism, This vm should not reach this point.
         } 
     }
-
-
 	
 	/**
 	 * Implementation of the execute function (Task interface)
 	 */
-//	public void execute() throws BuildException {
-	public void execute(){
+	public void execute() throws BuildException {
         try{
             //Use Xerces as the parser. Does not support Saxon6.5.5 parser 
            System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
@@ -225,7 +216,7 @@ public class IndexerTask{
 		
 		// Retrieve the clean-up properties for indexing
 		RetrieveCleanUpProps();
-	   // System.out.print("clean"+" " +cleanUpStrings);
+	   	// System.out.print("clean"+" " +cleanUpStrings);
 	    
 		//create a default handler
 		//SaxHTMLIndex spe = new SaxHTMLIndex (); // do not use clean-up props files
