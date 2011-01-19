@@ -687,7 +687,7 @@ set       nop
   <p>
     This is the online edition of the DocBook V5.0 book. References to
     V5.1 elements and features have been removed. There is a separate
-    <a href="http://docbook.org/tdg51/en/">online guide</a> for
+    <a href="http://docbook.org/tdg51/en/html/">online guide</a> for
     DocBook V5.1.
   </p>
   </div>
