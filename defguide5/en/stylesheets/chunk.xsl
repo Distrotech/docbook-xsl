@@ -9,7 +9,7 @@
 <!-- THIS STYLESHEET IS FOR SAXON -->
 
 <!-- Because I want to change the chunking rules, I need to copy the
-     while stylesheet. The import/apply-imports trick won't work because
+     whole stylesheet. The import/apply-imports trick won't work because
      the imported chunking code would chunk at the places where I want
      to avoid chunking. -->
 
@@ -555,19 +555,12 @@
             </xsl:choose>
           </td>
           <td align="right">
-            <i>DocBook: The Definitive Guide</i>
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="/book/bookinfo/releaseinfo"/>
-            <xsl:text> </xsl:text>
-            <span class="alpha-version">
-              <xsl:text>(</xsl:text>
-              <a>
-		<xsl:attribute name="href">co01.html</xsl:attribute>
-                <em>Alpha</em>
-              </a>
-              <xsl:text>)</xsl:text>
-            </span>
-            <xsl:text> </xsl:text>
+            <i>DocBook 5: The Definitive Guide</i>
+            <xsl:text> (Version </xsl:text>
+            <a href="ch00-online.html">
+              <xsl:value-of select="/book/bookinfo/releaseinfo"/>
+            </a>
+            <xsl:text>)</xsl:text>
           </td>
         </tr>
       </table>
@@ -661,89 +654,6 @@
                   </xsl:attribute>
 
                   <img src="figures/nav-up.png" alt="Up" border="0"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>&#160;</xsl:otherwise>
-            </xsl:choose>
-          </td>
-          <td width="40%" align="right">
-            <xsl:text>&#160;</xsl:text>
-            <xsl:apply-templates select="$next" mode="object.title.markup.textonly"/>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template name="X.footer.navigation">
-  <xsl:param name="prev" select="/foo"/>
-  <xsl:param name="next" select="/foo"/>
-  <xsl:variable name="home" select="/*[1]"/>
-  <xsl:variable name="up" select="parent::*"/>
-
-  <xsl:if test="$suppress.navigation = '0' and $suppress.footer.navigation = '0'">
-    <div class="navfooter">
-      <table width="100%" summary="Navigation table">
-        <tr>
-          <td width="40%" align="left">
-            <xsl:if test="count($prev)>0">
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$prev"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <xsl:call-template name="gentext.nav.prev"/>
-              </a>
-            </xsl:if>
-            <xsl:text>&#160;</xsl:text>
-          </td>
-          <td width="20%" align="center">
-            <xsl:choose>
-              <xsl:when test="$home != .">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$home"/>
-                    </xsl:call-template>
-                  </xsl:attribute>
-                  <xsl:call-template name="gentext.nav.home"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>&#160;</xsl:otherwise>
-            </xsl:choose>
-          </td>
-          <td width="40%" align="right">
-            <xsl:text>&#160;</xsl:text>
-            <xsl:if test="count($next)>0">
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <xsl:with-param name="object" select="$next"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <xsl:call-template name="gentext.nav.next"/>
-              </a>
-            </xsl:if>
-          </td>
-        </tr>
-
-        <tr>
-          <td width="40%" align="left">
-            <xsl:apply-templates select="$prev" mode="object.title.markup.textonly"/>
-            <xsl:text>&#160;</xsl:text>
-          </td>
-          <td width="20%" align="center">
-            <xsl:choose>
-              <xsl:when test="count($up)>0">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$up"/>
-                    </xsl:call-template>
-                  </xsl:attribute>
-                  <xsl:call-template name="gentext.nav.up"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>&#160;</xsl:otherwise>
@@ -874,6 +784,8 @@
     </xsl:call-template>
 
     <body>
+      <xsl:call-template name="body.attributes"/>
+
       <xsl:if test=". != /book">
         <xsl:call-template name="user.header.navigation"/>
 
@@ -894,6 +806,22 @@
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>
         </xsl:call-template>
+
+<!--  This is pointless since keywords aren't updated
+        <xsl:if test="*[pubdate or releaseinfo]">
+          <xsl:variable name="p" select="*[pubdate or releaseinfo][1]/pubdate"/>
+          <xsl:variable name="r" select="*[pubdate or releaseinfo][1]/releaseinfo"/>
+          <div class="infofooter">
+            <xsl:value-of select="$r"/>
+            <xsl:if test="$p and $r"> / </xsl:if>
+            <xsl:value-of select="$p"/>
+          </div>
+        </xsl:if>
+-->
+
+<!--
+        <xsl:message><xsl:copy-of select="."/></xsl:message>
+-->
 
         <xsl:call-template name="user.footer.navigation"/>
       </xsl:if>

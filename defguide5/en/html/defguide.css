@@ -1,8 +1,20 @@
-/* CSS2 Stylesheet for _DocBook: The Definitive Guide_
- * Copyright (C) 1999, 2000, 2001, 2002 O'Reilly & Associates, Inc.
+/* CSS Stylesheet for _DocBook: The Definitive Guide_
+ * Copyright (C) 2010 Norman Walsh.
  *
  * $Id$
  */
+
+div.covergraphic div.mediaobject img {
+  margin-right: 20px;
+  border: solid black 1px;
+}
+
+#backcover {
+  position: relative;
+  top: -40px;
+  height: 0px;
+  left: 380px;
+}
 
 div.example-output {
   padding-left: 15px;
@@ -26,6 +38,16 @@ div.example-source {
 
 p.publisher {
   text-align: center;
+}
+
+div.note50 {
+  padding-left: 384px;
+  padding-right: 36pt;
+}
+
+div.note50 p {
+  border: 2px #ffaaaa solid;
+  padding: 1em;
 }
 
 body.book {
@@ -99,12 +121,20 @@ div.navheader {
 div.navfooter {
   background-color: #c6bec6;
   margin-bottom: 0px;
-  padding-bottom: 0px;
+  padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
   border-top-style: solid;
   border-top-width: 1px;
   padding-top: 2px;
+}
+
+div.infofooter {
+  background-color: #c6bec6;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  border-top: solid 1px #aaaaaa;
 }
 
 div.copyrightfooter {
@@ -199,3 +229,32 @@ div.annotation-close { position: absolute;
                        right: 2px;
                      }
 
+div.caution {
+  background: url(figs/web/caution.png) no-repeat;
+  min-height: 80px;
+  padding-left: 100px;
+}
+
+div.caution h3 {
+  display: none;
+}
+
+div.tip {
+  background: url(figs/web/tip.png) no-repeat;
+  min-height: 80px;
+  padding-left: 100px;
+}
+
+div.tip h3 {
+  display: none;
+}
+
+div.note {
+  background: url(figs/web/note.png) no-repeat;
+  min-height: 80px;
+  padding-left: 100px;
+}
+
+div.note h3 {
+  display: none;
+}

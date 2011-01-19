@@ -18,19 +18,14 @@
 <?tdg-refsynopsisdiv?>
 
 <refsection condition="ref.description">
-<title>Description</title>
+<title>Description</title><para>The <tag>printhistory</tag> of a document identifies when
+      various editions and revisions were printed.</para>
 
+      <refsection><info><title>Processing expectations</title></info>
+        
 
-<para>The <tag>printhistory</tag> of a document identifies when various editions
-and revisions were printed.
-</para>
-
-<refsection><title>Processing expectations</title>
-<para><?tdg gentext='format.block'?>
-<?tdg gentext='format.csuppress'?>
-</para>
+        <para>Formatted as a displayed block. Sometimes suppressed.</para>
 </refsection>
-
 
 <?tdg-attributes?>
 <?tdg-parents?>
@@ -45,9 +40,11 @@ and revisions were printed.
 
 <programlisting><xi:include href="example.1.xml" parse="text"/></programlisting>
 
+<!-- removed; only renders the ellipsys
 <anchor xml:id="ex.os.printhistory.1" role="HACK-ex.out.start"/>
 <xi:include href="example.1.xml" xpointer="/1/2"/>
 <anchor xml:id="ex.oe.printhistory.1" role="HACK-ex.out.end"/>
+-->
 
 </refsection>
 

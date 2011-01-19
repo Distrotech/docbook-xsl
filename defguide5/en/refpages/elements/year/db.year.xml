@@ -18,17 +18,14 @@
 <?tdg-refsynopsisdiv?>
 
 <refsection condition="ref.description">
-<title>Description</title>
+<title>Description</title><para>A <tag>year</tag> element identifies a year. It is used in
+      <tag>copyright</tag> to identify the year or years in which
+      copyright is asserted.</para>
 
+      <refsection><info><title>Processing expectations</title></info>
+        
 
-<para>A <tag>year</tag> element identifies a year. In DocBook V3.0,
-this is only used in <tag>copyright</tag>, to identify the year or
-years in which copyright is asserted.
-</para>
-
-<refsection><title>Processing expectations</title>
-<para><?tdg gentext='format.inline'?>
-</para>
+        <para>Formatted inline.</para>
 </refsection>
 
 <?tdg-attributes?>
@@ -39,6 +36,10 @@ years in which copyright is asserted.
 
 <?tdg-seealso?>
 
-<!-- FIXME: add examples -->
+<refsection condition="ref.examples">
+<title>Examples</title>
+<para>See <tag>copyright</tag> for an example that uses this element.</para>
+</refsection>
+
 
 </refentry>

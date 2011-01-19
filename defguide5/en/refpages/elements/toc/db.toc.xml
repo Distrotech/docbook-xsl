@@ -18,19 +18,17 @@
 <?tdg-refsynopsisdiv?>
 
 <refsection condition="ref.description">
-<title>Description</title>
+<title>Description</title><para>The <tag>toc</tag> element defines a table of contents, or
+      more generally, a list of titles in a <phrase role="keep-together">document</phrase>.</para>
 
-<para>The <tag>toc</tag> element defines a Table of Contents, or more
-generally, a List of Titles in a document.
-</para>
+      <refsection><info><title>Processing expectations</title></info>
+        
 
-<refsection><title>Processing expectations</title>
-<para><?tdg gentext='format.block'?>
-</para>
-<para>In real life, <tag>toc</tag>s are usually generated automatically
-by the presentation system and never have to be represented explicitly
-in the document source.
-</para>
+        <para>Formatted as a displayed block.</para>
+
+        <para>In real life, <tag>toc</tag>s are usually generated
+        automatically by the presentation system and never have to be
+        represented explicitly in the document source.</para>
 </refsection>
 
 <?tdg-attributes?>
@@ -45,10 +43,6 @@ in the document source.
 <title>Examples</title>
 
 <programlisting><xi:include href="example.1.xml" parse="text"/></programlisting>
-
-<anchor xml:id="ex.os.toc.1" role="HACK-ex.out.start"/>
-<xi:include href="example.1.xml" xpointer="/1/2"/>
-<anchor xml:id="ex.oe.toc.1" role="HACK-ex.out.end"/>
 
 </refsection>
 

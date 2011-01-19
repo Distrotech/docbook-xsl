@@ -16,9 +16,7 @@
 <xsl:import href="/sourceforge/docbook/xsl/html/docbook.xsl"/>
 <xsl:include href="html-titlepage.xsl"/>
 
-<xsl:output method="html" encoding="utf-8" indent="no"/>
-
-<xsl:param name="ng-release" select="'5.0b1'"/>
+<xsl:output method="xml" encoding="utf-8" indent="yes"/>
 
 <xsl:param name="output.media" select="'online'"/>
 <xsl:param name="html.stylesheet">defguide.css</xsl:param>
@@ -66,9 +64,16 @@ set       nop
   <xsl:text> </xsl:text>
 </xsl:template>
 
-<xsl:template name="user.header.content">
+<xsl:template name="user.head.content">
   <xsl:param name="node" select="."/>
   <link rel="icon" href="http://docbook.org/graphics/defguide-icon16.png" type="image/png" />
+  <script type="text/javascript" src="script/refentry.js"/>
+</xsl:template>
+
+<xsl:template name="body.attributes">
+  <xsl:if test="self::refentry and refsynopsisdiv//itemizedlist[contains(@role,'patnlist')]">
+    <xsl:attribute name="onload">hideAll();</xsl:attribute>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="user.footer.navigation">
@@ -76,10 +81,7 @@ set       nop
   <div class="copyrightfooter">
     <p>
       <a href="dbcpyright.html">Copyright</a>
-      <xsl:text> &#xA9; 2004-2007 Norman Walsh. </xsl:text>
-      <xsl:text>Portions Copright © 1999-2003 </xsl:text>
-      <a href="http://www.oreilly.com/">O'Reilly &amp; Associates, Inc.</a>
-      <xsl:text> All rights reserved.</xsl:text>
+      <xsl:text> &#xA9; 2010 Norman Walsh.</xsl:text>
     </p>
   </div>
 </xsl:template>
@@ -90,6 +92,15 @@ set       nop
 
   <xsl:if test="@revision">
     <xsl:choose>
+      <xsl:when test="@revision='5.1'">
+        <img src="figures/rev_5.1.png" alt="[5.1]">
+          <xsl:if test="$align != ''">
+            <xsl:attribute name="align">
+              <xsl:value-of select="$align"/>
+            </xsl:attribute>
+          </xsl:if>
+        </img>
+      </xsl:when>
       <xsl:when test="@revision='5.0'">
         <img src="figures/rev_5.0.png" alt="[5.0]">
           <xsl:if test="$align != ''">
@@ -204,6 +215,96 @@ set       nop
   </h1>
 </xsl:template>
 
+<xsl:template match="itemizedlist[contains(@role,'patnlist')]">
+  <!-- don't apply imports because we don't want the anchor name -->
+  <div class="patnlist" id="{@id}">
+    <div>
+      <xsl:apply-templates select="." mode="class.attribute"/>
+      <xsl:if test="title">
+	<xsl:call-template name="formal.object.heading"/>
+      </xsl:if>
+
+      <!-- Preserve order of PIs and comments -->
+      <xsl:apply-templates 
+	  select="*[not(self::listitem
+		    or self::title
+		    or self::titleabbrev)]
+		    |comment()[not(preceding-sibling::listitem)]
+		    |processing-instruction()[not(preceding-sibling::listitem)]"/>
+
+      <ul>
+	<xsl:if test="$css.decoration != 0">
+	  <xsl:attribute name="type">
+	    <xsl:call-template name="list.itemsymbol"/>
+	  </xsl:attribute>
+	</xsl:if>
+
+	<xsl:if test="@spacing='compact'">
+	  <xsl:attribute name="compact">
+	    <xsl:value-of select="@spacing"/>
+	  </xsl:attribute>
+	</xsl:if>
+	<xsl:apply-templates 
+	    select="listitem
+                    |comment()[preceding-sibling::listitem]
+                    |processing-instruction()[preceding-sibling::listitem]"/>
+      </ul>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="emphasis[@role='patnlink']">
+  <xsl:variable name="id" select="ancestor::listitem[1]/@id"/>
+  <xsl:variable name="list"
+		select="following::itemizedlist[contains(@role,'patnlist')][1]"/>
+
+  <xsl:variable name="title">
+    <xsl:for-each select="$list//sgmltag">
+      <xsl:if test="position() &gt; 1 and last() &gt; 2">, </xsl:if>
+      <xsl:if test="position() = last() and last() &gt; 1"> and </xsl:if>
+      <xsl:value-of select="."/>
+    </xsl:for-each>
+  </xsl:variable>
+
+  <em title="{$title}" class='patnlink'>
+    <xsl:apply-templates/>
+  </em>
+
+  <xsl:if test="$id != ''">
+    <span id="pls.{$id}" style="display: none;">
+      <xsl:text>&#160;</xsl:text>
+      <a href="javascript:show('{$id}')">
+	<img src="graphics/right.gif" border="0" alt="[+]"/>
+      </a>
+    </span>
+    <span id="plh.{$id}">
+      <xsl:text>&#160;</xsl:text>
+      <a href="javascript:hide('{$id}')">
+	<img src="graphics/down.gif" border="0" alt="[-]"/>
+      </a>
+    </span>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="phrase[@role='cceq']">
+  <xsl:apply-imports/>
+
+  <xsl:if test="ancestor::refsynopsisdiv//itemizedlist[contains(@role,'patnlist')]">
+    <span id="cmshow" style="display: none;">
+      <xsl:text>&#160;</xsl:text>
+      <a href="javascript:showAll()">
+	<img src="graphics/right.gif" border="0" alt="[+]"/>
+      </a>
+    </span>
+    <span id="cmhide">
+      <xsl:text>&#160;</xsl:text>
+      <a href="javascript:hideAll()">
+	<img src="graphics/down.gif" border="0" alt="[-]"/>
+      </a>
+    </span>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="para">
   <xsl:if test="not(@condition)
                 or (@condition = $output.media)">
@@ -268,6 +369,9 @@ set       nop
   <xsl:text>: </xsl:text>
   <xsl:apply-templates/>
 </xsl:template>
+
+<xsl:template match="pubdate" mode="titlepage.mode"/>
+<xsl:template match="releaseinfo" mode="titlepage.mode"/>
 
 <!-- ============================================================ -->
 
@@ -501,9 +605,14 @@ set       nop
 
 <!-- ============================================================ -->
 
+<xsl:template match="bookinfo/mediaobject">
+  <div class="covergraphic">
+    <xsl:apply-imports/>
+  </div>
+</xsl:template>
+
 <xsl:template name="titlepage-block">
-  <xsl:variable name="authorgroup" select="bookinfo/authorgroup[1]"/>
-  <xsl:variable name="isbn" select="bookinfo/isbn[1]"/>
+  <xsl:variable name="isbn" select="bookinfo/biblioid[@class='isbn'][1]"/>
   <xsl:variable name="version" select="bookinfo/releaseinfo[1]"/>
   <xsl:variable name="date" select="bookinfo/pubdate[1]"/>
   <xsl:variable name="legalnotice" select="bookinfo/legalnotice[1]"/>
@@ -514,23 +623,25 @@ set       nop
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">by</xsl:with-param>
       </xsl:call-template>
-      <xsl:text>&#160;</xsl:text>
-      <xsl:apply-templates select="$authorgroup/author" mode="titleblock"/>
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="bookinfo/author" mode="titleblock"/>
     </span>
     <br/>
-    <span class="contributors">
-      <xsl:text>With contributions from</xsl:text>
-      <xsl:text>&#160;</xsl:text>
-      <xsl:apply-templates select="$authorgroup/othercredit" mode="titleblock"/>
+    <span class="editor">
+      <xsl:text>Edited by</xsl:text>
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="bookinfo/editor" mode="titleblock"/>
     </span>
     <br/>
     <xsl:if test="$isbn">
       <span class="isbn">
 	<xsl:text>ISBN: </xsl:text>
-	<a href="http://www.oreilly.com/catalog/docbook">
+	<a href="http://oreilly.com/catalog/9781565925809/">
 	  <xsl:apply-templates select="$isbn/node()"/>
 	</a>
       </span>
+      <xsl:text>, published in conjunction with </xsl:text>
+      <a href="http://xmlpress.net/">XML Press</a>.
       <br/>
     </xsl:if>
     <span class="version">
@@ -539,27 +650,53 @@ set       nop
     </span>
     <br/>
     <span class="date">
-      <!-- rcsdate = "$Date$" -->
-      <!-- timeString = "dow mon dd hh:mm:ss TZN yyyy" -->
-      <xsl:variable name="timeString" select="cvs:localTime($date/text())"/>
+      <!-- <pubdate>2010-05-21</pubdate> -->
+      <xsl:variable name="y" select="substring($date,1,4)"/>
+      <xsl:variable name="m" select="substring($date,6,2)"/>
+      <xsl:variable name="d" select="substring($date,9,2)"/>
+
       <xsl:text>Updated: </xsl:text>
-      <xsl:value-of select="substring($timeString, 1, 3)"/>
+      <xsl:value-of select="$d + 0"/>
+      <xsl:text> </xsl:text>
+
+      <xsl:choose>
+        <xsl:when test="$m = 1">January</xsl:when>
+        <xsl:when test="$m = 2">February</xsl:when>
+        <xsl:when test="$m = 3">March</xsl:when>
+        <xsl:when test="$m = 4">April</xsl:when>
+        <xsl:when test="$m = 5">May</xsl:when>
+        <xsl:when test="$m = 6">June</xsl:when>
+        <xsl:when test="$m = 7">July</xsl:when>
+        <xsl:when test="$m = 8">August</xsl:when>
+        <xsl:when test="$m = 9">September</xsl:when>
+        <xsl:when test="$m = 10">October</xsl:when>
+        <xsl:when test="$m = 11">November</xsl:when>
+        <xsl:when test="$m = 12">December</xsl:when>
+      </xsl:choose>
+
       <xsl:text>, </xsl:text>
-      <xsl:value-of select="substring($timeString, 9, 2)"/>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="substring($timeString, 5, 3)"/>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="substring($timeString, 25, 4)"/>
+      <xsl:value-of select="$y"/>
     </span>
   </p>
 
   <p class="copyright">
     <xsl:apply-templates select="$copyright" mode="titlepage.mode"/>
   </p>
+
+  <div class="note50">
+  <p>
+    This is the online edition of the DocBook V5.0 book. References to
+    V5.1 elements and features have been removed. There is a separate
+    <a href="http://docbook.org/tdg51/en/">online guide</a> for
+    DocBook V5.1.
+  </p>
+  </div>
+
   <br clear="all"/>
+  <p id="backcover">(<a href="figures/coverback.png">back cover</a>)</p>
 </xsl:template>
 
-<xsl:template match="authorgroup/author" mode="titleblock">
+<xsl:template match="bookinfo/author|bookinfo/editor" mode="titleblock">
   <xsl:if test="position() &gt; 1 and last() &gt; 2">,</xsl:if>
   <xsl:if test="position() &gt; 1 and position() = last()"> and</xsl:if>
   <xsl:if test="position() &gt; 1">&#160;</xsl:if>
@@ -633,7 +770,14 @@ set       nop
 
     <xsl:choose>
       <xsl:when test="starts-with(@condition,'ref.desc.')">
-	<a name="{substring-after(@condition,'ref.desc.')}"/>
+        <xsl:choose>
+          <xsl:when test="contains(@condition, ' ')">
+            <a name="{substring-after(substring-before(@condition,' '),'ref.desc.')}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a name="{substring-after(@condition,'ref.desc.')}"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:when test="@condition='ref.description'">
 	<a name="description"/>
@@ -682,6 +826,9 @@ set       nop
       </xsl:when>
       <xsl:when test="$lcname = 'indexterm'">
 	<xsl:value-of select="'element.db.indexterm.singular'"/>
+      </xsl:when>
+      <xsl:when test="$lcname = 'resource'">
+	<xsl:value-of select="'element.db.file.resource'"/>
       </xsl:when>
       <xsl:when test="$lcname = 'mml.*'">
 	<xsl:value-of select="'element.db._any.mml'"/>
@@ -899,6 +1046,7 @@ set       nop
   <xsl:param name="common.attributes"/>
 
   <table width="100%" border="0" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; ">
+    <col align="left" width="25%"/>
     <thead>
       <tr>
 	<th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; ">Name</th>

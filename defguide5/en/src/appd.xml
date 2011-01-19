@@ -1,395 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<appendix xmlns="http://docbook.org/ns/docbook"
-	  xmlns:xlink="http://www.w3.org/1999/xlink"
-	  version="5.0" xml:id="app-resources">
-<?dbhtml filename="appd.html"?>
+<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="app-interchange">
+<?dbhtml filename="appf.html"?>
 <info>
-  <title>Resources</title>
+  <title>Interchanging DocBook Documents</title>
   <pubdate>$Date$</pubdate>
   <releaseinfo>$Revision$</releaseinfo>
 </info>
 
-<indexterm xml:id="infoappd" class="startofrange" significance="normal"><primary>XML</primary>
-  <secondary>resources, reference</secondary></indexterm>
-<indexterm xml:id="SGMLinfoappc" class="startofrange" significance="normal"><primary>SGML</primary>
-  <secondary>resources, reference</secondary></indexterm>
+<para><indexterm class="startofrange" xml:id="DocBookinterchangeappf">
+      <primary>DocBook</primary>
 
-<para>The quantity of information about <acronym>SGML</acronym> and <acronym>XML</acronym> is growing
-on a daily basis.  This appendix strives to provide both a
-complete bibliography of the references mentioned explicitly in
-this book, and a sampling of resources for additional
-information about DocBook and about <acronym>SGML</acronym> and <acronym>XML</acronym> in general.
-Although not all of these resources are focused specifically on
-DocBook, they still provide helpful information for DocBook
-users.</para>
+      <secondary>documents</secondary>
 
-<section xml:id="latestver"><info><title>Latest Versions of DocBook</title></info>
+      <tertiary>interchange</tertiary>
+    </indexterm><indexterm class="startofrange" xml:id="DocBookinterchangeappf-2">
+      <primary>interchange</primary>
 
-<para>As of July 1998, responsibility for the advancement and maintenance
-of the DocBook <acronym>DTD</acronym> has been transferred from the Davenport Group, which originated
-it, to the DocBook Technical Committee of <acronym>OASIS</acronym> (Organization for the Advancement
-of Structured Information Standards) at <link xlink:href="http://www.oasis-open.org/">
-http://www.oasis-open.org/</link>.</para>
+      <secondary>documents</secondary>
+    </indexterm><indexterm class="startofrange" xml:id="questionappf">
+      <primary>questionnaire, document interchange</primary>
+    </indexterm>One of the early factors that motivated the development of
+  DocBook was the desire for companies to interchange documents. In
+  particular, <acronym>UNIX</acronym> vendors wanted to be able to interchange
+  common <acronym>UNIX</acronym> documentation.</para>
 
-<para>
-The latest releases of DocBook can be obtained from the official DocBook
-home page at <link xlink:href="http://www.oasis-open.org/docbook/">
-http://www.oasis-open.org/docbook/</link>.
-</para>
-</section>
-<section xml:id="res-resources"><info><title>Resources for Resources</title></info>
+  <para>A great deal of effort went into making sure that DocBook could handle
+  most (probably all) of the documents that were likely to be exchanged. This
+  avoids the guaranteed problem of interchanging documents created with
+  extended schemas.</para>
 
-<para>Here's where to find pointers to the subjects you want to find.</para>
-<variablelist>
-<varlistentry><term>The Most Recent Version of This Book</term>
-<listitem><para>
-The most recent online version of this book can be found at
-<link xlink:href="http://docbook.org/">http://docbook.org/</link>.
-</para></listitem>
-</varlistentry>
-<varlistentry><term>The Most Recent Version of DocBook</term>
-<listitem><para>
-The most recent version of DocBook, and the most recent information
-about the <acronym>DTD</acronym>, can be found at the DocBook home page:
-<link xlink:href="http://www.oasis-open.org/docbook/">http://www.oasis-open.org/docbook/</link>.
-</para></listitem>
-</varlistentry>
-<varlistentry><term>Robin Cover's <acronym>SGML</acronym>/<acronym>XML</acronym> Web page</term>
-<listitem>
-<para>Easily the largest and most up-to-date list of <acronym>SGML</acronym>/<acronym>XML</acronym> resources; can be found at <link xlink:href="http://www.oasis-open.org/cover/">http://www.oasis-open.org/cover/</link>.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><systemitem role="newsgroup">comp.text.sgml</systemitem>
-and <systemitem role="newsgroup">comp.text.xml</systemitem></term>
-<listitem>
-<para><acronym>USENET</acronym> newsgroups devoted to <acronym>SGML</acronym> and <acronym>XML</acronym> issues.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><acronym>FAQ</acronym>s</term>
-<listitem>
-<para>For pointers to several <acronym>SGML</acronym> <acronym>FAQ</acronym>s, see 
-<link xlink:href="http://www.oasis-open.org/cover/general.html#faq">http://www.oasis-open.org/cover/general.html#faq</link>. 
-The <acronym>XML</acronym> <acronym>FAQ</acronym> is
-available at <link xlink:href="http://www.ucc.ie/xml">http://www.ucc.ie/xml</link>.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><link xlink:href="http://www.xml.com/"><acronym>XML</acronym>.com</link></term>
-<listitem>
-<para><link xlink:href="http://www.xml.com/"><acronym>XML</acronym>.com</link>, run jointly
-by Songline Studios and Seybold, is a site devoted to making <acronym>XML</acronym>
-accessible.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</section>
-<section xml:id="res-intro"><info><title>Introductory Material on the Web</title></info>
+  <para>However, simply using DocBook or a subset of it is not enough to
+  ensure successful interchange. If you send someone your DocBook files, you
+  must also tell the recipient about the markup your documents use, any
+  additional markup conventions, and any processing expectations that impose
+  constraints.</para>
 
-<para>These documents provide a good background for a better understanding of
-<acronym>SGML</acronym> and <acronym>XML</acronym>.</para>
-<variablelist>
-<varlistentry><term>A Gentle Introduction to <acronym>SGML</acronym></term>
-<listitem>
-<para>A useful and simple document available in its original form at <link xlink:href="http://www-tei.uic.edu/orgs/tei/sgml/teip3sg/index.html">http://www-tei.uic.edu/orgs/tei/sgml/teip3sg/index.html
-</link>.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term>A Technical Introduction to <acronym>XML</acronym></term>
-<listitem>
-<para>A close look at the ins-and-outs of <acronym>XML</acronym> is available at <link xlink:href="http://nwalsh.com/docs/articles/xml/">
-http://nwalsh.com/docs/articles/xml/</link>.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</section>
+  <para>This appendix provides a sample interchange questionnaire to help draw
+  your attention to those areas that might cause problems.</para>
 
-<section xml:id="res-web"><info><title>References and Technical Notes <?lb?>on the Web</title></info>
+  <para>For maximum portability, delivered DocBook documents should be
+  accompanied by a filled-out interchange questionnaire. Because each
+  situation is unique, you may need to supply additional information (such as
+  layout specifications) in order to deliver a complete package.</para>
 
-<variablelist>
-<varlistentry><term>Entity Management</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open.org/html/a401.htm"><acronym>OASIS</acronym> Technical
-Resolution 9401:1997 (Amendment 2 to <acronym>TR</acronym> 9401)</link>.</para>
-<para>
-This document describes <acronym>OASIS</acronym> catalog files.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry><term>The <acronym>SGML</acronym> Declaration</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open.org/cover/wlw11.html">The <acronym>SGML</acronym> Declaration,</link> by Wayne Wholer.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry><term>Table Interoperability: Issues for the <acronym>CALS</acronym> Table Model
-</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open.org/html/a501.htm"><acronym>OASIS</acronym>
-Technical Research Paper 9501:1995</link>.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term>Exchange Table Model Document Type Definition</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open.org/html/a503.htm"><acronym>OASIS</acronym>
-Technical Resolution <acronym>TR</acronym> 9503:1995</link>.</para>
-</listitem>
-</varlistentry>
-<varlistentry xml:id="calsdtd"><term><acronym>CALS</acronym> Table Model Document Type Definition</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open.org/html/a502.htm"><acronym>OASIS</acronym>
-Technical Memorandum <acronym>TM</acronym> 9502:1995</link></para>
-</listitem>
-</varlistentry>
-<varlistentry xml:id="calsxmldtd">
-<term>XML Exchange Table Model Document Type Definition</term>
-<listitem>
-<para><link xlink:href="http://www.oasis-open-org/html/a901.htm">OASIS
-Technical Memorandum TM 9901:1999</link>.</para>
-</listitem>
-</varlistentry>
-<varlistentry xml:id="xhtml">
-<term><trademark>XHTML</trademark> 1.0 The Extensible HyperText Markup Language</term>
-<listitem>
-<para><link xlink:href="http://www.w3.org/TR/xhtml1">W3C Recommendation</link>.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry xml:id="html">
-<term><trademark>HTML 4.01 Specification</trademark></term>
-<listitem>
-<para><link xlink:href="http://www.w3.org/TR/html401/">W3C Recommendation</link>.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</section>
+  <bridgehead>DocBook and <acronym>XML</acronym> Usage</bridgehead>
 
-<section xml:id="res-rfc"><info><title>Internet <acronym>RFC</acronym>s</title></info>
+  <orderedlist continuation="restarts" inheritnum="ignore">
+    <listitem>
+      <para>What version of the schema are you using?</para>
+    </listitem>
 
-<para>
-<acronym>RFC</acronym>s (<quote>Request for Comments</quote>) are standards documents
-produced by the Internet Engineering Task Force (<acronym>IETF</acronym>).
-</para>
+    <listitem>
+      <para>Did you use any markup features of the schema that have been
+      flagged as obsolete (to be removed at the next major version of
+      DocBook)? If so, which ones?</para>
+    </listitem>
 
-<variablelist>
-<varlistentry><term><link xlink:href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1630.html"><acronym>RFC</acronym> 1630</link></term>
-<listitem>
-<para>Universal Resource Identifiers in <acronym>WWW</acronym>.</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>Did you extend DocBook in any way, inside or outside the provided
+      customization mechanisms? How? All extensions must be negotiated with
+      the recipient.</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1736.html"><acronym>RFC</acronym> 1736</link></term>
-<listitem>
-<para>Functional recommendations for Internet Resource Locators.</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>Did you remove markup from DocBook to create a subset? If you used
+      a subset of DocBook, supply the subset you used.</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1737.html"><acronym>RFC</acronym> 1737</link></term>
-<listitem>
-<para>Functional requirements for Uniform Resource Names.</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>Did you use the supplied catalog or another one, or none at all?
+      If you used a catalog other than the one supplied, provide it.</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://www.cis.ohio-state.edu/htbin/rfc/rfc1738.html"><acronym>RFC</acronym> 1738</link></term>
-<listitem>
-<para>Uniform Resource Locators (<acronym>URL</acronym>).</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>Did you use <acronym>SVG</acronym>, MathML, XInclude, XLink, or
+      any other <acronym>XML</acronym> schema?</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://www.cis.ohio-state.edu/htbin/rfc/rfc3066.html"><acronym>RFC</acronym> 3066</link></term>
-<listitem>
-<para>Tags for the identification of languages</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</section>
+    <listitem>
+      <para>Did you use character sets other than <acronym>UTF-8</acronym>? If
+      so, which ones? How did you use them?</para>
+    </listitem>
+  </orderedlist>
 
-<section xml:id="res-spec"><info><title>Specifications</title></info>
+  <bridgehead>Processing Requirements and Markup Interpretation</bridgehead>
 
-<para>Here are pointers to the specifications.</para>
-<variablelist>
-<varlistentry><term><link xlink:href="http://www.w3.org/TR/REC-xml">The <acronym>XML</acronym> Specification
-</link></term>
-<listitem>
-<para>The <acronym>W3C</acronym> technical recommendation that defines <acronym>XML</acronym> 1.0.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><link xlink:href="http://www.w3.org/TR/REC-xml-names/">Namespaces
-in <acronym>XML</acronym></link></term>
-<listitem>
-<para>The <acronym>W3C</acronym> technical recommendation that defines <acronym>XML</acronym> namespaces.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><link xlink:href="http://www.w3.org/TR/REC-MathML/">Mathematical
-Markup Language (MathML) 1.0 Specification</link></term>
-<listitem>
-<para>The <acronym>W3C</acronym> technical recommendation that defines MathML, an <acronym>XML</acronym>
-representation of mathematical equations.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><link xlink:href="http://www.unicode.org/unicode/uni2book/u2.html">
-The Unicode Standard, Version 2.0</link></term>
-<listitem>
-<para>The Unicode standard.</para>
-</listitem>
-</varlistentry>
-<varlistentry><term><link xlink:href="http://www.unicode.org/unicode/reports/tr8.html">
-Unicode Technical Report #8</link></term>
-<listitem>
-<para>Version 2.1 of the Unicode standard.</para>
-</listitem>
-</varlistentry>
+  <orderedlist continuation="continues" inheritnum="ignore">
+    <listitem>
+      <para>What formatting that you applied do you require your interchange
+      partner to apply? For example, where and how must text be generated in
+      order for the documents to make sense?</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://dublincore.org/documents/dces/">
-Dublin Core Metadata Element Set, Version 1.1: Reference Description</link></term>
-<listitem>
-<para>Version 1.1 of the Dublin Core Metadata Initiative's Metadata Element
-Set.</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>Did you supply your stylesheet and information regarding its
+      format and version?</para>
+    </listitem>
 
-<varlistentry><term><link xlink:href="http://www.getty.edu/research/tools/vocabulary/tgn/">
-Getty Thesaurus of Geographic Names</link></term>
-<listitem>
-<para>A controlled vocabulary of geographic place names.</para>
-</listitem>
-</varlistentry>
+    <listitem>
+      <para>How did you create tables of contents, lists of titles, and
+      indexes? Are they stored in DocBook form? If so, did you generate them
+      (and according to what rules) or create them by hand?</para>
+    </listitem>
 
-</variablelist>
-</section>
-<section xml:id="res-books"><info><title>Books and Printed Resources</title></info>
+    <listitem>
+      <para>If you used the <tag class="attribute">xml:lang</tag>
+      common attribute, why, and to what effect?</para>
+    </listitem>
 
-<para>There are also a number of books worth checking out:</para>
-<bibliolist>
-<biblioentry xml:id="maler96">
-	
-	
-	<authorgroup>
-	  <author><personname><firstname>Eve</firstname><surname>Maler</surname></personname></author>
-	  <author><personname><firstname>Jeanne</firstname><surname>El Andaloussi</surname></personname></author>
-	</authorgroup>
-	<biblioid class="isbn">0-13-309881-8</biblioid>
-	<publisher>
-	  <publishername>Prentice-Hall PTR</publishername>
-	  <address>
-	    <city>Upper Saddle River</city>
-	    <state>New Jersey</state>
-	  </address>
-	</publisher>
-	<pubdate>1970-01-01<!--1996--></pubdate>
-</biblioentry>
-<biblioentry>
-	
-	<authorgroup>
-	  <author><personname><firstname>Erik</firstname><surname>van Herwijnen</surname></personname></author>
-	</authorgroup>
-	<edition>2</edition>
-	<biblioid class="isbn">0-7923-9434-8</biblioid>
-	<publisher>
-	  <publishername>Kluwer Academic Press</publishername>
-	</publisher>
-	<pubdate>1970-01-01<!--1994--></pubdate>
-	<bibliomisc>An introductory book, but not a simple one.</bibliomisc>
-</biblioentry>
-<biblioentry>
-	
-	<authorgroup>
-	  <author><personname><firstname>Charles</firstname><surname>Goldfarb</surname></personname></author>
-	  <author><personname><firstname>Yuri</firstname><surname>Rubinksy</surname></personname></author>
-	</authorgroup>
-	<biblioid class="isbn">0-7923-9434-8</biblioid>
-	<pubdate>1970-01-01<!--1991--></pubdate>
-	<publisher>
-	  <publishername>Oxford University Press</publishername>
-	</publisher>
-	<bibliomisc>A reference book by the author of the SGML ISO Standard.</bibliomisc>
-</biblioentry>
-<biblioentry>
-   
-   <authorgroup>
-     <author><personname><firstname>Martin</firstname><surname>Bryan</surname></personname></author>
-   </authorgroup>
-   <biblioid class="isbn">0-201-17535-5</biblioid>
-   <pubdate>1970-01-01<!--1988--></pubdate>
-   <publisher>
-      <publishername>Addison-Wesley Publishing Company</publishername>
-   </publisher>
- </biblioentry>
-<biblioentry>
-	
-	<authorgroup>
-	  <author><personname><firstname>Chet</firstname><surname>Ensign</surname></personname></author>
-	</authorgroup>
-	<biblioid class="isbn">0-13-226705-5</biblioid>
-	<pubdate>1970-01-01<!--1998--></pubdate>
-	<publisher>
-	  <publishername>Prentice Hall</publishername>
-	</publisher>
-	<bibliomisc>Effective SGML evangelism.</bibliomisc>
-</biblioentry>
-<biblioentry>
-	
-	<authorgroup>
-	  <author><personname><firstname>Chris</firstname><surname>Maden</surname></personname></author>
-	</authorgroup>
-	<biblioid class="isbn">1-56592-518-1</biblioid>
-	<pubdate>1970-01-01<!--1999--></pubdate>
-	<publisher>
-	  <publishername>O'Reilly &amp; Associates</publishername>
-	</publisher>
-	<bibliomisc>An introductory book about XML.</bibliomisc>
-</biblioentry>
-<biblioentry>
-	
-	<authorgroup>
-	  <author><personname><firstname>Simon</firstname><surname>St. Laurent</surname></personname></author>
-	</authorgroup>
-	<biblioid class="isbn">1-5582-8592-X</biblioid>
-	<pubdate>1970-01-01<!--1998--></pubdate>
-	<publisher>
-	  <publishername>MIS:Press/IDG Books Worldwide</publishername>
-	</publisher>
-	<bibliomisc>Another introductory book about XML.</bibliomisc>
-</biblioentry>
-<biblioentry>
-    
-    <authorgroup>
-       <author><personname><firstname>Peter</firstname><surname>Flynn</surname></personname></author>
-     </authorgroup>
-     <biblioid class="isbn">0-7923-8169-6</biblioid>
-     <pubdate>1970-01-01<!--1998--></pubdate>
-     <publisher>
-       <publishername>Kluwer Academic Publishers</publishername>
-     </publisher>
-<bibliomisc>The standard work on SGML/XML software.</bibliomisc>
-</biblioentry>
- <biblioentry>
-   
-   
-   <authorgroup>
-      <author><personname><firstname>Michel</firstname><surname>Goosens</surname></personname></author>
-      <author><personname><firstname>Sebastian</firstname><surname>Rahtz</surname></personname></author>
-   </authorgroup>
-   <biblioid class="isbn">0-201-43311-7</biblioid>
-   <pubdate>1970-01-01<!--1999--></pubdate>
-   <publisher>
-     <publishername>Addison-Wesley Publishing Company</publishername>
-   </publisher>
- </biblioentry>
-</bibliolist>
-</section>
-<section xml:id="res-tools"><info><title><acronym>SGML</acronym>/<acronym>XML</acronym> Tools</title></info>
+    <listitem>
+      <para>If you used the <tag class="attribute">remap</tag> common
+      attribute, why, and to what effect?</para>
+    </listitem>
 
-<para>An attempt to provide a detailed description of all of the <acronym>SGML</acronym>/<acronym>XML</acronym>
-tools available is outside the scope of this book.
-</para>
-<para>
-For a list of recent
-of <acronym>SGML</acronym> tools, check out Robin Cover's <acronym>SGML</acronym>/<acronym>XML</acronym> page at <acronym>OASIS</acronym>: <link xlink:href="http://www.oasis-open.org/cover">
-http://www.oasis-open.org/cover</link>.
-</para>
-<para>For a list of <acronym>XML</acronym> tools,
-check out <acronym>XML</acronym>.com: <link xlink:href="http://www.xml.com/">http://www.xml.com/</link>.
-</para>
-</section>
+    <listitem>
+      <para>If you used the <tag class="attribute">role</tag> common
+      attribute, why, and to what effect?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used the effectivity attributes, which did you use, why,
+      and to what effect?</para>
+    </listitem>
+
+    <listitem>
+      <para>What values did you give to the <tag class="attribute">label</tag> attribute and how are they to be
+      interpreted for rendering?</para>
+    </listitem>
+
+    <listitem>
+      <para>What values did you give to the <tag class="attribute">mark</tag> and <tag class="attribute">override</tag> attributes for lists and how are
+      they to be interpreted for rendering?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use the <tag class="attribute">renderas</tag>
+      attribute on sections and/or <tag>bridgehead</tag>s?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you supply all keyword values you used for attributes whose
+      declared values are not enumerated tokens, along with the expected
+      processing for the occurrence of each keyword?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use markup to control width, size, and/or positioning
+      settings (such as <quote>fold-out</quote> or <quote>centered</quote>)
+      for graphics, line specific regions, and tables? If so, how?</para>
+    </listitem>
+
+    <listitem>
+      <para>For rendering of <tag>sidebar</tag>s, must these appear in
+      the flow of the text where they appear in your files, or may they
+      float?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use <tag>callout</tag>s? If so, what are the
+      processing expectations for callout marks?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use <tag>itemizedlist</tag>s? If so, what are the
+      processing expectations for the marks on list items and nested
+      lists?</para>
+    </listitem>
+
+    <listitem>
+      <para>For <tag>mediaobject</tag> and
+      <tag>inlinemediaobject</tag>, what method(s) did you use for
+      providing graphic data: element content, <tag class="attribute">fileref</tag> attribute, or <tag class="attribute">entityref</tag> attribute?</para>
+    </listitem>
+
+    <listitem>
+      <para>For <tag>mediaobject</tag> and
+      <tag>inlinemediaobject</tag>, what method(s) did you use for
+      selecting between alternative presentations?</para>
+    </listitem>
+
+    <listitem>
+      <para>How did you specify column widths in tables? Did you use vertical
+      spans? Did you use horizontal spans?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use <tag>entrytbl</tag>s?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used the <tag class="attribute">type</tag>
+      attribute on the link elements, why, and to what effect?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used the <tag>xref</tag>, do your interchange
+      partners need additional information about the semantics of the link?
+      Have you provided it, perhaps with <tag class="attribute">role</tag>?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use the <tag class="attribute">subject</tag>
+      attribute on <tag>glossdef</tag>? If so, did you use a thesaurus
+      of terms? If so, what is it?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used the <tag class="attribute">class</tag>
+      attribute on <tag>refmiscinfo</tag>, why and to what
+      effect?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used <tag>link</tag> and provided
+      <acronym>URL</acronym>s that are queries, what back-end processing is
+      required to resolve those queries?</para>
+    </listitem>
+
+    <listitem>
+      <para>Is there a <tag class="attribute">fileref</tag> or
+      <tag class="attribute">entityref</tag> attribute on every
+      <tag>audiodata</tag>, <tag>imagedata</tag>, and
+      <tag>videodata</tag> element. If one is not present, what is the
+      expectation?</para>
+    </listitem>
+
+    <listitem>
+      <para>If your <tag>bibliography</tag>s or
+      <tag>glossary</tag>s have special processing expectations, such
+      as the ability to display only those entries that are cited, have you
+      described them?</para>
+    </listitem>
+
+    <listitem>
+      <para>If your <tag>bibliography</tag>s contain
+      <tag>biblioentry</tag>s, what are the processing expectations?
+      Which fields are selected for display? What punctuation is added, and
+      where?</para>
+    </listitem>
+
+    <listitem>
+      <para>Do <tag>glossterm</tag>s or other elements have implicit
+      linking relationships that must be obeyed or handled in
+      presentation?</para>
+    </listitem>
+
+    <listitem>
+      <para>Did you use any processing instructions? Why and what for? Are
+      they in entities?</para>
+    </listitem>
+
+    <listitem>
+      <para>What copy fitting have you already done, and for what
+      outputs?</para>
+    </listitem>
+
+    <listitem>
+      <para>Are the <tag>revision</tag>s in your
+      <tag>revhistory</tag>s sorted in any particular way?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you use any of the <tag role="nonexistant">*synopsis</tag> elements,
+      describe how you define and markup <quote>arguments,</quote>
+      <quote>options,</quote> <quote>parameters,</quote> etc.</para>
+    </listitem>
+  </orderedlist>
+
+  <bridgehead>Assemblies</bridgehead>
+
+  <para>FIXME: complete this list.</para>
+
+  <orderedlist>
+    <listitem>
+      <para>Are you prepared for all the different types of <tag>relationship</tag>
+      that your interchange parterns have used?</para>
+    </listitem>
+    <listitem>
+      <para>Are you prepared for all the different types of <tag>transform</tag>s
+      that your interchange parterns have used?</para>
+    </listitem>
+  </orderedlist>
+
+  <bridgehead>Miscellaneous</bridgehead>
+
+  <orderedlist continuation="continues" inheritnum="ignore">
+    <listitem>
+      <para>Have you checked your files for viruses?</para>
+    </listitem>
+
+    <listitem>
+      <para>If you used <tag>bridgehead</tag>, have you joined a
+      recovery support group?<indexterm class="endofrange" startref="DocBookinterchangeappf-2"/><indexterm class="endofrange" startref="DocBookinterchangeappf"/><indexterm class="endofrange" startref="questionappf"/></para>
+    </listitem>
+  </orderedlist>
 </appendix>
