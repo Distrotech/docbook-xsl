@@ -588,7 +588,11 @@ site (http://docbook.sourceforge.net/release/).
 5. Extract the contents of the docbook-xsl-doc package into the 
    xsl/<version> and xsl-ns/<version> directories. 
 
-6. Delete ZIP files and temporary directories.
+6. The documentation packages contain reference.txt.gz and 
+   reference.pdf.gz. Unzip these archives (to ensure working links 
+   on the documentation index page).
+
+7. Delete ZIP files and temporary directories.
 
 For more information about file management and shell services at 
 SourceForge, see
@@ -602,12 +606,16 @@ SourceForge, see
 -----------------------------------------------------------------
 Part 6: Manage release files
 -----------------------------------------------------------------
-This section explains how to manage release files using the
-file-management interface at Sourceforge.
+
 
 Unfortunately, Sourceforge provides no automated way to manage
 file releases, so you must complete all the following steps using
 the SF file-management Web interface.
+
+The file-management Web interface has been updated. Please ee:
+https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download
+
+Here are the legacy instructions for reference *only*:
 
 NOTE: Try hard to make sure you've got everything prepared OK,
 because the SF file-management system is extremely unwieldy, and
@@ -796,6 +804,32 @@ This section explains how to announce a release.
         http://sourceforge.net/news/?group_id=21935
 
 -----------------------------------------------------------------
+Part 11: Do post-release wrap-up
+-----------------------------------------------------------------
+This section explains the "wrap up" steps you need to do
+following an official release.
+
+1. Open the VERSION file.
+
+2. Change the content of the PreviousRelease element to the
+   version number you have just released.
+
+3. Change the content of the PreviousReleaseRevision element to
+   the number of the repository revision from which you built the
+   release.
+
+4. Change the content of the fm:Version element to the version
+   number of the next anticipated release, with the string "-pre"
+   appended; for example:
+
+     <fm:Version>1.73.1-pre</fm:Version>
+
+9. Check the VERSION file back in.
+
+    svn commit \
+      -m "Restored VERSION file to snapshot state" VERSION
+
+-----------------------------------------------------------------
 Part 9: Prepare for Freshmeat update
 -----------------------------------------------------------------
 
@@ -861,31 +895,6 @@ following steps.
 
      make freshmeat-ns SFRELID=NNNNNN FMGO=
 
------------------------------------------------------------------
-Part 11: Do post-release wrap-up
------------------------------------------------------------------
-This section explains the "wrap up" steps you need to do
-following an official release.
-
-1. Open the VERSION file.
-
-2. Change the content of the PreviousRelease element to the
-   version number you have just released.
-
-3. Change the content of the PreviousReleaseRevision element to
-   the number of the repository revision from which you built the
-   release.
-
-4. Change the content of the fm:Version element to the version
-   number of the next anticipated release, with the string "-pre"
-   appended; for example:
-
-     <fm:Version>1.73.1-pre</fm:Version>
-
-9. Check the VERSION file back in.
-
-    svn commit \
-      -m "Restored VERSION file to snapshot state" VERSION
 
 -----------------------------------------------------------------
 NOTES

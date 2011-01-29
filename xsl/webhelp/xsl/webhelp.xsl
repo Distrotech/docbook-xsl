@@ -17,6 +17,7 @@
     <xsl:param name="webhelp.include.search.tab">true</xsl:param>
     <xsl:param name="webhelp.start.filename">index.html</xsl:param>
     <xsl:param name="webhelp.base.dir">docs</xsl:param>
+    <xsl:param name="webhelp.common.dir">../common/</xsl:param>
     <xsl:param name="webhelp.tree.cookie.id" select="concat( 'treeview-', count(//node()) )"/>
     <xsl:param name="webhelp.indexer.language">en</xsl:param>
     <xsl:param name="webhelp.default.topic"/>
@@ -56,58 +57,71 @@
         </l10n>
 	<!-- The fallback mechansim doesn't seem to work for local l10n stuff -->
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="ja">
-            <l:gentext key="Search" text="Search"/>
-            <l:gentext key="Enter_a_term_and_click" text="Enter a term and click "/>
-            <l:gentext key="Go" text="Go"/>
+            <l:gentext key="Search" text="検索"/>
+            <l:gentext key="Enter_a_term_and_click" text="用語をクリックして入力してください。"/>
+            <l:gentext key="Go" text="移動"/>
             <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Results"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
+            <l:gentext key="txt_filesfound" text="検索結果"/>
+            <l:gentext key="txt_enter_at_least_1_char" text="あなたは、少なくとも1つの文字を入力する必要があります。"/>
             <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
-            <l:gentext key="txt_results_for" text="Results for: "/>
-	        <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
+                       text="お使いのブラウザがサポートされていません。 Mozilla Firefoxの使用が推奨されます"/>
+            <l:gentext key="txt_please_wait" text="しばらくお待ちください。検索が進行中です..."/>
+            <l:gentext key="txt_results_for" text="次の検索語の結果： "/>
+	        <l:gentext key="HighlightButton" text="強調表示の切り替えの検索結果"/>
         </l10n>
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="de">
-            <l:gentext key="Search" text="Search"/>
-            <l:gentext key="Enter_a_term_and_click" text="Enter a term and click "/>
+            <l:gentext key="Search" text="suchen"/>
+            <l:gentext key="Enter_a_term_and_click" text="Geben Sie einen Begriff ein und klicken Sie "/>
             <l:gentext key="Go" text="Go"/>
             <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Results"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
+            <l:gentext key="txt_filesfound" text="Ergebnisse"/>
+            <l:gentext key="txt_enter_at_least_1_char" text="Sie müssen mindestens ein Zeichen."/>
             <l:gentext key="txt_browser_not_supported"
                        text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
-            <l:gentext key="txt_results_for" text="Results for: "/>
+            <l:gentext key="txt_please_wait" text="Bitte warten Sie. Die Suche ist im Gange ..."/>
+            <l:gentext key="txt_results_for" text="Ergebnisse für: "/>
 	        <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
         </l10n>
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="fr">
-            <l:gentext key="Search" text="Search"/>
-            <l:gentext key="Enter_a_term_and_click" text="Enter a term and click "/>
+            <l:gentext key="Search" text="rechercher"/>
+            <l:gentext key="Enter_a_term_and_click" text="Saisissez un terme et cliquer "/>
             <l:gentext key="Go" text="Go"/>
             <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Results"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
+            <l:gentext key="txt_filesfound" text="résultats"/>
+            <l:gentext key="txt_enter_at_least_1_char" text="Vous devez entrer au moins un caractère."/>
             <l:gentext key="txt_browser_not_supported"
                        text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
-            <l:gentext key="txt_results_for" text="Results for: "/>
+            <l:gentext key="txt_please_wait" text="S'il vous plaît attendre. La recherche est en cours ..."/>
+            <l:gentext key="txt_results_for" text="Résultats pour: "/>
 	        <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
         </l10n>
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="zh">
-            <l:gentext key="Search" text="Search"/>
-            <l:gentext key="Enter_a_term_and_click" text="Enter a term and click "/>
-            <l:gentext key="Go" text="Go"/>
+            <l:gentext key="Search" text="搜索"/>
+            <l:gentext key="Enter_a_term_and_click" text="输入字词，然后点击 "/>
+            <l:gentext key="Go" text="去"/>
             <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Results"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
+            <l:gentext key="txt_filesfound" text="条结果"/>
+            <l:gentext key="txt_enter_at_least_1_char" text="您必须输入至少一个字符。"/>
             <l:gentext key="txt_browser_not_supported"
                        text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
-            <l:gentext key="txt_results_for" text="Results for: "/>
+            <l:gentext key="txt_please_wait" text="请稍候。搜索中..."/>
+            <l:gentext key="txt_results_for" text="结果： "/>
 	        <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
         </l10n>
-
+        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="cs">
+            <l:gentext key="Search" text="Hledání"/>
+            <l:gentext key="Enter_a_term_and_click" text="Zadejte pojem a klikněte "/>
+            <l:gentext key="Go" text="Přejdi"/>
+            <l:gentext key="to_perform_a_search" text=" pro hledání."/>
+            <l:gentext key="txt_filesfound" text="Výsledky"/>
+            <l:gentext key="txt_enter_at_least_1_char" text="Musíte zadat alespoň jeden znak."/>
+            <l:gentext key="txt_browser_not_supported"
+                       text="Váš prohlížeč není podporován. Použití prohlížeče Mozilla Firefox je doporučeno."/>
+            <l:gentext key="txt_please_wait" text="Prosím čekejte. Probíhá hledání..."/>
+            <l:gentext key="txt_results_for" text="Výsledky pro: "/>
+            <l:gentext key="TableofContents" text="Obsah"/>
+           <l:gentext key="HighlightButton" text="Přepnout zvýrazňování výsledků hledání"/>
+        </l10n>
     </i18n>
 
   <xsl:template name="system.head.content">
@@ -164,7 +178,7 @@ These problems go away when you add this IE=7 mode meta tag.
             display: block;
             height: 22px;
             padding-left: 20px;
-            background: transparent url(../common/jquery/treeview/images/folder.gif) 0 0px no-repeat;
+            background: transparent url(<xsl:value-of select="$webhelp.common.dir"/>jquery/treeview/images/folder.gif) 0 0px no-repeat;
             }
             <!--[if IE]>
             input {
@@ -174,65 +188,71 @@ These problems go away when you add this IE=7 mode meta tag.
             <![endif]-->
         </style>
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" type="text/css" href="../common/css/positioning.css"/>
-        <link rel="stylesheet" type="text/css" href="../common/jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
-        <link rel="stylesheet" type="text/css" href="../common/jquery/treeview/jquery.treeview.css"/>
+        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
+        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
+        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
 
-        <script type="text/javascript" src="../common/jquery/jquery-1.4.2.min.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.4.2.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <script type="text/javascript" src="../common/jquery/jquery-ui-1.8.2.custom.min.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-ui-1.8.2.custom.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <script type="text/javascript" src="../common/jquery/jquery.cookie.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.cookie.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <script type="text/javascript" src="../common/jquery/treeview/jquery.treeview.min.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/treeview/jquery.treeview.min.js">
             <xsl:comment> </xsl:comment>
-        </script>
-        <!--Scripts/css stylesheets for Search-->
-        <script type="text/javascript" src="search/htmlFileList.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        <script type="text/javascript" src="search/htmlFileInfoList.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        <script type="text/javascript" src="search/nwSearchFnt.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        
-        <!--script type="text/javascript" src="search/addition.js">
-            <xsl:comment></xsl:comment>
-        </script>
-        <script type="text/javascript" src="search/indexLoader.js">
-            <xsl:comment></xsl:comment>
-        </script-->
-
-
-        <!--
-           NOTE: Stemmer javascript files should be in format <language>_stemmer.js.
-           For example, for English(en), source should be: "search/stemmers/en_stemmer.js"
-           For country codes, see: http://www.uspto.gov/patft/help/helpctry.htm
-        -->
-        <!--<xsl:message><xsl:value-of select="concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')"/></xsl:message>-->
-        <script type="text/javascript" src="{concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')}">
-            <xsl:comment>//make this scalable to other languages as well.</xsl:comment>
         </script>
 
-        <!--Index Files:
-            Index is broken in to three equal sized(number of index items) files. This is to help parallel downloading
-            of files to make it faster.-->
-        <script type="text/javascript" src="search/index-1.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        <script type="text/javascript" src="search/index-2.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        <script type="text/javascript" src="search/index-3.js">
-            <xsl:comment> </xsl:comment>
-        </script>
-        <!--End of index files -->
+	<xsl:if test="$webhelp.include.search.tab = 'true'">
+	  <!--Scripts/css stylesheets for Search-->
+	  <script type="text/javascript" src="search/htmlFileList.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+	  <script type="text/javascript" src="search/htmlFileInfoList.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+	  <script type="text/javascript" src="search/nwSearchFnt.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+
+	  <!--script type="text/javascript" src="search/addition.js">
+	      <xsl:comment></xsl:comment>
+	  </script>
+	  <script type="text/javascript" src="search/indexLoader.js">
+	      <xsl:comment></xsl:comment>
+	  </script-->
+
+
+	  <!--
+	     NOTE: Stemmer javascript files should be in format <language>_stemmer.js.
+	     For example, for English(en), source should be: "search/stemmers/en_stemmer.js"
+	     For country codes, see: http://www.uspto.gov/patft/help/helpctry.htm
+	  -->
+	  <!--<xsl:message><xsl:value-of select="concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')"/></xsl:message>-->
+	  <script type="text/javascript" src="{concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')}">
+	      <xsl:comment>//make this scalable to other languages as well.</xsl:comment>
+	  </script>
+
+	  <!--Index Files:
+	      Index is broken in to three equal sized(number of index items) files. This is to help parallel downloading
+	      of files to make it faster.-->
+	  <script type="text/javascript" src="search/index-1.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+	  <script type="text/javascript" src="search/index-2.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+	  <script type="text/javascript" src="search/index-3.js">
+	      <xsl:comment> </xsl:comment>
+	  </script>
+	  <!--End of index files -->
+	</xsl:if>
+	<xsl:call-template name="user.webhelp.head.content"/>
     </xsl:template>
+
+    <xsl:template name="user.webhelp.head.content"/>
 
     <xsl:template name="user.header.navigation">
         <xsl:param name="prev"/>
@@ -399,6 +419,8 @@ These problems go away when you add this IE=7 mode meta tag.
                         <xsl:with-param name="next" select="$next"/>
                         <xsl:with-param name="nav.context" select="$nav.context"/>
                     </xsl:call-template>
+
+		    <xsl:call-template name="user.webhelp.content.footer"/>
                 </div>
 
                 <xsl:call-template name="user.footer.navigation"/>
@@ -406,6 +428,8 @@ These problems go away when you add this IE=7 mode meta tag.
         </html>
         <xsl:value-of select="$chunk.append"/>
     </xsl:template>
+
+    <xsl:template name="user.webhelp.content.footer"/>
 
     <!-- The Header with the company logo -->
     <xsl:template name="webhelpheader">
@@ -417,8 +441,7 @@ These problems go away when you add this IE=7 mode meta tag.
         <xsl:variable name="up" select="parent::*"/>
 
         <div id="header">
-            <img style='margin-right: 2px; height: 59px; padding-right: 25px; padding-top: 8px' align="right"
-                 src='../common/images/logo.png' alt="Company Logo"/>
+	    <xsl:call-template name="webhelpheader.logo"/>
 
             <!-- Display the page title and the main heading(parent) of it-->
             <h1 align="center">
@@ -450,14 +473,16 @@ These problems go away when you add this IE=7 mode meta tag.
                             </a>
                         </td>
                         <td>
-                            <img src="../common/images/highlight-blue.gif" alt="H" height="25px"
+			  <xsl:if test="$webhelp.include.search.tab = 'true'">
+                            <img src="{$webhelp.common.dir}images/highlight-blue.gif" alt="H" height="25px"
                                  onclick="toggleHighlight()" id="showHideHighlight" style="cursor:pointer">
 				<xsl:attribute name="title">
 				  <xsl:call-template name="gentext">
 					<xsl:with-param name="key" select="'HighlightButton'"/>
 				  </xsl:call-template>				  
 				</xsl:attribute>
-			  </img>
+			    </img>
+			  </xsl:if>
                         </td>
                         <xsl:if test="count($prev) &gt; 0
                                         or (count($up) &gt; 0
@@ -521,6 +546,11 @@ These problems go away when you add this IE=7 mode meta tag.
             </div>
 
         </div>
+    </xsl:template>
+
+    <xsl:template name="webhelpheader.logo">
+      <img style='margin-right: 2px; height: 59px; padding-right: 25px; padding-top: 8px' align="right"
+	   src='{$webhelp.common.dir}images/logo.png' alt="Company Logo"/>
     </xsl:template>
 
     <xsl:template name="webhelptoc">
@@ -605,9 +635,10 @@ These problems go away when you add this IE=7 mode meta tag.
                                         </a>
                                     </li>
                                 </xsl:if>
+				<xsl:call-template name="user.webhelp.tabs.title"/>
                             </ul>
                             <div id="treeDiv">
-                                <img src="../common/images/loading.gif" alt="loading table of contents..."
+                                <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
                                      id="tocLoading" style="display:block;"/>
                                 <div id="ulTreeDiv" style="display:none">
                                     <ul id="tree" class="filetree">
@@ -646,13 +677,17 @@ These problems go away when you add this IE=7 mode meta tag.
                                     </div>
                                 </div>
                             </xsl:if>
-
+			    <xsl:call-template name="user.webhelp.tabs.content"/>
                         </div>
                     </div>
                 </div>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <!-- Hooks for adding customs tabs -->
+    <xsl:template name="user.webhelp.tabs.title"/>
+    <xsl:template name="user.webhelp.tabs.content"/>
 
     <xsl:template
             match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
@@ -693,7 +728,7 @@ These problems go away when you add this IE=7 mode meta tag.
                     <xsl:attribute name="id">webhelp-currentid</xsl:attribute>
                 </xsl:if>
                 <span class="file">
-                    <a href="{substring-after($href,concat($webhelp.base.dir,'/content/'))}">
+                    <a href="{substring-after($href, $base.dir)}">
                         <xsl:value-of select="$title"/>
                     </a>
                 </span>
@@ -713,7 +748,7 @@ These problems go away when you add this IE=7 mode meta tag.
     <xsl:template match="text()" mode="webhelptoc"/>
 
     <xsl:template name="user.footer.content">
-        <script type="text/javascript" src="../common/main.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}main.js">
             <xsl:comment></xsl:comment>
         </script>
     </xsl:template>
