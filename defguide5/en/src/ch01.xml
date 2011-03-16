@@ -755,24 +755,21 @@
     </section>
   </section>
 
-  <section xml:id="introduction-ns"><info><title>Finally in a Namespace</title></info>
-    
-
-    <para><indexterm class="startofrange" xml:id="idx.introduction-ns">
-        <primary>namespaces</primary>
-
-        <secondary>DocBook</secondary>
-      </indexterm>All DocBook <acronym>V5.0</acronym> elements are in the
-    namespace <uri>http://docbook.org/ns/docbook</uri>. <acronym>XML</acronym>
-    namespaces are used to distinguish between different element sets. In the
-    past few years, almost all new <acronym>XML</acronym> grammars have used
-    their own namespace. It is easy to create compound documents that contain
-    elements from different <acronym>XML</acronym> vocabularies. Consider this
-    simple article marked up in DocBook <acronym>V4.5</acronym>:<indexterm>
-        <primary>examples</primary>
-
-        <secondary>DocBook namespace</secondary>
-      </indexterm></para>
+<section xml:id="introduction-ns">
+<info>
+<title>Finally in a Namespace</title>
+</info>
+<para><indexterm class="startofrange" xml:id="idx.introduction-ns">
+<primary>namespaces</primary><secondary>DocBook</secondary>
+</indexterm>All DocBook <acronym>V5.0</acronym> elements are in the
+namespace <uri>http://docbook.org/ns/docbook</uri>. <acronym>XML</acronym>
+namespaces are used to distinguish between different element sets. In the
+past few years, almost all new <acronym>XML</acronym> grammars have used
+their own namespace. It is easy to create compound documents that contain
+elements from different <acronym>XML</acronym> vocabularies. Consider this
+simple article marked up in DocBook <acronym>V4.5</acronym>:<indexterm>
+<primary>examples</primary><secondary>DocBook namespace</secondary>
+</indexterm></para>
 
     <programlisting>&lt;!DOCTYPE article PUBLIC '-//OASIS//DTD DocBook XML V4.5//EN'
                          'http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd'&gt;
@@ -805,6 +802,44 @@
       In the future, this document will probably conform to (some version of)
       RDDL and provide pointers to related resources.<indexterm class="endofrange" startref="idx.introduction-ns"/></para>
     </note>
+
+<section xml:id="nsusage" revisionflag="added">
+<info>
+<title>Namespace Usage Policy</title>
+</info>
+
+<para>DocBook is used throughout the world. As one would expect in such a
+broad context, DocBook is often customized to satisfy the requirements
+of specific organizations or projects. The DocBook Technical Committee encourages such
+customization and works hard to make sure that the schemas are as
+amenable to customization as possible.</para>
+
+<para>When customizers add new elements to DocBook, they often place those
+elements in the DocBook namespace.
+There is historical precedent for this approach as DocBook's history
+pre-dates namespaces and even XML. Even without precedent, users would
+almost certainly encourage customizers to use the same namespace. In
+many cases it simplifies authoring and almost always simplifies the
+training of new authors.</para>
+
+<para>However, a new element introduced into the DocBook namespace by a
+local customization is not officially part of DocBook. Only the
+DocBook Technical Committee can introduce new elements into DocBook officially by
+publishing a new version of the standard with those elements.</para>
+
+<para>This means that the practice of adding new, local elements into the DocBook
+namespace comes with a cost:
+the potential for confusion among authors familiar with different
+customizations and the costs associated with resolving any conflicts
+between interchange partners.
+</para>
+
+<para>The DocBook Technical Committee encourages customizers to think carefully about these
+costs and weight the potential tradoffs between unofficially adding
+elements to DocBook and using elements in their own namespace with
+care.</para>
+
+</section>
   </section>
 
   <section xml:id="introduction-rng"><info><title>Relaxing with DocBook</title></info>

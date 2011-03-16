@@ -2,7 +2,7 @@
 <info xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>DocBook 5: The Definitive Guide</title>
-    <edition>1.0.1</edition>
+    <edition>1.0.2</edition>
     <biblioid class="isbn">9780596805029</biblioid>
     <author>
       <personname>
@@ -58,8 +58,8 @@
       <para>April 2010: DocBook 5: The Definitive Guide.</para>
       <para>October 1999: DocBook: The Definitive Guide.</para>
     </printhistory>
-    <releaseinfo>1.0.1 for DocBook V5.0</releaseinfo>
-    <pubdate>2011-01-19</pubdate>
+    <releaseinfo>1.0.2 for DocBook V5.0</releaseinfo>
+    <pubdate>2011-03-16</pubdate>
 
 <legalnotice>
 <literallayout><citetitle>DocBook 5: The Definitive Guide</citetitle> Copyright
