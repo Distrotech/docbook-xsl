@@ -199,6 +199,13 @@ These problems go away when you add this IE=7 mode meta tag.
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
 
+	<!-- 
+	     browserDetect is an Oxygen addition to warn the user if they're using chrome from the file system.
+	     This breaks the Oxygen search highlighting.
+	-->
+	<script type="text/javascript" src="../common/browserDetect.js">
+            <xsl:comment> </xsl:comment>
+	</script>
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.4.2.min.js">
             <xsl:comment> </xsl:comment>
         </script>
@@ -669,8 +676,8 @@ These problems go away when you add this IE=7 mode meta tag.
                             <xsl:if test="$webhelp.include.search.tab != 'false'">
                                 <div id="searchDiv">
                                     <div id="search">
-                                        <form onsubmit="Verifie(ditaSearch_Form);return false"
-                                              name="ditaSearch_Form"
+                                        <form onsubmit="Verifie(searchForm);return false"
+                                              name="searchForm"
                                               class="searchForm">
                                             <fieldset class="searchFieldSet">
                                                 <legend>
@@ -682,7 +689,7 @@ These problems go away when you add this IE=7 mode meta tag.
                                                     <input id="textToSearch" name="textToSearch" type="text"
                                                            class="searchText" tabindex="1"/>
                                                     <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
-                                                    <input onclick="Verifie(ditaSearch_Form)" type="button"
+                                                    <input onclick="Verifie(searchForm)" type="button"
                                                            class="searchButton"
                                                            value="Go" id="doSearch" tabindex="1"/>
                                                 </center>
