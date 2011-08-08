@@ -863,9 +863,11 @@
         </xsl:when>
         <!-- Use the xlink:href if no other text -->
         <xsl:when test="@xlink:href">
-	  <xsl:call-template name="hyphenate-url">
-	    <xsl:with-param name="url" select="@xlink:href"/>
-	  </xsl:call-template>
+	  <fo:inline hyphenate="false">
+	    <xsl:call-template name="hyphenate-url">
+	      <xsl:with-param name="url" select="@xlink:href"/>
+	    </xsl:call-template>
+	  </fo:inline>
         </xsl:when>
         <xsl:otherwise>
           <xsl:message>
@@ -922,9 +924,11 @@
                  external-destination="{$ulink.url}">
     <xsl:choose>
       <xsl:when test="count(child::node())=0 or (string(.) = $url)">
-        <xsl:call-template name="hyphenate-url">
-          <xsl:with-param name="url" select="$url"/>
-        </xsl:call-template>
+	<fo:inline hyphenate="false">
+	  <xsl:call-template name="hyphenate-url">
+	    <xsl:with-param name="url" select="$url"/>
+	  </xsl:call-template>
+	</fo:inline>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>

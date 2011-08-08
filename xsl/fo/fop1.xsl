@@ -137,7 +137,9 @@
     <xsl:apply-templates select="/*[1]" mode="label.markup"/>
     <xsl:apply-templates select="/*[1]" mode="title.markup"/>
     <xsl:variable name="subtitle">
-      <xsl:apply-templates select="/*[1]" mode="subtitle.markup"/>
+      <xsl:apply-templates select="/*[1]" mode="subtitle.markup">
+        <xsl:with-param name="verbose" select="0"/>
+      </xsl:apply-templates>
     </xsl:variable>
     <xsl:if test="$subtitle !=''">
       <xsl:text> - </xsl:text>
@@ -167,6 +169,9 @@
                 </xsl:when>
                 <xsl:when test="$authors[self::corpauthor]">
                   <xsl:value-of select="$authors"/>
+                </xsl:when>
+                <xsl:when test="$authors[orgname]">
+                  <xsl:value-of select="$authors/orgname"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:call-template name="person.name">
