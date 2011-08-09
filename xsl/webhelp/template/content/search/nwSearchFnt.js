@@ -54,8 +54,7 @@ function Verifie(ditaSearch_Form) {
     searchTextField = trim(document.searchForm.textToSearch.value);
 	var expressionInput = searchTextField;	
 
-    /*
-    //Set a cookie to store the searched keywords
+
     $.cookie('textToSearch', expressionInput);
     */
     //-------------------------OXYGEN PATCH END-------------------------
