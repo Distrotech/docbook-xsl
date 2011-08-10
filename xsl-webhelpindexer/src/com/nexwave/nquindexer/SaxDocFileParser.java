@@ -200,8 +200,8 @@ public class SaxDocFileParser extends org.xml.sax.helpers.DefaultHandler {
 			// The marker is used to compute the scoring
 			// Create the marker
 			String marker = "@@@elem_" + stack.peek() + "@@@ ";
-			text = text.trim();
 			String originalText = text.replaceAll("\\s+"," ");
+			text = text.trim();
 			// Do a minimal clean
 			text = minimalClean(text, null, null);
 			text = text.replaceAll("\\s+"," ");
