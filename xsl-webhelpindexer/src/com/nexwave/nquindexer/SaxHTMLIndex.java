@@ -67,6 +67,8 @@ public class SaxHTMLIndex extends SaxDocFileParser{
 	private int SCORING_FOR_BOLD = 5;
 	private int SCORING_FOR_ITALIC = 3;
 	private int SCORING_FOR_NORMAL_TEXT = 1;
+	private int SCORING_FOR_KEYWORD = 100;
+	private int SCORING_FOR_INDEXTERM = 75;
 	
 	/**
 	 * The list with the word and scoring object
@@ -140,6 +142,8 @@ public class SaxHTMLIndex extends SaxDocFileParser{
         //Do Stemming for words in items
         //TODO currently, stemming support is for english and german only. Add support for other languages as well.
 
+        // START OXYGEN PATCH
+        wsList = new ArrayList<WordAndScoring>();
         // START OXYGEN PATCH, create the words and scoring list
 //        String[] tokenizedItems;
         // END OXYGEN PATCH
@@ -147,6 +151,8 @@ public class SaxHTMLIndex extends SaxDocFileParser{
                 || indexerLanguage.equalsIgnoreCase("ko")){
                 LinkedList<String> tokens = new LinkedList<String>();
             try{
+            	//EXM-21501 Oxygen patch, replace the extra "@@@"s.
+            	str = str.replaceAll("@@@([^\\s]*)@@@", "");
                 CJKAnalyzer analyzer = new CJKAnalyzer(org.apache.lucene.util.Version.LUCENE_30);
                 Reader reader = new StringReader(str);
                 TokenStream stream = analyzer.tokenStream("", reader);
@@ -156,9 +162,23 @@ public class SaxHTMLIndex extends SaxDocFileParser{
                 while (stream.incrementToken()) {
                     String term = termAtt.term();
                     tokens.add(term);
-//                    System.out.println(term + " " + offAtt.startOffset() + " " + offAtt.endOffset());
+                    WordAndScoring ws = new WordAndScoring(term, term, 1);
+                    boolean found = false;
+    				for (int i = 0; i < wsList.size(); i++) { 
+    					// If the stem of the current word is already in list, 
+    					// do not add the word in the list, just recompute scoring
+    					if (wsList.get(i).getStem().equals(ws.getStem())) {
+    						found = true;
+    						int scoring = wsList.get(i).getScoring();
+    						wsList.get(i).setScoring(scoring + ws.getScoring());
+    						break;
                 }
 
+					}
+    				if (!found) {
+    					wsList.add(ws);
+    				}
+                }
                 // START OXYGEN PATCH
                 //tokenizedItems = tokens.toArray(new String[tokens.size()]);
                 // END OXYGEN PATCH
@@ -281,6 +301,10 @@ public class SaxHTMLIndex extends SaxDocFileParser{
 					scoring = SCORING_FOR_ITALIC;
 				} else if ("strong".equalsIgnoreCase(elementName)) {
 					scoring = SCORING_FOR_BOLD;
+				} else if ("meta_keywords".equalsIgnoreCase(elementName)) {
+					scoring = SCORING_FOR_KEYWORD;
+				} else if ("meta_indexterms".equalsIgnoreCase(elementName)) {
+					scoring = SCORING_FOR_INDEXTERM;
 				}
 				// Get the stemmed word
 				String stemWord = word;
@@ -348,7 +372,7 @@ public class SaxHTMLIndex extends SaxDocFileParser{
 			tempCharBuf.append("\\u3002");
 			Iterator it = cleanUpPunctuation.iterator();
 			while (it.hasNext()){
-				tempCharBuf.append("|").append(it.next());
+				tempCharBuf.append("|"+it.next());
 			}
 		}
 

@@ -56,7 +56,7 @@ function Verifie(ditaSearch_Form) {
 
 
     $.cookie('textToSearch', expressionInput);
-    */
+
     //-------------------------OXYGEN PATCH END-------------------------
 
 
@@ -75,9 +75,27 @@ function Verifie(ditaSearch_Form) {
     }
     else {
         //-------------------------OXYGEN PATCH START-------------------------
-        // Allow to search maximum 10 words
-		noWords = searchTextField.split(" ");    	
+       // OXYGEN PATCH START - EXM-20996 - split by " ", ".", ":", "-"
+    var splitSpace = searchTextField.split(" ");
+       var splitWords = [];
+        for (var i = 0 ; i < splitSpace.length ; i++) {
+          var splitDot = splitSpace[i].split(".");
+          for (var i1 = 0; i1 < splitDot.length; i1++) {
+               var splitColon = splitDot[i1].split(":");
+            for (var i2 = 0; i2 < splitColon.length; i2++) {
+                var splitDash = splitColon[i2].split("-");
+                 for (var i3 = 0; i3 < splitDash.length; i3++) {
+                     if (splitDash[i3].split("").length > 0) {
+                           splitWords.push(splitDash[i3]);
+                       }
+                 }
+            }
+          }
+       }
+       noWords = splitWords;
+       // OXYGEN PATCH END - EXM-20996 - split by " ", ".", ":", "-"
     	if (noWords.length > 9){
+          // Allow to search maximum 10 words
     		alert(txt_enter_more_than_10_words);
     		expressionInput = '';
     		for (var x = 0 ; x < 10 ; x++){
@@ -87,6 +105,12 @@ function Verifie(ditaSearch_Form) {
     		document.searchForm.textToSearch.focus();
     	} else {
 	        // Effectuer la recherche
+             // OXYGEN PATCH START - EXM-20996
+             expressionInput = '';
+          for (var x = 0 ; x < noWords.length ; x++) {
+                 expressionInput = expressionInput + " " + noWords[x]; 
+             }
+             // OXYGEN PATCH END - EXM-20996
 	        Effectuer_recherche(expressionInput);
 	        // reactive la fenetre de search (utile car cadres)
 	        /*
@@ -135,14 +159,20 @@ function Effectuer_recherche(expressionInput) {
     //If Lucene CJKTokenizer was used as the indexer, then useCJKTokenizing will be true. Else, do normal tokenizing.
     // 2-gram tokenizinghappens in CJKTokenizing, 
     // OXYGEN PATCH START. If doStem then make tokenize with Stemmer
+    var finalArray;
     if (doStem){
     // OXYGEN PATCH END.
 	    if(useCJKTokenizing){
 	        finalWordsList = cjkTokenize(wordsList);
+          finalArray = finalWordsList;
 	    } else { 
 	        finalWordsList = tokenize(wordsList);
+          finalArray = finalWordsList;
 	    }
-    } 
+    } else if(useCJKTokenizing){
+          finalWordsList = cjkTokenize(wordsList);
+          finalArray = finalWordsList;
+         } else{
 
     //load the scripts with the indices: the following lines do not work on the server. To be corrected
     /*if (IEBrowser) {
@@ -156,7 +186,7 @@ function Effectuer_recherche(expressionInput) {
 	
 	var splitedValues = expressionInput.split(" ");
 	finalWordsList = finalWordsList.concat(splitedValues);
-	var finalArray = finalWordsList;
+            finalArray = finalWordsList;
 	finalArray = removeDuplicate(finalArray);
     // OXYGEN PATCH START.
     var wordsArray = '';
@@ -192,6 +222,7 @@ function Effectuer_recherche(expressionInput) {
     txt_wordsnotfound = expressionInput;
 	finalWordsList = removeDuplicate(finalWordsList);
     //-------------------------OXYGEN PATCH END-------------------------
+   }
     if (finalWordsList.length) {
       //search 'and' and 'or' one time
       fileAndWordList = SortResults(finalWordsList);
@@ -252,7 +283,7 @@ function Effectuer_recherche(expressionInput) {
 					
                     arrayString = 'Array(';
                     for(var x in finalArray){
-                    	if (finalArray[x].length > 2){
+                      if (finalArray[x].length > 2 || useCJKTokenizing){
                     		arrayString+= "'" + finalArray[x] + "',";
                     	} 
                     }
