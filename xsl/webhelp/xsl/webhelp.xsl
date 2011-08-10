@@ -223,6 +223,9 @@ These problems go away when you add this IE=7 mode meta tag.
 	  <!--Scripts/css stylesheets for Search-->
 	  <!-- TODO: Why THREE files? There's absolutely no need for having separate files. 
 		These should have been identified at the optimization phase! --> 
+	  <script type="text/javascript" src="search/l10n.js">
+	    <xsl:comment></xsl:comment>
+	  </script>
 	  <script type="text/javascript" src="search/htmlFileList.js">
 	      <xsl:comment> </xsl:comment>
 	  </script>

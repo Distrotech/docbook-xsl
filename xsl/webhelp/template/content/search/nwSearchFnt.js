@@ -348,7 +348,7 @@ function Effectuer_recherche(expressionInput) {
         }
         results += "</p>";
     } else {
-        results = "<p>" + localeresource.search_no_results + "</p>";
+        results = "<p>" + localeresource.search_no_results + " <span class=\"searchExpression\">" + txt_wordsnotfound + "</span>" + "</p>";
     }
     
     //-------------------------OXYGEN PATCH START-------------------------
