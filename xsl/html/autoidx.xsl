@@ -301,13 +301,22 @@
   <dt>
     <xsl:for-each select="$refs/primary">
       <xsl:if test="@id or @xml:id">
-        <a name="{(@id|@xml:id)[1]}"/>
+        <xsl:choose>
+          <xsl:when test="$generate.id.attributes = 0">
+            <a name="{(@id|@xml:id)[1]}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <span>
+              <xsl:call-template name="id.attribute"/>
+            </span>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
     </xsl:for-each>
     <xsl:value-of select="primary"/>
     <xsl:choose>
       <xsl:when test="$index.links.to.section = 1">
-        <xsl:for-each select="$refs[generate-id() = generate-id(key('primary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
+        <xsl:for-each select="$refs[@zone != '' or generate-id() = generate-id(key('primary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -317,7 +326,8 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="$refs[&scope;]">
+        <xsl:for-each select="$refs[not(see) 
+                              and not(secondary)][&scope;]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -373,13 +383,22 @@
   <dt>
     <xsl:for-each select="$refs/secondary">
       <xsl:if test="@id or @xml:id">
-        <a name="{(@id|@xml:id)[1]}"/>
+        <xsl:choose>
+          <xsl:when test="$generate.id.attributes = 0">
+            <a name="{(@id|@xml:id)[1]}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <span>
+              <xsl:call-template name="id.attribute"/>
+            </span>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
     </xsl:for-each>
     <xsl:value-of select="secondary"/>
     <xsl:choose>
       <xsl:when test="$index.links.to.section = 1">
-        <xsl:for-each select="$refs[generate-id() = generate-id(key('secondary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
+        <xsl:for-each select="$refs[@zone != '' or generate-id() = generate-id(key('secondary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -389,7 +408,8 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="$refs[&scope;]">
+        <xsl:for-each select="$refs[not(see) 
+                                and not(tertiary)][&scope;]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -445,13 +465,22 @@
   <dt>
     <xsl:for-each select="$refs/tertiary">
       <xsl:if test="@id or @xml:id">
-        <a name="{(@id|@xml:id)[1]}"/>
+        <xsl:choose>
+          <xsl:when test="$generate.id.attributes = 0">
+            <a name="{(@id|@xml:id)[1]}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <span>
+              <xsl:call-template name="id.attribute"/>
+            </span>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
     </xsl:for-each>
     <xsl:value-of select="tertiary"/>
     <xsl:choose>
       <xsl:when test="$index.links.to.section = 1">
-        <xsl:for-each select="$refs[generate-id() = generate-id(key('tertiary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
+        <xsl:for-each select="$refs[@zone != '' or generate-id() = generate-id(key('tertiary-section', concat($key, &sep;, &section.id;))[&scope;][1])]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -461,7 +490,7 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="$refs[&scope;]">
+        <xsl:for-each select="$refs[not(see)][&scope;]">
           <xsl:apply-templates select="." mode="reference">
             <xsl:with-param name="position" select="position()"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -607,6 +636,7 @@
 
       <a>
         <xsl:apply-templates select="." mode="class.attribute"/>
+        <xsl:call-template name="id.attribute"/>
         <xsl:attribute name="href">
           <xsl:call-template name="href.target">
             <xsl:with-param name="object" select="$target[1]"/>
@@ -630,6 +660,7 @@
 
       <a>
         <xsl:apply-templates select="." mode="class.attribute"/>
+        <xsl:call-template name="id.attribute"/>
         <xsl:attribute name="href">
           <xsl:call-template name="href.target">
             <xsl:with-param name="object" select="$target[1]"/>

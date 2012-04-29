@@ -3,15 +3,26 @@
         xmlns:exsl="http://exslt.org/common"
         xmlns:ng="http://docbook.org/docbook-ng" 
         xmlns:db="http://docbook.org/ns/docbook"
-        version="1.0" xmlns="http://www.w3.org/1999/xhtml">
+        version="1.0" xmlns="http://www.w3.org/1999/xhtml"
+	exclude-result-prefixes="exsl ng db">
 
-    <xsl:import href="../../xhtml/chunk.xsl"/>
-
+    <xsl:import href="/home/kasun/docbook/docbook-xsl-snapshot/xhtml/chunk.xsl"/>
 
     <xsl:output
             method="html"
             encoding="utf-8"
             cdata-section-elements=""/>
+
+    <xsl:param name="chunker.output.method">
+        <xsl:choose>
+            <xsl:when test="contains(system-property('xsl:vendor'), 'SAXON 6')">saxon:xhtml</xsl:when>
+            <xsl:otherwise>html</xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
+
+    <xsl:param name="doc.title">
+      <xsl:call-template name="get.doc.title"/>
+    </xsl:param>
 
     <!-- webhelp-specific params! -->
     <!-- To be added to normal params file someday -->
@@ -29,12 +40,12 @@
 	This is needed for stemming support and to filter the subtle differences in the languages 
 	'en' (english) is the default. Refer the NOTE: on stemmers given below for more info. -->
     <xsl:param name="webhelp.indexer.language">en</xsl:param>
-    <xsl:param name="webhelp.default.topic"/>
+    <xsl:param name="webhelp.default.topic">index.html</xsl:param>
     <xsl:param name="webhelp.autolabel">0</xsl:param>
     <!-- webhelp-specific params! -->
 
     <!-- Set some reasonable defaults for webhelp output -->
-    <xsl:param name="chunker.output.indent">no</xsl:param>
+    <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
     <xsl:param name="base.dir" select="concat($webhelp.base.dir,'/content/')"/>
@@ -42,100 +53,56 @@
     <!-- Generate the end-of-the-book index -->
     <xsl:param name="generate.index" select="1"/>
     <xsl:param name="inherit.keywords" select="'0'"/>
-    <xsl:param name="local.l10n.xml" select="document('')"/>
     <xsl:param name="para.propagates.style" select="1"/>
     <xsl:param name="phrase.propagates.style" select="1"/>
     <xsl:param name="chunk.first.sections" select="1"/>
+    <xsl:param name="chunk.section.depth" select="1"/>
+    <xsl:param name="use.id.as.filename" select="1"/>
+    <xsl:param name="branding">not set</xsl:param>
+    <xsl:param name="brandname"> </xsl:param>
+
+    <xsl:param name="section.autolabel" select="1"/>
     <xsl:param name="chapter.autolabel" select="1"/>
-    <xsl:param name="section.autolabel" select="0"/>
+    <xsl:param name="appendix.autolabel" select="1"/>
+    <xsl:param name="qandadiv.autolabel" select="1"/>
+    <xsl:param name="reference.autolabel" select="1"/>
+    <xsl:param name="part.autolabel" select="1"/>    
+    <xsl:param name="section.autolabel.max.depth" select="3"/>
+    <xsl:param name="section.label.includes.component.label" select="1"/>
+
+    <xsl:param name="generate.section.toc.level" select="5"/>
+    <xsl:param name="component.label.includes.part.label" select="1"/>
+    <xsl:param name="suppress.footer.navigation">0</xsl:param>
+    <xsl:param name="callout.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/callouts/</xsl:param>
+    <xsl:param name="callouts.extension">1</xsl:param>
+    <xsl:param name="admon.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/admon/</xsl:param>
+    <xsl:param name="admon.graphics" select="0"/>
     <!--xsl:param name="generate.toc">book toc</xsl:param-->
+
+<xsl:param name="generate.toc">
+appendix  toc,title
+article/appendix  nop
+article   toc,title
+book      title,figure,table,example,equation
+chapter   toc,title
+part      toc,title
+preface   toc,title
+qandadiv  toc
+qandaset  toc
+reference toc,title
+sect1     toc
+sect2     toc
+sect3     toc
+sect4     toc
+sect5     toc
+section   toc
+set       toc,title
+</xsl:param>
 
     <!-- Localizations of webhelp specific words. Your contributions for other languages are appreciated.
 	Currently, only around 10 translations needed. -->
-    <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="en">
-            <l:gentext key="Search" text="Search"/>
-            <l:gentext key="Enter_a_term_and_click" text="Enter a term and click "/>
-            <l:gentext key="Go" text="Go"/>
-            <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Results"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="You must enter at least one character."/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Please wait. Search in progress..."/>
-            <l:gentext key="txt_results_for" text="Results for: "/>
-            <l:gentext key="TableofContents" text="Contents"/>
-	    <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
-	    <l:gentext key="Your_search_returned_no_results" text="Your search returned no results."/>
-        </l10n>
-	<!-- The fallback mechansim doesn't seem to work for local l10n stuff -->
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="ja">
-            <l:gentext key="Search" text="検索"/>
-            <l:gentext key="Enter_a_term_and_click" text="用語をクリックして入力してください。"/>
-            <l:gentext key="Go" text="移動"/>
-            <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="検索結果"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="あなたは、少なくとも1つの文字を入力する必要があります。"/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="お使いのブラウザがサポートされていません。 Mozilla Firefoxの使用が推奨されます"/>
-            <l:gentext key="txt_please_wait" text="しばらくお待ちください。検索が進行中です..."/>
-            <l:gentext key="txt_results_for" text="次の検索語の結果： "/>
-	    <l:gentext key="HighlightButton" text="強調表示の切り替えの検索結果"/>
-        </l10n>
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="de">
-            <l:gentext key="Search" text="suchen"/>
-            <l:gentext key="Enter_a_term_and_click" text="Geben Sie einen Begriff ein und klicken Sie "/>
-            <l:gentext key="Go" text="Go"/>
-            <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="Ergebnisse"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="Sie müssen mindestens ein Zeichen."/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="Bitte warten Sie. Die Suche ist im Gange ..."/>
-            <l:gentext key="txt_results_for" text="Ergebnisse für: "/>
-	    <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
-        </l10n>
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="fr">
-            <l:gentext key="Search" text="rechercher"/>
-            <l:gentext key="Enter_a_term_and_click" text="Saisissez un terme et cliquer "/>
-            <l:gentext key="Go" text="Go"/>
-            <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="résultats"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="Vous devez entrer au moins un caractère."/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="S'il vous plaît attendre. La recherche est en cours ..."/>
-            <l:gentext key="txt_results_for" text="Résultats pour: "/>
-	    <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
-        </l10n>
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="zh">
-            <l:gentext key="Search" text="搜索"/>
-            <l:gentext key="Enter_a_term_and_click" text="输入字词，然后点击 "/>
-            <l:gentext key="Go" text="去"/>
-            <l:gentext key="to_perform_a_search" text=" to perform a search."/>
-            <l:gentext key="txt_filesfound" text="条结果"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="您必须输入至少一个字符。"/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="Your browser is not supported. Use of Mozilla Firefox is recommended."/>
-            <l:gentext key="txt_please_wait" text="请稍候。搜索中..."/>
-            <l:gentext key="txt_results_for" text="结果： "/>
-	    <l:gentext key="HighlightButton" text="Toggle search result highlighting"/>
-        </l10n>
-        <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="cs">
-            <l:gentext key="Search" text="Hledání"/>
-            <l:gentext key="Enter_a_term_and_click" text="Zadejte pojem a klikněte "/>
-            <l:gentext key="Go" text="Přejdi"/>
-            <l:gentext key="to_perform_a_search" text=" pro hledání."/>
-            <l:gentext key="txt_filesfound" text="Výsledky"/>
-            <l:gentext key="txt_enter_at_least_1_char" text="Musíte zadat alespoň jeden znak."/>
-            <l:gentext key="txt_browser_not_supported"
-                       text="Váš prohlížeč není podporován. Použití prohlížeče Mozilla Firefox je doporučeno."/>
-            <l:gentext key="txt_please_wait" text="Prosím čekejte. Probíhá hledání..."/>
-            <l:gentext key="txt_results_for" text="Výsledky pro: "/>
-            <l:gentext key="TableofContents" text="Obsah"/>
-           <l:gentext key="HighlightButton" text="Přepnout zvýrazňování výsledků hledání"/>
-        </l10n>
-    </i18n>
+    <!-- Moved to files under 'gentext/locale/', search for WebHelp -->
+    
 
   <xsl:template name="system.head.content">
   <xsl:param name="node" select="."/>
@@ -150,11 +117,13 @@ These problems go away when you add this IE=7 mode meta tag.
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
 <xsl:text>
 </xsl:text>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<xsl:text>
+</xsl:text>
   </xsl:template>
 
     <!-- HTML <head> section customizations -->	
     <xsl:template name="user.head.content">
-  	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <!--  <xsl:message>
             webhelp.tree.cookie.id = <xsl:value-of select="$webhelp.tree.cookie.id"/> +++ <xsl:value-of select="count(//node())"/>
             $webhelp.indexer.language = <xsl:value-of select="$webhelp.indexer.language"/> +++ <xsl:value-of select="count(//node())"/>
@@ -165,45 +134,114 @@ These problems go away when you add this IE=7 mode meta tag.
             var language = "<xsl:value-of select="$webhelp.indexer.language"/>";
             var w = new Object();
             //Localization
-            txt_filesfound = '<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'txt_filesfound'"/>
+            txt_filesfound = '<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'txt_filesfound'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>';
-            txt_enter_at_least_1_char = "<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'txt_enter_at_least_1_char'"/>
+            txt_enter_at_least_1_char = "<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'txt_enter_at_least_1_char'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>";
-            txt_browser_not_supported = "<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'txt_browser_not_supported'"/>
+            txt_browser_not_supported = "<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'txt_browser_not_supported'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>";
-            txt_please_wait = "<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'txt_please_wait'"/>
+            txt_please_wait = "<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'txt_please_wait'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>";
-            txt_results_for = "<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'txt_results_for'"/>
+            txt_results_for = "<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'txt_results_for'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>";
         </script>
-        <style type="text/css">
-            input {
-            margin-bottom: 5px;
-            margin-top: 2px;
-            }
 
-            .folder {
-            display: block;
-            height: 22px;
-            padding-left: 20px;
-            background: transparent url(<xsl:value-of select="$webhelp.common.dir"/>jquery/treeview/images/folder.gif) 0 0px no-repeat;
-            }
-        </style>
+<!-- kasunbg: Order is important between the in-html-file css and the linked css files. Some css declarations in jquery-ui-1.8.2.custom.css are over-ridden. 
+     If that's a concern, just remove the additional css contents inside these default jquery css files. I thought of keeping them intact for easier maintenance! -->
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
 
+        <style type="text/css">
+noscript{
+      font-weight:bold;
+}
+input {
+    margin-bottom: 5px;
+    margin-top: 2px;
+}
+.folder {
+    display: block;
+    height: 22px;
+    padding-left: 20px;
+    background: transparent url(<xsl:value-of select="$webhelp.common.dir"/>jquery/treeview/images/folder.gif) 0 0px no-repeat;
+}
+span.contentsTab {
+    padding-left: 20px;
+    background: url(<xsl:value-of select="$webhelp.common.dir"/>images/toc-icon.png) no-repeat 0 center;
+}
+span.searchTab {
+    padding-left: 20px;
+    background: url(<xsl:value-of select="$webhelp.common.dir"/>images/search-icon.png) no-repeat 0 center;
+}
+
+/* Overide jquery treeview's defaults for ul. */
+.treeview ul {
+    background-color: transparent;
+    margin-top: 4px;
+}		
+#webhelp-currentid {
+    background-color: #D8D8D8 !important;
+}
+.treeview .hover { color: black; }
+.filetree li span a { text-decoration: none; font-size: 12px; color: #517291; }
+
+/* Override jquery-ui's default css customizations. These are supposed to take precedence over those.*/
+.ui-widget-content {
+    border: 0px; 
+    background: none; 
+    color: none;     
+}
+.ui-widget-header {
+    color: #e9e8e9;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #bbc4c5;
+    border-top: 4px solid #e5e5e5;
+    border: medium none;
+    background: #F4F4F4; /* old browsers */
+    background: -moz-linear-gradient(top, #F4F4F4 0%, #E6E4E5 100%); /* firefox */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F4F4F4), color-stop(100%,#E6E4E5)); /* webkit */    
+    font-weight: none;
+}
+.ui-widget-header a { color: none; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
+border: none; background: none; font-weight: none; color: none; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: black; text-decoration: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: none; background: none; font-weight: none; color: none; }
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: none; background: none; font-weight: none; color: none; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { 
+    color: black; text-decoration: none; 	
+    background: #C6C6C6; /* old browsers */
+    background: -moz-linear-gradient(top, #C6C6C6 0%, #D8D8D8 100%); /* firefox */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#C6C6C6), color-stop(100%,#D8D8D8)); /* webkit */
+    -webkit-border-radius:15px; -moz-border-radius:10px;
+    border: 1px solid #f1f1f1;
+}    
+.ui-corner-all { border-radius: 0 0 0 0; }
+
+.ui-tabs { padding: .2em;}
+.ui-tabs .ui-tabs-nav li { top: 0px; margin: -2px 0 1px; text-transform: uppercase; font-size: 10.5px;}
+.ui-tabs .ui-tabs-nav li a { padding: .25em 2em .25em 1em; margin: .5em; text-shadow: 0 1px 0 rgba(255,255,255,.5); }
+        </style>
+
 	<!-- 
 	     browserDetect is an Oxygen addition to warn the user if they're using chrome from the file system.
 	     This breaks the Oxygen search highlighting.
 	-->
-	<script type="text/javascript" src="../common/browserDetect.js">
+	<script type="text/javascript" src="{$webhelp.common.dir}browserDetect.js">
             <xsl:comment> </xsl:comment>
 	</script>
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.4.2.min.js">
@@ -301,9 +339,6 @@ These problems go away when you add this IE=7 mode meta tag.
 	<xsl:message>language: <xsl:value-of select="$webhelp.indexer.language"/> </xsl:message>
 	<!-- * Get a title for current doc so that we let the user -->
 	<!-- * know what document we are processing at this point. -->
-	<xsl:variable name="doc.title">
-	  <xsl:call-template name="get.doc.title"/>
-	</xsl:variable>
 	<xsl:choose>
 	  <!-- Hack! If someone hands us a DocBook V5.x or DocBook NG document,
 	  toss the namespace and continue.  Use the docbook5 namespaced
@@ -437,13 +472,18 @@ These problems go away when you add this IE=7 mode meta tag.
                 </xsl:call-template>
 
                 <div id="content">
-
+                     <noscript> <!-- Show a notification if the user has disabled javascript -->
+                
+						        Javascript is disabled on your browser. Please enable Javascript to navigate the interface properly.
+                   
+                     </noscript>
                     <xsl:call-template name="user.header.content"/>
 
                     <xsl:copy-of select="$content"/>
 
                     <xsl:call-template name="user.footer.content"/>
 
+					<!-- Redundant since the upper navigation bar always visible -->
                     <xsl:call-template name="footer.navigation">
                         <xsl:with-param name="prev" select="$prev"/>
                         <xsl:with-param name="next" select="$next"/>
@@ -473,57 +513,47 @@ These problems go away when you add this IE=7 mode meta tag.
         <xsl:variable name="up" select="parent::*"/>
 
         <div id="header">
-	    <xsl:call-template name="webhelpheader.logo"/>
-
+  	    <xsl:call-template name="webhelpheader.logo"/>
             <!-- Display the page title and the main heading(parent) of it-->
-            <h1 align="center">
-                <xsl:apply-templates select="." mode="object.title.markup"/>
-                <br/>
+            <h1>
+	      <xsl:call-template name="get.doc.title"/>
+	      <br/>
                 <xsl:choose>
                     <xsl:when
-                            test="count($up) &gt; 0 and generate-id($up) != generate-id($home)">
-                        <xsl:apply-templates select="$up" mode="object.title.markup"/>
-                    </xsl:when>
+			test="count($up) &gt; 0 and generate-id($up) != generate-id($home)">
+		      <xsl:apply-templates select="$up" mode="object.title.markup"/>
+		    </xsl:when>
+		    <xsl:when test="not(generate-id(.) = generate-id(/*))">
+		      <xsl:apply-templates select="." mode="object.title.markup"/>
+		    </xsl:when>
                     <xsl:otherwise>&#160;</xsl:otherwise>
                 </xsl:choose>
-            </h1>
-
+	    </h1>
             <!-- Prev and Next links generation-->
-            <div id="navheader" align="right">
+            <div id="navheader">
+	      <xsl:call-template name="user.webhelp.navheader.content"/>
                 <xsl:comment>
                     <!-- KEEP this code. In case of neither prev nor next links are available, this will help to
-                    keep the integrity of the DOM tree-->
+                        keep the integrity of the DOM tree-->
                 </xsl:comment>
                 <!--xsl:with-param name="prev" select="$prev"/>
                 <xsl:with-param name="next" select="$next"/>
                 <xsl:with-param name="nav.context" select="$nav.context"/-->
-                <table>
+                <table class="navLinks">
                     <tr>
-                        <td style="height: 28px; width: 16px;">
-                            <a id="showHideButton" onclick="showHideToc();"
-                               class="pointLeft" title="Hide TOC tree">.
+                        <td>
+                            <a id="showHideButton" href="javascript:showHideToc();"
+                                class="pointLeft" tabindex="5" title="Hide TOC tree">Sidebar
                             </a>
                         </td>
-                        <td>
-			  <xsl:if test="$webhelp.include.search.tab = 'true'">
-                            <img src="{$webhelp.common.dir}images/highlight-blue.gif" alt="H" height="25px"
-                                 onclick="toggleHighlight()" id="showHideHighlight" style="cursor:pointer">
-				<xsl:attribute name="title">
-				  <xsl:call-template name="gentext">
-					<xsl:with-param name="key" select="'HighlightButton'"/>
-				  </xsl:call-template>				  
-				</xsl:attribute>
-			    </img>
-			  </xsl:if>
-                        </td>
                         <xsl:if test="count($prev) &gt; 0
-                                        or (count($up) &gt; 0
-                                        and generate-id($up) != generate-id($home)
-                                        and $navig.showtitles != 0)
-                                        or count($next) &gt; 0">
+                            or (count($up) &gt; 0
+                            and generate-id($up) != generate-id($home)
+                            and $navig.showtitles != 0)
+                            or count($next) &gt; 0">
                             <td>
                                 <xsl:if test="count($prev)>0">
-                                    <a accesskey="p" tabindex="5">
+                                    <a accesskey="p" class="navLinkPrevious" tabindex="5">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$prev"/>
@@ -540,7 +570,7 @@ These problems go away when you add this IE=7 mode meta tag.
                                     <xsl:when test="count($up)&gt;0
                                               and generate-id($up) != generate-id($home)">
                                         |
-                                        <a accesskey="u" tabindex="5">
+                                        <a accesskey="u" class="navLinkUp" tabindex="5">
                                             <xsl:attribute name="href">
                                                 <xsl:call-template name="href.target">
                                                     <xsl:with-param name="object" select="$up"/>
@@ -556,7 +586,7 @@ These problems go away when you add this IE=7 mode meta tag.
                                 
                                 <xsl:if test="count($next)>0">
                                     |
-                                    <a accesskey="n" tabindex="5">
+                                    <a accesskey="n" class="navLinkNext" tabindex="5">
                                         <xsl:attribute name="href">
                                             <xsl:call-template name="href.target">
                                                 <xsl:with-param name="object" select="$next"/>
@@ -576,9 +606,19 @@ These problems go away when you add this IE=7 mode meta tag.
     </xsl:template>
 
     <xsl:template name="webhelpheader.logo">
-      <img style='margin-right: 2px; height: 59px; padding-right: 25px; padding-top: 8px' align="right"
-	   src='{$webhelp.common.dir}images/logo.png' alt="Company Logo"/>
+	<a target="_blank">
+	    <xsl:attribute name="href">
+		<xsl:choose>
+		    <xsl:when test="$branding = 'docbook'">http://docbook.org/</xsl:when>
+		    <xsl:otherwise>#</xsl:otherwise>
+		</xsl:choose>
+	    </xsl:attribute>
+	<img style='margin-right: 2px; height: 59px; padding-right: 25px; padding-top: 8px' align="right"
+	    src='{$webhelp.common.dir}images/logo.png' alt="{$brandname} Documentation"/>
+	</a>
     </xsl:template>
+
+    <xsl:template name="user.webhelp.navheader.content"/>
 
     <xsl:template name="webhelptoc">
         <xsl:param name="currentid"/>
@@ -593,7 +633,7 @@ These problems go away when you add this IE=7 mode meta tag.
                             <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
                         </xsl:if>
                     </xsl:if>
-                    <xsl:apply-templates select="key('id',$rootid)" mode="title.markup"/>
+                    <xsl:apply-templates select="key('id',$rootid)" mode="titleabbrev.markup"/>
                 </xsl:variable>
                 <xsl:variable name="href">
                     <xsl:choose>
@@ -621,7 +661,7 @@ These problems go away when you add this IE=7 mode meta tag.
                             <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
                         </xsl:if>
                     </xsl:if>
-                    <xsl:apply-templates select="/*" mode="title.markup"/>
+                    <xsl:apply-templates select="/*" mode="titleabbrev.markup"/>
                 </xsl:variable>
                 <xsl:variable name="href">
                     <xsl:choose>
@@ -638,27 +678,29 @@ These problems go away when you add this IE=7 mode meta tag.
                     </xsl:choose>
                 </xsl:variable>
 
-                <div>
-                    <div id="leftnavigation" style="padding-top:3px; background-color:white;">
+                <div id="sidebar"> <!--#sidebar id is used for showing and hiding the side bar -->
+                    <div id="leftnavigation" style="padding-top:3px;">
                         <div id="tabs">
                             <ul>
                                 <li>
-                                    <a href="#treeDiv" tabindex="1">
-                                        <em>
-                                            <xsl:call-template name="gentext">
-                                                <xsl:with-param name="key" select="'TableofContents'"/>
+                                    <a href="#treeDiv" style="outline:0;" tabindex="1">
+                                        <span class="contentsTab">
+                                            <xsl:call-template name="gentext.template">
+                                                <xsl:with-param name="name" select="'TableofContents'"/>
+						<xsl:with-param name="context" select="'webhelp'"/>
                                             </xsl:call-template>
-                                        </em>
+                                        </span>
                                     </a>
                                 </li>
                                 <xsl:if test="$webhelp.include.search.tab != 'false'">
                                     <li>
-                                        <a href="#searchDiv" tabindex="1">
-                                            <em>
-                                                <xsl:call-template name="gentext">
-                                                    <xsl:with-param name="key" select="'Search'"/>
+                                        <a href="#searchDiv" style="outline:0;" tabindex="1" onclick="doSearch()">
+                                            <span class="searchTab">
+                                                <xsl:call-template name="gentext.template">
+                                                    <xsl:with-param name="name" select="'Search'"/>
+						    <xsl:with-param name="context" select="'webhelp'"/>
                                                 </xsl:call-template>
-                                            </em>
+                                            </span>
                                         </a>
                                     </li>
                                 </xsl:if>
@@ -684,12 +726,13 @@ These problems go away when you add this IE=7 mode meta tag.
                                               class="searchForm">
                                             <fieldset class="searchFieldSet">
                                                 <legend>
-                                                    <xsl:call-template name="gentext">
-                                                        <xsl:with-param name="key" select="'Search'"/>
+                                                    <xsl:call-template name="gentext.template">
+                                                        <xsl:with-param name="name" select="'Search'"/>
+							<xsl:with-param name="context" select="'webhelp'"/>
                                                     </xsl:call-template>
                                                 </legend>
                                                 <center>
-                                                    <input id="textToSearch" name="textToSearch" type="text"
+                                                    <input id="textToSearch" name="textToSearch" type="search" 
                                                            class="searchText" tabindex="1"/>
                                                     <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
                                                     <input onclick="Verifie(searchForm)" type="button"
@@ -702,6 +745,7 @@ These problems go away when you add this IE=7 mode meta tag.
                                     <div id="searchResults">
                                            <center> </center>
                                     </div>
+                                    <p class="searchHighlight"><a href="#" onclick="toggleHighlight()">Search Highlighter (On/Off)</a></p>
                                 </div>
                             </xsl:if>
 			    <xsl:call-template name="user.webhelp.tabs.content"/>
@@ -718,7 +762,7 @@ These problems go away when you add this IE=7 mode meta tag.
 
     <!-- Generates the webhelp table-of-contents (TOC). -->
     <xsl:template
-            match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
+            match="book|part|reference|preface|chapter|bibliography|appendix|article|topic|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index|setindex"
             mode="webhelptoc">
         <xsl:param name="currentid"/>
         <xsl:variable name="title">
@@ -730,7 +774,7 @@ These problems go away when you add this IE=7 mode meta tag.
                     <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
                 </xsl:if>
             </xsl:if>
-            <xsl:apply-templates select="." mode="title.markup"/>
+            <xsl:apply-templates select="." mode="titleabbrev.markup"/>
         </xsl:variable>
 
         <xsl:variable name="href">
@@ -757,10 +801,10 @@ These problems go away when you add this IE=7 mode meta tag.
                         <xsl:value-of select="$title"/>
                     </a>
                 </span>
-                <xsl:if test="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv">
+                <xsl:if test="part|reference|preface|chapter|bibliography|appendix|article|topic|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv">
                     <ul>
                         <xsl:apply-templates
-                                select="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv"
+                                select="part|reference|preface|chapter|bibliography|appendix|article|topic|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv"
                                 mode="webhelptoc">
                             <xsl:with-param name="currentid" select="$currentid"/>
                         </xsl:apply-templates>
@@ -774,7 +818,7 @@ These problems go away when you add this IE=7 mode meta tag.
 
     <xsl:template name="user.footer.content">
         <script type="text/javascript" src="{$webhelp.common.dir}main.js">
-            <xsl:comment></xsl:comment>
+            <xsl:comment> </xsl:comment>
         </script>
     </xsl:template>
  
@@ -829,8 +873,7 @@ These problems go away when you add this IE=7 mode meta tag.
                     <head>
 		      <link rel="shortcut icon" href="favicon.ico"/>
 		      <meta http-equiv="Refresh" content="1; URL=content/{$default.topic}"/>
-		      <title><xsl:value-of select="//title[1]"/>&#160;
-		      </title>
+		      <title><xsl:value-of select="//title[1]"/>&#160;</title>
                     </head>
                     <body>
 		      If not automatically redirected, click <a href="content/{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
@@ -851,11 +894,13 @@ These problems go away when you add this IE=7 mode meta tag.
             <xsl:with-param name="content">
 	      //Resource strings for localization
 	      var localeresource = new Object;
-	      localeresource["search_no_results"]="<xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'Your_search_returned_no_results'"/>
+	      localeresource["search_no_results"]="<xsl:call-template name="gentext.template">
+                <xsl:with-param name="name" select="'Your_search_returned_no_results'"/>
+		<xsl:with-param name="context" select="'webhelp'"/>
                 </xsl:call-template>";
             </xsl:with-param>
         </xsl:call-template>    
     </xsl:template>
 
 </xsl:stylesheet> 
+

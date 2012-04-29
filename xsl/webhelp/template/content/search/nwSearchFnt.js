@@ -37,10 +37,11 @@ txt_please_wait = "Please wait. Search in progress...";
 txt_results_for = "Results for: ";
 //-------------------------OXYGEN PATCH END-------------------------
 
-/* Cette fonction verifie la validite de la recherche entrre par l utilisateur */
-function Verifie(ditaSearch_Form) {
+/* This function verify the validity of search input by the user
+  Cette fonction verifie la validite de la recherche entrre par l utilisateur */
+function Verifie(searchForm) {
 
-    // Check browser compatibitily
+    // Check browser compatibility
     if (navigator.userAgent.indexOf("Konquerer") > -1) {
 
         alert(txt_browser_not_supported);
@@ -48,15 +49,10 @@ function Verifie(ditaSearch_Form) {
     }
 
     //-------------------------OXYGEN PATCH START-------------------------
-    /*
-    var expressionInput = document.ditaSearch_Form.textToSearch.value
-    */
     searchTextField = trim(document.searchForm.textToSearch.value);
-	var expressionInput = searchTextField;	
-
-
+    searchTextField = searchTextField.replace(/['"]/g,'');
+	var expressionInput = searchTextField;
     $.cookie('textToSearch', expressionInput);
-
     //-------------------------OXYGEN PATCH END-------------------------
 
 
@@ -66,10 +62,7 @@ function Verifie(ditaSearch_Form) {
         alert(txt_enter_at_least_1_char);
         // reactive la fenetre de search (utile car cadres)
 
-        //-------------------------OXYGEN PATCH START-------------------------
-        /*
-        document.ditaSearch_Form.textToSearch.focus();
-        */
+        //-------------------------OXYGEN PATCH START------------------------
         document.searchForm.textToSearch.focus();
         //-------------------------OXYGEN PATCH END-------------------------
     }
@@ -113,9 +106,6 @@ function Verifie(ditaSearch_Form) {
              // OXYGEN PATCH END - EXM-20996
 	        Effectuer_recherche(expressionInput);
 	        // reactive la fenetre de search (utile car cadres)
-	        /*
-	        document.ditaSearch_Form.textToSearch.focus();
-	        */
 	        document.searchForm.textToSearch.focus();        
 	        //-------------------------OXYGEN PATCH END-------------------------
     	}
@@ -141,8 +131,20 @@ function Effectuer_recherche(expressionInput) {
     var txt_wordsnotfound = "";
 
 
+    // --------------------------------------
+    // Begin Thu's patch 
     /*nqu: expressionInput, la recherche est lower cased, plus remplacement des char speciaux*/
-    searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/\.|%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
+    //The original replacement expression is: 
+    //searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/\.|%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
+    //The above expression was error prone because it did not deal with words that have a . as part of the word correctly, for example, document.txt
+    
+    //Do not automatically replace a . with a space
+    searchFor = expressionInput.toLowerCase().replace(/<\//g, "_st_").replace(/\$_/g, "_di_").replace(/%2C|%3B|%21|%3A|@|\/|\*/g, " ").replace(/(%20)+/g, " ").replace(/_st_/g, "</").replace(/_di_/g, "%24_");
+    
+    //If it ends with a period, replace it with a space
+    searchFor = searchFor.replace(/[.]$/,"");
+    // End Thu's Patch
+    // ------------------------------------------
 
     searchFor = searchFor.replace(/  +/g, " ");
     searchFor = searchFor.replace(/ $/, "").replace(/^ /, "");
@@ -151,11 +153,7 @@ function Effectuer_recherche(expressionInput) {
     wordsList.sort();
 
     //set the tokenizing method
-    if(typeof indexerLanguage != "undefined" && (indexerLanguage=="zh" || indexerLanguage=="ja" ||indexerLanguage=="ko")){
-        useCJKTokenizing=true;
-    } else {
-        useCJKTokenizing=false;
-    }
+    useCJKTokenizing = typeof indexerLanguage != "undefined" && (indexerLanguage == "zh" || indexerLanguage == "ja" || indexerLanguage == "ko");
     //If Lucene CJKTokenizer was used as the indexer, then useCJKTokenizing will be true. Else, do normal tokenizing.
     // 2-gram tokenizinghappens in CJKTokenizing, 
     // OXYGEN PATCH START. If doStem then make tokenize with Stemmer
@@ -184,39 +182,27 @@ function Effectuer_recherche(expressionInput) {
      */
     var tempTab = new Array();
 	
-	var splitedValues = expressionInput.split(" ");
-	finalWordsList = finalWordsList.concat(splitedValues);
-            finalArray = finalWordsList;
-	finalArray = removeDuplicate(finalArray);
-    // OXYGEN PATCH START.
-    var wordsArray = '';
-    // OXYGEN PATCH END.
-    for (var t in finalWordsList) {	
-    // OXYGEN PATCH START.
-		if (doStem){
-    // OXYGEN PATCH END.
-	        if (w[finalWordsList[t].toString()] == undefined) {
-	            txt_wordsnotfound += finalWordsList[t] + " ";
-	        } else {
-	            tempTab.push(finalWordsList[t]);
+    // ---------------------------------------
+    // Thu's patch
+    //Do not use associative array in for loop, for example:
+    //for(var t in finalWordsList)
+    //it causes errors when finalWordList contains 
+    //stemmed words such as: kei from the stemmed word: key
+    for(var t=0;t<finalWordsList.length;++t){
+        var aWord=finalWordsList[t];
+        //w is a Map like Object, use the current word in finalWordList as the key
+        if(w[aWord] == undefined){
+            txt_wordsnotfound += aWord + " ";
 	        }
-    // OXYGEN PATCH START.
-    	} else {
-    		var searchedValue = finalWordsList[t].toString();
-    		if (wordsStartsWith(searchedValue) != undefined){
-    			wordsArray+=wordsStartsWith(searchedValue);
+        else{
+            tempTab.push(aWord);
     		}
     	}
-    // OXYGEN PATCH END.
-    }
-    // OXYGEN PATCH START.
-    wordsArray = wordsArray.substr(0, wordsArray.length - 1);    
-	if (!doStem){		
-		finalWordsList = wordsArray.split(",");
-	} else {
     	finalWordsList = tempTab;		
-	}
-    // OXYGEN PATCH END.
+    //Check all the inputs to see if the root words are in the finalWordsList, if not add them there
+    var inputs = expressionInput.split(' ');
+    // Thu's Patch 
+    // -------------------------------------------
 
     //-------------------------OXYGEN PATCH START-----------------------
     txt_wordsnotfound = expressionInput;
@@ -289,8 +275,7 @@ function Effectuer_recherche(expressionInput) {
                     }
                     arrayString = arrayString.substring(0,arrayString.length - 1) + ")";
                     var idLink = 'foundLink' + no;
-                    var link = 'openAndHighlight(\'' + tempPath + '\', ' + arrayString + ', \'' + idLink + '\')';
-                    var linkString = '<li><a id="' + idLink + '" href="' + tempPath + '" class="foundResult" onclick="'+link+'">' + tempTitle + '</a>';
+                    var linkString = '<li><a id="' + idLink + '" href="' + tempPath + '" class="foundResult">' + tempTitle + '</a>';
                     var starWidth = (ttScore * 100/ hundredProcent)/(ttScore_first/hundredProcent) * (numberOfWords/maxNumberOfWords);
                     starWidth = starWidth < 10 ? (starWidth + 5) : starWidth;
                     // Keep the 5 stars format
@@ -396,16 +381,30 @@ function wordsStartsWith(searchedValue){
 function tokenize(wordsList){
     var stemmedWordsList = new Array(); // Array with the words to look for after removing spaces
     var cleanwordsList = new Array(); // Array with the words to look for
-    for(var j in wordsList){
+    // -------------------------------------------------
+    // Thu's patch
+    for(var j=0;j<wordsList.length;++j){
         var word = wordsList[j];
+        var originalWord=word;
         if(typeof stemmer != "undefined" ){
+            var stemmedWord=stemmer(word);
+            if(w[stemmedWord]!=undefined){
             stemQueryMap[stemmer(word)] = word;
+            }
+            else{
+                stemQueryMap[originalWord]=originalWord;
+            }
         } else {
+            if(w[word]!=undefined){
             stemQueryMap[word] = word;
+        }
+            else{
+                stemQueryMap[originalWord]=originalWord;
+            }
         }
     } 
      //stemmedWordsList is the stemmed list of words separated by spaces.
-    for (var t in wordsList) {
+    for (var t=0;t<wordsList.length;++t) {
         wordsList[t] = wordsList[t].replace(/(%22)|^-/g, "");
         if (wordsList[t] != "%20") {
             scriptLetterTab.add(wordsList[t].charAt(0));
@@ -417,8 +416,15 @@ function tokenize(wordsList){
         //Do the stemming using Porter's stemming algorithm
         for (var i = 0; i < cleanwordsList.length; i++) {			
             var stemWord = stemmer(cleanwordsList[i]);			
+            if(w[stemWord]!=undefined){
             stemmedWordsList.push(stemWord);
         }
+            else{
+                stemmedWordsList.push(cleanwordsList[i]);               
+            }
+        }
+    // End Thu's patch
+    // -------------------------------------------
     } else {
         stemmedWordsList = cleanwordsList;
     }
@@ -673,23 +679,26 @@ function SortResults(mots) {
     for (var t in mots) {
         // get the list of the indices of the files.
         var listNumerosDesFicStr = w[mots[t].toString()];        
-        //alert ("listNumerosDesFicStr "+listNumerosDesFicStr);
-        var tab = listNumerosDesFicStr.split(",");
-        //for each file (file's index):
-        for (var t2 in tab) {
-            var tmp = '';
-            var idx = '';
-            var temp = tab[t2].toString();
-            if (temp.indexOf('*') != -1){
-                idx = temp.indexOf('*');
-                tmp = temp.substring(idx + 3, temp.length);
-                temp = temp.substring(0,idx);
-            }
-            scoringArr.push(tmp);
-            if (fileAndWordList[temp] == undefined) {
-                fileAndWordList[temp] = "" + mots[t];
-            } else {
-                fileAndWordList[temp] += "," + mots[t];
+        if (listNumerosDesFicStr != undefined) {
+            //alert ("listNumerosDesFicStr "+listNumerosDesFicStr);
+            var tab = listNumerosDesFicStr.split(",");
+            //for each file (file's index):
+            for (var t2 in tab) {
+                var tmp = '';
+                var idx = '';
+                var temp = tab[t2].toString();
+                if (temp.indexOf('*') != -1) {
+                    idx = temp.indexOf('*');
+                    tmp = temp.substring(idx + 3, temp.length);
+                    temp = temp.substring(0, idx);
+                }
+                scoringArr.push(tmp);
+                if (fileAndWordList[temp] == undefined) {
+                    fileAndWordList[temp] = "" + mots[t];
+                } else {
+                    fileAndWordList[temp] += "," + mots[t];
+                }
+                //console.info("fileAndWordList[" + temp + "]=" + fileAndWordList[temp] + " : " + tmp);
             }
             //console.info("fileAndWordList[" + temp + "]=" + fileAndWordList[temp] + " : " + tmp);
         }
@@ -700,7 +709,11 @@ function SortResults(mots) {
     finalObj = new Array();
     for (t in fileAndWordList) {    	
     	finalObj.push(new newObj(t,fileAndWordList[t]));
-    }    
+    }
+
+    if ( finalObj.length == 0 ) {   // None of the queried words are not in the index (stemmed or not)
+        return null;
+    }
     finalObj = removeDerivates(finalObj);
     for (t in finalObj) {
         tab = finalObj[t].wordList.split(',');
@@ -728,20 +741,20 @@ function SortResults(mots) {
     fileAndWordListValuesOnly = fileAndWordListValuesOnly.sort(compare_nbMots);
 
     var listToOutput = new Array();
-    for (var j in fileAndWordListValuesOnly) {
+    for (var fawlvoIdx in fileAndWordListValuesOnly) {
         for (t in temptab) {
-            if (temptab[t].motsliste == fileAndWordListValuesOnly[j]) {
-                if (listToOutput[j] == undefined) {
-                    listToOutput[j] = new Array(temptab[t]);
+            if (temptab[t].motsliste == fileAndWordListValuesOnly[fawlvoIdx]) {
+                if (listToOutput[fawlvoIdx] == undefined) {
+                    listToOutput[fawlvoIdx] = new Array(temptab[t]);
                 } else {
-                    listToOutput[j].push(temptab[t]);
+                    listToOutput[fawlvoIdx].push(temptab[t]);
                 }
             }
         }
     }		
   // Sort results by scoring, descending on the same group
-	for (var i in listToOutput) {
-	    listToOutput[i].sort(function(a, b){
+	for (var ltoIdx in listToOutput) {
+	    listToOutput[ltoIdx].sort(function(a, b){
 			return b.scoring - a.scoring;
 		});
 	}

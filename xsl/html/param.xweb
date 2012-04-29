@@ -28,6 +28,10 @@ $Id$
   <year>2005</year>
   <year>2006</year>
   <year>2007</year>
+ <year>2008</year>
+  <year>2009</year>
+  <year>2010</year>
+  <year>2011</year>
   <holder>Norman Walsh</holder>
 </copyright>
 <abstract>
@@ -116,9 +120,11 @@ $Id$
 -->
 <reference xml:id="html"><title>HTML</title>
 &html.base;
-&html.stylesheet.type;
 &html.stylesheet;
+&html.stylesheet.type;
 &css.decoration;
+&html.script;
+&html.script.type;
 &spacing.paras;
 &emphasis.propagates.style;
 &para.propagates.style;
@@ -132,6 +138,7 @@ $Id$
 &draft.mode;
 &draft.watermark.image;
 &generate.id.attributes;
+&generate.consistent.ids;
 &generate.meta.abstract;
 &make.clean.html;
 &docbook.css.source;
@@ -308,6 +315,7 @@ $Id$
 &html.extra.head.links;
 &root.filename;
 &base.dir;
+&chunked.filename.prefix;
 &generate.manifest;
 &manifest;
 &manifest.in.base.dir;
@@ -480,6 +488,7 @@ around all these parameters.</para>
 <src:fragref linkend="chunk.toc.frag"/>
 <src:fragref linkend="chunk.tocs.and.lots.frag"/>
 <src:fragref linkend="chunk.tocs.and.lots.has.title.frag"/>
+<src:fragref linkend="chunked.filename.prefix.frag"/>
 <src:fragref linkend="citerefentry.link.frag"/>
 <src:fragref linkend="collect.xref.targets.frag"/>
 <src:fragref linkend="component.label.includes.part.label.frag"/>
@@ -517,6 +526,7 @@ around all these parameters.</para>
 <src:fragref linkend="funcsynopsis.decoration.frag"/>
 <src:fragref linkend="funcsynopsis.style.frag"/>
 <src:fragref linkend="function.parens.frag"/>
+<src:fragref linkend="generate.consistent.ids.frag"/>
 <src:fragref linkend="generate.css.header.frag"/>
 <src:fragref linkend="generate.id.attributes.frag"/>
 <src:fragref linkend="generate.index.frag"/>
@@ -548,6 +558,8 @@ around all these parameters.</para>
 <src:fragref linkend="html.head.legalnotice.link.types.frag"/>
 <src:fragref linkend="html.longdesc.frag"/>
 <src:fragref linkend="html.longdesc.link.frag"/>
+<src:fragref linkend="html.script.frag"/>
+<src:fragref linkend="html.script.type.frag"/>
 <src:fragref linkend="html.stylesheet.frag"/>
 <src:fragref linkend="html.stylesheet.type.frag"/>
 <src:fragref linkend="htmlhelp.alias.file.frag"/>

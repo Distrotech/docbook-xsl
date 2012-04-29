@@ -53,9 +53,21 @@
              or $lcext = 'jpg'
              or $lcext = 'avi'
              or $lcext = 'mpg'
+             or $lcext = 'mp4'
              or $lcext = 'mpeg'
              or $lcext = 'qt'
              or $lcext = 'gif'
+             or $lcext = 'acc'
+             or $lcext = 'mp1'
+             or $lcext = 'mp2'
+             or $lcext = 'mp3'
+             or $lcext = 'mp4'
+             or $lcext = 'm4v'
+             or $lcext = 'm4a'
+             or $lcext = 'wav'
+             or $lcext = 'ogv'
+             or $lcext = 'ogg'
+             or $lcext = 'webm'
              or $lcext = 'bmp'">1</xsl:if>
 </xsl:template>
 
@@ -64,6 +76,7 @@
 <xsl:template match="screenshot">
   <div>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="id.attribute"/>
     <xsl:apply-templates/>
   </div>
 </xsl:template>
@@ -1019,11 +1032,13 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
     </xsl:attribute>
   </xsl:if>
 
+  <!-- Turn off longdesc attribute since not supported by browsers
   <xsl:if test="$longdesc != ''">
     <xsl:attribute name="longdesc">
       <xsl:value-of select="$longdesc"/>
     </xsl:attribute>
   </xsl:if>
+  -->
 
   <xsl:if test="@align and $viewport = 0">
     <xsl:attribute name="align">
@@ -1042,11 +1057,15 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 <xsl:template match="graphic">
   <xsl:choose>
     <xsl:when test="parent::inlineequation">
-      <xsl:call-template name="anchor"/>
-      <xsl:call-template name="process.image"/>
+      <span>
+        <xsl:call-template name="id.attribute"/>
+        <xsl:call-template name="anchor"/>
+        <xsl:call-template name="process.image"/>
+      </span>
     </xsl:when>
     <xsl:otherwise>
       <div>
+        <xsl:call-template name="id.attribute"/>
         <xsl:if test="@align">
           <xsl:attribute name="align">
             <xsl:value-of select="@align"/>
@@ -1134,6 +1153,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
         <xsl:value-of select="$align"/>
       </xsl:attribute>
     </xsl:if>
+    <xsl:call-template name="id.attribute"/>
     <xsl:call-template name="anchor"/>
 
     <xsl:apply-templates select="$object"/>
@@ -1144,6 +1164,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 <xsl:template match="inlinemediaobject">
   <span>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="id.attribute"/>
     <xsl:call-template name="anchor"/>
     <xsl:call-template name="select.mediaobject"/>
   </span>
@@ -1159,8 +1180,32 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
 <xsl:template match="imageobjectco">
   <xsl:call-template name="anchor"/>
-  <xsl:apply-templates select="imageobject"/>
+  <xsl:choose>
+    <!-- select one imageobject? -->
+    <xsl:when test="$use.role.for.mediaobject != 0 and
+                    count(imageobject) &gt; 1 and
+                    imageobject[@role]">
+      <xsl:variable name="olist" select="imageobject"/>
+    
+      <xsl:variable name="object.index">
+        <xsl:call-template name="select.mediaobject.index">
+          <xsl:with-param name="olist" select="$olist"/>
+          <xsl:with-param name="count" select="1"/>
+        </xsl:call-template>
+      </xsl:variable>
+    
+      <xsl:variable name="object" select="$olist[position() = $object.index]"/>
+    
+      <xsl:apply-templates select="$object"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- otherwise process them all -->
+      <xsl:apply-templates select="imageobject"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
   <xsl:apply-templates select="calloutlist"/>
+
 </xsl:template>
 
 <xsl:template match="imageobject">
@@ -1260,7 +1305,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                 <xsl:value-of select="$dbhtml.dir"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="$base.dir"/>
+                <xsl:value-of select="$chunk.base.dir"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
@@ -1339,7 +1384,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
   <xsl:variable name="this.uri">
     <xsl:call-template name="make-relative-filename">
-      <xsl:with-param name="base.dir" select="$base.dir"/>
+      <xsl:with-param name="base.dir" select="$chunk.base.dir"/>
       <xsl:with-param name="base.name">
         <xsl:call-template name="href.target.uri"/>
       </xsl:with-param>
@@ -1454,6 +1499,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 <xsl:template match="caption">
   <div>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="id.attribute"/>
     <xsl:if test="@align = 'right' or @align = 'left' or @align='center'">
       <xsl:attribute name="align"><xsl:value-of
                          select="@align"/></xsl:attribute>

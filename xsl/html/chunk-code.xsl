@@ -54,6 +54,8 @@
     <xsl:call-template name="dbhtml-dir"/>
   </xsl:if>
 
+  <xsl:value-of select="$chunked.filename.prefix"/>
+
   <xsl:value-of select="$fn"/>
   <!-- You can't add the html.ext here because dbhtml filename= may already -->
   <!-- have added it. It really does have to be handled in the recursive template -->
@@ -369,6 +371,25 @@
       </xsl:if>
     </xsl:when>
 
+    <xsl:when test="self::topic">
+      <xsl:choose>
+        <xsl:when test="/set">
+          <!-- in a set, make sure we inherit the right book info... -->
+          <xsl:apply-templates mode="recursive-chunk-filename" select="parent::*">
+            <xsl:with-param name="recursive" select="true()"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:text>to</xsl:text>
+      <xsl:number level="any" format="01" from="book"/>
+      <xsl:if test="not($recursive)">
+        <xsl:value-of select="$html.ext"/>
+      </xsl:if>
+    </xsl:when>
+
     <xsl:otherwise>
       <xsl:text>chunk-filename-error-</xsl:text>
       <xsl:value-of select="name(.)"/>
@@ -421,19 +442,7 @@
 	 stylesheets for DocBook5 if you don't want to use this feature.-->
     <xsl:when test="$exsl.node.set.available != 0 
                     and (*/self::ng:* or */self::db:*)">
-      <xsl:call-template name="log.message">
-        <xsl:with-param name="level">Note</xsl:with-param>
-        <xsl:with-param name="source" select="$doc.title"/>
-        <xsl:with-param name="context-desc">
-          <xsl:text>namesp. cut</xsl:text>
-        </xsl:with-param>
-        <xsl:with-param name="message">
-          <xsl:text>stripped namespace before processing</xsl:text>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:variable name="nons">
-        <xsl:apply-templates mode="stripNS"/>
-      </xsl:variable>
+
       <xsl:call-template name="log.message">
         <xsl:with-param name="level">Note</xsl:with-param>
         <xsl:with-param name="source" select="$doc.title"/>
@@ -444,7 +453,8 @@
           <xsl:text>processing stripped document</xsl:text>
         </xsl:with-param>
       </xsl:call-template>
-      <xsl:apply-templates select="exsl:node-set($nons)"/>
+
+      <xsl:apply-templates select="exsl:node-set($no.namespace)"/>
     </xsl:when>
     <!-- Can't process unless namespace removed -->
     <xsl:when test="*/self::ng:* or */self::db:*">
@@ -517,6 +527,7 @@
 
 <xsl:template match="set|book|part|preface|chapter|appendix
                      |article
+                     |topic
                      |reference|refentry
                      |book/glossary|article/glossary|part/glossary
                      |book/bibliography|article/bibliography|part/bibliography
@@ -589,6 +600,7 @@
 <!-- ==================================================================== -->
 <xsl:template match="set|book|part|preface|chapter|appendix
                      |article
+                     |topic
                      |reference|refentry
                      |sect1|sect2|sect3|sect4|sect5
                      |section
@@ -601,7 +613,7 @@
     <xsl:call-template name="make-relative-filename">
       <xsl:with-param name="base.dir">
         <xsl:if test="$manifest.in.base.dir = 0">
-          <xsl:value-of select="$base.dir"/>
+          <xsl:value-of select="$chunk.base.dir"/>
         </xsl:if>
       </xsl:with-param>
       <xsl:with-param name="base.name">
@@ -621,7 +633,7 @@
       <xsl:call-template name="make-relative-filename">
         <xsl:with-param name="base.dir">
           <xsl:if test="$manifest.in.base.dir = 0">
-            <xsl:value-of select="$base.dir"/>
+            <xsl:value-of select="$chunk.base.dir"/>
           </xsl:if>
         </xsl:with-param>
         <xsl:with-param name="base.name">
@@ -640,7 +652,7 @@
     <xsl:call-template name="make-relative-filename">
       <xsl:with-param name="base.dir">
         <xsl:if test="$manifest.in.base.dir = 0">
-          <xsl:value-of select="$base.dir"/>
+          <xsl:value-of select="$chunk.base.dir"/>
         </xsl:if>
       </xsl:with-param>
       <xsl:with-param name="base.name">

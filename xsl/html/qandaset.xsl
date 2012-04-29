@@ -34,9 +34,12 @@
 
   <div>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="id.attribute">
+      <xsl:with-param name="conditional" select="0"/>
+    </xsl:call-template>
     <xsl:apply-templates select="$title"/>
     <xsl:if test="not($title)">
-      <!-- id is output on title if there is one -->
+      <!-- andhor is output on title if there is one -->
       <xsl:call-template name="anchor">
         <xsl:with-param name="conditional" select="0"/>
       </xsl:call-template>
@@ -121,6 +124,10 @@
 
   <xsl:element name="h{string(number($qalevel)+1)}">
     <xsl:apply-templates select="." mode="class.attribute"/>
+    <xsl:call-template name="id.attribute">
+      <xsl:with-param name="node" select=".."/>
+      <xsl:with-param name="conditional" select="0"/>
+    </xsl:call-template>
     <xsl:call-template name="anchor">
       <xsl:with-param name="node" select=".."/>
       <xsl:with-param name="conditional" select="0"/>
@@ -145,7 +152,16 @@
 
   <tr>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <!-- capture the id of the  quandaentry -->
+    <xsl:call-template name="id.attribute">
+      <xsl:with-param name="node" select=".."/>
+      <xsl:with-param name="conditional" select="0"/>
+    </xsl:call-template>
     <td align="{$direction.align.start}" valign="top">
+      <!-- and the id of the question too -->
+      <xsl:call-template name="id.attribute">
+        <xsl:with-param name="conditional" select="0"/>
+      </xsl:call-template>
       <xsl:call-template name="anchor">
         <xsl:with-param name="node" select=".."/>
         <xsl:with-param name="conditional" select="0"/>
@@ -206,6 +222,7 @@
 
   <tr>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:call-template name="id.attribute"/>
     <td align="{$direction.align.start}" valign="top">
       <xsl:call-template name="anchor"/>
       <xsl:variable name="answer.label">
@@ -404,19 +421,21 @@
       </xsl:attribute>
     </xsl:if>
 
-    <col align="{$direction.align.start}">
-      <xsl:attribute name="width">
-        <xsl:choose>
-          <xsl:when test="$label-width != ''">
-            <xsl:value-of select="$label-width"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>1%</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
-    </col>
-    <col/>
+    <colgroup>
+      <col align="{$direction.align.start}">
+        <xsl:attribute name="width">
+          <xsl:choose>
+            <xsl:when test="$label-width != ''">
+              <xsl:value-of select="$label-width"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>1%</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </col>
+      <col/>
+    </colgroup>
     <tbody>
       <xsl:apply-templates select="qandaentry|qandadiv"/>
     </tbody>
