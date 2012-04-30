@@ -1,4 +1,8 @@
 <?xml version='1.0'?>
+<!DOCTYPE xsl:stylesheet [
+<!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">
+<!ENTITY uppercase "'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+ ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
                 xmlns:dyn="http://exslt.org/dynamic"
@@ -64,7 +68,7 @@ sectioninfo seglistitem segmentedlist seriesinfo set setindex setinfo
 shortcut sidebar simplelist simplesect spanspec step subject
 subjectset substeps synopfragment table tbody textobject tfoot tgroup
 thead tip toc tocchap toclevel1 toclevel2 toclevel3 toclevel4
-toclevel5 tocpart varargs variablelist varlistentry videodata
+toclevel5 tocpart topic varargs variablelist varlistentry videodata
 videoobject void warning subjectset
 
 classsynopsis
@@ -457,6 +461,13 @@ Defaults to the context node.</para>
     </xsl:when>
     <xsl:when test="$object/@xml:id">
       <xsl:value-of select="$object/@xml:id"/>
+    </xsl:when>
+    <xsl:when test="$generate.consistent.ids != 0">
+      <!-- Make $object the current node -->
+      <xsl:for-each select="$object">
+        <xsl:text>id-</xsl:text>
+        <xsl:number level="multiple" count="*"/>
+      </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="generate-id($object)"/>
@@ -1326,8 +1337,10 @@ pointed to by the link is one of the elements listed in
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="prevlist"
-        select="$list/preceding::orderedlist[1]"/>
+      <!-- match on previous list at same nesting level -->
+      <xsl:variable name="prevlist" 
+       select="$list/preceding::orderedlist
+                [count($list/ancestor::orderedlist) = count(ancestor::orderedlist)][1]"/>
       <xsl:choose>
         <xsl:when test="count($prevlist) = 0">2</xsl:when>
         <xsl:otherwise>
@@ -2036,4 +2049,48 @@ engine does not support it.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+
+<doc:template name="graphic.format.content-type" xmlns="">
+  <refpurpose>Returns mimetype for media format</refpurpose>
+  <refdescription id="graphic.format.content-type-desc">
+    <para>This takes as input a 'format' param and returns
+    a mimetype string.  It uses an xsl:choose after first
+    converting the input to all uppercase.</para>
+  </refdescription>
+</doc:template>
+<xsl:template name="graphic.format.content-type">
+  <xsl:param name="format"/>
+  <xsl:variable name="upperformat" select="translate($format,&lowercase;,&uppercase;)"/>
+  <xsl:choose>
+    <xsl:when test="$upperformat = ''"></xsl:when>
+    <xsl:when test="$upperformat = 'linespecific'"></xsl:when>
+    <xsl:when test="$upperformat = 'PS'">application/postscript</xsl:when>
+    <xsl:when test="$upperformat = 'PDF'">application/pdf</xsl:when>
+    <xsl:when test="$upperformat = 'PNG'">image/png</xsl:when>
+    <xsl:when test="$upperformat = 'SVG'">image/svg+xml</xsl:when>
+    <xsl:when test="$upperformat = 'JPG'">image/jpeg</xsl:when>
+    <xsl:when test="$upperformat = 'JPEG'">image/jpeg</xsl:when>
+    <xsl:when test="$upperformat = 'GIF'">image/gif</xsl:when>
+    <xsl:when test="$upperformat = 'GIF87A'">image/gif</xsl:when>
+    <xsl:when test="$upperformat = 'GIF89A'">image/gif</xsl:when>
+    <xsl:when test="$upperformat = 'ACC'">audio/acc</xsl:when>
+    <xsl:when test="$upperformat = 'MPG'">audio/mpeg</xsl:when>
+    <xsl:when test="$upperformat = 'MP1'">audio/mpeg</xsl:when>
+    <xsl:when test="$upperformat = 'MP2'">audio/mpeg</xsl:when>
+    <xsl:when test="$upperformat = 'MP3'">audio/mpeg</xsl:when>
+    <xsl:when test="$upperformat = 'M4A'">audio/mp4</xsl:when>
+    <xsl:when test="$upperformat = 'MPEG'">audio/mpeg</xsl:when>
+    <xsl:when test="$upperformat = 'WAV'">audio/wav</xsl:when>
+    <xsl:when test="$upperformat = 'MP4'">video/mp4</xsl:when>
+    <xsl:when test="$upperformat = 'M4V'">video/mp4</xsl:when>
+    <xsl:when test="$upperformat = 'OGV'">video/ogg</xsl:when>
+    <xsl:when test="$upperformat = 'OGG'">video/ogg</xsl:when>
+    <xsl:when test="$upperformat = 'WEBM'">video/webm</xsl:when>
+    <xsl:otherwise>
+        <xsl:value-of select="concat('image/', $upperformat)"/> 
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>

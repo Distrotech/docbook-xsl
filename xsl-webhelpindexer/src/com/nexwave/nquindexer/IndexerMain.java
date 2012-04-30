@@ -162,8 +162,6 @@ public class IndexerMain {
      * The main class without Ant dependencies.
      * This can be used as a standalone jar.
      *
-     * @param args need two parameters for this array. htmlDirectory indexerLanguage
-     *             If only one parameter is there (htmlDir), indexerLanguage defaults to english
      */
     public static void main(String[] args) {
 
@@ -186,7 +184,6 @@ public class IndexerMain {
         indexer.execute();
 
     }
-
 
     /**
      * The main execution happens here.

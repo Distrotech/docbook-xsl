@@ -6,7 +6,7 @@
         version="1.0" xmlns="http://www.w3.org/1999/xhtml"
 	exclude-result-prefixes="exsl ng db">
 
-    <xsl:import href="/home/kasun/docbook/docbook-xsl-snapshot/xhtml/chunk.xsl"/>
+    <xsl:import href="../../xhtml/chunk.xsl"/>
 
     <xsl:output
             method="html"

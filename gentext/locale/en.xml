@@ -218,6 +218,22 @@
 <gentext key="hyphenation-push-character-count" text="2"/>
 <gentext key="hyphenation-remain-character-count" text="2"/>
 
+<!-- WebHelp -->
+<context name="webhelp">
+  <template name="Search">Search</template>
+  <template name="Enter_a_term_and_click">Enter a term and click </template>
+  <template name="Go">Go</template>
+  <template name="to_perform_a_search"> to perform a search.</template>
+  <template name="txt_filesfound">Results</template>
+  <template name="txt_enter_at_least_1_char">You must enter at least one character.</template>
+  <template name="txt_browser_not_supported">Your browser is not supported. Use of Mozilla Firefox is recommended.</template>
+  <template name="txt_please_wait">Please wait. Search in progress...</template>
+  <template name="txt_results_for">Results for: </template>
+  <template name="TableofContents">Contents</template>
+  <template name="HighlightButton">Toggle search result highlighting</template>
+  <template name="Your_search_returned_no_results">Your search returned no results.</template>
+</context>
+
 <context name="styles">
 
 <template name="person-name">first-last</template>
@@ -321,6 +337,7 @@
 <template name="sect5">%t</template>
 <template name="section">%t</template>
 <template name="simplesect">%t</template>
+<template name="topic">%t</template>
 <template name="part">%t</template>
 
 </context>
@@ -339,6 +356,7 @@
 <template name="sect5">%n.&#160;%t</template>
 <template name="section">%n.&#160;%t</template>
 <template name="simplesect">%t</template>
+<template name="topic">%t</template>
 
 </context>
 
@@ -382,6 +400,7 @@
 <template name="setindex">%s</template>
 <template name="sidebar">%s</template>
 <template name="simplesect">%s</template>
+<template name="topic">%t</template>
 <template name="toc">%s</template>
 
 </context>
@@ -458,6 +477,7 @@
 <template name="docnamelong"> in the document titled %o</template>
 <template name="pageabbrev">(p. %p)</template>
 <template name="Page">Page %p</template>
+<template name="topic">%t</template>
 
 <template name="bridgehead"><sectioncalled/> <startquote/>%t<endquote/></template>
 <template name="refsection"><sectioncalled/> <startquote/>%t<endquote/></template>
@@ -600,6 +620,7 @@
 <context name="htmlhelp">
 <template name="langcode">0x0409 English (UNITED STATES)</template>
 </context>
+
 
 <context name="index">
 <template name="term-separator">, </template>

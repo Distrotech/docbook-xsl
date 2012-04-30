@@ -21,7 +21,7 @@
   </condition>
 
   <target name="validate" if="perform-validation-dtd">
-<!--    <xmlvalidate file="${input-xml}" classname="org.apache.xerces.parsers.SAXParser"/> -->
+    <xmlvalidate file="${input-xml}" classname="org.ccil.cowan.tagsoup.Parser" classpathref="classpath"/>
   </target>
 
   <target name="chunk" depends="clean">
