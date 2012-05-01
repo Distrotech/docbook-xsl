@@ -1,33 +1,35 @@
 <?xml version='1.0'?>
-<!DOCTYPE slides SYSTEM "../../schema/dtd/slides.dtd">
+
 <?dbhtml graphics-dir="../graphics" css-stylesheet-dir="../browser"?>
 <?dbhtml script-dir="../browser"?>
-<slides>
-<slidesinfo>
+
+<dbs:slides xmlns="http://docbook.org/ns/docbook" xmlns:dbs="http://docbook.org/ns/docbook-slides" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
   <title>The Slides Document Type</title>
   <titleabbrev>Slides</titleabbrev>
-  <author><firstname>Norman</firstname><surname>Walsh</surname></author>
+  <author><personname><firstname>Norman</firstname><surname>Walsh</surname></personname></author>
   <pubdate>Friday, 19 Dec 2003</pubdate>
   <releaseinfo role="version">3.3.0</releaseinfo>
   <copyright><year>2002</year><year>2003</year>
              <holder>Norman Walsh</holder></copyright>
-</slidesinfo>
+</info>
 
-<foil><title>Introduction</title>
+<dbs:foil><info><title>Introduction</title></info>
+
 <para>This is the introductory slide.</para>
 <para>If you use foil groups (previously called sections), you can
 have introductory slides before the first group.</para>
 <para>Note: Bugs in some versions of Mozilla and IE prevent the XHTML
 version of slides from working correctly in those browsers.
-See <ulink url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=702066&amp;group_id=21935&amp;atid=397263">the report</ulink> for more
+See <uri xlink:href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=702066&amp;group_id=21935&amp;atid=397263">the report</uri> for more
 details.</para>
-</foil>
+</dbs:foil>
 
-<foilgroup><title>Purpose and History</title>
+<dbs:foilgroup><info><title>Purpose and History</title></info>
 
 <para>Groups can now have introductory text as well.</para>
 
-<foil><title>What Are Slides?</title>
+<dbs:foil><info><title>What Are Slides?</title></info>
 <itemizedlist>
 <listitem><para>An XML presentation tool
 </para></listitem>
@@ -36,22 +38,22 @@ details.</para>
 <listitem><para>Supported by Open Source software
 </para></listitem>
 </itemizedlist>
-</foil>
+</dbs:foil>
 
-<foil><title>Where Do They Come From?</title>
+<dbs:foil><info><title>Where Do They Come From?</title></info>
 
 <itemizedlist>
-<listitem><para>Maintained by the <ulink url="http://docbook.sourceforge.net/">DocBook
-Open Repository</ulink> Project at
-<ulink url="http://sourceforge.net/">SourceForge</ulink>
+<listitem><para>Maintained by the <uri xlink:href="http://docbook.sourceforge.net/">DocBook
+Open Repository</uri> Project at
+<uri xlink:href="http://sourceforge.net/">SourceForge</uri>
 </para></listitem>
 <listitem><para>Customization layer of
-<ulink url="http://www.oasis-open.org/docbook/xml/simple/">Simplified DocBook</ulink>
+<uri xlink:href="http://www.oasis-open.org/docbook/xml/simple/">Simplified DocBook</uri>
 </para></listitem>
 </itemizedlist>
-</foil>
+</dbs:foil>
 
-<foil><title>Why?</title>
+<dbs:foil><info><title>Why?</title></info>
 
 <itemizedlist>
 <listitem><para>So Norm could give presentations
@@ -68,41 +70,39 @@ directly into his slides
 <listitem><para>Oh, let's face it: because it was there. Like the proverbial mountain.
 </para></listitem>
 </itemizedlist>
-</foil>
-</foilgroup>
+</dbs:foil>
+</dbs:foilgroup>
 
-<foilgroup><title>Authoring</title>
+<dbs:foilgroup><info><title>Authoring</title></info>
 
 <para>How to write a presentation.</para>
 
-<foil><title>Minimal Presentation</title>
+<dbs:foil><info><title>Minimal Presentation</title></info>
 
 <para>The smallest possible presentation looks like this:</para>
 
 <screen><![CDATA[<?xml version='1.0'?>
-<!DOCTYPE slides PUBLIC "-//Norman Walsh//DTD Slides XML V3.0b1//EN"
-                 "http://docbook.sourceforge.net/release/slides/3.0b1/slides.dtd">
-<slides>
-<slidesinfo>
+<dbs:slides xmlns="http://docbook.org/ns/docbook" xmlns:dbs="http://docbook.org/ns/docbook-slides">
+<info>
 <title>Presentation Title</title>
-</slidesinfo>
-<foil><title>Foil Title</title>
+</info>
+<dbs:foil><title>Foil Title</title>
 <para>Foil content</para>
-</foil>
-</slides>]]></screen>
+</dbs:foil>
+</dbs:slides>]]></screen>
 
 <para>Every presentation must contain at least one slide.</para>
-</foil>
+</dbs:foil>
 
-<foil><title>Presentation Metadata</title>
+<dbs:foil><info><title>Presentation Metadata</title></info>
 
 <para>Presentations usually have more metadata in the <literal>slidesinfo</literal>
 wrapper. Here's a typical example:</para>
 
-<screen><![CDATA[<slidesinfo>
+<screen><![CDATA[<info>
   <title>Supporting Localized Generated Text</title>
   <titleabbrev>Generated Text</titleabbrev>
-  <author><firstname>Norman</firstname><surname>Walsh</surname></author>
+  <author><personname><firstname>Norman</firstname><surname>Walsh</surname></personname></author>
   <pubdate>Sunday, 08 Apr 2001</pubdate>
   <confgroup>
     <conftitle>XSLTUK-01</conftitle>
@@ -113,109 +113,109 @@ wrapper. Here's a typical example:</para>
   <releaseinfo role="version">Version TEST</releaseinfo>
   <copyright><year>2001</year>
              <holder>Sun Microsystems, Inc.</holder></copyright>
-</slidesinfo>]]></screen>
-</foil>
+</info>]]></screen>
+</dbs:foil>
 
-<foil><title>Presentation Content</title>
+<dbs:foil><info><title>Presentation Content</title></info>
 
 <para>It's common for individual slides to consist of a single
 bulleted or numbered list. However, the full range of <quote>block
 level</quote> Simplified DocBook elements are available.</para>
 
-</foil>
-</foilgroup>
+</dbs:foil>
+</dbs:foilgroup>
 
-<foilgroup><title>Styling</title>
+<dbs:foilgroup><info><title>Styling</title></info>
 
 <para>How to transform a presentation.</para>
 
-<foil><title>HTML</title>
+<dbs:foil><info><title>HTML</title></info>
 
 <para>There are a lot of HTML options. When you publish your
 presentation on the web, it's probably best to use one of the simpler,
 more accessible styles. For your actual live presentation, you may
 want to choose something fancier.</para>
 
-</foil>
+</dbs:foil>
 
-<foil><title>Plain HTML</title>
+<dbs:foil><info><title>Plain HTML</title></info>
 
 <itemizedlist>
-<listitem><para><ulink url="../default/"><filename>default.xsl</filename></ulink>
+<listitem><para><filename xlink:href="../default/">default.xsl</filename>
 and
-<ulink url="../plain/"><filename>plain.xsl</filename></ulink>
+<filename xlink:href="../plain/">plain.xsl</filename>
 produce fairly simple presentations
 </para></listitem>
-<listitem><para><ulink url="../tables/"><filename>tables.xsl</filename></ulink>
+<listitem><para><filename xlink:href="../tables/">tables.xsl</filename>
 uses a table to show the navigation context (somewhat like the tabular
-<ulink url="http://docbook.sourceforge.net/">Website</ulink> style)
+<uri xlink:href="http://docbook.sourceforge.net/">Website</uri> style)
 </para></listitem>
-<listitem><para><ulink url="../vslides/"><filename>vslides.xsl</filename></ulink>
+<listitem><para><filename xlink:href="../vslides/">vslides.xsl</filename>
 places navigation on the left side instead of the top and bottom
 </para></listitem>
-<listitem><para><ulink url="../w3c/"><filename>w3c.xsl</filename></ulink>
+<listitem><para><filename xlink:href="../w3c/">w3c.xsl</filename>
 produces slides that resemble the format used by the W3C for presentations
 </para></listitem>
 </itemizedlist>
 
-</foil>
+</dbs:foil>
 
-<foil><title>Fancy HTML</title>
+<dbs:foil><info><title>Fancy HTML</title></info>
 
 <itemizedlist>
-<listitem><para><ulink url="../frames1/frames.html"><filename>frames.xsl</filename></ulink>
+<listitem><para><filename xlink:href="../frames1/frames.html">frames.xsl</filename>
 uses frames. There are several options that you can apply:
 </para>
 <itemizedlist>
-<listitem><para><ulink url="../frames2/frames.html">overlay</ulink> uses CSS absolute positioning
+<listitem><para><uri xlink:href="../frames2/frames.html">overlay</uri> uses CSS absolute positioning
 to keep the navigation static on the pages (only works on recent browsers)
 </para></listitem>
-<listitem><para><ulink url="../frames3/frames.html">multiframe</ulink> uses additional frames
+<listitem><para><uri xlink:href="../frames3/frames.html">multiframe</uri> uses additional frames
 to keep the navigation static on the pages
 </para></listitem>
 
 <listitem>
-<para><ulink url="../frames4/frames.html">dynamic.toc</ulink> uses
+<para><uri xlink:href="../frames4/frames.html">dynamic.toc</uri> uses
 JavaScript to make the table of context <quote>active</quote> so that
 you can open and close the foil groups (only works on recent browsers)</para>
 </listitem>
 
 <listitem>
-<para><ulink url="../frames5/frames.html">active.toc</ulink> uses
+<para><uri xlink:href="../frames5/frames.html">active.toc</uri> uses
 JavaScript to keep the table of contents and the current slide in sync
 (only works on recent browsers)</para>
 </listitem>
 
 <listitem><para>These toc styles can be combined with
-<ulink url="../frames6/frames.html">overlay</ulink> or <ulink url="../frames7/frames.html">multiframe</ulink>
+<uri xlink:href="../frames6/frames.html">overlay</uri> or <uri xlink:href="../frames7/frames.html">multiframe</uri>
 </para></listitem>
 </itemizedlist>
 </listitem>
 </itemizedlist>
-</foil>
+</dbs:foil>
 
-<foil><title>PDF</title>
+<dbs:foil><info><title>PDF</title></info>
 
 <para>The <filename>fo-plain.xsl</filename> stylesheet produces XSL Formatting
 Objects that can subsequently be turned into PDF.</para>
 
-</foil>
+</dbs:foil>
 
-</foilgroup>
+</dbs:foilgroup>
 
-<foilgroup><title>Presentation</title>
+<dbs:foilgroup><info><title>Presentation</title></info>
 
 <para>How to customize and present a set of slides.</para>
 
-<foil><title>Look And Feel</title>
+<dbs:foil><info><title>Look And Feel</title></info>
 
 <para>For HTML display, most of the actual
 <quote>look-and-feel</quote> of the presentation is controlled by the CSS
 stylesheet(s) used.</para>
 
-</foil>
+</dbs:foil>
 
-<foil><title>Presentation Tips</title>
+<dbs:foil><info><title>Presentation Tips</title></info>
 
 <itemizedlist>
 <listitem><para>It's usually best if each slide is only one page (avoid scrolling).
@@ -231,29 +231,29 @@ your slides.
 <listitem><para>Speak more slowly. I always forget that one.
 </para></listitem>
 </itemizedlist>
-</foil>
+</dbs:foil>
 
-</foilgroup>
+</dbs:foilgroup>
 
-<foilgroup><title>Conclusions</title>
+<dbs:foilgroup><info><title>Conclusions</title></info>
 
-<foil><title>Conclusions</title>
+<dbs:foil><info><title>Conclusions</title></info>
 
 <para>It's customary to have a conclusions slide.</para>
 
-</foil>
+</dbs:foil>
 
-<foil><title>References</title>
+<dbs:foil><info><title>References</title></info>
 
 <para>References are a good idea too.</para>
 
-</foil>
+</dbs:foil>
 
-<foil><title>Q&amp;A</title>
+<dbs:foil><info><title>Q&amp;A</title></info>
 
 <para>Any questions?</para>
 
-</foil>
-</foilgroup>
+</dbs:foil>
+</dbs:foilgroup>
 
-</slides>
+</dbs:slides>
