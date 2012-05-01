@@ -56,6 +56,7 @@ dbs.slides.attlist = dbs.slides.role.attribute?
 dbs.foilgroup = element foilgroup {
   dbs.foilgroup.attlist,
   db.info?,
+  db.all.blocks*,
   dbs.foil+
 }
 
