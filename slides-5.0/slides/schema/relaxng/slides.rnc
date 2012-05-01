@@ -1,0 +1,96 @@
+namespace db = "http://docbook.org/ns/docbook"
+default namespace dbs = "http://docbook.org/ns/docbook-slides"
+
+# See http://docbook.org/ns/docbook-slides
+
+# This file is part of DocBook Slides V5.0
+# 
+# Copyright 2012 Gabor Kovesdan
+# 
+# Release: $Id$
+# 
+# Permission to use, copy, modify and distribute the DocBook Slides
+# schema and its accompanying documentation for any purpose and without
+# fee is hereby granted in perpetuity, provided that the above copyright
+# notice and this paragraph appear in all copies. The copyright
+# holders make no representation about the suitability of the schema
+# for any purpose. It is provided "as is" without expressed or implied
+# warranty.
+# 
+# If you modify the DocBook Slides schema in any way, label your schema
+# as a variant of DocBook Slides. See the reference documentation
+# (http://docbook.org/tdg5/en/html/ch05.html#s-notdocbook)
+# for more information.
+# 
+# Please direct all questions, bug reports, or suggestions for changes
+# to the docbook@lists.oasis-open.org mailing list. For more
+# information, see http://www.oasis-open.org/docbook/.
+# 
+# ======================================================================
+
+include "docbook.rnc" inherit = db {
+  start = dbs.slides
+  
+  # Avoid ID clashes
+  db._any.attribute = attribute * - (xml:id | linkend) { text }
+}
+
+dbs.slides = element slides { dbs.slides.attlist,
+  db.info,
+  dbs.speakernotes?,
+  dbs.foil*,
+  dbs.foilgroup*
+}
+
+dbs.slides.role.attribute = attribute role { text }
+
+dbs.slides.status.attribute = db.status.attribute
+
+dbs.slides.attlist = dbs.slides.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
+  & db.label.attribute?
+  & dbs.slides.status.attribute?
+#  & dbs.slides.class.attribute?  # XXX: may be a good feature
+
+dbs.foilgroup = element foilgroup {
+  dbs.foilgroup.attlist,
+  db.info?,
+  dbs.foil+
+}
+
+dbs.foilgroup.role.attribute = attribute role { text }
+
+dbs.foilgroup.status.attribute = db.status.attribute
+
+dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
+  & db.label.attribute?
+  & dbs.slides.status.attribute?
+
+dbs.foil = element foil { dbs.foil.attlist,
+   db.info?,
+   db.all.blocks+,
+   db.navigation.components*
+}
+
+dbs.foil.role.attribute = attribute role { text }
+
+dbs.foil.status.attribute = db.status.attribute
+
+dbs.foil.attlist = dbs.foil.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
+  & db.label.attribute?
+  & dbs.foil.status.attribute?
+
+dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
+  db.all.blocks+
+}
+
+dbs.speakernotes.role.attribute = attribute role { text }
+
+dbs.speakernotes.attlist = dbs.speakernotes.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
