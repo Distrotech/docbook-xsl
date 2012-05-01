@@ -2,8 +2,8 @@ include ../../../buildtools/Makefile.incl
 
 all: slides.dtd
 
-slides.dtd: slides-custom.dtd slides.mod
-	$(FLATTEN) $< > $@
+slides.dtd: ../relaxng/slides.rnc
+	$(FLATTEN) $< $@
 
 clean:
 
