@@ -10,4 +10,6 @@ all: slides.rng
 	$(RUNTRANG) $< $@
 
 clean:
+
+maintainer-clean: clean
 	rm -f slides.rng

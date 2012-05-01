@@ -1,9 +1,16 @@
+SUBDIRS= dtd relaxng xsd
+
 all:
-	$(MAKE) -C dtd
-	$(MAKE) -C relaxng
+.for d in $(SUBDIRS)
+	$(MAKE) -C ${d}
+.endfor
 
 clean:
-	$(MAKE) -C relaxng clean
+.for d in $(SUBDIRS)
+	$(MAKE) -C ${d} clean
+.endfor
 
 maintainer-clean: clean
-	$(MAKE) -C dtd maintainer-clean
+.for d in $(SUBDIRS)
+	$(MAKE) -C ${d} maintainer-clean
+.endfor
