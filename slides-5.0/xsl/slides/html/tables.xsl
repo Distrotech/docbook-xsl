@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -81,10 +82,10 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="foilgroup" mode="t-toc">
+<xsl:template match="dbs:foilgroup" mode="t-toc">
   <xsl:variable name="thisfoilgroup" select="."/>
 
-  <xsl:for-each select="/slides/foil|/slides/foilgroup">
+  <xsl:for-each select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup">
     <xsl:choose>
       <xsl:when test="name(.) = 'foilgroup'">
         <xsl:choose>
@@ -119,7 +120,7 @@
         <br/>
 
         <xsl:if test="$thisfoilgroup = .">
-          <xsl:for-each select="foil">
+          <xsl:for-each select="dbs:foil">
             <img alt=" ">
               <xsl:attribute name="src">
                 <xsl:call-template name="graphics-file">
@@ -169,10 +170,10 @@
   </xsl:for-each>
 </xsl:template>
 
-<xsl:template match="foil" mode="t-toc">
+<xsl:template match="dbs:foil" mode="t-toc">
   <xsl:variable name="thisfoil" select="."/>
 
-  <xsl:for-each select="/slides/foil|/slides/foilgroup">
+  <xsl:for-each select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup">
     <xsl:choose>
       <xsl:when test="name(.) = 'foilgroup'">
         <img alt=" ">
@@ -192,8 +193,8 @@
         </span>
         <br/>
 
-        <xsl:if test="$thisfoil/ancestor::foilgroup = .">
-          <xsl:for-each select="foil">
+        <xsl:if test="$thisfoil/ancestor::dbs:foilgroup = .">
+          <xsl:for-each select="dbs:foil">
             <img alt=" ">
               <xsl:attribute name="src">
                 <xsl:call-template name="graphics-file">
@@ -237,7 +238,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- foils only -->
-        <xsl:for-each select="/slides/foil">
+        <xsl:for-each select="/dbs:slides/dbs:foil">
           <xsl:choose>
             <xsl:when test="$thisfoil = .">
               <img alt="+">
@@ -270,22 +271,22 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="slides" mode="toc-title">
+<xsl:template match="dbs:slides" mode="toc-title">
   <xsl:call-template name="nobreak">
     <xsl:with-param name="string">
       <xsl:choose>
-        <xsl:when test="slidesinfo/titleabbrev">
-          <xsl:value-of select="slidesinfo/titleabbrev"/>
+        <xsl:when test="/dbs:slides/info/titleabbrev">
+          <xsl:value-of select="/dbs:slides/info/titleabbrev"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="slidesinfo/title"/>
+          <xsl:value-of select="/dbs:slides/info/title"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="toc-title">
+<xsl:template match="dbs:foilgroup" mode="toc-title">
   <xsl:call-template name="nobreak">
     <xsl:with-param name="string">
       <xsl:choose>
@@ -300,7 +301,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foil" mode="toc-title">
+<xsl:template match="dbs:foil" mode="toc-title">
   <xsl:call-template name="nobreak">
     <xsl:with-param name="string">
       <xsl:choose>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -22,14 +23,14 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="slides">
+<xsl:template match="dbs:slides">
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
     <xsl:with-param name="filename" select="concat($base.dir, $toc.html)"/>
     <xsl:with-param name="content">
       <html>
         <head>
-          <title><xsl:value-of select="slidesinfo/title"/></title>
+          <title><xsl:value-of select="/dbs:slides/info/title"/></title>
           <xsl:if test="$css.stylesheet != ''">
             <link type="text/css" rel="stylesheet">
               <xsl:attribute name="href">
@@ -40,7 +41,7 @@
           <xsl:apply-templates select="/processing-instruction('dbhtml')" mode="css.pi"/>
 
           <xsl:call-template name="links">
-            <xsl:with-param name="next" select="/slides"/>
+            <xsl:with-param name="next" select="/dbs:slides"/>
             <xsl:with-param name="tocfile" select="$toc.html"/>
           </xsl:call-template>
 
@@ -94,7 +95,7 @@
 		</xsl:if>
 
                 <xsl:call-template name="vertical-navigation">
-                  <xsl:with-param name="next" select="/slides"/>
+                  <xsl:with-param name="next" select="/dbs:slides"/>
                   <xsl:with-param name="tocfile"/>
                 </xsl:call-template>
 
@@ -129,7 +130,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="slidesinfo">
+<xsl:template match="/dbs:slides/info">
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
     <xsl:with-param name="filename" select="concat($base.dir, $titlefoil.html)"/>
@@ -147,7 +148,7 @@
           <xsl:apply-templates select="/processing-instruction('dbhtml')" mode="css.pi"/>
 
           <xsl:call-template name="links">
-            <xsl:with-param name="next" select="(/slides/foil|/slides/foilgroup)[1]"/>
+            <xsl:with-param name="next" select="(/dbs:slides/foil|/dbs:slides/foilgroup)[1]"/>
             <xsl:with-param name="tocfile" select="$toc.html"/>
           </xsl:call-template>
 
@@ -202,8 +203,8 @@
 
                 <xsl:call-template name="vertical-navigation">
                   <xsl:with-param name="first"/>
-                  <xsl:with-param name="last" select="(following::foilgroup|following::foil)[last()]"/>
-                  <xsl:with-param name="next" select="(following::foilgroup|following::foil)[1]"/>
+                  <xsl:with-param name="last" select="(following::dbs:foilgroup|following::dbs:foil)[last()]"/>
+                  <xsl:with-param name="next" select="(following::dbs:foilgroup|following::dbs:foil)[1]"/>
                 </xsl:call-template>
 
               </td>
@@ -230,7 +231,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup">
+<xsl:template match="dbs:foilgroup">
   <xsl:param name="thisfoilgroup">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:param>
@@ -239,9 +240,9 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="nextfoil" select="foil[1]"/>
-  <xsl:variable name="lastfoil" select="(descendant::foil|following::foil)[last()]"/>
-  <xsl:variable name="prevfoil" select="(preceding::foil|/slides)[last()]"/>
+  <xsl:variable name="nextfoil" select="dbs:foil[1]"/>
+  <xsl:variable name="lastfoil" select="(descendant::dbs:foil|following::dbs:foil)[last()]"/>
+  <xsl:variable name="prevfoil" select="(preceding::dbs:foil|/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -343,28 +344,28 @@
     </xsl:with-param>
   </xsl:call-template>
 
-  <xsl:apply-templates select="foil"/>
+  <xsl:apply-templates select="dbs:foil"/>
 </xsl:template>
 
-<xsl:template match="foil">
+<xsl:template match="dbs:foil">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="foilgroup" select="ancestor::foilgroup"/>
+  <xsl:variable name="foilgroup" select="ancestor::dbs:foilgroup"/>
 
   <xsl:variable name="thisfoil">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:variable>
 
-  <xsl:variable name="nextfoil" select="(following::foil
-                                        |following::foilgroup)[1]"/>
+  <xsl:variable name="nextfoil" select="(following::dbs:foil
+                                        |following::dbs:foilgroup)[1]"/>
 
-  <xsl:variable name="lastfoil" select="following::foil[last()]"/>
+  <xsl:variable name="lastfoil" select="following::dbs:foil[last()]"/>
 
-  <xsl:variable name="prevfoil" select="(preceding-sibling::foil[1]
-                                        |parent::foilgroup[1]
-                                        |/slides)[last()]"/>
+  <xsl:variable name="prevfoil" select="(preceding-sibling::dbs:foil[1]
+                                        |parent::dbs:foilgroup[1]
+                                        |/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -469,25 +470,25 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="slidesinfo" mode="header">
+<xsl:template match="/dbs:slides/info" mode="header">
   <div class="navhead">
     <!-- nop -->
   </div>
 </xsl:template>
 
-<xsl:template match="foil|foilgroup" mode="header">
+<xsl:template match="dbs:foil|dbs:foilgroup" mode="header">
   <div class="navhead">
     <table border="0" width="100%" summary="Header table"
            cellpadding="0" cellspacing="0">
       <tr>
         <td align="left">
-          <xsl:apply-templates select="/slides/slidesinfo/title"
+          <xsl:apply-templates select="/dbs:slides/info/title"
                                mode="slide.footer.mode"/>
         </td>
         <td align="right">
-          <xsl:value-of select="count(preceding::foil)
-                                + count(preceding::foilgroup)
-                                + count(ancestor::foilgroup)
+          <xsl:value-of select="count(preceding::dbs:foil)
+                                + count(preceding::dbs:foilgroup)
+                                + count(ancestor::dbs:foilgroup)
                                 + 1"/>
         </td>
       </tr>
@@ -495,37 +496,37 @@
   </div>
 </xsl:template>
 
-<xsl:template match="slidesinfo" mode="footer">
+<xsl:template match="/dbs:slides/info" mode="footer">
   <div class="navfoot">
     <!-- nop -->
   </div>
 </xsl:template>
 
-<xsl:template match="foil|foilgroup" mode="footer">
+<xsl:template match="dbs:foil|dbs:foilgroup" mode="footer">
   <div class="navfoot">
     <table border="0" width="100%" summary="Header table"
            cellpadding="0" cellspacing="0">
       <tr>
         <td align="center">
           <xsl:text>Slide </xsl:text>
-          <xsl:value-of select="count(preceding::foil)
-                                + count(preceding::foilgroup)
-                                + count(ancestor::foilgroup)
+          <xsl:value-of select="count(preceding::dbs:foil)
+                                + count(preceding::dbs:foilgroup)
+                                + count(ancestor::dbs:foilgroup)
                                 + 1"/>
           <xsl:text> of </xsl:text>
-          <xsl:value-of select="count(//foil) + count(//foilgroup)"/>
+          <xsl:value-of select="count(//dbs:foil) + count(//dbs:foilgroup)"/>
         </td>
       </tr>
     </table>
   </div>
 </xsl:template>
 
-<xsl:template match="slides" mode="footer"/>
+<xsl:template match="dbs:slides" mode="footer"/>
 
 <!-- ============================================================ -->
 
 <xsl:template name="vertical-navigation">
-  <xsl:param name="first" select="/slides"/>
+  <xsl:param name="first" select="/dbs:slides"/>
   <xsl:param name="prev"/>
   <xsl:param name="last"/>
   <xsl:param name="next"/>

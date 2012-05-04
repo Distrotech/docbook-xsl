@@ -1,5 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:dbs="http://docbook.org/ns/docbook-slides"
 		version="1.0">
 
 <xsl:import href="../../html/chunk.xsl"/>
@@ -12,7 +13,7 @@
 
 <xsl:output method="html"/>
 
-<xsl:strip-space elements="slides foil foilgroup"/>
+<xsl:strip-space elements="dbs:slides dbs:foil dbs:foilgroup"/>
 
 <!-- Process the slides -->
 
@@ -20,7 +21,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="slides">
+<xsl:template match="dbs:slides">
   <xsl:apply-templates select="." mode="toc"/>
   <xsl:apply-templates/>
 </xsl:template>
@@ -46,7 +47,7 @@
                 <xsl:attribute name="href">
                   <xsl:apply-templates select="$home" mode="filename"/>
                 </xsl:attribute>
-                <xsl:value-of select="($home/title|$home/slidesinfo/title)[1]"/>
+                <xsl:value-of select="($home/info/title)"/>
               </a>
             </span>
           </xsl:if>
@@ -208,7 +209,7 @@
            summary="Navigation table">
       <tr>
         <td align="left" valign="top">
-          <xsl:apply-templates select="/slides/slidesinfo/copyright"
+          <xsl:apply-templates select="/dbs:slides/info/copyright"
                                mode="slide.footer.mode"/>
           <xsl:text>&#160;</xsl:text>
         </td>
@@ -285,7 +286,7 @@
   <xsl:if test="$tocfile != ''">
     <link rel="contents" href="{$tocfile}">
       <xsl:attribute name="title">
-        <xsl:value-of select="/slides/slidesinfo/title"/>
+        <xsl:value-of select="/dbs:slides/info/title"/>
       </xsl:attribute>
     </link>
   </xsl:if>
@@ -296,7 +297,7 @@
         <xsl:apply-templates select="$home" mode="filename"/>
       </xsl:attribute>
       <xsl:attribute name="title">
-        <xsl:value-of select="($home/title|$home/slidesinfo/title)[1]"/>
+        <xsl:value-of select="($home/dbs:slidesinfo/title)"/>
       </xsl:attribute>
     </link>
 
@@ -305,7 +306,7 @@
         <xsl:apply-templates select="$home" mode="filename"/>
       </xsl:attribute>
       <xsl:attribute name="title">
-        <xsl:value-of select="($home/title|$home/slidesinfo/title)[1]"/>
+        <xsl:value-of select="($home/info/title)"/>
       </xsl:attribute>
     </link>
   </xsl:if>
@@ -316,7 +317,7 @@
         <xsl:apply-templates select="$up" mode="filename"/>
       </xsl:attribute>
       <xsl:attribute name="title">
-        <xsl:value-of select="($up/title|$up/slidesinfo/title)[1]"/>
+        <xsl:value-of select="($up/info/title)"/>
       </xsl:attribute>
     </link>
   </xsl:if>
@@ -327,7 +328,7 @@
         <xsl:apply-templates select="$prev" mode="filename"/>
       </xsl:attribute>
       <xsl:attribute name="title">
-        <xsl:value-of select="($prev/title|$prev/slidesinfo/title)[1]"/>
+        <xsl:value-of select="($prev/info/title)"/>
       </xsl:attribute>
     </link>
   </xsl:if>
@@ -342,7 +343,7 @@
       </xsl:attribute>
     </link>
 
-    <xsl:variable name="last" select="$next/following::foil[last()]"/>
+    <xsl:variable name="last" select="$next/following::dbs:foil[last()]"/>
     <xsl:if test="$last">
       <link rel="last">
         <xsl:attribute name="href">
@@ -366,7 +367,7 @@
     </link>
   </xsl:for-each>
 
-  <xsl:for-each select="foilgroup|../foilgroup">
+  <xsl:for-each select="dbs:foilgroup|../dbs:foilgroup">
     <link rel="section">
       <xsl:attribute name="href">
         <xsl:apply-templates select="." mode="filename"/>
@@ -387,7 +388,7 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="next" select="(/slides/foil|/slides/foilgroup)[1]"/>
+  <xsl:variable name="next" select="(/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup)[1]"/>
   <xsl:variable name="tocfile" select="$toc.html"/>
   <xsl:variable name="dir">
     <xsl:call-template name="dbhtml-dir"/>
@@ -419,7 +420,7 @@
           <xsl:apply-templates select="/processing-instruction('dbhtml')" mode="css.pi"/>
 
           <xsl:call-template name="links">
-            <xsl:with-param name="home" select="/slides"/>
+            <xsl:with-param name="home" select="/dbs:slides"/>
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="tocfile" select="$tocfile"/>
           </xsl:call-template>
@@ -547,27 +548,27 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="slidesinfo/title">
+<xsl:template match="/dbs:slides/info/title">
   <h1 class="{name(.)}"><xsl:apply-templates/></h1>
 </xsl:template>
 
-<xsl:template match="slidesinfo/authorgroup">
+<xsl:template match="/dbs:slides/info/authorgroup">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="slidesinfo/author|slidesinfo/authorgroup/author">
+<xsl:template match="/dbs:slides/info/author">
   <h1 class="{name(.)}"><xsl:apply-imports/></h1>
 </xsl:template>
 
-<xsl:template match="slidesinfo/releaseinfo">
+<xsl:template match="/dbs:slides/info/releaseinfo">
   <h4 class="{name(.)}"><xsl:apply-templates/></h4>
 </xsl:template>
 
-<xsl:template match="slidesinfo/date">
+<xsl:template match="/dbs:slides/info/date">
   <h4 class="{name(.)}"><xsl:apply-templates/></h4>
 </xsl:template>
 
-<xsl:template match="slidesinfo/copyright">
+<xsl:template match="/dbs:slides/info/copyright">
   <!-- nop -->
 </xsl:template>
 
@@ -601,14 +602,14 @@
 <!-- ====================================================================== -->
 <!-- toc -->
 
-<xsl:template match="slides" mode="toc">
+<xsl:template match="dbs:slides" mode="toc">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="/slides"/>
-  <xsl:variable name="next" select="(foil|foilgroup)[1]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="/dbs:slides"/>
+  <xsl:variable name="next" select="(dbs:foil|dbs:foilgroup)[1]"/>
   <xsl:variable name="tocfile" select="''"/>
   <xsl:variable name="dir"> <!-- MJ: added -->
     <xsl:call-template name="dbhtml-dir"/>
@@ -620,7 +621,7 @@
     <xsl:with-param name="content">
       <html>
         <head>
-          <title><xsl:value-of select="slidesinfo/title"/></title>
+          <title><xsl:value-of select="/dbs:slides/info/title"/></title>
 
           <xsl:call-template name="system.head.content"/>
 
@@ -726,7 +727,7 @@
 <xsl:template name="toc-body">
   <h1 class="title">
     <a href="{$titlefoil.html}">
-      <xsl:value-of select="/slides/slidesinfo/title"/>
+      <xsl:value-of select="/dbs:slides/info/title"/>
     </a>
   </h1>
 
@@ -738,15 +739,15 @@
     </b>
   </p>
   <dl class="toc">
-    <xsl:apply-templates select="foilgroup|foil" mode="toc"/>
+    <xsl:apply-templates select="dbs:foilgroup|dbs:foil" mode="toc"/>
   </dl>
 </xsl:template>
 
 <xsl:template name="toc-top-nav">
-  <xsl:param name="home" select="/slides"/>
+  <xsl:param name="home" select="/dbs:slides"/>
   <xsl:param name="up"/>
   <xsl:param name="prev"/>
-  <xsl:param name="next" select="(foil|foilgroup)[1]"/>
+  <xsl:param name="next" select="(dbs:foil|dbs:foilgroup)[1]"/>
   <xsl:param name="tocfile"/>
 
   <xsl:call-template name="top-nav">
@@ -759,10 +760,10 @@
 </xsl:template>
 
 <xsl:template name="toc-bottom-nav">
-  <xsl:param name="home" select="/slides"/>
+  <xsl:param name="home" select="/dbs:slides"/>
   <xsl:param name="up"/>
   <xsl:param name="prev"/>
-  <xsl:param name="next" select="(foil|foilgroup)[1]"/>
+  <xsl:param name="next" select="(dbs:foil|dbs:foilgroup)[1]"/>
   <xsl:param name="tocfile"/>
 
   <xsl:call-template name="bottom-nav">
@@ -774,7 +775,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="toc">
+<xsl:template match="dbs:foilgroup" mode="toc">
   <xsl:param name="recursive" select="1"/>
 
   <dt>
@@ -790,13 +791,13 @@
   <xsl:if test="$recursive != 0">
     <dd>
       <dl class="toc">
-	<xsl:apply-templates select="foil" mode="toc"/>
+	<xsl:apply-templates select="dbs:foil" mode="toc"/>
       </dl>
     </dd>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="foil" mode="toc">
+<xsl:template match="dbs:foil" mode="toc">
   <dt>
     <xsl:apply-templates select="." mode="number"/>
     <xsl:text>. </xsl:text>
@@ -809,18 +810,18 @@
   </dt>
 </xsl:template>
 
-<xsl:template match="title|titleabbrev" mode="toc">
+<xsl:template match="dbs:title|dbs:titleabbrev" mode="toc">
   <xsl:apply-templates mode="toc"/>
 </xsl:template>
 
-<xsl:template match="speakernotes" mode="toc">
+<xsl:template match="dbs:speakernotes" mode="toc">
   <!-- nop -->
 </xsl:template>
 
 <!-- ====================================================================== -->
 <!-- foil -->
 
-<xsl:template match="foil">
+<xsl:template match="dbs:foil">
   <xsl:param name="thisfoil">
     <xsl:apply-templates select="." mode="chunk-filename"/>
   </xsl:param>
@@ -829,13 +830,13 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
-  <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                    |parent::foilgroup[1]
-                                    |/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
+  <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                    |parent::dbs:foilgroup[1]
+                                    |/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -999,7 +1000,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foil/title">
+<xsl:template match="dbs:foil/info/title">
   <h1 class="{name(.)}">
     <xsl:apply-templates/>
   </h1>
@@ -1008,7 +1009,7 @@
 <!-- ====================================================================== -->
 <!-- foilgroup -->
 
-<xsl:template match="foilgroup">
+<xsl:template match="dbs:foilgroup">
   <xsl:param name="thisfoilgroup">
     <xsl:apply-templates select="." mode="chunk-filename"/>
   </xsl:param>
@@ -1017,10 +1018,10 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
   <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -1146,10 +1147,10 @@
     </xsl:with-param>
   </xsl:call-template>
 
-  <xsl:apply-templates select="foil"/>
+  <xsl:apply-templates select="dbs:foil"/>
 </xsl:template>
 
-<xsl:template match="foilgroup/title">
+<xsl:template match="dbs:foilgroup/info/title">
   <h1 class="{name(.)}"><xsl:apply-templates/></h1>
 </xsl:template>
 
@@ -1165,7 +1166,7 @@
 
   <xsl:if test="$foilgroup.toc != 0">
     <dl class="toc">
-      <xsl:apply-templates select="foil" mode="toc"/>
+      <xsl:apply-templates select="dbs:foil" mode="toc"/>
     </dl>
   </xsl:if>
 </xsl:template>
@@ -1252,29 +1253,29 @@
 
 <!-- ====================================================================== -->
 
-<xsl:template match="foil" mode="number">
-  <xsl:number count="foil|foilgroup" level="any"/>
+<xsl:template match="dbs:foil" mode="number">
+  <xsl:number count="dbs:foil|dbs:foilgroup" level="any"/>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="number">
-  <xsl:number count="foil|foilgroup" level="any"/>
+<xsl:template match="dbs:foilgroup" mode="number">
+  <xsl:number count="dbs:foil|dbs:foilgroup" level="any"/>
 </xsl:template>
 
 <!-- ====================================================================== -->
 
-<xsl:template match="slides" mode="filename">
+<xsl:template match="dbs:slides" mode="filename">
   <xsl:value-of select="$titlefoil.html"/>
 </xsl:template>
 
-<xsl:template match="foil" mode="filename">
+<xsl:template match="dbs:foil" mode="filename">
   <xsl:text>foil</xsl:text>
-  <xsl:number count="foil" level="any" format="01"/>
+  <xsl:number count="dbs:foil" level="any" format="01"/>
   <xsl:value-of select="$html.ext"/>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="filename">
+<xsl:template match="dbs:foilgroup" mode="filename">
   <xsl:text>foilgroup</xsl:text>
-  <xsl:number count="foilgroup" level="any" format="01"/>
+  <xsl:number count="dbs:foilgroup" level="any" format="01"/>
   <xsl:value-of select="$html.ext"/>
 </xsl:template>
 
@@ -1344,55 +1345,6 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="ulink">
-  <a>
-    <xsl:if test="@id">
-      <xsl:attribute name="name"><xsl:value-of select="@id"/></xsl:attribute>
-    </xsl:if>
-    <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
-    <xsl:if test="$ulink.target != ''">
-      <xsl:attribute name="target">
-        <xsl:value-of select="$ulink.target"/>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:choose>
-      <xsl:when test="count(child::node())=0">
-	<xsl:value-of select="@url"/>
-      </xsl:when>
-      <xsl:otherwise>
-	<xsl:apply-templates/>
-        <xsl:if test="@role='show'">
-          <xsl:text> (</xsl:text>
-          <xsl:value-of select="@url"/>
-          <xsl:text>)</xsl:text>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-  </a>
-</xsl:template>
-
-<xsl:template match="title/ulink">
-  <a>
-    <xsl:if test="@id">
-      <xsl:attribute name="name"><xsl:value-of select="@id"/></xsl:attribute>
-    </xsl:if>
-    <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
-    <xsl:if test="$ulink.target != ''">
-      <xsl:attribute name="target">
-        <xsl:value-of select="$ulink.target"/>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:choose>
-      <xsl:when test="count(child::node())=0">
-	<xsl:value-of select="@url"/>
-      </xsl:when>
-      <xsl:otherwise>
-	<xsl:apply-templates/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </a>
-</xsl:template>
-
 <xsl:template match="subtitle">
   <h2 class="subtitle">
     <xsl:apply-templates/>
@@ -1410,7 +1362,7 @@
   <!-- nop -->
 </xsl:template>
 
-<xsl:template match="speakernotes">
+<xsl:template match="dbs:speakernotes">
   <!-- nop -->
 </xsl:template>
 
@@ -1463,7 +1415,7 @@
 
     <xsl:when test="name(.)='foil'">
       <xsl:variable name="foilnumber">
-	<xsl:number count="foil" level="any"/>
+	<xsl:number count="dbs:foil" level="any"/>
       </xsl:variable>
 
       <xsl:value-of select="$dir"/>
@@ -1474,7 +1426,7 @@
 
     <xsl:when test="name(.)='foilgroup'">
       <xsl:variable name="foilgroupnumber">
-        <xsl:number count="foilgroup" level="any" format="01"/>
+        <xsl:number count="dbs:foilgroup" level="any" format="01"/>
       </xsl:variable>
 
       <xsl:value-of select="$dir"/>
@@ -1497,7 +1449,7 @@
 <!-- ====================================================================== -->
 <!-- Handling of xrefs -->
 
-<xsl:template match="foil|foilgroup" mode="xref-to">
+<xsl:template match="dbs:foil|dbs:foilgroup" mode="xref-to">
   <xsl:param name="referrer"/>
   <xsl:param name="xrefstyle"/>
 
@@ -1527,10 +1479,10 @@
 
 <xsl:template name="foil.number">
   <xsl:choose>
-    <xsl:when test="$show.foil.number != 0 and self::foil">
+    <xsl:when test="$show.foil.number != 0 and self::dbs:foil">
       <xsl:number count="foil" level="any"/>
       /
-      <xsl:value-of select="count(//foil)"/>
+      <xsl:value-of select="count(//dbs:foil)"/>
     </xsl:when>
     <xsl:otherwise>
       &#160;

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -7,7 +8,7 @@
 <xsl:template match="/">
   <html>
     <head>
-      <title><xsl:value-of select="/slides/slidesinfo/title"/></title>
+      <title><xsl:value-of select="/dbs:slides/info/title"/></title>
     </head>
     <body>
       <xsl:apply-templates/>
@@ -15,7 +16,7 @@
   </html>
 </xsl:template>
 
-<xsl:template match="slidesinfo">
+<xsl:template match="dbs:slides/info">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -27,11 +28,11 @@
   </div>
 </xsl:template>
 
-<xsl:template match="slides" mode="toc">
+<xsl:template match="dbs:slides" mode="toc">
   <!-- nop -->
 </xsl:template>
 
-<xsl:template match="foil">
+<xsl:template match="dbs:foil">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -44,7 +45,7 @@
   </div>
 </xsl:template>
 
-<xsl:template match="foilgroup">
+<xsl:template match="dbs:foilgroup">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>

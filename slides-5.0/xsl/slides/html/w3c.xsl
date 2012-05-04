@@ -1,5 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:dbs="http://docbook.org/ns/docbook-slides"
 		version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -149,8 +150,8 @@
            summary="footer">
       <tr>
         <td align="left" valign="top">
-          <xsl:variable name="author" select="(/slides/slidesinfo//author
-                                              |/slides/slidesinfo//editor)"/>
+          <xsl:variable name="author" select="(/dbs:slides/info//author
+                                              |/dbs:slides/info//editor)"/>
           <xsl:for-each select="$author">
             <xsl:choose>
               <xsl:when test=".//email">
@@ -168,12 +169,12 @@
         </td>
         <td align="right" valign="top">
           <span class="index">
-            <xsl:value-of select="count(preceding::foil)
-                                  + count(preceding::foilgroup)
-                                  + count(ancestor::foilgroup)
+            <xsl:value-of select="count(preceding::dbs:foil)
+                                  + count(preceding::dbs:foilgroup)
+                                  + count(ancestor::dbs:foilgroup)
                                   + 1"/>
             <xsl:text> of </xsl:text>
-            <xsl:value-of select="count(//foil|//foilgroup)"/>
+            <xsl:value-of select="count(//dbs:foil|//dbs:foilgroup)"/>
           </span>
         </td>
 
@@ -351,7 +352,7 @@
 
   <xsl:if test="$foilgroup.toc != 0">
     <dl class="toc">
-      <xsl:apply-templates select="foil" mode="toc"/>
+      <xsl:apply-templates select="dbs:foil" mode="toc"/>
     </dl>
   </xsl:if>
 </xsl:template>

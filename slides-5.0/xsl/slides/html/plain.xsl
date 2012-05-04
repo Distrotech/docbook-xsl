@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -33,7 +34,7 @@
       <tr>
         <td align="left" width="45%">
           <span class="slidestitle">
-            <xsl:value-of select="(/slides/slidesinfo/title)[1]"/>
+            <xsl:value-of select="(/dbs:slides/info/title)[1]"/>
           </span>
           <xsl:text>&#160;</xsl:text>
         </td>
@@ -48,7 +49,7 @@
                   <xsl:apply-templates select="$home" mode="filename"/>
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                  <xsl:value-of select="$home/slidesinfo/title"/>
+                  <xsl:value-of select="$home/info/title"/>
                 </xsl:attribute>
                 <img alt="Home" border="0">
                   <xsl:attribute name="src">
@@ -195,7 +196,7 @@
                   <xsl:apply-templates select="$home" mode="filename"/>
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                  <xsl:value-of select="$home/slidesinfo/title"/>
+                  <xsl:value-of select="$home/info/title"/>
                 </xsl:attribute>
                 <img alt="Home" border="0">
                   <xsl:attribute name="src">
@@ -321,10 +322,10 @@
 <!-- ============================================================ -->
 
 <xsl:template name="toc-top-nav">
-  <xsl:param name="home" select="/slides"/>
+  <xsl:param name="home" select="/dbs:slides"/>
   <xsl:param name="up"/>
   <xsl:param name="prev"/>
-  <xsl:param name="next" select="(foil|foilgroup)[1]"/>
+  <xsl:param name="next" select="(dbs:foil|dbs:foilgroup)[1]"/>
   <xsl:param name="toc"/>
 
   <div class="navhead">
@@ -342,7 +343,7 @@
                   <xsl:apply-templates select="$home" mode="filename"/>
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                  <xsl:value-of select="$home/slidesinfo/title"/>
+                  <xsl:value-of select="$home/info/title"/>
                 </xsl:attribute>
                 <img alt="Home" border="0">
                   <xsl:attribute name="src">

@@ -1,5 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:dbs="http://docbook.org/ns/docbook-slides"
 		version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -40,8 +41,7 @@
         </td>
         <td align="center" width="80%">
           <xsl:variable name="prestitle">
-            <xsl:value-of select="(/slides/slidesinfo/title
-                                  |/slides/title)[1]"/>
+            <xsl:value-of select="(/dbs:slides/info/title)"/>
           </xsl:variable>
 
           <span class="navheader">
@@ -86,15 +86,15 @@
       <tr>
         <td align="left" width="80%" valign="top">
           <span class="navfooter">
-            <xsl:apply-templates select="/slides/slidesinfo/copyright"
+            <xsl:apply-templates select="/dbs:slides/info/copyright"
                                  mode="slide.footer.mode"/>
           </span>
         </td>
         <td align="right" width="20%" valign="top">
           <span class="index">
-            <xsl:value-of select="count(preceding::foil)
-                                  + count(preceding::foilgroup)
-                                  + count(ancestor::foilgroup)
+            <xsl:value-of select="count(preceding::dbs:foil)
+                                  + count(preceding::dbs:foilgroup)
+                                  + count(ancestor::dbs:foilgroup)
                                   + 1"/>
           </span>
           <xsl:text>&#160;</xsl:text>
@@ -151,14 +151,14 @@
       <tr>
         <td align="left" width="80%" valign="top">
           <span class="navfooter">
-            <xsl:apply-templates select="/slides/slidesinfo/copyright"
+            <xsl:apply-templates select="/dbs:slides/info/copyright"
                                  mode="slide.footer.mode"/>
           </span>
         </td>
         <td align="right" width="20%" valign="top">
           <a>
             <xsl:attribute name="href">
-              <xsl:apply-templates select="(following::foilgroup|following::foil)[1]"
+              <xsl:apply-templates select="(following::dbs:foilgroup|following::dbs:foil)[1]"
                                    mode="filename"/>
             </xsl:attribute>
             <img alt="Next" border="0">
@@ -200,7 +200,7 @@
       <tr>
         <td align="left" width="80%" valign="top">
           <span class="navfooter">
-            <xsl:apply-templates select="/slides/slidesinfo/copyright"
+            <xsl:apply-templates select="/dbs:slides/info/copyright"
                                  mode="slide.footer.mode"/>
           </span>
         </td>

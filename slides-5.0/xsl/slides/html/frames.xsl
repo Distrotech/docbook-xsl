@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 version="1.0">
 
 <xsl:import href="slides-common.xsl"/>
@@ -70,18 +71,18 @@
 
 <!-- ====================================================================== -->
 
-<xsl:template match="slides">
+<xsl:template match="dbs:slides">
   <xsl:variable name="title">
     <xsl:choose>
-      <xsl:when test="(slidesinfo/titleabbrev|titleabbrev)">
-        <xsl:value-of select="(slidesinfo/titleabbrev|titleabbrev)[1]"/>
+      <xsl:when test="(info/titleabbrev)">
+        <xsl:value-of select="(info/titleabbrev)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="(slidesinfo/title|title)[1]"/>
+        <xsl:value-of select="(info/title)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="toc.rows" select="1+count(//foilgroup)+count(//foil)"/>
+  <xsl:variable name="toc.rows" select="1+count(//dbs:foilgroup)+count(//dbs:foil)"/>
   <xsl:variable name="toc.height" select="$toc.rows * $toc.row.height"/>
 
   <xsl:if test="$overlay != 0 and $multiframe != 0">
@@ -262,9 +263,9 @@ function init() {
 
 <!-- ====================================================================== -->
 
-<xsl:template match="slidesinfo">
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
+<xsl:template match="dbs:slides/info">
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
 
   <xsl:variable name="doctype-public">
     <xsl:call-template name="doctype-public">
@@ -392,13 +393,13 @@ function init() {
   </frameset>
 </xsl:template>
 
-<xsl:template match="slidesinfo" mode="multiframe-top">
+<xsl:template match="dbs:slides/info" mode="multiframe-top">
   <xsl:variable name="thisfoil">
     <xsl:value-of select="$titlefoil.html"/>
   </xsl:variable>
 
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -476,13 +477,13 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="slidesinfo" mode="multiframe-body">
+<xsl:template match="dbs:slides/info" mode="multiframe-body">
   <xsl:variable name="thisfoil">
     <xsl:value-of select="$titlefoil.html"/>
   </xsl:variable>
 
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -550,13 +551,13 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="slidesinfo" mode="multiframe-bottom">
+<xsl:template match="dbs:slides/info" mode="multiframe-bottom">
   <xsl:variable name="thisfoil">
     <xsl:value-of select="$titlefoil.html"/>
   </xsl:variable>
 
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -634,7 +635,7 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="slidesinfo" mode="singleframe">
+<xsl:template match="dbs:slides/info" mode="singleframe">
   <xsl:param name="thisfoil">
     <xsl:value-of select="$titlefoil.html"/>
   </xsl:param>
@@ -643,8 +644,8 @@ function init() {
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
 
   <body class="titlepage">
     <xsl:call-template name="body.attributes"/>
@@ -810,7 +811,7 @@ function init() {
            summary="Navigation table">
       <tr>
         <td align="left" valign="top">
-          <xsl:apply-templates select="/slides/slidesinfo/copyright"
+          <xsl:apply-templates select="/dbs:slides/info/copyright"
                                mode="slide.footer.mode"/>
           <xsl:text>&#160;</xsl:text>
         </td>
@@ -871,7 +872,7 @@ function init() {
 
 <!-- ====================================================================== -->
 
-<xsl:template match="foilgroup">
+<xsl:template match="dbs:foilgroup">
   <xsl:param name="thisfoilgroup">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:param>
@@ -889,9 +890,9 @@ function init() {
   </xsl:variable>
 
   <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
   <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
     <xsl:with-param name="doctype-public" select="$doctype-public"/>
@@ -980,10 +981,10 @@ function init() {
   <xsl:apply-templates select="foil"/>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="multiframe">
+<xsl:template match="dbs:foilgroup" mode="multiframe">
   <xsl:variable name="thisfoilgroup">
     <xsl:text>foilgroup</xsl:text>
-    <xsl:number count="foilgroup" level="any" format="01"/>
+    <xsl:number count="dbs:foilgroup" level="any" format="01"/>
     <xsl:value-of select="$html.ext"/>
   </xsl:variable>
 
@@ -1005,17 +1006,17 @@ function init() {
   </frameset>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="multiframe-top">
+<xsl:template match="dbs:foilgroup" mode="multiframe-top">
   <xsl:variable name="foilgroup">
     <xsl:text>foilgroup</xsl:text>
-    <xsl:number count="foilgroup" level="any" format="01"/>
+    <xsl:number count="dbs:foilgroup" level="any" format="01"/>
     <xsl:value-of select="$html.ext"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
   <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -1086,19 +1087,19 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="multiframe-body">
+<xsl:template match="dbs:foilgroup" mode="multiframe-body">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="dbs:foil[1]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
 
   <xsl:variable name="thisfoilgroup">
     <xsl:text>foilgroup</xsl:text>
-    <xsl:number count="foilgroup" level="any" format="01"/>
+    <xsl:number count="dbs:foilgroup" level="any" format="01"/>
     <xsl:value-of select="$html.ext"/>
   </xsl:variable>
 
@@ -1173,17 +1174,17 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="multiframe-bottom">
+<xsl:template match="dbs:foilgroup" mode="multiframe-bottom">
   <xsl:variable name="thisfoilgroup">
     <xsl:text>foilgroup</xsl:text>
-    <xsl:number count="foilgroup" level="any" format="01"/>
+    <xsl:number count="dbs:foilgroup" level="any" format="01"/>
     <xsl:value-of select="$html.ext"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
   <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -1263,7 +1264,7 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="singleframe">
+<xsl:template match="dbs:foilgroup" mode="singleframe">
   <xsl:param name="thisfoilgroup">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:param>
@@ -1272,10 +1273,10 @@ function init() {
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up" select="(parent::slides|parent::foilgroup)[1]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up" select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
   <xsl:variable name="next" select="foil[1]"/>
-  <xsl:variable name="prev" select="(preceding::foil|parent::foilgroup|/slides)[last()]"/>
+  <xsl:variable name="prev" select="(preceding::dbs:foil|parent::dbs:foilgroup|/dbs:slides)[last()]"/>
   <body class="foilgroup">
     <xsl:call-template name="body.attributes"/>
     <xsl:choose>
@@ -1349,13 +1350,13 @@ function init() {
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
-  <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                    |parent::foilgroup[1]
-                                    |/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
+  <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                    |parent::dbs:foilgroup[1]
+                                    |/dbs:slides)[last()]"/>
 
   <xsl:variable name="doctype-public">
     <xsl:call-template name="doctype-public">
@@ -1455,7 +1456,7 @@ function init() {
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="foil" mode="multiframe">
+<xsl:template match="dbs:foil" mode="multiframe">
   <xsl:variable name="foilgroup" select="ancestor::foilgroup"/>
 
   <xsl:variable name="thisfoil">
@@ -1483,18 +1484,18 @@ function init() {
   </frameset>
 </xsl:template>
 
-<xsl:template match="foil" mode="multiframe-top">
+<xsl:template match="dbs:foil" mode="multiframe-top">
   <xsl:variable name="thisfoil">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
-  <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                    |parent::foilgroup[1]
-                                    |/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
+  <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                    |parent::dbs:foilgroup[1]
+                                    |/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -1567,7 +1568,7 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foil" mode="multiframe-body">
+<xsl:template match="dbs:foil" mode="multiframe-body">
   <xsl:variable name="thisfoil">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:variable>
@@ -1601,13 +1602,13 @@ function init() {
           </xsl:if>
 
           <xsl:if test="$keyboard.nav != 0 or $dynamic.toc != 0 or $active.toc != 0">
-            <xsl:variable name="home" select="/slides"/>
-            <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-            <xsl:variable name="next" select="(following::foil
-                                              |following::foilgroup)[1]"/>
-            <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                              |parent::foilgroup[1]
-                                              |/slides)[last()]"/>
+            <xsl:variable name="home" select="/dbs:slides"/>
+            <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+            <xsl:variable name="next" select="(following::dbs:foil
+                                              |following::dbs:foilgroup)[1]"/>
+            <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                              |parent::dbs:foilgroup[1]
+                                              |/dbs:slides)[last()]"/>
 
             <xsl:call-template name="links">
               <xsl:with-param name="home" select="$home"/>
@@ -1657,13 +1658,13 @@ function init() {
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
-  <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                    |parent::foilgroup[1]
-                                    |/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
+  <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                    |parent::dbs:foilgroup[1]
+                                    |/dbs:slides)[last()]"/>
 
   <xsl:call-template name="write.chunk">
     <xsl:with-param name="indent" select="$output.indent"/>
@@ -1736,7 +1737,7 @@ function init() {
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="foil" mode="singleframe">
+<xsl:template match="dbs:foil" mode="singleframe">
   <xsl:param name="thisfoil">
     <xsl:apply-templates select="." mode="filename"/>
   </xsl:param>
@@ -1745,13 +1746,13 @@ function init() {
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <xsl:variable name="home" select="/slides"/>
-  <xsl:variable name="up"   select="(parent::slides|parent::foilgroup)[1]"/>
-  <xsl:variable name="next" select="(following::foil
-                                    |following::foilgroup)[1]"/>
-  <xsl:variable name="prev" select="(preceding-sibling::foil[1]
-                                    |parent::foilgroup[1]
-                                    |/slides)[last()]"/>
+  <xsl:variable name="home" select="/dbs:slides"/>
+  <xsl:variable name="up"   select="(parent::dbs:slides|parent::dbs:foilgroup)[1]"/>
+  <xsl:variable name="next" select="(following::dbs:foil
+                                    |following::dbs:foilgroup)[1]"/>
+  <xsl:variable name="prev" select="(preceding-sibling::dbs:foil[1]
+                                    |parent::dbs:foilgroup[1]
+                                    |/dbs:slides)[last()]"/>
 
   <body class="foil">
     <xsl:call-template name="body.attributes"/>
@@ -1815,7 +1816,7 @@ function init() {
 
 <!-- ============================================================ -->
 
-<xsl:template match="slidesinfo" mode="toc">
+<xsl:template match="dbs:slides/info" mode="toc">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -1834,7 +1835,7 @@ function init() {
   </div>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="toc">
+<xsl:template match="dbs:foilgroup" mode="toc">
   <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
 
   <xsl:variable name="thisfoilgroup">
@@ -1859,11 +1860,11 @@ function init() {
         </xsl:otherwise>
       </xsl:choose>
     </a>
-    <xsl:apply-templates select="foil" mode="toc"/>
+    <xsl:apply-templates select="dbs:foil" mode="toc"/>
   </div>
 </xsl:template>
 
-<xsl:template match="foil" mode="toc">
+<xsl:template match="dbs:foil" mode="toc">
   <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
   <xsl:variable name="foil">
     <xsl:apply-templates select="." mode="filename"/>
@@ -1890,7 +1891,7 @@ function init() {
 
 <!-- ====================================================================== -->
 
-<xsl:template match="slidesinfo" mode="ns-toc">
+<xsl:template match="dbs:slides/info" mode="ns-toc">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -1924,7 +1925,7 @@ function init() {
   <xsl:text>');&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="foilgroup" mode="ns-toc">
+<xsl:template match="dbs:foilgroup" mode="ns-toc">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -1964,7 +1965,7 @@ function init() {
   <xsl:text>');&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="foil" mode="ns-toc">
+<xsl:template match="dbs:foil" mode="ns-toc">
   <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
 
   <xsl:choose>
@@ -2007,7 +2008,7 @@ function init() {
   <xsl:text>');&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="speakernotes" mode="ns-toc">
+<xsl:template match="dbs:speakernotes" mode="ns-toc">
   <!-- nop -->
 </xsl:template>
 
