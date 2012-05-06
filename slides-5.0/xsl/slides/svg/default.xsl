@@ -2,6 +2,7 @@
   xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:doc='http://nwalsh.com/xsl/documentation/1.0'
+  xmlns:dbs="http://docbook.org/ns/docbook-slides"
   exclude-result-prefixes='doc'>
 
   <xsl:import href='../../lib/lib.xsl'/>
@@ -121,7 +122,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="slides">
+  <xsl:template match="dbs:slides">
     <xsl:if test='$css-stylesheet != ""'>
       <xsl:processing-instruction name='xml-stylesheet'>
         <xsl:text> href="</xsl:text>
@@ -132,7 +133,7 @@
 
     <svg xsl:use-attribute-sets="svg.attributes">
       <title>
-        <xsl:value-of select="slidesinfo/title"/>
+        <xsl:value-of select="dbs:slides/info/title"/>
       </title>
 
       <defs>
@@ -147,10 +148,10 @@
         </xsl:call-template>
 
         <text id='title-main' x='50%' y='33.3%' text-anchor='middle' xsl:use-attribute-sets='text-title'>
-          <xsl:value-of select='/slides/slidesinfo/title'/>
+          <xsl:value-of select='/dbs:slides/info/title'/>
         </text>
         <g id='title-author'>
-          <xsl:apply-templates select='/slides/slidesinfo/author|/slides/slidesinfo/corpauthor'/>
+          <xsl:apply-templates select='/dbs:slides/info/author|/dbs:slides/info/corpauthor'/>
         </g>
 
         <set attributeName='display' to='none' attributeType='CSS'>
@@ -159,16 +160,16 @@
           </xsl:attribute>
           <xsl:attribute name='end'>
             <xsl:text>foil1-previous-button.click; </xsl:text>
-            <xsl:value-of select='concat("foil", count(//foil), ".click")'/>
-            <xsl:for-each select='//foil'>
-              <xsl:value-of select='concat("; foil", count(preceding-sibling::foil|preceding::foil) + 1, "-title-button.click")'/>
+            <xsl:value-of select='concat("foil", count(//dbs:foil), ".click")'/>
+            <xsl:for-each select='//dbs:foil'>
+              <xsl:value-of select='concat("; foil", count(preceding-sibling::dbs:foil|preceding::dbs:foil) + 1, "-title-button.click")'/>
             </xsl:for-each>
           </xsl:attribute>
         </set>
       </g>
 
       <!-- Create the TOC -->
-      <xsl:if test='foilgroup'>
+      <xsl:if test='dbs:foilgroup'>
         <g id='toc' display='none'>
 
           <xsl:call-template name='render-background'>
@@ -177,20 +178,20 @@
           </xsl:call-template>
 
           <text id='toc-main' x='50%' y='50' text-anchor='middle' xsl:use-attribute-sets='text-title'>
-            <xsl:value-of select='/slides/slidesinfo/title'/>
+            <xsl:value-of select='/dbs:slides/info/title'/>
           </text>
 
           <set attributeName='display' to='inline' attributeType='CSS'>
             <xsl:attribute name='begin'>
               <xsl:text>title.click</xsl:text>
-              <xsl:for-each select='//foil'>
-                <xsl:value-of select='concat("; foil", count(preceding-sibling::foil|preceding::foil) + 1, "-toc-button.click")'/>
+              <xsl:for-each select='//dbs:foil'>
+                <xsl:value-of select='concat("; foil", count(preceding-sibling::dbs:foil|preceding::dbs:foil) + 1, "-toc-button.click")'/>
               </xsl:for-each>
             </xsl:attribute>
             <xsl:attribute name='end'>
               <xsl:text>toc.click; toc-content.click</xsl:text>
-              <xsl:for-each select='//foilgroup'>
-                <xsl:value-of select='concat("; index-foilgroup-", count(preceding-sibling::foilgroup|preceding::foilgroup) + 1, ".click")'/>
+              <xsl:for-each select='//dbs:foilgroup'>
+                <xsl:value-of select='concat("; index-foilgroup-", count(preceding-sibling::dbs:foilgroup|preceding::dbs:foilgroup) + 1, ".click")'/>
               </xsl:for-each>
             </xsl:attribute>
           </set>
@@ -198,10 +199,10 @@
         </g>
         <g id='toc-content' display='none'>
           <xsl:call-template name='layout-toc-columns'>
-            <xsl:with-param name='nodes' select='foilgroup'/>
+            <xsl:with-param name='nodes' select='dbs:foilgroup'/>
             <xsl:with-param name='x'>
               <xsl:choose>
-                <xsl:when test='count(foilgroup) > $toc.line.max'>
+                <xsl:when test='count(dbs:foilgroup) > $toc.line.max'>
                   <xsl:text>50</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>75</xsl:otherwise>
@@ -211,21 +212,21 @@
           <set attributeName='display' to='inline' attributeType='CSS'>
             <xsl:attribute name='begin'>
               <xsl:text>title.click</xsl:text>
-              <xsl:for-each select='//foil'>
-                <xsl:value-of select='concat("; foil", count(preceding-sibling::foil|preceding::foil) + 1, "-toc-button.click")'/>
+              <xsl:for-each select='//dbs:foil'>
+                <xsl:value-of select='concat("; foil", count(preceding-sibling::dbs:foil|preceding::dbs:foil) + 1, "-toc-button.click")'/>
               </xsl:for-each>
             </xsl:attribute>
             <xsl:attribute name='end'>
               <xsl:text>toc.click; toc-content.click</xsl:text>
-              <xsl:for-each select='//foilgroup'>
-                <xsl:value-of select='concat("; index-foilgroup-", count(preceding-sibling::foilgroup|preceding::foilgroup) + 1, ".click")'/>
+              <xsl:for-each select='//dbs:foilgroup'>
+                <xsl:value-of select='concat("; index-foilgroup-", count(preceding-sibling::dbs:foilgroup|preceding::dbs:foilgroup) + 1, ".click")'/>
               </xsl:for-each>
             </xsl:attribute>
           </set>
         </g>
       </xsl:if>
 
-      <xsl:apply-templates select='*[not(self::slidesinfo)]'/>
+      <xsl:apply-templates select='*[not(self::dbs:slides/info)]'/>
 
     </svg>
   </xsl:template>
@@ -304,7 +305,7 @@
             <xsl:if test='$entries-are-links = "yes"'>
               <xsl:attribute name='id'>
                 <xsl:text>index-foilgroup-</xsl:text>
-                <xsl:value-of select='count(preceding-sibling::foilgroup|preceding::foilgroup) + 1'/>
+                <xsl:value-of select='count(preceding-sibling::dbs:foilgroup|preceding::dbs:foilgroup) + 1'/>
               </xsl:attribute>
             </xsl:if>
             <text x='{$x}' y='{position() * 35 + 75}' xsl:use-attribute-sets='text-main'>
@@ -332,8 +333,8 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match='foilgroup'>
-    <xsl:variable name='fg-num' select='count(preceding-sibling::foilgroup) + 1'/>
+  <xsl:template match='dbs:foilgroup'>
+    <xsl:variable name='fg-num' select='count(preceding-sibling::dbs:foilgroup) + 1'/>
 
     <!-- Add a separator foil to indicate progress -->
     <g id='toc-sep-{$fg-num}' display='none'>
@@ -343,7 +344,7 @@
       </xsl:call-template>
 
       <text id='toc-sep-{$fg-num}-main' x='50%' y='50' text-anchor='middle' xsl:use-attribute-sets='text-title'>
-        <xsl:value-of select='/slides/slidesinfo/title'/>
+        <xsl:value-of select='/dbs:slides/info/title'/>
       </text>
 
       <set attributeName='display' to='inline' attributeType='CSS' end='toc-sep-{$fg-num}.click; toc-sep-{$fg-num}-content.click'>
@@ -354,9 +355,9 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:text>index-foilgroup-</xsl:text>
-              <xsl:value-of select='count(preceding-sibling::foilgroup) + 1'/>
+              <xsl:value-of select='count(preceding-sibling::dbs:foilgroup) + 1'/>
               <xsl:text>.click; foil</xsl:text>
-              <xsl:value-of select='count(preceding::foil)'/>
+              <xsl:value-of select='count(preceding::dbs:foil)'/>
               <xsl:text>.click</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
@@ -366,12 +367,12 @@
     </g>
     <g id='toc-sep-{$fg-num}-content' display='none'>
       <xsl:call-template name='layout-toc-columns'>
-        <xsl:with-param name='nodes' select='/slides/foilgroup'/>
+        <xsl:with-param name='nodes' select='/dbs:slides/foilgroup'/>
         <xsl:with-param name='entries-are-links' select='no'/>
         <xsl:with-param name='highlight' select='.'/>
         <xsl:with-param name='x'>
           <xsl:choose>
-            <xsl:when test='count(/slides/foilgroup) > $toc.line.max'>
+            <xsl:when test='count(/dbs:slides/foilgroup) > $toc.line.max'>
               <xsl:text>50</xsl:text>
             </xsl:when>
             <xsl:otherwise>75</xsl:otherwise>
@@ -386,9 +387,9 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:text>index-foilgroup-</xsl:text>
-              <xsl:value-of select='count(preceding-sibling::foilgroup) + 1'/>
+              <xsl:value-of select='count(preceding-sibling::dbs:foilgroup) + 1'/>
               <xsl:text>.click; foil</xsl:text>
-              <xsl:value-of select='count(preceding::foil)'/>
+              <xsl:value-of select='count(preceding::dbs:foil)'/>
               <xsl:text>.click</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
@@ -398,11 +399,11 @@
 
     <!-- still want TOC and Previous buttons -->
 
-    <xsl:apply-templates select='foil'/>
+    <xsl:apply-templates select='dbs:foil'/>
   </xsl:template>
 
-  <xsl:template match='foil'>
-    <xsl:variable name='number' select='count(preceding-sibling::foil|preceding::foil) + 1'/>
+  <xsl:template match='dbs:foil'>
+    <xsl:variable name='number' select='count(preceding-sibling::dbs:foil|preceding::dbs:foil) + 1'/>
 
     <g id='foil{$number}' display='none'>
       <xsl:call-template name='render-background'>
@@ -412,11 +413,11 @@
       <text id='foil{$number}-title' transform='translate(50 50)'>
         <tspan id='foil{$number}-title-foilgroup' x='0' y='0' xsl:use-attribute-sets='text-title'>
           <xsl:choose>
-            <xsl:when test='parent::foilgroup'>
+            <xsl:when test='parent::dbs:foilgroup'>
               <xsl:value-of select='../title'/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select='/slides/slidesinfo/title'/>
+              <xsl:value-of select='/dbs:slides/info/title'/>
             </xsl:otherwise>
           </xsl:choose>
         </tspan>
@@ -473,7 +474,7 @@
   <xsl:template name='toc-button'/>
   <xsl:template name='previous-button'/>
 
-  <xsl:template match='foilinfo|foil/title|foil/subtitle|foil/titleabbrev'/>
+  <xsl:template match='dbs:foil/info|foil/info/title|foil/info/subtitle|foil/info/titleabbrev'/>
 
   <xsl:template name='foil-events'>
     <xsl:param name='number' select='0'/>
@@ -496,28 +497,28 @@
             end='foil{$number}.click; foil{$number}-toc-button.click'>
           <xsl:attribute name='begin'>
             <xsl:choose>
-              <xsl:when test='parent::foilgroup'>
-                <xsl:value-of select='concat("toc-sep-", count(preceding::foilgroup) + 1, ".click")'/>
+              <xsl:when test='parent::dbs:foilgroup'>
+                <xsl:value-of select='concat("toc-sep-", count(preceding::dbs:foilgroup) + 1, ".click")'/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>title.click</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test='parent::foilgroup and not(preceding-sibling::foil)'>
-              <xsl:value-of select='concat("; index-foilgroup-", count(preceding::foilgroup) + 1, ".click")'/>
+            <xsl:if test='parent::dbs:foilgroup and not(preceding-sibling::dbs:foil)'>
+              <xsl:value-of select='concat("; index-foilgroup-", count(preceding::dbs:foilgroup) + 1, ".click")'/>
             </xsl:if>
             <xsl:value-of select='concat("; foil", $number + 1, "-previous-button.click")'/>
           </xsl:attribute>
         </set>
       </xsl:when>
-      <xsl:when test='count(following-sibling::foil|following::foil) = 0'>
+      <xsl:when test='count(following-sibling::dbs:foil|following::dbs:foil) = 0'>
         <!-- This is the very last foil -->
         <set attributeName='{$attribute}' to='{$onvalue}' attributeType='CSS'
             end='foil{$number}.click; foil{$number}-toc-button.click; foil{$number}-previous-button.click'>
           <xsl:attribute name='begin'>
             <xsl:choose>
-              <xsl:when test='parent::foilgroup and not(preceding-sibling::foil)'>
-                <xsl:value-of select='concat("; index-foilgroup-", count(preceding::foilgroup) + 1, ".click; toc-sep-", count(preceding::foilgroup) + 1, ".click")'/>
+              <xsl:when test='parent::dbs:foilgroup and not(preceding-sibling::dbs:foil)'>
+                <xsl:value-of select='concat("; index-foilgroup-", count(preceding::dbs:foilgroup) + 1, ".click; toc-sep-", count(preceding::dbs:foilgroup) + 1, ".click")'/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select='concat("foil", $number - 1, ".click")'/>
@@ -532,8 +533,8 @@
           <xsl:attribute name='begin'>
             <xsl:value-of select='concat("foil", $number + 1, "-previous-button.click")'/>
             <xsl:choose>
-              <xsl:when test='parent::foilgroup and not(preceding-sibling::foil)'>
-                <xsl:value-of select='concat("; index-foilgroup-", count(preceding::foilgroup) + 1, ".click; toc-sep-", count(preceding::foilgroup) + 1, ".click")'/>
+              <xsl:when test='parent::dbs:foilgroup and not(preceding-sibling::dbs:foil)'>
+                <xsl:value-of select='concat("; index-foilgroup-", count(preceding::dbs:foilgroup) + 1, ".click; toc-sep-", count(preceding::dbs:foilgroup) + 1, ".click")'/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select='concat("; foil", $number - 1, ".click")'/>
@@ -674,12 +675,6 @@
     <g transform='translate(0 30)'>
       <image xlink:href='{@fileref}' x='0' y='0' width='600' height='400'/>
     </g>
-  </xsl:template>
-
-  <xsl:template match='ulink'>
-    <a xlink:href='{@url}'>
-      <xsl:apply-templates/>
-    </a>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:rx="http://www.renderx.com/XSL/Extensions"
                 version="1.0">
@@ -202,7 +203,7 @@
   <xsl:param name="master-reference" select="'unknown'"/>
 
   <xsl:variable name="last-slide"
-                select="(//foil|//foilgroup)[last()]"/>
+                select="(//dbs:foil|//dbs:foilgroup)[last()]"/>
 
   <xsl:variable name="last-id">
     <xsl:choose>
@@ -225,14 +226,14 @@
         <fo:table-row height="14pt">
           <fo:table-cell text-align="left">
             <fo:block>
-              <xsl:if test="self::foil">
+              <xsl:if test="self::dbs:foil">
                 <xsl:choose>
-                  <xsl:when test="ancestor::foilgroup[1]/titleabbrev">
-                    <xsl:apply-templates select="ancestor::foilgroup[1]/titleabbrev"
+                  <xsl:when test="ancestor::dbs:foilgroup[1]/info/titleabbrev">
+                    <xsl:apply-templates select="ancestor::dbs:foilgroup[1]/info/titleabbrev"
                                          mode="titlepage.mode"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:apply-templates select="ancestor::foilgroup[1]/title"
+                    <xsl:apply-templates select="ancestor::dbs:foilgroup[1]/info/title"
                                          mode="titlepage.mode"/>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -241,12 +242,12 @@
           </fo:table-cell>
           <fo:table-cell text-align="center">
             <fo:block>
-              <xsl:if test="/slides/slidesinfo/releaseinfo[@role='copyright']">
-                <xsl:apply-templates select="/slides/slidesinfo/releaseinfo[@role='copyright']"
+              <xsl:if test="/dbs:slides/info/releaseinfo[@role='copyright']">
+                <xsl:apply-templates select="/dbs:slides/sinfo/releaseinfo[@role='copyright']"
                                      mode="value"/>
                 <xsl:text>&#160;&#160;&#160;</xsl:text>
               </xsl:if>
-              <xsl:apply-templates select="/slides/slidesinfo/copyright"
+              <xsl:apply-templates select="/dbs:slides/sinfo/copyright"
                                    mode="titlepage.mode"/>
             </fo:block>
           </fo:table-cell>
@@ -286,7 +287,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="slides">
+<xsl:template match="dbs:slides">
   <xsl:variable name="master-reference">
     <xsl:call-template name="select.pagemaster"/>
   </xsl:variable>
@@ -309,18 +310,18 @@
           <xsl:with-param name="conditional" select="0"/>
         </xsl:call-template>
         <xsl:call-template name="slides.titlepage"/>
-        <xsl:apply-templates select="speakernotes"/>
+        <xsl:apply-templates select="dbs:speakernotes"/>
       </fo:block>
     </fo:flow>
   </fo:page-sequence>
-  <xsl:apply-templates select="foil|foilgroup"/>
+  <xsl:apply-templates select="dbs:foil|dbs:foilgroup"/>
 </xsl:template>
 
-<xsl:template match="slidesinfo"/>
+<xsl:template match="dbs:slides/info"/>
 
-<xsl:template match="slides" mode="title.markup">
+<xsl:template match="dbs:slides" mode="title.markup">
   <xsl:param name="allow-anchors" select="'0'"/>
-  <xsl:apply-templates select="(slidesinfo/title|title)[1]"
+  <xsl:apply-templates select="dbs:slides/info/title"
                        mode="title.markup">
     <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
   </xsl:apply-templates>
@@ -341,7 +342,7 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="foilgroup">
+<xsl:template match="dbs:foilgroup">
   <xsl:variable name="master-reference">
     <xsl:call-template name="select.pagemaster"/>
   </xsl:variable>
@@ -364,9 +365,9 @@
 
     <fo:flow flow-name="xsl-region-body">
       <fo:block>
-	<xsl:if test="*[not(self::foil)]">
+	<xsl:if test="*[not(self::dbsfoil)]">
 	  <fo:block xsl:use-attribute-sets="foil.properties" space-after="1em">
-	    <xsl:apply-templates select="*[not(self::foil)]"/>
+	    <xsl:apply-templates select="*[not(self::dbs:foil)]"/>
 	  </fo:block>
 	</xsl:if>
 
@@ -374,17 +375,17 @@
       </fo:block>
     </fo:flow>
   </fo:page-sequence>
-  <xsl:apply-templates select="foil"/>
+  <xsl:apply-templates select="dbs:foil"/>
 </xsl:template>
 
-<xsl:template match="foilgroup/title"/>
-<xsl:template match="foilgroup/titleabbrev"/>
+<xsl:template match="dbs:foilgroup/info/title"/>
+<xsl:template match="dbs:foilgroup/info/titleabbrev"/>
 
-<xsl:template match="foilgroup/titleabbrev" mode="titlepage.mode">
+<xsl:template match="dbs:foilgroup/info/titleabbrev" mode="titlepage.mode">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="slides/foilgroup/title" mode="titlepage.mode">
+<xsl:template match="dbs:slides/foilgroup/info/title" mode="titlepage.mode">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -397,7 +398,7 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="foilgroupinfo"/>
+<xsl:template match="dbs:foilgroup/info"/>
 
 <!-- ============================================================ -->
 
@@ -416,7 +417,7 @@
 </xsl:template>
 -->
 
-<xsl:template match="foil">
+<xsl:template match="dbs:foil">
   <xsl:variable name="master-reference">
     <xsl:call-template name="select.pagemaster"/>
   </xsl:variable>
@@ -446,18 +447,18 @@
   </fo:page-sequence>
 </xsl:template>
 
-<xsl:template match="foilinfo"/>
-<xsl:template match="foil/title"/>
-<xsl:template match="foil/subtitle">
+<xsl:template match="dbs:foil/info"/>
+<xsl:template match="dbs:foil/info/title"/>
+<xsl:template match="dbs:foil/info/subtitle">
   <fo:block xsl:use-attribute-sets="foil.subtitle.properties">
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
-<xsl:template match="foil/titleabbrev"/>
+<xsl:template match="dbs:foil/info/titleabbrev"/>
 
 <!-- ============================================================ -->
 
-<xsl:template match="slides" mode="label.markup">
+<xsl:template match="dbs:slides" mode="label.markup">
   <xsl:if test="@label">
     <xsl:value-of select="@label"/>
   </xsl:if>
@@ -465,7 +466,7 @@
 
 <!-- ============================================================ -->
 
-<xsl:template match="speakernotes">
+<xsl:template match="dbs:speakernotes">
   <fo:block xsl:use-attribute-sets="speakernote.properties">
     <xsl:apply-templates/>
   </fo:block>
@@ -476,7 +477,7 @@
 
 <!-- XEP -->
 
-<xsl:template match="slides|foilgroup|foil[not(@role) or @role != 'ENDTITLE']"
+<xsl:template match="dbs:slides|dbs:foilgroup|dbs:foil[not(@role) or @role != 'ENDTITLE']"
               mode="xep.outline">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
@@ -513,7 +514,7 @@
 
 <!-- Handling of xrefs -->
 
-<xsl:template match="foil|foilgroup" mode="xref-to">
+<xsl:template match="dbs:foil|dbs:foilgroup" mode="xref-to">
   <xsl:param name="referrer"/>
   <xsl:param name="xrefstyle"/>
   

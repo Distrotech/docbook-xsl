@@ -6,6 +6,7 @@
                 xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:set="http://exslt.org/sets"
+                xmlns:dbs="http://docbook.org/ns/docbook-slides"
 		version="1.0"
                 exclude-result-prefixes="doc exsl set">
 
@@ -23,15 +24,15 @@
 <xsl:param name="keyboard.nav" select="0"/>
 <xsl:param name="htmlhelp.default.topic" select="'index.html'"/>
 
-<xsl:template match="slides" mode="title.markup">
+<xsl:template match="dbs:slides" mode="title.markup">
   <xsl:param name="allow-anchors" select="0"/>
-  <xsl:apply-templates select="(slidesinfo/title|title)[1]"
+  <xsl:apply-templates select="dbs:slides/info/title"
                        mode="title.markup">
     <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
   </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="slides|foilgroup" mode="hhc">
+<xsl:template match="dbs:slides|dbs:foilgroup" mode="hhc">
   <xsl:variable name="title">
     <xsl:if test="$htmlhelp.autolabel=1">
       <xsl:variable name="label.markup">
@@ -54,14 +55,14 @@
       </param>
     </OBJECT></LI>&lf;
   </xsl:if>
-  <xsl:if test="foil|foilgroup">
+  <xsl:if test="dbs:foil|dbs:foilgroup">
     <UL>&lf;
-      <xsl:apply-templates select="foil|foilgroup" mode="hhc"/>
+      <xsl:apply-templates select="dbs:foil|dbs:foilgroup" mode="hhc"/>
     </UL>&lf;
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="foil" mode="hhc">
+<xsl:template match="dbs:foil" mode="hhc">
   <xsl:variable name="title">
     <xsl:if test="$htmlhelp.autolabel=1">
       <xsl:variable name="label.markup">

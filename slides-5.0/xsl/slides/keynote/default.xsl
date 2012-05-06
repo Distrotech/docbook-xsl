@@ -6,6 +6,7 @@
   xmlns:doc='http://nwalsh.com/xsl/documentation/1.0'
   xmlns:str='http://xsltsl.org/string'
   xmlns:math='http://xsltsl.org/math'
+  xmlns:dbs="http://docbook.org/ns/docbook-slides"
   exclude-result-prefixes='doc str math'>
 
   <xsl:import href='xsltsl/stdlib.xsl'/>
@@ -72,7 +73,7 @@
     </slide-list>
   </xsl:template>
 
-  <xsl:template match='slides' mode='slides'>
+  <xsl:template match='dbs:slides' mode='slides'>
     <slide id='slide-1' master-slide-id="{$masters/apxl:master-slide[@name=$slide-master]/@id}">
       <drawables>
         <body visibility='tracks-master' vertical-alignment='tracks-master'/>
@@ -85,43 +86,43 @@
       <bullets>
         <bullet marker-type='inherited' level='0'>
           <content tab-stops='L 96' font-size='84' font-color='g1' font-name='GillSans' paragraph-alignment='center'>
-            <xsl:apply-templates select='slidesinfo/title/node()'/>
+            <xsl:apply-templates select='dbs:slides/info/title/node()'/>
           </content>
         </bullet>
         <xsl:choose>
-          <xsl:when test='slidesinfo/subtitle'>
+          <xsl:when test='dbs:slides/info/subtitle'>
             <bullet marker-type='inherited' level='1'>
               <content tab-stops='L 96' font-size='36' font-color='g1' font-name='GillSans' paragraph-alignment='center'>
-                <xsl:apply-templates select='slidesinfo/subtitle/node()' mode='slides'/>
+                <xsl:apply-templates select='dbs:slides/info/subtitle/node()' mode='slides'/>
               </content>
             </bullet>
           </xsl:when>
-          <xsl:when test='slidesinfo/corpauthor'>
+          <xsl:when test='dbs:slides/info/corpauthor'>
             <bullet marker-type='inherited' level='1'>
               <content tab-stops='L 96' font-size='36' font-color='g1' font-name='GillSans' paragraph-alignment='center'>
-                <xsl:apply-templates select='slidesinfo/corpauthor/node()' mode='slides'/>
+                <xsl:apply-templates select='dbs:slides/info/corpauthor/node()' mode='slides'/>
               </content>
             </bullet>
           </xsl:when>
-          <xsl:when test='slidesinfo/author'>
+          <xsl:when test='dbs:slides/info/author'>
             <bullet marker-type='inherited' level='1'>
               <content tab-stops='L 96' font-size='36' font-color='g1' font-name='GillSans' paragraph-alignment='center'>
-                <xsl:apply-templates select='slidesinfo/author' mode='slides'/>
+                <xsl:apply-templates select='dbs:slides/info/author' mode='slides'/>
               </content>
             </bullet>
           </xsl:when>
         </xsl:choose>
       </bullets>
       <notes font-size='18' font-name='LucidaGrande'>
-        <xsl:apply-templates select='slidesinfo/*[not(self::title|self::subtitle|self::corpauthor|self::author)]' mode='slides'/>
+        <xsl:apply-templates select='dbs:/slides/info/*[not(self::dbs:title|self::dbs:subtitle|self::dbs:corpauthor|self::dbs:author)]' mode='slides'/>
       </notes>
     </slide>
 
-    <xsl:if test='foilgroup'>
+    <xsl:if test='dbs:foilgroup'>
       <xsl:call-template name='overview'/>
     </xsl:if>
 
-    <xsl:apply-templates select='foilgroup|foil' mode='slides'/>
+    <xsl:apply-templates select='dbs:foilgroup|dbs:foil' mode='slides'/>
   </xsl:template>
 
   <xsl:template name='overview'>
@@ -132,7 +133,7 @@
         <body visibility='tracks-master' vertical-alignment='tracks-master'/>
         <title visibility='tracks-master' vertical-alignment='tracks-master'/>
 
-        <xsl:for-each select='ancestor-or-self::slides/foilgroup'>
+        <xsl:for-each select='ancestor-or-self::dbs:slides/dbs:foilgroup'>
           <textbox id='textbox-{position()}' grow-horizontally='true' transformation='1 0 0 1 {100 + floor((position() - 1) div 10) * 400} {200 + floor((position() - 1) mod 10) * 50}' size='200 50'>
             <content tab-stops='L 84' font-size='36' paragraph-alignment='left'>
               <xsl:attribute name='font-color'>
@@ -174,8 +175,8 @@
     <xsl:text>.  </xsl:text>
   </xsl:template>
 
-  <xsl:template match='foilgroup' mode='slides'>
-    <xsl:variable name='number' select='count(preceding-sibling::foilgroup) + count(preceding::foil) + 1'/>
+  <xsl:template match='dbs:foilgroup' mode='slides'>
+    <xsl:variable name='number' select='count(preceding-sibling::dbs:foilgroup) + count(preceding::dbs:foil) + 1'/>
 
     <xsl:call-template name='overview'>
       <xsl:with-param name='current' select='.'/>
@@ -184,7 +185,7 @@
     <slide id='foilgroup-{generate-id()}'>
       <xsl:attribute name='master-slide-id'>
         <xsl:choose>
-          <xsl:when test='*[not(self::foil|self::foilgroupinfo|self::speakernotes)]'>
+          <xsl:when test='*[not(self::dbs:foil|self::dbs:foilgroup/info|self::dbs:speakernotes)]'>
             <xsl:value-of select='$masters/apxl:master-slide[@name=$title-only-master]/@id'/>
           </xsl:when>
           <xsl:otherwise>
@@ -211,10 +212,10 @@
 
         <xsl:apply-templates select='itemizedlist/listitem' mode='slides'/>
       </bullets>
-      <xsl:if test='speakernotes'>
+      <xsl:if test='dbs:speakernotes'>
         <notes font-size='18' font-name='LucidaGrande'>
-          <xsl:apply-templates select='speakernotes/para[1]/node()' mode='slides'/>
-          <xsl:for-each select='speakernotes/para[position() != 1]'>
+          <xsl:apply-templates select='dbs:speakernotes/para[1]/node()' mode='slides'/>
+          <xsl:for-each select='dbs:speakernotes/para[position() != 1]'>
             <xsl:text>; </xsl:text>
             <xsl:apply-templates select='node()' mode='slides'/>
           </xsl:for-each>
@@ -222,12 +223,12 @@
       </xsl:if>
     </slide>
 
-    <xsl:apply-templates select='foil' mode='slides'/>
+    <xsl:apply-templates select='dbs:foil' mode='slides'/>
 
   </xsl:template>
 
-  <xsl:template match='foil' mode='slides'>
-    <xsl:variable name='number' select='count(preceding::foilgroup) + count(preceding::foil) + count(preceding-sibling::foil) + 1'/>
+  <xsl:template match='dbs:foil' mode='slides'>
+    <xsl:variable name='number' select='count(preceding::dbs:foilgroup) + count(preceding::dbs:foil) + count(preceding-sibling::dbs:foil) + 1'/>
 
     <slide id='foil-{generate-id()}'>
       <xsl:attribute name='master-slide-id'>
@@ -270,10 +271,10 @@
         </bullet>
         <xsl:apply-templates select='itemizedlist/listitem' mode='slides'/>
       </bullets>
-      <xsl:if test='speakernotes'>
+      <xsl:if test='dbs:speakernotes'>
         <notes font-size='18' font-name='LucidaGrande'>
-          <xsl:apply-templates select='speakernotes/para[1]/node()' mode='slides'/>
-          <xsl:for-each select='speakernotes/para[position() != 1]'>
+          <xsl:apply-templates select='dbs:speakernotes/para[1]/node()' mode='slides'/>
+          <xsl:for-each select='dbs:speakernotes/para[position() != 1]'>
             <xsl:text>; </xsl:text>
             <xsl:apply-templates select='node()' mode='slides'/>
           </xsl:for-each>
@@ -365,7 +366,7 @@
         </plugin>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test='not(self::foilgroup) and .//imageobject'>
+        <xsl:if test='not(self::dbs:foilgroup) and .//imageobject'>
           <xsl:variable name='base'>
             <xsl:call-template name='str:substring-after-last'>
               <xsl:with-param name='text' select='.//imageobject/imagedata/@fileref'/>
