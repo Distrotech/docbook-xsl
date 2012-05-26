@@ -1676,6 +1676,12 @@ proportional-column-width() function.</para>
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="table/caption">
+  <fo:block xsl:use-attribute-sets="table.caption.properties">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
 <!-- ==================================================================== -->
 
 </xsl:stylesheet>
