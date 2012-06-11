@@ -38,6 +38,7 @@ include "docbook.rnc" inherit = db {
 dbs.slides = element slides { dbs.slides.attlist,
   db.info,
   dbs.speakernotes?,
+  dbs.handoutnotes?,
   dbs.foil*,
   dbs.foilgroup*
 }
@@ -57,6 +58,7 @@ dbs.foilgroup = element foilgroup {
   dbs.foilgroup.attlist,
   db.info?,
   dbs.speakernotes?,
+  dbs.handoutnotes?,
   db.all.blocks*,
   dbs.foil+
 }
@@ -75,6 +77,7 @@ dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
 dbs.foil = element foil { dbs.foil.attlist,
    db.info?,
    dbs.speakernotes?,
+   dbs.handoutnotes?,
    db.all.blocks+,
    db.navigation.components*
 }
@@ -97,6 +100,16 @@ dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
 dbs.speakernotes.role.attribute = attribute role { text }
 
 dbs.speakernotes.attlist = dbs.speakernotes.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
+
+dbs.handoutnotes = element handoutnotes { dbs.handoutnotes.attlist,
+  db.all.blocks+
+}
+
+dbs.handoutnotes.role.attribute = attribute role { text }
+
+dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
 
