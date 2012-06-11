@@ -1,6 +1,6 @@
 include $(DOCBOOK_SVN)/buildtools/Makefile.incl
 
-DIRS = fo html xhtml
+DIRS = fo
 
 base:
 	for i in $(DIRS) __bogus__; do \
