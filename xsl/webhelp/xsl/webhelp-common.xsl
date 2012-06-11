@@ -38,7 +38,7 @@
     <xsl:param name="para.propagates.style" select="1"/>
     <xsl:param name="phrase.propagates.style" select="1"/>
     <xsl:param name="chunk.first.sections" select="1"/>
-    <xsl:param name="chunk.section.depth" select="1"/>
+    <xsl:param name="chunk.section.depth" select="3"/>
     <xsl:param name="use.id.as.filename" select="1"/>
     <xsl:param name="branding">not set</xsl:param>
     <xsl:param name="brandname"> </xsl:param>
@@ -217,6 +217,9 @@ border: none; background: none; font-weight: none; color: none; }
 .ui-tabs .ui-tabs-nav li { top: 0px; margin: -2px 0 1px; text-transform: uppercase; font-size: 10.5px;}
 .ui-tabs .ui-tabs-nav li a { padding: .25em 2em .25em 1em; margin: .5em; text-shadow: 0 1px 0 rgba(255,255,255,.5); }
         </style>
+	<xsl:comment><xsl:text>[if IE]>
+	&lt;link rel="stylesheet" type="text/css" href="../common/css/ie.css"/>
+	&lt;![endif]</xsl:text></xsl:comment>
 
 	<!-- 
 	     browserDetect is an Oxygen addition to warn the user if they're using chrome from the file system.
