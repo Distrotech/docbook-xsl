@@ -70,6 +70,7 @@ dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.slides.status.attribute?
+  & dbs.incremental.attribute?
 
 dbs.foil = element foil { dbs.foil.attlist,
    db.info?,
@@ -87,6 +88,7 @@ dbs.foil.attlist = dbs.foil.role.attribute?
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.foil.status.attribute?
+  & dbs.incremental.attribute?
 
 dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
   db.all.blocks+
@@ -97,3 +99,5 @@ dbs.speakernotes.role.attribute = attribute role { text }
 dbs.speakernotes.attlist = dbs.speakernotes.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
+
+dbs.incremental.attribute = attribute incremental { "0" | "1" }
