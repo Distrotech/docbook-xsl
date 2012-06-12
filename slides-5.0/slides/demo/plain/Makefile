@@ -1,8 +1,7 @@
 include ../../../buildtools/Makefile.incl
-SLIDES=../source/slides.xml
+SLIDES=../../doc/slides.xml
 
-index.html: ../../xsl/html/plain.xsl
-
+index.html: ../../xsl/slides/xhtml/plain.xsl
 	$(XSLT) $(SLIDES) $<
 
 clean:
