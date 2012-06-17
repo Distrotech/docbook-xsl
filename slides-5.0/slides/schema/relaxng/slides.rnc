@@ -73,6 +73,7 @@ dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
   & db.label.attribute?
   & dbs.slides.status.attribute?
   & dbs.incremental.attribute?
+  & dbs.collapsable.attribute?
 
 dbs.foil = element foil { dbs.foil.attlist,
    db.info?,
@@ -92,6 +93,7 @@ dbs.foil.attlist = dbs.foil.role.attribute?
   & db.label.attribute?
   & dbs.foil.status.attribute?
   & dbs.incremental.attribute?
+  & dbs.collapsable.attribute?
 
 dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
   db.all.blocks+
@@ -114,3 +116,4 @@ dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
   & db.common.linking.attributes
 
 dbs.incremental.attribute = attribute incremental { "0" | "1" }
+dbs.collapsable.attribute = attribute collapsable { "0" | "1" | "expanded" }
