@@ -416,6 +416,34 @@
 	</listitem>
       </itemizedlist>
     </dbs:foil>
+  
+    <dbs:foil collapsable="1">
+      <info>
+        <title>Collapsable Lists</title>
+      </info>
+      
+      <orderedlist>
+	<listitem>
+          <orderedlist>
+          <listitem>
+	    <para>If you set the <code>collapsable</code> attribute ...</para>
+	</listitem>
+	
+	<listitem>
+	  <para>... to <literal>1</literal> on a foil, ...</para>
+	</listitem>
+	
+	<listitem>
+	  <para>... then you will get collapsable lists, ...</para>
+	</listitem>
+	
+	<listitem>
+	  <para>... like this.  (Also depending on the output format.)</para>
+	</listitem>
+      </orderedlist>
+	</listitem>
+      </orderedlist>
+    </dbs:foil>
   </dbs:foilgroup>
   
   <dbs:foilgroup>
@@ -440,14 +468,15 @@
 	  </tr>
 
 	  <tr>
+	    <td>xhtml/slidy.xsl</td>
+	    <td>Single XHTL file in W3C HTML Slidy format.</td>
+	  </tr>
+
+	  <tr>
 	    <td>xhtml/s5.xsl</td>
 	    <td>Single XHTML file in S5 format.</td>
 	  </tr>
 
-	  <tr>
-	    <td>xhtml/slidy.xsl</td>
-	    <td>Single XHTL file in W3C HTML Slidy format.</td>
-	  </tr>
 	</tbody>
       </informaltable>
     </dbs:foil>
@@ -483,6 +512,36 @@
     
     <dbs:foil>
       <info>
+        <title>W3C HTML Slidy</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para>W3C <uri xlink:href="http://www.w3.org/Talks/Tools/Slidy2/">HTML Slidy</uri>
+	    is an XHTML framework for presentations.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>It seems mature and well maintained.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>HTML Slidy handles well long content.  Its formatting
+	    allows more text on a single foil and even if your text
+	    overflows, you can scroll inside the single foil.  It also
+	    supports collapsable lists and a JavaScript clock so that you
+	    do not run out of time.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>For HTML Slidy, use
+	    <filename>xhtml/slidy.xsl</filename>.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
         <title>S5 Format</title>
       </info>
       
@@ -493,56 +552,24 @@
 	</listitem>
 	
 	<listitem>
-	  <para>It is an XHTML-based framework for slideshows and uses a specially formatted
-	    XHTML file that contains all the slideshow content.</para>
+	  <para>It is yet another XHTML-based framework for slideshows, like
+	    HTML Slidy.</para>
 	</listitem>
 	
 	<listitem>
-	  <para>The XHTML file is supported by CSS stylesheets and some JavaScript
-	    code that implements the slideshow and navigation code.</para>
+	  <para>Its JavaScript code behaves somewhat differently and it is less
+	    mature.</para>
 	</listitem>
 	
 	<listitem>
-	  <para><acronym>S<superscript>5</superscript></acronym> is designed to run
-	    in all standard-compliant web browsers,
-	    both from web or from a local computer.</para>
+	  <para>It supports incremental lists but in general, it is not so
+	    feature-rich as HTML Slidy.</para>
 	</listitem>
 	
 	<listitem>
 	  <para>To create your <acronym>S<superscript>5</superscript></acronym>
 	     presentation, pick the
 	    <filename>xhtml/s5.xsl</filename> stylesheet.</para>
-	</listitem>
-      </itemizedlist>
-    </dbs:foil>
-    
-    <dbs:foil>
-      <info>
-        <title>W3C HTML Slidy</title>
-      </info>
-      
-      <itemizedlist>
-        <listitem>
-	  <para>W3C <uri xlink:href="http://www.w3.org/Talks/Tools/Slidy2/">HTML Slidy</uri>
-	    is yet another XHTML framework for presentations, similar to
-	    <acronym>S<superscript>5</superscript></acronym>.</para>
-	</listitem>
-	
-	<listitem>
-	  <para>It offers a different default design but apart from this, the
-	    features provided are quite similar.</para>
-	</listitem>
-	
-	<listitem>
-	  <para>There is one point to highlight, though.  HTML Slidy handles
-	    better long content.  Its formatting allows more text on a single
-	    foil and even if your text overflows, you can scroll inside the
-	    single foil.</para>
-	</listitem>
-	
-	<listitem>
-	  <para>For HTML Slidy, use
-	    <filename>xhtml/slidy.xsl</filename>.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
@@ -623,8 +650,7 @@
 	</listitem>
 	
 	<listitem>
-	  <para>A recommended option is using <command>xmllint</command> from
-	    <application>libxml2</application> or
+	  <para>The recommended validator is
 	    <application>jing</application>.</para>
 	</listitem>
 	
@@ -642,8 +668,8 @@
       
       <itemizedlist>
         <listitem>
-	  <para>With <command>xmllint</command>, run:
-	    <userinput>xmllint --noout --relaxng ~/docbook-slides/slides.rng foo.xml</userinput>.</para>
+	  <para>With <command>jing</command>, run:
+	    <userinput>jing ~/docbook-slides/slides.rng foo.xml</userinput>.</para>
 	</listitem>
 	
 	<listitem>
