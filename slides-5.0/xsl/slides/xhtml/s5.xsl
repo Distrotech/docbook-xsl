@@ -9,6 +9,8 @@
 <xsl:import href="../../xhtml/chunk.xsl"/>
 <xsl:import href="plain.xsl"/>
 
+<xsl:param name="wrap.slidecontent">0</xsl:param>
+
 <!-- XXX: recommended by S5 but DocBook XSL produces XHTML Transitional
 
 <xsl:output doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -24,10 +26,8 @@
 <!-- whether to generate pubdate in the footer -->
 <xsl:param name="s5.generate.pubdate">1</xsl:param>
 
-<!-- whether lists are incremental: all, default (dbs:incremental), no -->
-<xsl:param name="s5.incremental.lists">default</xsl:param>
-
 <!-- paths for S5-related files -->
+<xsl:param name="s5.path.prefix">http://meyerweb.com/eric/tools/s5/</xsl:param>
 <xsl:param name="s5.path.slides.css">ui/default/slides.css</xsl:param>
 <xsl:param name="s5.path.outline.css">ui/default/outline.css</xsl:param>
 <xsl:param name="s5.path.print.css">ui/default/print.css</xsl:param>
@@ -42,12 +42,12 @@
   <meta name="defaultView" content="{$s5.defaultview}"/>
   <meta name="controlVis" content="{$s5.controls}"/>
 
-  <link rel="stylesheet" href="{$s5.path.slides.css}" type="text/css" media="projection" id="slideProj" />
-  <link rel="stylesheet" href="{$s5.path.outline.css}" type="text/css" media="screen" id="outlineStyle" />
-  <link rel="stylesheet" href="{$s5.path.print.css}" type="text/css" media="print" id="slidePrint" />
-  <link rel="stylesheet" href="{$s5.path.opera.css}" type="text/css" media="projection" id="operaFix" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.slides.css)}" type="text/css" media="projection" id="slideProj" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.outline.css)}" type="text/css" media="screen" id="outlineStyle" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.print.css)}" type="text/css" media="print" id="slidePrint" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.opera.css)}" type="text/css" media="projection" id="operaFix" />
 
-  <script src="{$s5.path.slides.js}" type="text/javascript"></script>
+  <script src="{concat($s5.path.prefix, $s5.path.slides.js)}" type="text/javascript"></script>
 </xsl:template>
 
 <xsl:template name="slideshow.head">
@@ -63,47 +63,34 @@
   </div>
 </xsl:template>
 
-<xsl:template name="slide.copyright">
-  <div class="copyright">
-    <xsl:text>Copyright &#xa9; </xsl:text>
-    <xsl:value-of select="/dbs:slides/db:info/db:copyright/db:year"/>
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="/dbs:slides/db:info/db:copyright/db:holder"/>
-  </div>
+<xsl:template match="db:xref">
+  <xsl:variable name="target" select="id(./@linkend)"/>
+
+  <xsl:choose>
+    <xsl:when test="($target[self::dbs:foil] or $target[self::dbs:foilgroup])">
+      <xsl:variable name="target.no" select="count(preceding::dbs:foil|preceding::dbs:foilgroup) + 1"/>
+
+      <xsl:apply-templates select="$target" mode="xref-to"/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:call-template select="." name="xref"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
-<xsl:template name="slide.pubdate">
-  <div class="pubdate">
-    <xsl:text>Published on </xsl:text>
-    <xsl:value-of select="/dbs:slides/db:info/db:pubdate"/>
-  </div>
-</xsl:template>
+<xsl:template match="db:biblioentry" mode="xref-to">
+  <xsl:variable name="id" select="@xml:id"/>
 
-<xsl:template match="db:itemizedlist">
-  <ul>
-    <xsl:if test="($s5.incremental.lists = 'all') or (($s5.incremental.lists = 'default') and (ancestor-or-self::*/@incremental[1] = '1'))">
-      <xsl:attribute name="class">incremental</xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates select="*"/>
-  </ul>
-</xsl:template>
+  <xsl:choose>
+    <xsl:when test="$bibliography.numbered != 0">
+      <xsl:number from="db:bibliography" count="db:biblioentry|db:bibliomixed" level="any" format="1"/>
+    </xsl:when>
 
-<xsl:template match="db:orderedlist">
-  <ul>
-    <xsl:if test="($s5.incremental.lists = 'all') or (($s5.incremental.lists = 'default') and (ancestor-or-self::*/@incremental[1] = '1'))">
-      <xsl:attribute name="class">incremental</xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates select="*"/>
-  </ul>
-</xsl:template>
-
-<xsl:template match="/" mode="slide.footer.mode">
-  <xsl:if test="/dbs:slides/db:info/db:copyright">
-    <xsl:call-template name="slide.copyright"/>
-  </xsl:if>
-  <xsl:if test="$s5.generate.pubdate and /dbs:slides/db:info/db:pubdate">
-    <xsl:call-template name="slide.pubdate"/>
-  </xsl:if>
+    <xsl:otherwise>
+      <xsl:value-of select="$id"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
