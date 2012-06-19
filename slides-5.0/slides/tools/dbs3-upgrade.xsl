@@ -5,11 +5,9 @@
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		version="1.0">
 
-<xsl:output method="xml" encoding="utf-8" indent="yes"/>
+<xsl:output method="xml" encoding="utf-8" indent="no"/>
 
-<!--
 <xsl:preserve-space elements="*"/>
--->
 
 <xsl:template match="/slides">
   <dbs:slides>
