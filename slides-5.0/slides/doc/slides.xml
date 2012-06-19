@@ -24,7 +24,7 @@
     </copyright>
   </info>
 
-  <dbs:foil>
+  <dbs:foil style="introduction">
     <info>
       <title>Introduction</title>
     </info>
@@ -35,7 +35,7 @@
       <listitem>
         <para>is a multi-namespace schema extension
 	  to the original <link xlink:href="http://www.docbook.org/">DocBook</link>
-	  schema.</para>
+	  <xref linkend="docbook5"/> schema.</para>
       </listitem>
       
       <listitem>
@@ -71,7 +71,7 @@
     
     <itemizedlist>
       <listitem>
-        <para>DocBook is an XML grammar to mark up papers and books and
+        <para>DocBook is an XML <xref linkend="w3c-xml"/> grammar to mark up papers and books and
 	  then process them with XML-related standards.</para>
       </listitem>
 	
@@ -157,7 +157,9 @@
 	
 	<listitem>
 	  <para>Currently the output formats are limited to
-	    some XHTML based output formats, namely S5 and HTML Slidy.
+	    some XHTML based output
+	    formats, namely S5 <xref linkend="s5"/> and
+	    HTML Slidy <xref linkend="slidy"/>.
 	    In the future, support for other important type of
 	    outputs (e.g. PDF end EPUB) will be added.</para>
 	</listitem>
@@ -325,15 +327,15 @@
         <title>Block Content</title>
       </info>
 
-      <para>You have access to all of the block content elements in DocBook,
-        e.g. you can create a simple paragraph with
-	<code>&lt;para&gt;</code>, just like in DocBook.</para>
-	
       <itemizedlist>
         <listitem>
-	  <para>Or you can use different types of lists, like
-	  <code>&lt;itemizedlist&gt;</code> or
-	  <code>&lt;orderedlist&gt;</code>.</para>
+	  <para>You have access to all of the block content elements in DocBook,
+            e.g. you can create a simple paragraph with
+	    <code>&lt;para&gt;</code>, just like in DocBook.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>Or you can use lists, like <code>&lt;itemizedlist&gt;</code>.</para>
 	</listitem>
       </itemizedlist>
       
@@ -421,6 +423,9 @@
       <info>
         <title>Collapsable Lists</title>
       </info>
+      
+      <para>You can see a collapsable list below (depending on the output
+        format).  Click on the node to expand it.</para>
       
       <orderedlist>
 	<listitem>
@@ -606,7 +611,7 @@
       
       <para>Sommetimes parameters are not enough and you need to modify
         the templates to achieve your goal.  Customizations are easy
-	to create with XSLT.</para>
+	to create with XSLT <xref linkend="w3c-xslt"/>.</para>
 
       <orderedlist>
 	<listitem>
@@ -668,7 +673,7 @@
       
       <itemizedlist>
         <listitem>
-	  <para>With <command>jing</command>, run:
+	  <para>With <command>jing</command> <xref linkend="jing"/>, run:
 	    <userinput>jing ~/docbook-slides/slides.rng foo.xml</userinput>.</para>
 	</listitem>
 	
@@ -696,7 +701,7 @@
         <listitem>
 	  <para>You need an XSLT processor to transform the documents.
 	    For example, you can use either <command>xsltproc</command> from
-	    <application>libxslt</application>, <application>Xalan</application>
+	    <application>libxslt</application> <xref linkend="libxslt"/>, <application>Xalan</application>
 	    or <application>Saxon</application>.</para>
 	</listitem>
 	
@@ -901,7 +906,7 @@
 	</listitem>
 	
         <listitem>
-	  <para><emphasis>Attributes:</emphasis> incremental</para>
+	  <para><emphasis>Attributes:</emphasis> incremental, collapsable, style</para>
 	</listitem>
 	
 	<listitem>
@@ -925,7 +930,7 @@
 	</listitem>
 	
         <listitem>
-	  <para><emphasis>Attributes:</emphasis> incremental</para>
+	  <para><emphasis>Attributes:</emphasis> incremental, collapsable, style</para>
 	</listitem>
 	
 	<listitem>
@@ -951,5 +956,102 @@
 	</listitem>
       </itemizedlist>
     </dbs:foil>
-  </dbs:foilgroup>  
+  </dbs:foilgroup>
+  
+  <dbs:foil>
+    <info>
+      <title>Related Standards</title>
+    </info>
+    
+    <bibliography>
+      <title>Related Standards</title>
+
+      <biblioentry xml:id="w3c-xml">
+        <title>Extensible Markup Language (XML)</title>
+
+        <org>
+          <orgname>W3C</orgname>
+        </org>
+
+        <bibliosource class="uri" xlink:href="http://www.w3.org/TR/REC-xml/">http://www.w3.org/TR/REC-xml/</bibliosource>
+      </biblioentry>
+
+      <biblioentry xml:id="docbook5">
+        <title>The DocBook Schema Version 5.0</title>
+
+        <org>
+          <orgname>OASIS</orgname>
+        </org>
+
+        <bibliosource class="uri" xlink:href="http://docs.oasis-open.org/docbook/specs/docbook-5.0-spec-os.html">http://docs.oasis-open.org/docbook/specs/docbook-5.0-spec-os.html</bibliosource>
+      </biblioentry>
+      
+      <biblioentry xml:id="w3c-xslt">
+        <title>XSL Transformations (XSLT) Version 1.0</title>
+
+        <org>
+          <orgname>W3C</orgname>
+        </org>
+
+        <bibliosource class="uri" xlink:href="http://www.w3.org/TR/xslt">http://www.w3.org/TR/xslt</bibliosource>
+      </biblioentry>
+      
+      <biblioentry xml:id="w3c-xslfo">
+        <title>Extensible Stylesheet Language (XSL) Version 1.1</title>
+
+        <org>
+          <orgname>W3C</orgname>
+        </org>
+
+        <bibliosource class="uri" xlink:href="http://www.w3.org/TR/xsl/">http://www.w3.org/TR/xsl/</bibliosource>
+      </biblioentry>
+    </bibliography>
+  </dbs:foil>
+  
+  <dbs:foil>
+    <info>
+      <title>Supported HTML Presentation Frameworks</title>
+    </info>
+    
+    <bibliography>
+      <title>Supported HTML Presentation Frameworks</title>
+
+      <biblioentry xml:id="s5">
+        <title>S<superscript>5</superscript></title>
+	<subtitle>A Simple Standards-Based Slide Show System</subtitle>
+
+        <bibliosource class="uri" xlink:href="http://meyerweb.com/eric/tools/s5/">http://meyerweb.com/eric/tools/s5/</bibliosource>
+      </biblioentry>
+
+      <biblioentry xml:id="slidy">
+        <title>HTML Slidy</title>
+	<subtitle>Slide Shows in HTML and XHTML</subtitle>
+
+        <bibliosource class="uri" xlink:href="www.w3.org/Talks/Tools/Slidy2/">www.w3.org/Talks/Tools/Slidy2/</bibliosource>
+      </biblioentry>
+    </bibliography>
+  </dbs:foil>
+  
+  <dbs:foil>
+    <info>
+      <title>Recommended Tools</title>
+    </info>
+    
+    <bibliography>
+      <title>Recommended Tools</title>
+
+      <biblioentry xml:id="jing">
+        <title>Jing RELAX-NG validator</title>
+
+        <bibliosource class="uri" xlink:href="http://www.thaiopensource.com/relaxng/jing.html">http://www.thaiopensource.com/relaxng/jing.html</bibliosource>
+      </biblioentry>
+
+      <biblioentry xml:id="libxslt">
+        <title>libxslt</title>
+	<subtitle>The XSLT C library for GNOME</subtitle>
+
+        <bibliosource class="uri" xlink:href="http://xmlsoft.org/xslt/">http://xmlsoft.org/xslt/</bibliosource>
+      </biblioentry>
+    </bibliography>
+  </dbs:foil>
 </dbs:slides>
