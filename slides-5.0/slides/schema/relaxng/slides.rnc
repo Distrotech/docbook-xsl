@@ -39,8 +39,10 @@ dbs.slides = element slides { dbs.slides.attlist,
   db.info,
   dbs.speakernotes?,
   dbs.handoutnotes?,
-  dbs.foil*,
-  dbs.foilgroup*
+  (
+    dbs.foil? &
+    dbs.foilgroup?
+  )*
 }
 
 dbs.slides.role.attribute = attribute role { text }
@@ -74,12 +76,13 @@ dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
   & dbs.slides.status.attribute?
   & dbs.incremental.attribute?
   & dbs.collapsable.attribute?
+  & dbs.style.attribute?
 
 dbs.foil = element foil { dbs.foil.attlist,
    db.info?,
    dbs.speakernotes?,
    dbs.handoutnotes?,
-   db.all.blocks+,
+   db.all.blocks*,
    db.navigation.components*
 }
 
@@ -94,6 +97,7 @@ dbs.foil.attlist = dbs.foil.role.attribute?
   & dbs.foil.status.attribute?
   & dbs.incremental.attribute?
   & dbs.collapsable.attribute?
+  & dbs.style.attribute?
 
 dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
   db.all.blocks+
@@ -117,3 +121,4 @@ dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
 
 dbs.incremental.attribute = attribute incremental { "0" | "1" }
 dbs.collapsable.attribute = attribute collapsable { "0" | "1" | "expanded" }
+dbs.style.attribute = attribute style { text }
