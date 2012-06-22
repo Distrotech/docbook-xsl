@@ -95,7 +95,8 @@ set       toc,title
 
   <title>
     <xsl:copy-of select="$title"/> <xsl:if test="parent::*"> - <xsl:copy-of select="$document-title"/></xsl:if>
-  </title>
+  </title>  
+  <meta name="Section-title" content="{$title}"/>
 </xsl:template>
 
   <xsl:template name="system.head.content">
@@ -114,7 +115,11 @@ These problems go away when you add this IE=7 mode meta tag.
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <xsl:text>
 </xsl:text>
-  </xsl:template>
+       
+ <xsl:text>
+  </xsl:text>
+  
+    </xsl:template>
 
     <!-- HTML <head> section customizations -->	
     <xsl:template name="user.head.content">
