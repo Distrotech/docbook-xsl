@@ -174,4 +174,8 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="*[namespace-uri()]">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
 </xsl:stylesheet>
