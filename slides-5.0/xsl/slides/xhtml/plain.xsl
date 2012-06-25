@@ -4,7 +4,9 @@
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		xmlns:db="http://docbook.org/ns/docbook"
 		xmlns:dbs="http://docbook.org/ns/docbook-slides"
+		xmlns:exsl="http://exslt.org/common"
 		exclude-result-prefixes="dbs db"
+		extension-element-prefixes="exsl"
 		version="1.0">
 
 <xsl:import href="../../xhtml/chunk.xsl"/>
@@ -16,6 +18,8 @@
     <l:gentext key="Foil" text="Foil"/>
     <l:gentext key="Speakernotes" text="Speaker Notes"/>
     <l:gentext key="Handout" text="Handout Notes"/>
+    <l:gentext key="SVGImage" text="SVG image"/>
+    <l:gentext key="MathMLFormula" text="MathML formula"/>
 
     <l:context name="title">
       <l:gentext key="foil" text="Foil %n %t"/>
@@ -47,6 +51,12 @@
 
 <!-- whether lists are collapsable: all, default (collapsable attrib), no -->
 <xsl:param name="collapsable.lists">default</xsl:param>
+
+<!-- inline, object, embed, iframe, image, link -->
+<xsl:param name="svg.embedding.mode">object</xsl:param>
+
+<!-- inline, object, embed, iframe, image, link -->
+<xsl:param name="mml.embedding.mode">object</xsl:param>
 
 <!-- Overrides from DocBook XSL -->
 <xsl:template name="process.qanda.toc"/>
@@ -288,6 +298,83 @@
       </xsl:otherwise>
     </xsl:choose>
   </a>
+</xsl:template>
+
+<xsl:template match="*[namespace-uri() = 'http://www.w3.org/2000/svg']">
+  <xsl:call-template name="handle.embedded">
+    <xsl:with-param name="modeParam" select="$svg.embedding.mode"/>
+    <xsl:with-param name="fileExt" select="'.svg'"/>
+    <xsl:with-param name="mimeType" select="'image/svg+xml'"/>
+    <xsl:with-param name="gentextKey" select="'SVGImage'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="*[namespace-uri() = 'http://www.w3.org/1998/Math/MathML']">
+  <xsl:call-template name="handle.embedded">
+    <xsl:with-param name="modeParam" select="$mml.embedding.mode"/>
+    <xsl:with-param name="fileExt" select="'.mml'"/>
+    <xsl:with-param name="mimeType" select="'application/mathml-presentation+xml'"/>
+    <xsl:with-param name="gentextKey" select="'MathMLFormula'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="handle.embedded">
+  <xsl:param name="modeParam">inline</xsl:param>
+  <xsl:param name="fileExt"/>
+  <xsl:param name="mimeType"/>
+  <xsl:param name="gentextKey"/>
+
+  <xsl:choose>
+    <xsl:when test="$modeParam = 'inline'">
+      <xsl:copy-of select="."/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:variable name="id">
+	<xsl:call-template select="." name="generate.id"/>
+      </xsl:variable>
+      <xsl:variable name="fname">
+	<xsl:value-of select="concat($id, $fileExt)"/>
+      </xsl:variable>
+
+      <exsl:document href="{$fname}">
+	<xsl:copy-of select="."/>
+
+	<xsl:fallback>
+	  <xsl:message terminate="yes">
+	    Your XSLT processor does not support exsl:document.
+	    You can only use inline SVG images.
+	  </xsl:message>
+	</xsl:fallback>
+      </exsl:document>
+
+      <xsl:choose>
+        <xsl:when test="$modeParam = 'object'">
+	  <object data="{$fname}" type="{$mimeType}"/>
+        </xsl:when>
+
+        <xsl:when test="$modeParam = 'image'">
+	  <img src="{$fname}"/>
+        </xsl:when>
+
+        <xsl:when test="$modeParam = 'link'">
+	  <a href="{$fname}">
+	    <xsl:call-template name="gentext">
+	      <xsl:with-param name="key" select="$gentextKey"/>
+	    </xsl:call-template>
+	  </a> 
+        </xsl:when>
+
+        <xsl:when test="$modeParam = 'iframe'">
+	  <iframe src="{$fname}"/>
+        </xsl:when>
+
+        <xsl:when test="$modeParam = 'embed'">
+	  <embed src="{$fname}" type="{$mimeType}" /> 
+        </xsl:when>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="generate.anchor">
