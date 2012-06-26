@@ -16,11 +16,11 @@
 </xsl:template>
 
 <xsl:template name="process.content">
-    <xsl:call-template name="create.info"/>
+    <xsl:apply-templates select="slidesinfo|foilgroupinfo|foilinfo|title|titleabbrev|subtitle"/>
 
     <xsl:apply-templates select="speakernotes"/>
 
-    <xsl:apply-templates select="*[local-name() != 'speakernotes'][local-name() != 'title'][local-name() != 'titleabbrev'][local-name() != 'subtitle'][local-name() != 'slidesinfo'][local-name() != 'foilinfo'][local-name() != 'foilgroupinfo']"/>
+    <xsl:apply-templates select="*[not(self::speakernotes)][not(self::title)][not(self::titleabbrev)][not(self::subtitle)][not(self::slidesinfo)][not(self::foilinfo)][not(self::foilgroupinfo)]"/>
 </xsl:template>
 
 <xsl:template match="foil">
@@ -41,18 +41,9 @@
   </dbs:speakernotes>
 </xsl:template>
 
-<xsl:template name="create.info">
+<xsl:template name="slidesinfo|foilgroupinfo|foilinfo">
   <info>
-    <xsl:if test="title">
-      <title><xsl:value-of select="title"/></title>
-    </xsl:if>
-    <xsl:if test="titleabbrev">
-      <titleabbrev><xsl:value-of select="titleabbrev"/></titleabbrev>
-    </xsl:if>
-    <xsl:if test="subtitle">
-      <subtitle><xsl:value-of select="subtitle"/></subtitle>
-    </xsl:if>
-    <xsl:apply-templates select="slidesinfo/*|foilgroupinfo/*|foilinfo/*"/>
+    <xsl:copy-of select="*"/>
   </info>
 </xsl:template>
 
