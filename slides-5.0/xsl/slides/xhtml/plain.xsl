@@ -95,10 +95,16 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template name="get.title">
+  <xsl:value-of select="(db:info/db:titleabbrev|db:titleabbrev|db:info/db:title|db:title)[1]"/>
+</xsl:template>
+
 <xsl:template match="/">
   <html xml:lang="{/dbs:slides/@xml:lang}">
     <head>
-      <title><xsl:value-of select="/dbs:slides/db:info/db:title"/></title>
+      <title>
+	<xsl:call-template select="/dbs:slides" name="get.title"/>
+      </title>
 
       <xsl:call-template name="xhtml.head"/>
     </head>
@@ -119,7 +125,7 @@
           <xsl:when test="($generate.foilgroup.numbered.toc != 0)">
             <ol>
               <xsl:for-each select="dbs:foil">
-                <li><xsl:value-of select="db:info/db:title"/></li>
+                <li><xsl:call-template name="get.title"/></li>
               </xsl:for-each>
             </ol>
           </xsl:when>
@@ -127,7 +133,7 @@
           <xsl:otherwise>
             <ul>
               <xsl:for-each select="dbs:foil">
-                <li><xsl:value-of select="db:info/db:title"/></li>
+                <li><xsl:call-template name="get.title"/></li>
               </xsl:for-each>
             </ul>
           </xsl:otherwise>
@@ -196,11 +202,17 @@
 </xsl:template>
 
 <xsl:template match="db:info">
-  <h1 class="title"><xsl:value-of select="db:title"/></h1>
-  <xsl:if test="db:subtitle">
-    <h2 class="subtitle"><xsl:value-of select="db:subtitle"/></h2>
+  <xsl:apply-templates select="db:title|db:titleabbrev|db:subtitle|db:author|db:authorgroup/db:author"/>
+</xsl:template>
+
+<xsl:template match="db:title|db:titleabbrev">
+  <xsl:if test=".[not(self::db:title)] or (not(preceding-sibling::db:titleabbrev) and not(following-sibling::db:titleabbrev))"
+    <h1 class="title"><xsl:value-of select="."/></h1>
   </xsl:if>
-  <xsl:apply-templates select="db:author|db:authorgroup/db:author"/>
+</xsl:template>
+
+<xsl:template match="db:subtitle">
+  <h1 class="subtitle"><xsl:value-of select="."/></h1>
 </xsl:template>
 
 <xsl:template match="db:author">
@@ -277,7 +289,7 @@
   <xsl:call-template name="gentext.space"/>
   <xsl:value-of select="count(preceding::dbs:foil|preceding::dbs:foilgroup) + 1"/>
   <xsl:text>: </xsl:text>
-  <xsl:value-of select="./db:info/db:title"/>
+  <xsl:call-template name="get.title"/>
 </xsl:template>
 
 <xsl:template match="db:biblioentry" mode="xref-to">
@@ -433,7 +445,7 @@
 </xsl:template>
 
 <xsl:template match="/" mode="slide.titlepage.mode">
-  <xsl:apply-templates select="/dbs:slides/db:info"/>
+  <xsl:call-template select="/dbs:slides" name="get.title"/>
 </xsl:template>
 
 </xsl:stylesheet>
