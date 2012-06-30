@@ -206,7 +206,7 @@
 </xsl:template>
 
 <xsl:template match="db:title|db:titleabbrev">
-  <xsl:if test=".[not(self::db:title)] or (not(preceding-sibling::db:titleabbrev) and not(following-sibling::db:titleabbrev))"
+  <xsl:if test="not(self::db:title) or (not(preceding-sibling::db:titleabbrev) and not(following-sibling::db:titleabbrev))">
     <h1 class="title"><xsl:value-of select="."/></h1>
   </xsl:if>
 </xsl:template>
@@ -260,6 +260,20 @@
   <ol>
     <xsl:call-template name="list.content"/>
   </ol>
+</xsl:template>
+
+<xsl:template match="db:mediaobject">
+  <xsl:choose>
+    <xsl:when test="ancestor-or-self::*[@dbs:incremental = 1]">
+      <div class="incremental">
+	<xsl:apply-templates/>
+      </div>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:apply-templates/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="bibliography.titlepage"/>
