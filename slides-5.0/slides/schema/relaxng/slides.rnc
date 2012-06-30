@@ -35,6 +35,12 @@ include "docbook.rnc" inherit = db {
   
   # Avoid ID clashes
   db._any.attribute = attribute * - (xml:id | linkend) { text }
+
+  db.common.attributes =
+    db.xml.id.attribute?
+    & db.common.base.attributes
+    & db.annotations.attribute?
+    & dbs.style.attributes?
 }
 
 dbs.all.content = db.all.blocks? &
@@ -60,7 +66,6 @@ dbs.slides.attlist = dbs.slides.role.attribute?
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.slides.status.attribute?
-#  & dbs.slides.class.attribute?  # XXX: may be a good feature
 
 dbs.foilgroup = element foilgroup {
   dbs.foilgroup.attlist,
@@ -80,9 +85,6 @@ dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.slides.status.attribute?
-  & dbs.incremental.attribute?
-  & dbs.collapsable.attribute?
-  & dbs.style.attribute?
 
 dbs.foil = element foil { dbs.foil.attlist,
   db._info.title.req,
@@ -101,9 +103,6 @@ dbs.foil.attlist = dbs.foil.role.attribute?
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.foil.status.attribute?
-  & dbs.incremental.attribute?
-  & dbs.collapsable.attribute?
-  & dbs.style.attribute?
 
 dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
   db.all.blocks+
@@ -125,6 +124,10 @@ dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
 
-dbs.incremental.attribute = attribute incremental { "0" | "1" }
-dbs.collapsable.attribute = attribute collapsable { "0" | "1" | "expanded" }
-dbs.style.attribute = attribute style { text }
+dbs.style.attributes  = dbs.incremental.attribute?
+  & dbs.collapsable.attribute?
+  & dbs.style.attribute?
+
+dbs.incremental.attribute = attribute dbs:incremental { "0" | "1" }
+dbs.collapsable.attribute = attribute dbs:collapsable { "0" | "1" | "expanded" }
+dbs.style.attribute = attribute dbs:style { text }
