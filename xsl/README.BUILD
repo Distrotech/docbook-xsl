@@ -56,7 +56,7 @@ contributions welcome...
    - Xerces-J jar files
    - Apache XML Commons Resolver jar file
 
-   You probably should also have the Xalan 2 jar file installed.
+   You probably should also have the Xalans 2 jar file installed.
 
    In addition to the above, the doc/distrib/release build requires:
 

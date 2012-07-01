@@ -1,0 +1,49 @@
+<project default="help" name="androidBuild">
+
+	<dirname property="ant.file.dir" file="${ant.file.mainbuild}"/>
+	<loadproperties srcFile="${ant.file.dir}/build.properties"/>
+	
+	<property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
+
+    <path id="classpath">
+        <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
+		<pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
+		<pathelement location="${extensions.dir}/lucene-core-3.0.0.jar"/>
+    </path>	
+	
+  <target name="chunk" depends="clean">
+	
+	<mkdir dir="${output-dir}"/>
+	<xslt
+	  in="${input-xml}"
+	  out="${output-dir}/dummy.html"
+	  style="${stylesheet-path}"
+	  scanincludeddirectories="false"
+	  classpath="${xslt-processor-classpath}">
+	  	  
+	  <param name="mobile.base.dir" expression="${output-dir}" if="output-dir"/>
+	</xslt>
+	
+	<delete file="${output-dir}/dummy.html"/>
+	
+  </target>
+
+  <target name="android-mobile" depends="chunk"/>
+
+  <target name="clean">
+	<delete dir="${output-dir}" />
+	
+	<delete file="${prof-file}" />
+	<delete dir="${prof-dir}" />
+
+  </target>
+
+  <target name="help">
+	<echo>
+	Android application build help.
+	help      : to view help options
+	profiling : to get profiled .xml output from the input .xml file
+	
+	</echo>
+  </target>
+</project>

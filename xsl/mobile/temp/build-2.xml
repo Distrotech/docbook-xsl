@@ -1,0 +1,82 @@
+<project default="help" name="androidBuild">
+
+	<dirname property="ant.file.dir" file="${ant.file.mainbuild}"/>
+	<loadproperties srcFile="${ant.file.dir}/build.properties"/>
+	
+	<property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
+
+    <path id="classpath">
+        <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
+		<pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
+		<pathelement location="${extensions.dir}/lucene-core-3.0.0.jar"/>
+		<pathelement location="${extensions.dir}/tagsoup-1.2.1.jar"/>
+    </path>
+
+	<property name="prof-dir" value="profiled" />
+	<property name="prof-file" value="${prof-dir}/profiled.xml" />
+	
+  <target name="chunk" depends="" >
+	<mkdir dir="${output-dir}"/>
+	<tempfile destdir="${output-dir}" deleteonexit="true" property="dummy.html"/>		
+
+	<xslt
+	 	in="${prof-file}"
+	  	out="${output-dir}/dummy.html"
+	  	style="${stylesheet-path}"
+	    extension=".html"
+		classpath="${xslt-processor-classpath}">
+		
+		<param name="output_file_name" expression="${output_file_name}"/>
+	</xslt>
+  </target>
+
+  <target name="android-mobile" depends="profiling,chunk"/>
+
+  <target name="clean">
+	<delete dir="${output-dir}" />
+	
+	<delete file="${prof-file}" />
+	<delete dir="${prof-dir}" />
+
+  </target>
+
+  <!--only profiling and get validate out put -->	
+  <target name="profiling" depends="clean" description="only profiling and get output">
+	<mkdir dir="${prof-dir}"/>
+	<touch file="${prof-file}"/>	
+	
+	<xslt
+	  in="${input-xml}"
+	    out="${ant.file.dir}/profiled/profiled.xml"
+	  	style="${ant.file.dir}/../profiling/profile.xsl" force="true">
+
+		<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+		       value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+	  <param name="profile.arch" expression="${profile.arch}" if="profile.arch"/>
+	  <param name="profile.audience" expression="${profile.audience}" if="profile.audience"/>
+	  <param name="profile.condition" expression="${profile.condition}" if="profile.condition"/>
+	  <param name="profile.conformance" expression="${profile.conformance}" if="profile.conformance"/>
+	  <param name="profile.lang" expression="${profile.lang}" if="profile.lang"/>
+	  <param name="profile.os" expression="${profile.os}" if="profile.os"/>
+	  <param name="profile.revision" expression="${profile.revision}" if="profile.revision"/>
+	  <param name="profile.revisionflag" expression="${profile.revisionflag}" if="profile.revisionflag"/>
+	  <param name="profile.role" expression="${profile.role}" if="profile.role"/>
+	  <param name="profile.security" expression="${profile.security}" if="profile.security"/>
+	  <param name="profile.status" expression="${profile.status}" if="profile.status"/>
+	  <param name="profile.userlevel" expression="${profile.userlevel}" if="profile.userlevel"/>
+	  <param name="profile.vendor" expression="${profile.vendor}" if="profile.vendor"/>
+	  <param name="profile.wordsize" expression="${profile.wordsize}" if="profile.wordsize"/>
+	  <param name="profile.attribute" expression="${profile.attribute}" if="profile.attribute"/>
+	  <param name="profile.value" expression="${profile.value}" if="profile.value"/>
+	</xslt>
+  </target>
+
+  <target name="help">
+	<echo>
+	Android application build help.
+	help      : to view help options
+	profiling : to get profiled .xml output from the input .xml file
+	
+	</echo>
+  </target>
+</project>
