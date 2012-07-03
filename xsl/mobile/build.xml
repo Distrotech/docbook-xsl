@@ -21,7 +21,7 @@
 	  scanincludeddirectories="false"
 	  classpath="${xslt-processor-classpath}">
 	  	  
-	  <param name="mobile.base.dir" expression="${output-dir}" if="output-dir"/>
+	  <param name="mobile.base.dir" expression="${output-dir}"/>
 	</xslt>
 	
 	<delete file="${output-dir}/dummy.html"/>
