@@ -41,7 +41,15 @@ include "docbook.rnc" inherit = db {
     & db.common.base.attributes
     & db.annotations.attribute?
     & dbs.style.attributes?
+
+  db._any.svg =
+    element svg:* { (dbs._any.attribute | text | db._any)* }
+
+  db._any.mml =
+    element mml:* { (dbs._any.attribute | text | db._any)* }
 }
+
+dbs._any.attribute = attribute * { text }
 
 dbs.all.content = db.all.blocks? &
   db._any.svg? &
