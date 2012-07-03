@@ -1,7 +1,9 @@
-<project default="help" name="androidBuild">
+<project default="help" name="DocBookMobileBuild">
 
-	<dirname property="ant.file.dir" file="${ant.file.mainbuild}"/>
+	<dirname property="ant.file.dir" file="${ant.file.DocBookMobileBuild}"/>
 	<loadproperties srcFile="${ant.file.dir}/build.properties"/>
+
+	<include file="${ant.file.dir}/android/build.xml" as="nested"/>
 	
 	<property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
 
@@ -28,7 +30,14 @@
 	
   </target>
 
-  <target name="android-mobile" depends="chunk"/>
+	<target name="add_resources" description="copy js and css">
+		<copy todir="${output-dir}">
+   			 <fileset dir="./template_mobile"/>
+		</copy>
+	</target>
+
+	<target name="mobile" depends="chunk,add_resources"/>
+	<target name="release_unsigned_apk" depends="nested.release_unsigned_apk" />
 
   <target name="clean">
 	<delete dir="${output-dir}" />
