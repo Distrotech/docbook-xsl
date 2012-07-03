@@ -1,6 +1,6 @@
 /* Following are the presentation styles -- edit away! */
 
-body {background: #FFF url(bodybg.gif) -16px 0 no-repeat; color: #000; font-size: 2.25em;}
+body {background: #FFF url(bodybg.gif) -16px 0 no-repeat; color: #000; font-size: 2.0em;}
 :link, :visited {text-decoration: none; color: #00C;}
 #controls :active {color: #88A !important;}
 #controls :focus {outline: 1px dotted #227;}
@@ -71,10 +71,11 @@ ul.urls {list-style: none; display: inline; margin: 0;}
 html>body .external {border-bottom: none;}
 .external:after {content: " \274F"; font-size: smaller; color: #77B;}
 
-.incremental, .incremental *, .incremental *:after {color: #DDE; visibility: visible;}
+.incremental, .incremental *, .incremental *:after {visibility: hidden;}
 img.incremental {visibility: hidden;}
 .slide .current {color: #B02;}
 
+.footnote {font-size: 0.75em;}
 
 /* diagnostics
 
