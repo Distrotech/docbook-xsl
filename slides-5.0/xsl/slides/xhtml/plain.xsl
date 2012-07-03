@@ -58,6 +58,9 @@
 <!-- inline, object, embed, iframe, image, link -->
 <xsl:param name="mml.embedding.mode">object</xsl:param>
 
+<!-- user-defined CSS; also works for S5/Slidy to extend the vendor CSS files -->
+<xsl:param name="user.css">user.css</xsl:param>
+
 <!-- Overrides from DocBook XSL -->
 <xsl:template name="process.qanda.toc"/>
 
@@ -65,6 +68,7 @@
 
 <xsl:template name="xhtml.head">
   <meta name="generator" content="DocBook Slides Stylesheets V{$VERSION}"/>
+  <link rel="stylesheet" href="{$user.css}" type="text/css"/>
 </xsl:template>
 
 <xsl:template name="slideshow.head"/>
@@ -96,14 +100,18 @@
 </xsl:template>
 
 <xsl:template name="get.title">
-  <xsl:value-of select="(db:info/db:titleabbrev|db:titleabbrev|db:info/db:title|db:title)[1]"/>
+  <xsl:param name="ctx" select="."/>
+
+  <xsl:value-of select="($ctx/db:info/db:titleabbrev|$ctx/db:titleabbrev|$ctx/db:info/db:title|$ctx/db:title)[1]"/>
 </xsl:template>
 
 <xsl:template match="/">
   <html xml:lang="{/dbs:slides/@xml:lang}">
     <head>
       <title>
-	<xsl:call-template select="/dbs:slides" name="get.title"/>
+	<xsl:call-template name="get.title">
+	  <xsl:with-param name="ctx" select="/dbs:slides"/>
+	</xsl:call-template>
       </title>
 
       <xsl:call-template name="xhtml.head"/>
@@ -143,9 +151,9 @@
 
 <xsl:template name="foil.classes">
   <xsl:choose>
-    <xsl:when test="@style">
+    <xsl:when test="@dbs:style">
       <xsl:attribute name="class">
-	<xsl:value-of select="concat('slide ', @style)"/>
+	<xsl:value-of select="concat('slide ', @dbs:style)"/>
       </xsl:attribute>
     </xsl:when>
 
@@ -156,7 +164,7 @@
 </xsl:template>
 
 <xsl:template match="dbs:foilgroup">
-  <xsl:call-template name="generate.anchor" select="."/>
+  <xsl:call-template name="generate.anchor"/>
   <div>
     <xsl:call-template name="foil.classes"/>
 
@@ -179,7 +187,7 @@
 </xsl:template>
 
 <xsl:template match="dbs:foil">
-  <xsl:call-template name="generate.anchor" select="."/>
+  <xsl:call-template name="generate.anchor"/>
   <div>
     <xsl:call-template name="foil.classes"/>
 
@@ -234,15 +242,15 @@
 </xsl:template>
 
 <xsl:template name="list.content">
-    <xsl:if test="($incremental.lists = 'all') or (($incremental.lists = 'default') and (ancestor-or-self::*/@incremental[1] = '1'))">
+    <xsl:if test="($incremental.lists = 'all') or (($incremental.lists = 'default') and (ancestor-or-self::*/@dbs:incremental[1] = '1'))">
       <xsl:attribute name="class">incremental</xsl:attribute>
     </xsl:if>
 
     <xsl:if test="not(ancestor::db:itemizedlist|ancestor::db:orderedlist)">
-      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@collapsable[1] = '1'))">
+      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@dbs:collapsable[1] = '1'))">
 	<xsl:attribute name="class">outline</xsl:attribute>
       </xsl:if>
-      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@collapsable[1] = 'expanded'))">
+      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@dbs:collapsable[1] = 'expanded'))">
 	<xsl:attribute name="class">expand</xsl:attribute>
       </xsl:if>
     </xsl:if>
@@ -265,7 +273,11 @@
 <xsl:template match="db:mediaobject">
   <xsl:choose>
     <xsl:when test="ancestor-or-self::*[@dbs:incremental = 1]">
-      <div class="incremental">
+      <div>
+	<xsl:attribute name="class">
+	  <xsl:call-template name="get.classes"/>
+	</xsl:attribute>
+
 	<xsl:apply-templates/>
       </div>
     </xsl:when>
@@ -326,6 +338,14 @@
   </a>
 </xsl:template>
 
+<xsl:template name="extension.process.image.attributes">
+  <xsl:if test="@dbs:style">
+    <xsl:attribute name="class">
+      <xsl:value-of select="@dbs:style"/>
+    </xsl:attribute>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="*[namespace-uri() = 'http://www.w3.org/2000/svg']">
   <xsl:call-template name="handle.embedded">
     <xsl:with-param name="modeParam" select="$svg.embedding.mode"/>
@@ -357,7 +377,7 @@
 
     <xsl:otherwise>
       <xsl:variable name="id">
-	<xsl:call-template select="." name="generate.id"/>
+	<xsl:call-template name="generate.id"/>
       </xsl:variable>
       <xsl:variable name="fname">
 	<xsl:value-of select="concat($id, $fileExt)"/>
@@ -400,6 +420,34 @@
         </xsl:when>
       </xsl:choose>
     </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="get.classes">
+  <xsl:variable name="incremental">
+    <xsl:if test="($incremental.lists = 'all') or (($incremental.lists = 'default') and (ancestor-or-self::*/@dbs:incremental[1] = '1'))">
+      <xsl:value-of select="'incremental'"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="style">
+    <xsl:if test="@dbs:style">
+      <xsl:value-of select="@dbs:style"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$incremental and $style">
+      <xsl:value-of select="concat($incremental, ', ', $style)"/>
+    </xsl:when>
+
+    <xsl:when test="$incremental">
+      <xsl:value-of select="$incremental"/>
+    </xsl:when>
+
+    <xsl:when test="$style">
+      <xsl:value-of select="$style"/>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 
@@ -459,7 +507,13 @@
 </xsl:template>
 
 <xsl:template match="/" mode="slide.titlepage.mode">
-  <xsl:call-template select="/dbs:slides" name="get.title"/>
+  <h1>
+    <xsl:call-template name="get.title">
+      <xsl:with-param name="ctx" select="/dbs:slides"/>
+    </xsl:call-template>
+  </h1>
+
+  <xsl:apply-templates select="/dbs:slides/db:info/*[self::db:subtitle or self::db:author]"/>
 </xsl:template>
 
 </xsl:stylesheet>

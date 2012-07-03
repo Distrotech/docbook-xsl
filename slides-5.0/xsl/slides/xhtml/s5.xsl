@@ -27,7 +27,7 @@
 <xsl:param name="s5.generate.pubdate">1</xsl:param>
 
 <!-- paths for S5-related files -->
-<xsl:param name="s5.path.prefix">http://meyerweb.com/eric/tools/s5/</xsl:param>
+<xsl:param name="s5.path.prefix">files/s5/</xsl:param>
 <xsl:param name="s5.path.slides.css">ui/default/slides.css</xsl:param>
 <xsl:param name="s5.path.outline.css">ui/default/outline.css</xsl:param>
 <xsl:param name="s5.path.print.css">ui/default/print.css</xsl:param>
@@ -46,6 +46,7 @@
   <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.outline.css)}" type="text/css" media="screen" id="outlineStyle" />
   <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.print.css)}" type="text/css" media="print" id="slidePrint" />
   <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.opera.css)}" type="text/css" media="projection" id="operaFix" />
+  <link rel="stylesheet" href="{$user.css}" type="text/css"/>
 
   <script src="{concat($s5.path.prefix, $s5.path.slides.js)}" type="text/javascript"></script>
 </xsl:template>
@@ -74,7 +75,7 @@
     </xsl:when>
 
     <xsl:otherwise>
-      <xsl:call-template select="." name="xref"/>
+      <xsl:call-template name="xref"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -91,6 +92,18 @@
       <xsl:value-of select="$id"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="db:mediaobject">
+  <p class="imgcon">
+    <xsl:apply-templates/>
+  </p>
+</xsl:template>
+
+<xsl:template name="extension.process.image.attributes">
+  <xsl:attribute name="class">
+    <xsl:call-template name="get.classes"/>
+  </xsl:attribute>
 </xsl:template>
 
 </xsl:stylesheet>

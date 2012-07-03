@@ -14,7 +14,7 @@
 <xsl:param name="slidy.duration">15</xsl:param>
 
 <!-- Slidy files -->
-<xsl:param name="slidy.path.prefix">http://www.w3.org/Talks/Tools/Slidy2/</xsl:param>
+<xsl:param name="slidy.path.prefix">files/slidy/</xsl:param>
 <xsl:param name="slidy.slidy.css">styles/slidy.css</xsl:param>
 <xsl:param name="slidy.user.css">styles/w3c-blue.css</xsl:param>
 <xsl:param name="slidy.slidy.js">scripts/slidy.js</xsl:param>
@@ -36,6 +36,7 @@
   <xsl:if test="$slidy.user.css">
     <link rel="stylesheet" href="{concat($slidy.path.prefix, $slidy.user.css)}" type="text/css"/>
   </xsl:if>
+  <link rel="stylesheet" href="{$user.css}" type="text/css"/>
   <script src="{concat($slidy.path.prefix, $slidy.slidy.js)}" charset="utf-8" type="text/javascript"/>
 </xsl:template>
 
@@ -59,7 +60,13 @@
   <div class="background"/>
 
   <div class="slide cover title">
-    <xsl:apply-templates select="/dbs:slides/db:info"/>
+    <h1>
+      <xsl:call-template name="get.title">
+	<xsl:with-param name="ctx" select="/dbs:slides"/>
+      </xsl:call-template>
+    </h1>
+
+    <xsl:apply-templates select="/dbs:slides/db:info/*[self::db:subtitle or self::db:author]"/>
   </div>
 </xsl:template>
 
@@ -81,7 +88,7 @@
     </xsl:when>
 
     <xsl:otherwise>
-      <xsl:call-template select="." name="xref"/>
+      <xsl:call-template name="xref"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
