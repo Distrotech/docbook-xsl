@@ -24,7 +24,7 @@
     </copyright>
   </info>
 
-  <dbs:foil style="introduction">
+  <dbs:foil dbs:style="introduction">
     <info>
       <title>Introduction</title>
     </info>
@@ -395,7 +395,7 @@
       </qandaset>
     </dbs:foil>
     
-    <dbs:foil incremental="1">
+    <dbs:foil dbs:incremental="1">
       <info>
         <title>Incremental Slides</title>
       </info>
@@ -418,8 +418,32 @@
 	</listitem>
       </itemizedlist>
     </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>Incremental Images</title>
+      </info>
+      
+      <mediaobject dbs:incremental="1" dbs:style="face_container">
+        <imageobject>
+	  <imagedata dbs:style="face_first" fileref="images/face1.gif"/>
+	</imageobject>
+
+        <imageobject>
+	  <imagedata dbs:style="face_other" fileref="images/face2.gif"/>
+	</imageobject>
+	
+        <imageobject>
+	  <imagedata dbs:style="face_other" fileref="images/face3.gif"/>
+	</imageobject>
+
+        <imageobject>
+	  <imagedata dbs:style="face_other" fileref="images/face4.gif"/>
+	</imageobject>
+      </mediaobject>
+    </dbs:foil>
   
-    <dbs:foil collapsable="1">
+    <dbs:foil dbs:collapsable="1">
       <info>
         <title>Collapsable Lists</title>
       </info>
@@ -448,6 +472,47 @@
       </orderedlist>
 	</listitem>
       </orderedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>Embedded SVG</title>
+      </info>
+      
+      <para>You can embed SVG code, like this:</para>
+      
+      <programlisting><![CDATA[<svg xml:id="circle" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <circle cx="100" cy="50" r="40" stroke="black"
+    stroke-width="2" fill="yellow" />
+</svg>]]></programlisting>
+
+      <svg xml:id="circle" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="yellow" />
+      </svg> 
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>Embedded MathML</title>
+      </info>
+      
+      <para>You can embed MathML
+        <footnote><para>See <uri xlink:href="http://www.w3.org/TR/MathML3/">http://www.w3.org/TR/MathML3/</uri>.</para></footnote>
+	code, like this:</para>
+      
+      <programlisting><![CDATA[<math xml:id="identity-matrix-2dim" xmlns="http://www.w3.org/1998/Math/MathML">
+  <matrix>
+    <matrixrow><cn>1</cn><cn>0</cn></matrixrow>
+    <matrixrow><cn>0</cn><cn>1</cn></matrixrow>
+  </matrix>
+</math>]]></programlisting>
+
+      <math xml:id="identity-matrix-2dim" xmlns="http://www.w3.org/1998/Math/MathML">
+	<matrix>
+	  <matrixrow><cn>1</cn><cn>0</cn></matrixrow>
+	  <matrixrow><cn>0</cn><cn>1</cn></matrixrow>
+	</matrix>
+      </math>
     </dbs:foil>
   </dbs:foilgroup>
   
