@@ -1,5 +1,5 @@
 # Configuration
-DOCBOOK_DIST := $(pwd)..
+DOCBOOK_DIST := $(pwd).
 
 DOCBOOK_EXTENSIONS_DIR = $(DOCBOOK_DIST)/extensions
 
