@@ -27,6 +27,13 @@
 		</exec>
 	</target>
 
+	<target name="release_debug_apk" depends="create-android-project , copy_mobile_output">
+		<exec executable="ant" dir="${android.file.dir}/${app_output_dir}" >
+			<arg value="debug" />
+		</exec>
+	</target>
+
+
 	<target name="help" description="User help for Android build.">
 		<echo>
 			android-build 			: To 

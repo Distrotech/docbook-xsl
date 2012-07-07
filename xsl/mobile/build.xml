@@ -38,6 +38,8 @@
 
 	<target name="mobile" depends="chunk,add_resources"/>
 	<target name="release_unsigned_apk" depends="nested.release_unsigned_apk" />
+	<target name="release_debug_apk" depends="nested.release_debug_apk" />
+
 
   <target name="clean">
 	<delete dir="${output-dir}" />
