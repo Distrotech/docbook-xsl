@@ -53,7 +53,22 @@ dbs._any.attribute = attribute * { text }
 
 dbs.all.content = db.all.blocks? &
   db._any.svg? &
-  db._any.mml?
+  db._any.mml? &
+  dbs.block?
+
+dbs.block = element block { dbs.block.attlist,
+  dbs.all.content*
+}
+
+dbs.block.role.attribute = attribute role { text }
+
+dbs.block.status.attribute = db.status.attribute
+
+dbs.block.attlist = dbs.block.role.attribute?
+  & db.common.attributes
+  & db.common.linking.attributes
+  & db.label.attribute?
+  & dbs.block.status.attribute?
 
 dbs.slides = element slides { dbs.slides.attlist,
   db._info.title.req,
