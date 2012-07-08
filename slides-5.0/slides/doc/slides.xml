@@ -395,6 +395,42 @@
       </qandaset>
     </dbs:foil>
     
+    <dbs:foil>
+      <info>
+        <title>References</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para>Sometimes you need to add some remarks and some
+	    references to your slide content.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>For small remarks, you can use the
+	    <code>&lt;footnote&gt;</code> element to insert a footnote
+	    that will appear on the same foil where it is inserted.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>Or for references to external content
+	    - books and websites - you can include one or more
+	    reference foils in the end.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>On these foils, you can use the
+	    <code>&lt;bibliography&gt;</code> element and you
+	    will get a nicely formatted reference list.</para>
+	</listitem>
+
+	<listitem>
+	  <para>Use <code>&lt;xref&gt;</code> in the content
+	    to generate a link to the reference entry.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
     <dbs:foil dbs:incremental="1">
       <info>
         <title>Incremental Slides</title>
@@ -419,6 +455,85 @@
       </itemizedlist>
     </dbs:foil>
     
+    <dbs:foil dbs:collapsable="1">
+      <info>
+        <title>Collapsable Lists</title>
+      </info>
+
+      <para>You can see a collapsable list below (depending on the output
+        format).  Click on the node to expand it.</para>
+
+      <orderedlist>
+        <listitem>
+          <orderedlist>
+          <listitem>
+            <para>If you set the <code>collapsable</code> attribute ...</para>
+        </listitem>
+
+        <listitem>
+          <para>... to <literal>1</literal> on a foil, ...</para>
+        </listitem>
+
+        <listitem>
+          <para>... then you will get collapsable lists, ...</para>
+        </listitem>
+
+        <listitem>
+          <para>... like this.  (Also depending on the output format.)</para>
+        </listitem>
+      </orderedlist>
+        </listitem>
+      </orderedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>Building Blocks</title>
+      </info>
+
+      <itemizedlist>
+        <listitem>
+	  <para>Slides are a layout-oriented documents; formatting
+	    is a crucial part of them.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>DocBook aims to separate structure and layout but for
+	    Slides sometimes it is not entirely possible, yet the
+	    layout-related markup is tried to be kept minimal.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>You can use the <code>&lt;dbs:block&gt;</code> element
+	    that will be transformed to a container type in the
+	    generated document (e.g. <literal>div</literal> in HTML).</para>
+	</listitem>
+	
+	<listitem>
+	  <para>You can also apply the <literal>dbs:style</literal> attribute
+	    to blocks and you can even embed them.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>Block Example</title>
+      </info>
+
+      <dbs:block dbs:style="left">
+        <para>This is the left block.</para>
+      </dbs:block>
+      
+      <dbs:block dbs:style="right" dbs:incremental="1">
+        <para>This is the right block.  And it is incremental.</para>
+      </dbs:block>  
+    </dbs:foil>
+  </dbs:foilgroup>
+  
+  <dbs:foilgroup>
+    <title>Images and Formulas</title>
+    
     <dbs:foil>
       <info>
         <title>Incremental Images</title>
@@ -442,37 +557,6 @@
 	</imageobject>
       </mediaobject>
     </dbs:foil>
-  
-    <dbs:foil dbs:collapsable="1">
-      <info>
-        <title>Collapsable Lists</title>
-      </info>
-      
-      <para>You can see a collapsable list below (depending on the output
-        format).  Click on the node to expand it.</para>
-      
-      <orderedlist>
-	<listitem>
-          <orderedlist>
-          <listitem>
-	    <para>If you set the <code>collapsable</code> attribute ...</para>
-	</listitem>
-	
-	<listitem>
-	  <para>... to <literal>1</literal> on a foil, ...</para>
-	</listitem>
-	
-	<listitem>
-	  <para>... then you will get collapsable lists, ...</para>
-	</listitem>
-	
-	<listitem>
-	  <para>... like this.  (Also depending on the output format.)</para>
-	</listitem>
-      </orderedlist>
-	</listitem>
-      </orderedlist>
-    </dbs:foil>
     
     <dbs:foil>
       <info>
@@ -481,7 +565,9 @@
       
       <para>You can embed SVG code, like this:</para>
       
-      <programlisting><![CDATA[<svg xml:id="circle" xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <programlisting><![CDATA[<svg xml:id="circle" 
+				    xmlns="http://www.w3.org/2000/svg"
+				    version="1.1">
   <circle cx="100" cy="50" r="40" stroke="black"
     stroke-width="2" fill="yellow" />
 </svg>]]></programlisting>
@@ -500,7 +586,8 @@
         <footnote><para>See <uri xlink:href="http://www.w3.org/TR/MathML3/">http://www.w3.org/TR/MathML3/</uri>.</para></footnote>
 	code, like this:</para>
       
-      <programlisting><![CDATA[<math xml:id="identity-matrix-2dim" xmlns="http://www.w3.org/1998/Math/MathML">
+      <programlisting><![CDATA[<math xml:id="identity-matrix-2dim"
+				     xmlns="http://www.w3.org/1998/Math/MathML">
   <matrix>
     <matrixrow><cn>1</cn><cn>0</cn></matrixrow>
     <matrixrow><cn>0</cn><cn>1</cn></matrixrow>
@@ -515,7 +602,7 @@
       </math>
     </dbs:foil>
   </dbs:foilgroup>
-  
+
   <dbs:foilgroup>
     <info>
       <title>Presentation</title>
@@ -527,27 +614,29 @@
       </info>
       
       <informaltable>
-	<thead>
-	  <tr><td>Stylesheet</td><td>Description.</td></tr>
-	</thead>
+	<tgroup cols="2">
+	  <thead>
+	    <row><entry>Stylesheet</entry><entry>Description.</entry></row>
+	  </thead>
 
-        <tbody>
-	  <tr>
-	    <td>xhtml/plain.xsl</td>
-	    <td>Single plain XHTML file.</td>
-	  </tr>
+          <tbody>
+	    <row>
+	      <entry>xhtml/plain.xsl</entry>
+	      <entry>Single plain XHTML file.</entry>
+	    </row>
 
-	  <tr>
-	    <td>xhtml/slidy.xsl</td>
-	    <td>Single XHTL file in W3C HTML Slidy format.</td>
-	  </tr>
+	    <row>
+	      <entry>xhtml/slidy.xsl</entry>
+	      <entry>Single XHTL file in W3C HTML Slidy format.</entry>
+	    </row>
 
-	  <tr>
-	    <td>xhtml/s5.xsl</td>
-	    <td>Single XHTML file in S5 format.</td>
-	  </tr>
+	    <row>
+	      <entry>xhtml/s5.xsl</entry>
+	      <entry>Single XHTML file in S5 format.</entry>
+	    </row>
 
-	</tbody>
+	  </tbody>
+	</tgroup>
       </informaltable>
     </dbs:foil>
     
@@ -743,7 +832,7 @@
 	</listitem>
 	
 	<listitem>
-	  <para>For <application>Emacs/nXML</application>, you can use put the following into
+	  <para>For <application>Emacs/nXML</application>, you can put the following into
 	    your <filename>emacs.conf</filename>:</para>
 	    
 	  <programlisting>
@@ -949,7 +1038,8 @@
       
       <itemizedlist>
         <listitem>
-	  <para><emphasis>May contain:</emphasis> db:info, dbs:foilgroup, dbs:foil</para>
+	  <para><emphasis>May contain:</emphasis> db:title, db:titleabbrev,
+	    db:subtitle, db:info, dbs:foilgroup, dbs:foil</para>
 	</listitem>
 	
 	<listitem>
@@ -967,11 +1057,8 @@
       
       <itemizedlist>
         <listitem>
-	  <para><emphasis>May contain:</emphasis> db:info, [block content], dbs:foil, dbs:speakernotes</para>
-	</listitem>
-	
-        <listitem>
-	  <para><emphasis>Attributes:</emphasis> incremental, collapsable, style</para>
+	  <para><emphasis>May contain:</emphasis> db:title, db:titleabbev,
+	    db:subtitle, db:info, [block content], dbs:foil, dbs:speakernotes</para>
 	</listitem>
 	
 	<listitem>
@@ -991,11 +1078,8 @@
       
       <itemizedlist>
         <listitem>
-	  <para><emphasis>May contain:</emphasis> db:info, [block content], dbs:speakernotes</para>
-	</listitem>
-	
-        <listitem>
-	  <para><emphasis>Attributes:</emphasis> incremental, collapsable, style</para>
+	  <para><emphasis>May contain:</emphasis> db:title, db:titleabbev,
+	    db:subtitle, db:info, [block content], dbs:speakernotes</para>
 	</listitem>
 	
 	<listitem>
@@ -1018,6 +1102,68 @@
 	<listitem>
 	  <para><emphasis>Usage:</emphasis> Notes that are not meant to be presented to
 	    the audience but to the speaker.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+
+     <dbs:foil>
+      <info>
+        <title>dbs:handoutnotes</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para><emphasis>May contain:</emphasis> [block content]</para>
+	</listitem>
+	
+	<listitem>
+	  <para><emphasis>Usage:</emphasis> Notes that are not meant to accompany
+	    printed slides.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+     <dbs:foil>
+      <info>
+        <title>Attribute dbs:incremental</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para><emphasis>Usage:</emphasis> Makes the content incremental.
+	    Allowed on any element and inherited when set to <literal>1</literal>
+	    but not applicable everywhere and its effect depends on the output
+	    format.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+     <dbs:foil>
+      <info>
+        <title>Attribute dbs:collapsable</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para><emphasis>Usage:</emphasis> Makes the content collapsable.
+	    Allowed on any element and inherited when set to <literal>1</literal>
+	    but not applicable everywhere and its effect depends on the output
+	    format.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+     <dbs:foil>
+      <info>
+        <title>Attribute dbs:style</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para><emphasis>Usage:</emphasis> Classifies the given element
+	    to a specific formatting class.  Typically applicable to foils,
+	    foilgroups and mediaobject.  Allowed anywhere but not processed
+	    everywhere.  In HTML it naturally maps to the class attribute.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
