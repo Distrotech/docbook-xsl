@@ -16,12 +16,12 @@
 <!-- =			some configurations for mobile xsl sheets											   = -->
 <!-- =================================================================================================== -->		
 	<xsl:param name="mobile.base.dir">application</xsl:param>
-	<xsl:param name="webhelp.include.search.tab">true</xsl:param>
-	<xsl:param name="webhelp.start.filename">index.html</xsl:param>
-	<xsl:param name="webhelp.tree.cookie.id" select="concat( 'treeview-', count(//node()) )" />
-	<xsl:param name="webhelp.indexer.language">en	</xsl:param>
-	<xsl:param name="webhelp.default.topic" />
-	<xsl:param name="webhelp.autolabel">0</xsl:param>
+	<xsl:param name="mobile.include.search.tab">true</xsl:param>
+	<xsl:param name="mobile.start.filename">index.html</xsl:param>
+	<xsl:param name="mobile.tree.cookie.id" select="concat( 'treeview-', count(//node()) )" />
+	<xsl:param name="mobile.indexer.language">en	</xsl:param>
+	<xsl:param name="mobile.default.topic" />
+	<xsl:param name="mobile.autolabel">0</xsl:param>
 	
 <!-- =================================================================================================== -->	
 <!-- =			default configuration for build mobile out put										   = -->
@@ -147,7 +147,7 @@
 	
 <!-- ========== elementary template which is located in "docbook.xsl" of xhtml style sheets in xsl repo. =================== -->	
 	<xsl:template match="/">
-		<xsl:message> language: <xsl:value-of select="$webhelp.indexer.language"/>
+		<xsl:message> language: <xsl:value-of select="$mobile.indexer.language"/>
 		</xsl:message>
 		<!-- * Get a title for current doc so that we let the user -->
 		<!-- * know what document we are processing at this point. -->
@@ -294,7 +294,7 @@
 							<xsl:with-param name="nav.context" select="$nav.context"/>
 						</xsl:call-template>
 					</div>
-					<!-- <xsl:call-template name="user.footer.navigation"/> -->
+					<xsl:call-template name="user.footer.navigation"/>
 				</div>
 			</body>
 		</html>
@@ -311,18 +311,18 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<!-- <xsl:message> webhelp.tree.cookie.id = <xsl:value-of select="$webhelp.tree.cookie.id"/> 
-			+++ <xsl:value-of select="count(//node())"/> $webhelp.indexer.language = 
-			<xsl:value-of select="$webhelp.indexer.language"/> +++ <xsl:value-of select="count(//node())"/> 
+		<!-- <xsl:message> mobile.tree.cookie.id = <xsl:value-of select="$mobile.tree.cookie.id"/> 
+			+++ <xsl:value-of select="count(//node())"/> $mobile.indexer.language = 
+			<xsl:value-of select="$mobile.indexer.language"/> +++ <xsl:value-of select="count(//node())"/> 
 			</xsl:message> -->
 		
 		<script type="text/javascript">
 			//The id for tree cookie
 			var treeCookieId = "
-			<xsl:value-of select="$webhelp.tree.cookie.id" />
+			<xsl:value-of select="$mobile.tree.cookie.id" />
 			";
 			var language = "
-			<xsl:value-of select="$webhelp.indexer.language" />
+			<xsl:value-of select="$mobile.indexer.language" />
 			";
 			var w = new Object();
 			//Localization
@@ -416,9 +416,9 @@
 		<!-- NOTE: Stemmer javascript files should be in format <language>_stemmer.js. 
 			For example, for English(en), source should be: "search/stemmers/en_stemmer.js" 
 			For country codes, see: http://www.uspto.gov/patft/help/helpctry.htm -->
-		<!--<xsl:message><xsl:value-of select="concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')"/></xsl:message> -->
+		<!--<xsl:message><xsl:value-of select="concat('search/stemmers/',$mobile.indexer.language,'_stemmer.js')"/></xsl:message> -->
 		<script type="text/javascript"
-			src="{concat('search/stemmers/',$webhelp.indexer.language,'_stemmer.js')}">
+			src="{concat('search/stemmers/',$mobile.indexer.language,'_stemmer.js')}">
 			<xsl:comment>
 				//make this scalable to other languages as well.
 			</xsl:comment>
@@ -475,7 +475,7 @@
 		<!-- <xsl:call-template name="mobiletoc"/> -->
 		
 		<!-- <testing toc in the content page> <xsl:call-template name="mobiletoctoc"/> 
-			<xsl:if test="$webhelp.include.search.tab != 'false'"> <xsl:call-template 
+			<xsl:if test="$mobile.include.search.tab != 'false'"> <xsl:call-template 
 			name="search"/> </xsl:if> -->
 	</xsl:template>
 	
@@ -649,6 +649,193 @@
 	
 <!-- ====== "mobile-toc" : newly created -->
 	<xsl:template name="mobiletoc">
+		<xsl:param name="currentid" />
+		<xsl:choose>
+			<xsl:when test="$rootid != ''">
+				<xsl:variable name="title">
+					<xsl:if test="$mobile.autolabel=1">
+						<xsl:variable name="label.markup">
+							<xsl:apply-templates select="key('id',$rootid)"
+								mode="label.markup" />
+						</xsl:variable>
+						<xsl:if test="normalize-space($label.markup)">
+							<xsl:value-of select="concat($label.markup,$autotoc.label.separator)" />
+						</xsl:if>
+					</xsl:if>
+					<xsl:apply-templates select="key('id',$rootid)"
+						mode="title.markup" />
+				</xsl:variable>
+				<xsl:variable name="href">
+					<xsl:choose>
+						<xsl:when test="$manifest.in.base.dir != 0">
+							<xsl:call-template name="href.target">
+								<xsl:with-param name="object" select="key('id',$rootid)" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="href.target.with.base.dir">
+								<xsl:with-param name="object" select="key('id',$rootid)" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+			</xsl:when>
+			
+			<xsl:otherwise>
+				<xsl:variable name="title">
+					<xsl:if test="$mobile.autolabel=1">
+						<xsl:variable name="label.markup">
+							<xsl:apply-templates select="/*" mode="label.markup" />
+						</xsl:variable>
+						<xsl:if test="normalize-space($label.markup)">
+							<xsl:value-of select="concat($label.markup,$autotoc.label.separator)" />
+						</xsl:if>
+					</xsl:if>
+					<xsl:apply-templates select="/*" mode="title.markup" />
+				</xsl:variable>
+				<xsl:variable name="href">
+					<xsl:choose>
+						<xsl:when test="$manifest.in.base.dir != 0">
+							<xsl:call-template name="href.target">
+								<xsl:with-param name="object" select="/" />
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="href.target.with.base.dir">
+								<xsl:with-param name="object" select="/" />
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				
+				<div>
+					<div id="leftnavigation" style="padding-top:3px; background-color:white;">
+						<div id="tabs">
+							<ul>
+								<li>
+									<a href="#treeDiv">
+										<em>
+											<xsl:call-template name="gentext">
+												<xsl:with-param name="key" select="'TableofContents'" />
+											</xsl:call-template>
+										</em>
+									</a>
+								</li>
+								<xsl:if test="$mobile.include.search.tab != 'false'">
+									<li>
+										<a href="#searchDiv">
+											<em>
+												<xsl:call-template name="gentext">
+													<xsl:with-param name="key" select="'Search'" />
+												</xsl:call-template>
+											</em>
+										</a>
+									</li>
+								</xsl:if>
+							</ul>
+							<div id="treeDiv">
+								<img src="../common/images/loading.gif" alt="loading table of contents..."
+									id="tocLoading" style="display:block;" />
+								<div id="ulTreeDiv" style="display:none">
+									<ul id="tree" class="filetree">
+										<xsl:apply-templates select="/*/*" mode="mobiletoc">
+											<xsl:with-param name="currentid" select="$currentid" />
+										</xsl:apply-templates>
+									</ul>
+								</div>
+								
+							</div>
+							<xsl:if test="$mobile.include.search.tab != 'false'">
+								<div id="searchDiv">
+									<div id="search">
+										<form onsubmit="Verifie(ditaSearch_Form);return false"
+											name="ditaSearch_Form" class="searchForm">
+											<fieldset class="searchFieldSet">
+												<legend>
+													<xsl:call-template name="gentext">
+														<xsl:with-param name="key" select="'Search'" />
+													</xsl:call-template>
+												</legend>
+												<center>
+													<input id="textToSearch" name="textToSearch" type="text"
+														class="searchText" />
+													<xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> 
+                                                    </xsl:text>
+													<input onclick="Verifie(ditaSearch_Form)" type="button"
+														class="searchButton" value="Go" id="doSearch" />
+												</center>
+											</fieldset>
+										</form>
+									</div>
+									<div id="searchResults">
+										<center>
+										</center>
+									</div>
+								</div>
+							</xsl:if>
+							
+						</div>
+					</div>
+				</div>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	
+<!-- ====== when match one of following ->execute ====================================================== -->
+	<xsl:template  match= "book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
+		mode="mobiletoc">
+		<xsl:param name="currentid" />
+		<xsl:variable name="title">
+			<xsl:if test="$mobile.autolabel=1">
+				<xsl:variable name="label.markup">
+					<xsl:apply-templates select="." mode="label.markup" />
+				</xsl:variable>
+				<xsl:if test="normalize-space($label.markup)">
+					<xsl:value-of select="concat($label.markup,$autotoc.label.separator)" />
+				</xsl:if>
+			</xsl:if>
+			<xsl:apply-templates select="." mode="title.markup" />
+		</xsl:variable>
+		
+		<xsl:variable name="href">
+			<xsl:choose>
+				<xsl:when test="$manifest.in.base.dir != 0">
+					<xsl:call-template name="href.target" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="href.target.with.base.dir" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:variable name="id" select="generate-id(.)" />
+		<!--<xsl:message> <xsl: select="name(ancestor-or-self::*) "/> </xsl:message> -->
+		
+		<xsl:if
+			test="not(self::index) or (self::index and not($generate.index = 0))">
+			<!--li style="white-space: pre; line-height: 0em;" -->
+			<li>
+				<xsl:if test="$id = $currentid">
+					<xsl:attribute name="id">mobile-currentid</xsl:attribute>
+				</xsl:if>
+				<span class="file">
+					<a href="{substring-after($href,concat($mobile.base.dir,'/content/'))}">
+						<xsl:value-of select="$title" />
+					</a>
+				</span>
+				<xsl:if
+					test="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv">
+					<ul>
+						<xsl:apply-templates
+							select="part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv"
+							mode="mobiletoc">
+							<xsl:with-param name="currentid" select="$currentid" />
+						</xsl:apply-templates>
+					</ul>
+				</xsl:if>
+			</li>
+		</xsl:if>
 	</xsl:template>
 	
 <!-- =================================================================================================== -->	
