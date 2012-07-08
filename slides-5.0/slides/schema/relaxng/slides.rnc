@@ -1,5 +1,5 @@
 namespace db = "http://docbook.org/ns/docbook"
-namespace mml = "http://www.w3.org/1998/Math/MathML/"
+namespace mml = "http://www.w3.org/1998/Math/MathML"
 namespace svg = "http://www.w3.org/2000/svg"
 default namespace dbs = "http://docbook.org/ns/docbook-slides"
 
