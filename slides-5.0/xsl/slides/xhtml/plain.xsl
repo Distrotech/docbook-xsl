@@ -46,11 +46,9 @@
 <!-- whether to wrap slide content in a div class="slidecontent" -->
 <xsl:param name="wrap.slidecontent">1</xsl:param>
 
-<!-- whether lists are incremental: all, default (incremental attrib), no -->
-<xsl:param name="incremental.lists">default</xsl:param>
+<xsl:param name="disable.incremental">0</xsl:param>
 
-<!-- whether lists are collapsable: all, default (collapsable attrib), no -->
-<xsl:param name="collapsable.lists">default</xsl:param>
+<xsl:param name="disable.collapsable">0</xsl:param>
 
 <!-- inline, object, embed, iframe, image, link -->
 <xsl:param name="svg.embedding.mode">object</xsl:param>
@@ -150,17 +148,22 @@
 </xsl:template>
 
 <xsl:template name="foil.classes">
-  <xsl:choose>
-    <xsl:when test="@dbs:style">
-      <xsl:attribute name="class">
-	<xsl:value-of select="concat('slide ', @dbs:style)"/>
-      </xsl:attribute>
-    </xsl:when>
+  <xsl:variable name="classValue">
+    <xsl:call-template name="process.dbs.attributes">
+      <!-- Do not put incremental or collapsable on foils -->
+      <xsl:with-param name="attributeSet" select="self::*/@dbs:style"/>
+      <xsl:with-param name="stored">
+        <xsl:value-of select="'slide'"/>
+        <xsl:if test="@*[namespace-uri() = 'http://docbook.org/ns/docbook-slides']">
+          <xsl:text> </xsl:text>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
 
-    <xsl:otherwise>
-      <xsl:attribute name="class">slide</xsl:attribute>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:attribute name="class">
+    <xsl:value-of select="$classValue"/>
+  </xsl:attribute>
 </xsl:template>
 
 <xsl:template match="dbs:foilgroup">
@@ -209,6 +212,76 @@
   </div>
 </xsl:template>
 
+<xsl:template name="process.dbs.attributes">
+  <xsl:param name="attributeSet"/>
+  <xsl:param name="stored" select="''"/>
+
+  <xsl:variable name="gotIncremental">
+    <xsl:if test="((local-name($attributeSet[1]) = 'incremental') and ($attributeSet[1] = '1'))">1</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="enableIncremental">
+    <xsl:if test="($disable.incremental = '0') and ($gotIncremental = '1')">1</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="gotCollapsable">
+    <xsl:if test="((local-name($attributeSet[1]) = 'collapsable') and ($attributeSet[1] = '1'))">1</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="enableCollapsable">
+    <xsl:if test="($disable.collapsable = '0') and ($gotCollapsable = '1')">1</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="append">
+    <xsl:choose>
+      <xsl:when test="local-name($attributeSet[1]) = 'style'">
+	<xsl:value-of select="$attributeSet[1]"/>
+      </xsl:when>
+
+      <xsl:when test="$enableCollapsable = '1'">
+        <xsl:value-of select="'outline'"/>
+      </xsl:when>
+ 
+      <xsl:when test="$enableIncremental = '1'">
+	<xsl:value-of select="'incremental'"/>
+      </xsl:when>
+    </xsl:choose>
+
+    <xsl:if test="count($attributeSet) &gt; 1">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="not($attributeSet)">
+      <xsl:value-of select="$stored"/>
+    </xsl:when>
+
+    <xsl:when test="count($attributeSet) &lt;= 1">
+      <xsl:value-of select="concat($stored, $append)"/>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:call-template name="process.dbs.attributes">
+	<xsl:with-param name="attributeSet" select="$attributeSet[position() != 1]"/>
+	<xsl:with-param name="stored" select="concat($stored, $append)"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="dbs:block">
+  <xsl:variable name="classValue">
+    <xsl:call-template name="process.dbs.attributes">
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <div class="{$classValue}">
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
+
 <xsl:template match="db:info">
   <xsl:apply-templates select="db:title|db:titleabbrev|db:subtitle|db:author|db:authorgroup/db:author"/>
 </xsl:template>
@@ -242,20 +315,17 @@
 </xsl:template>
 
 <xsl:template name="list.content">
-    <xsl:if test="($incremental.lists = 'all') or (($incremental.lists = 'default') and (ancestor-or-self::*/@dbs:incremental[1] = '1'))">
-      <xsl:attribute name="class">incremental</xsl:attribute>
-    </xsl:if>
+  <xsl:variable name="classValue">
+    <xsl:call-template name="process.dbs.attributes">
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+    </xsl:call-template>
+  </xsl:variable>
 
-    <xsl:if test="not(ancestor::db:itemizedlist|ancestor::db:orderedlist)">
-      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@dbs:collapsable[1] = '1'))">
-	<xsl:attribute name="class">outline</xsl:attribute>
-      </xsl:if>
-      <xsl:if test="($collapsable.lists = 'all') or (($collapsable.lists = 'default') and (ancestor-or-self::*/@dbs:collapsable[1] = 'expanded'))">
-	<xsl:attribute name="class">expand</xsl:attribute>
-      </xsl:if>
-    </xsl:if>
+  <xsl:attribute name="class">
+    <xsl:value-of select="$classValue"/>
+  </xsl:attribute>
 
-    <xsl:apply-templates select="*"/>
+  <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="db:itemizedlist">
@@ -271,21 +341,15 @@
 </xsl:template>
 
 <xsl:template match="db:mediaobject">
-  <xsl:choose>
-    <xsl:when test="ancestor-or-self::*[@dbs:incremental = 1]">
-      <div>
-	<xsl:attribute name="class">
-	  <xsl:call-template name="get.classes"/>
-	</xsl:attribute>
+  <xsl:variable name="classValue">
+    <xsl:call-template name="process.dbs.attributes">
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+    </xsl:call-template>
+  </xsl:variable>
 
-	<xsl:apply-templates/>
-      </div>
-    </xsl:when>
-
-    <xsl:otherwise>
-      <xsl:apply-templates/>
-    </xsl:otherwise>
-  </xsl:choose>
+  <div class="{$classValue}">
+    <xsl:apply-templates/>
+  </div>
 </xsl:template>
 
 <xsl:template name="bibliography.titlepage"/>
@@ -339,9 +403,15 @@
 </xsl:template>
 
 <xsl:template name="extension.process.image.attributes">
-  <xsl:if test="@dbs:style">
+  <xsl:variable name="classValue">
+    <xsl:call-template name="process.dbs.attributes">
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:if test="./@*[namespace-uri() = 'http://docbook.org/ns/docbook-slides']">
     <xsl:attribute name="class">
-      <xsl:value-of select="@dbs:style"/>
+      <xsl:value-of select="$classValue"/>
     </xsl:attribute>
   </xsl:if>
 </xsl:template>
@@ -418,36 +488,14 @@
         <xsl:when test="$modeParam = 'embed'">
 	  <embed src="{$fname}" type="{$mimeType}" /> 
         </xsl:when>
+
+	<xsl:otherwise>
+	  <xsl:message terminate="yes">
+	    Unknown processing mode <xsl:value-of select="$modeParam"/>.
+	  </xsl:message>
+	</xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template name="get.classes">
-  <xsl:variable name="incremental">
-    <xsl:if test="($incremental.lists = 'all') or (($incremental.lists = 'default') and (ancestor-or-self::*/@dbs:incremental[1] = '1'))">
-      <xsl:value-of select="'incremental'"/>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:variable name="style">
-    <xsl:if test="@dbs:style">
-      <xsl:value-of select="@dbs:style"/>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="$incremental and $style">
-      <xsl:value-of select="concat($incremental, ', ', $style)"/>
-    </xsl:when>
-
-    <xsl:when test="$incremental">
-      <xsl:value-of select="$incremental"/>
-    </xsl:when>
-
-    <xsl:when test="$style">
-      <xsl:value-of select="$style"/>
-    </xsl:when>
   </xsl:choose>
 </xsl:template>
 

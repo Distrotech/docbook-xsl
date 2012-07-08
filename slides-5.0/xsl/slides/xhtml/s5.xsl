@@ -95,15 +95,15 @@
 </xsl:template>
 
 <xsl:template match="db:mediaobject">
-  <p class="imgcon">
+  <p>
+    <xsl:if test="@dbs:style">
+      <xsl:attribute name="class">
+	<xsl:value-of select="@dbs:style"/>
+      </xsl:attribute>
+    </xsl:if>
+
     <xsl:apply-templates/>
   </p>
-</xsl:template>
-
-<xsl:template name="extension.process.image.attributes">
-  <xsl:attribute name="class">
-    <xsl:call-template name="get.classes"/>
-  </xsl:attribute>
 </xsl:template>
 
 </xsl:stylesheet>
