@@ -12,8 +12,9 @@
 
      This file is part customization layer on top of the XSL DocBook
      Stylesheet distribution that generates webhelp output.
-
+<xsl:param name="webhelp.common.dir">common/</xsl:param>
      ******************************************************************** -->
+<xsl:param name="webhelp.common.dir">common/</xsl:param>
 
     <xsl:param name="chunker.output.method">
         <xsl:choose>
@@ -27,10 +28,11 @@
     </xsl:param>
 
     <!-- Set some reasonable defaults for webhelp output -->
+    <!-- <xsl:param name="webhelp.common.dir">common/</xsl:param> -->
     <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
-    <xsl:param name="base.dir" select="concat($webhelp.base.dir,'/content/')"/>
+    <xsl:param name="base.dir" select="concat($webhelp.base.dir,'/')"/>
     <xsl:param name="suppress.navigation">0</xsl:param>
     <!-- Generate the end-of-the-book index -->
     <xsl:param name="generate.index" select="1"/>
@@ -425,7 +427,7 @@ border: none; background: none; font-weight: none; color: none; }
 	  </xsl:otherwise>
 	</xsl:choose>
 	
-	<xsl:call-template name="index.html"/>
+	<!-- <xsl:call-template name="index.html"/> -->
 
 	<xsl:call-template name="l10n.js"/>
     </xsl:template>
