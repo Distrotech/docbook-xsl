@@ -23,6 +23,8 @@
     <!-- To be added to normal params file someday -->
     <xsl:param name="mobile.include.search.tab">true</xsl:param>
     <xsl:param name="mobile.start.filename">index.html</xsl:param>
+	<xsl:param name="mobile.setting.filename">settings.html</xsl:param>
+	<xsl:param name="mobile.menubar.filename">menubar.html</xsl:param>
     <xsl:param name="mobile.base.dir">www</xsl:param>
     <xsl:param name="mobile.tree.cookie.id" select="concat( 'treeview-', count(//node()) )"/>
     <xsl:param name="mobile.indexer.language">en</xsl:param>
@@ -370,6 +372,10 @@ These problems go away when you add this IE=7 mode meta tag.
 	</xsl:choose>
 	
 	<xsl:call-template name="index.html"/>
+  	
+  	<xsl:call-template name="settings.html" />
+  	
+  	<xsl:call-template name="menubar.html"></xsl:call-template>
 
     </xsl:template>
 
@@ -449,7 +455,7 @@ These problems go away when you add this IE=7 mode meta tag.
 			</xsl:choose>
 		</h4>
 
-		<!-- Prev and Next links generation-->
+		<!-- Prev links generation-->
 
 		<xsl:comment>
                     <!-- KEEP this code. In case of neither prev nor next links are available, this will help to
@@ -493,8 +499,9 @@ These problems go away when you add this IE=7 mode meta tag.
 					test="count($up)&gt;0
                                               and generate-id($up) != generate-id($home)">
 
-					<a accesskey="u" data-role="button" data-icon="arrow-u" data-iconpos="notext"
-						data-theme="a">
+					<!--<div accesskey="u" data-role="button" data-icon="arrow-u" data-iconpos="notext"
+						data-theme="a">-->
+					<div>
 						<xsl:attribute name="href">
 							<xsl:call-template name="href.target">
 								<xsl:with-param name="object" select="$up"/>
@@ -503,11 +510,11 @@ These problems go away when you add this IE=7 mode meta tag.
 						<xsl:call-template name="navig.content">
 							<xsl:with-param name="direction" select="'up'"/>
 						</xsl:call-template>
-					</a>
+					</div>
 				</xsl:when>
 				<xsl:otherwise>&#160;</xsl:otherwise>
 			</xsl:choose>
-
+			<!-- "Next" navigator genarate -->
 			<xsl:if test="count($next)>0">
 
 				<a accesskey="n" data-role="button" data-icon="arrow-r" data-iconpos="notext"
@@ -533,6 +540,8 @@ These problems go away when you add this IE=7 mode meta tag.
 					<xsl:with-param name="object" select="$next"/>
 				</xsl:call-template>
 			</xsl:variable>
+			
+			<!-- actions for the events happening on the phone/device -->
 			<script type="text/javascript">
 					$(function() {
 						$("#current_page").live('swipedown', function(event) {
@@ -542,7 +551,7 @@ These problems go away when you add this IE=7 mode meta tag.
 				
 					$(function() {
 						$("#current_page").live('swipeup', function(event) {
-							$.mobile.changePage("#toc");
+							$.mobile.changePage("menubar.html");
 						});
 					});
 					
@@ -557,7 +566,20 @@ These problems go away when you add this IE=7 mode meta tag.
 							$.mobile.changePage("<xsl:value-of select="$nav_next"/>");
 						});
 					});
-				</script>
+			</script>
+			
+			<!-- pop up the settings panel when click on menu button of the phone/device -->
+			<script type="text/javascript" charset="utf-8">
+				document.addEventListener("deviceready", onDeviceReady, false);
+
+				function onDeviceReady() {
+					document.addEventListener("menubutton", onMenuKeyDown, false);
+				}
+
+				function onMenuKeyDown() {
+					$.mobile.changePage("settings.html");
+				}
+			</script>
 		</xsl:if>
 
 	</xsl:template>
@@ -769,4 +791,307 @@ These problems go away when you add this IE=7 mode meta tag.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
+	
+	<!-- settings -->
+	<xsl:template name="settings.html">
+		
+		<xsl:call-template name="write.chunk">
+			<xsl:with-param name="filename">
+				<!--<xsl:choose>
+					<xsl:when test="$mobile.start.filename">
+						<xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="'index.html'"/>
+					</xsl:otherwise>
+				</xsl:choose>-->
+				
+				<xsl:value-of select="concat($mobile.base.dir,'/content/',$mobile.setting.filename)"/>
+			</xsl:with-param>
+			<xsl:with-param name="method" select="'xml'"/>
+			<xsl:with-param name="encoding" select="'utf-8'"/>
+			<xsl:with-param name="indent" select="'yes'"/>
+			<xsl:with-param name="content">
+
+				<html>
+					<head>
+						<title>Settings</title>
+						
+						<meta name="viewport" content="width=device-width, initial-scale=1" />
+						<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+						
+						<script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>
+						
+						<link rel="stylesheet" type="text/css"
+							href="../css/themes/default/jquery.mobile-1.1.0.css"></link>
+						<script type="text/javascript" src="../js/jquery-1.7.2.js">// jquery </script>
+
+						<script type="text/javascript" src="../js/jquery.cookie.js">// cookies </script>
+
+						<script type="text/javascript" src="../js/jquery.mobile-1.1.0.js">// jquery mobile </script>
+						<script type="text/javascript" src="../js/swipeupdown.js">//swipe</script>
+						<script type="text/javascript" src="../js/mobile-settings.js">//mobile-settings</script>
+						
+					</head>
+					<body>
+
+						<div data-role="page">
+
+							<div data-role="header">
+								<h1>Settings</h1>
+							</div>
+
+							<div data-role="content">
+
+								<form>
+									<ul data-role="listview" data-inset="true" data-theme="b">
+										<li data-role="list-divider" data-mini="true">Edit</li>
+
+										<li>
+											<a id="viewtoc" href="#toc">ToC</a>
+										</li>
+										<li>
+											<a id="viewmenubar" href="menubar.html">Menu Bar</a>
+										</li>
+
+										<li>
+											<label for="view-bars" class="select" data-mini="true">
+												<strong>
+												<em>View</em>
+												</strong>
+											</label>
+											<select name="select-view-bars" id="view-bars"
+												data-theme="e" data-icon="arrow-d"
+												data-native-menu="false">
+												<option value="viewToC">View ToC</option>
+												<option value="viewMenuBar">View Menu Bar</option>
+											</select>
+										</li>
+
+										<li>
+											<label for="select-menu-bar-position" class="select"
+												data-mini="true">
+												<strong>
+												<em> Menu Bar Tap Position </em>
+												</strong>
+											</label>
+											<select name="select-menu-bar-position"
+												id="select-menu-bar-position" data-theme="e"
+												data-icon="arrow-d" data-native-menu="false">
+												<option value="tapUpper">Tap Upper Screen</option>
+												<option value="tapLower">Tap Lower Screen</option>
+
+											</select>
+										</li>
+
+										<li>
+											<label for="select-toc-position" class="select"
+												data-mini="true">
+												<strong>
+												<em>ToC Tap Position </em>
+												</strong>
+											</label>
+											<select name="select-toc-position"
+												id="select-toc-position" data-theme="e"
+												data-icon="arrow-d" data-native-menu="false">
+												<option value="tapUpper">Tap Upper Screen</option>
+												<option value="tapLower">Tap Lower Screen</option>
+											</select>
+										</li>
+
+										<li data-theme="a">
+											<label for="select-prev-page-direction" class="select"
+												data-mini="true">
+												<strong>
+												<em>Prev Page Direction </em>
+												</strong>
+											</label>
+											<select name="select-prev-page-direction"
+												id="select-prev-page-direction" data-theme="e"
+												data-icon="arrow-d" data-native-menu="false">
+												<option value="swipeLeft">Swipe Left</option>
+												<option value="swipeRight">Swipe Right</option>
+											</select>
+										</li>
+
+										<li data-theme="a">
+											<label for="select-next-page-direction" class="select"
+												data-mini="true">
+												<strong>
+												<em>Next Page Direction </em>
+												</strong>
+											</label>
+											<select name="select-next-page-direction"
+												id="select-next-page-direction" data-theme="e"
+												data-icon="arrow-d" data-native-menu="false">
+												<option value="swipeLeft">Swipe Left</option>
+												<option value="swipeRight">Swipe Right</option>
+											</select>
+										</li>
+
+										<li data-theme="a">
+											<label for="select-pop-up-menu-bar" class="select"
+												data-mini="true">
+												<strong>
+												<em>Pop Up Menu Bar</em>
+												</strong>
+											</label>
+											<select name="select-pop-up-menu-bar"
+												id="select-pop-up-menu-bar" data-theme="e"
+												data-icon="arrow-d" data-native-menu="false">
+												<option value="showMenuBar">Show Menu Bar</option>
+												<option value="hideMenuBar">Hide Menu Bar</option>
+
+											</select>
+										</li>
+
+										<li data-theme="a">
+											<label for="select-pop-up-toc" class="select"
+												data-mini="true">
+												<strong>
+												<em>Pop Up ToC </em>
+												</strong>
+											</label>
+											<select name="select-pop-up-toc" id="select-pop-up-toc"
+												data-theme="e" data-icon="arrow-d"
+												data-native-menu="false">
+												<option value="showtoc">Show ToC</option>
+												<option value="hidetoc">Hide ToC</option>
+											</select>
+										</li>
+									</ul>
+								</form>
+
+								<ul data-role="listview" data-inset="true" data-theme="b">
+									<li data-role="list-divider" data-mini="true">Advance
+										Settings</li>
+									<li>
+										<div class="ui-grid-a">
+											<div class="ui-block-a">
+												<label for="remember-page" data-mini="true">Remember
+												Page</label>
+											</div>
+											<div class="ui-block-b">
+												<div class="ui-block-a"/>
+												<div class="ui-block-b">
+												<select name="remember-page" id="remember-page"
+												data-role="slider" data-mini="true"
+												data-pos="right">
+												<option value="off">Off</option>
+												<option value="on">On</option>
+												</select>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="ui-grid-a">
+											<div class="ui-block-a">
+												<label for="voice-search" data-mini="true">Voice
+												Search</label>
+											</div>
+											<div class="ui-block-b">
+												<div class="ui-block-a"/>
+												<div class="ui-block-b">
+												<select name="voice-search" id="voice-search"
+												data-role="slider" data-mini="true"
+												data-pos="right">
+												<option value="off">Off</option>
+												<option value="on">On</option>
+												</select>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</body>
+				</html>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!-- menu Bar -->
+	<xsl:template name="menubar.html">
+		<xsl:call-template name="write.chunk">
+			<xsl:with-param name="filename">
+				<!--<xsl:choose>
+					<xsl:when test="$mobile.start.filename">
+						<xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="'index.html'"/>
+					</xsl:otherwise>
+				</xsl:choose>-->
+
+				<xsl:value-of select="concat($mobile.base.dir,'/content/',$mobile.menubar.filename)"
+				/>
+			</xsl:with-param>
+			<xsl:with-param name="method" select="'xml'"/>
+			<xsl:with-param name="encoding" select="'utf-8'"/>
+			<xsl:with-param name="indent" select="'yes'"/>
+			<xsl:with-param name="content">
+				<html>
+					<head>
+						<meta name="viewport" content="width=device-width, initial-scale=1"/>
+						<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+						<script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>
+						<link rel="stylesheet" type="text/css"
+							href="../css/themes/default/jquery.mobile-1.1.0.css"/>
+						<script type="text/javascript" src="../js/jquery-1.7.2.js">// jquery </script>
+						<script type="text/javascript" src="../js/jquery.cookie.js">// cookies </script>
+						<script type="text/javascript" src="../js/jquery.mobile-1.1.0.js">// jquery mobile </script>
+						<script type="text/javascript" src="../js/swipeupdown.js">//swipe</script>
+						<script type="text/javascript" src="../js/mobile-settings.js">//mobile-settings</script>
+					</head>
+					<body>
+						<div data-role="page">
+							<div data-role="header">
+								<h1>Menu Bar</h1>
+							</div>
+							<div data-role="content">
+
+								<div data-role="footer" data-theme="b" class="ui-bar ui-grid-b">
+									<div class="ui-block-a">
+										<div style="margin: 8px 0 0 10px;">
+											<a href="index.html" data-role="button" data-icon="back"
+												data-theme="a">Back</a>
+										</div>
+									</div>
+									<div class="ui-block-b">
+										<input id="value" value="page no"/>
+									</div>
+									<div class="ui-block-c">
+										<div style="margin: 8px 0 0 10px;">
+											<a href="index.html" data-role="button"
+												data-icon="arrow-r" data-theme="a">Go</a>
+										</div>
+									</div>
+								</div>
+								<div data-role="footer" data-theme="b" class="ui-bar ui-grid-a">
+									<div class="ui-block-a">
+
+										<select name="select-choice-min" id="select-choice-1"
+											data-theme="e" data-native-menu="false">
+											<option value="8">Front size-8</option>
+											<option value="9">Front size-9</option>
+											<option value="10">Front size-10</option>
+											<option value="12">Front size-12</option>
+										</select>
+									</div>
+									<div class="ui-block-b">
+										<div style="margin: 5px 5px 5px 5px;">
+											<input type="search" name="search" id="searc-basic"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</body>
+				</html>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+	
 </xsl:stylesheet>
