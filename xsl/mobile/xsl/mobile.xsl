@@ -19,8 +19,9 @@
 		<xsl:call-template name="get.doc.title"/>
 	</xsl:param>
 
-	<!-- mobile-specific params! -->
-    <!-- To be added to normal params file someday -->
+	<!-- =============================================================================== -->	
+	<!-- =			some configurations for mobile xsl sheets						   = -->
+	<!-- =============================================================================== -->
     <xsl:param name="mobile.include.search.tab">true</xsl:param>
     <xsl:param name="mobile.start.filename">index.html</xsl:param>
 	<xsl:param name="mobile.setting.filename">settings.html</xsl:param>
@@ -30,9 +31,10 @@
     <xsl:param name="mobile.indexer.language">en</xsl:param>
     <xsl:param name="mobile.default.topic"/>
     <xsl:param name="mobile.autolabel">0</xsl:param>
-    <!-- mobile-specific params! -->
 
-    <!-- Set some reasonable defaults for mobile output -->
+	<!-- =============================================================================== -->	
+	<!-- =			default configuration for build mobile out put					   = -->
+	<!-- =============================================================================== -->
     <xsl:param name="chunker.output.indent">no</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
@@ -46,7 +48,6 @@
     <xsl:param name="chunk.first.sections" select="1"/>
     <xsl:param name="chapter.autolabel" select="1"/>
     <xsl:param name="section.autolabel" select="0"/>
-    <!--xsl:param name="generate.toc">book toc</xsl:param-->
 
     <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
         <l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="en">
@@ -118,25 +119,23 @@
         </l10n>
 
     </i18n>
+	
+	<!-- =============================================================================== -->	
+	<!-- =			system.head.content												   = -->
+	<!-- =============================================================================== -->
+	<xsl:template name="system.head.content">
+		<xsl:param name="node" select="."/>
+		<xsl:text>
+	</xsl:text>
 
-  <xsl:template name="system.head.content">
-  <xsl:param name="node" select="."/>
-<xsl:text>
-</xsl:text>
-<!-- 
-This avoids two problems in IE 8. We should someday figure out why this is happening and tweak the JavaScript so this <meta/> tag is not necessary:
-1. When you perform a search and click the Toggle Highlight button, IE 8 adds a line break before the highlighted word.
-2. If you click the show/hide toc button, the tab crashes.
-These problems go away when you add this IE=7 mode meta tag.
- -->
-	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-<xsl:text>
-</xsl:text>
-  </xsl:template>
+		<meta http-equiv="X-UA-Compatible" content="IE=7"/>
+		<xsl:text>
+	</xsl:text>
+	</xsl:template>
 
-	<!-- =================================================================================================== -->	
-	<!-- =			"user.head.content" called from "chunk-element-content									 -->
-	<!-- =================================================================================================== -->	
+	<!-- =============================================================================== -->	
+	<!-- =			"user.head.content" called from "chunk-element-content			   = -->
+	<!-- =============================================================================== -->	
 	<xsl:template name="user.head.content">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -248,7 +247,10 @@ These problems go away when you add this IE=7 mode meta tag.
 		</script>
 		<!--End of index files -->
 	</xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			user.header.navigation											   = -->
+	<!-- =============================================================================== -->
     <xsl:template name="user.header.navigation">
         <xsl:param name="prev"/>
         <xsl:param name="next"/>
@@ -266,11 +268,17 @@ These problems go away when you add this IE=7 mode meta tag.
             <xsl:call-template name="search"/>
         </xsl:if-->
     </xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			user.header.content												   = -->
+	<!-- =============================================================================== -->
     <xsl:template name="user.header.content">
         <xsl:comment> <!-- KEEP this code. --> </xsl:comment>
     </xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			user.footer.navigation											   = -->
+	<!-- =============================================================================== -->
     <xsl:template name="user.footer.navigation">
     	<xsl:call-template name="mobiletoc">
 		  <xsl:with-param name="currentid" select="generate-id(.)"/>
@@ -303,16 +311,7 @@ These problems go away when you add this IE=7 mode meta tag.
 		<xsl:variable name="nons">
         <xsl:apply-templates mode="stripNS"/>
       </xsl:variable>
-		<!--
-		<xsl:message>Saving stripped document.</xsl:message>
-		<xsl:call-template name="write.chunk">
-        <xsl:with-param name="filename" select="'/tmp/stripped.xml'"/>
-        <xsl:with-param name="method" select="'xml'"/>
-        <xsl:with-param name="content">
-		<xsl:copy-of select="exsl:node-set($nons)"/>
-	  </xsl:with-param>
-      </xsl:call-template>
-		-->
+	  	
 		<xsl:call-template name="log.message">
 		  <xsl:with-param name="level">Note</xsl:with-param>
 		  <xsl:with-param name="source" select="$doc.title"/>
@@ -378,7 +377,10 @@ These problems go away when you add this IE=7 mode meta tag.
   	<xsl:call-template name="menubar.html"></xsl:call-template>
 
     </xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			chunk-element-content											   = -->
+	<!-- =============================================================================== -->
 	<xsl:template name="chunk-element-content">
 		<xsl:param name="prev"/>
 		<xsl:param name="next"/>
@@ -434,7 +436,9 @@ These problems go away when you add this IE=7 mode meta tag.
 		<xsl:value-of select="$chunk.append"/>
 	</xsl:template>
 
-    <!-- The Header with the company logo -->
+	<!-- =============================================================================== -->	
+	<!-- =			Mobile Header													   = -->
+	<!-- =============================================================================== -->
 	<xsl:template name="mobileheader">
 		<xsl:param name="prev"/>
 		<xsl:param name="next"/>
@@ -501,7 +505,7 @@ These problems go away when you add this IE=7 mode meta tag.
 
 					<!--<div accesskey="u" data-role="button" data-icon="arrow-u" data-iconpos="notext"
 						data-theme="a">-->
-					<div>
+					<!--<div>
 						<xsl:attribute name="href">
 							<xsl:call-template name="href.target">
 								<xsl:with-param name="object" select="$up"/>
@@ -510,7 +514,8 @@ These problems go away when you add this IE=7 mode meta tag.
 						<xsl:call-template name="navig.content">
 							<xsl:with-param name="direction" select="'up'"/>
 						</xsl:call-template>
-					</div>
+					</div>-->
+					&#160;
 				</xsl:when>
 				<xsl:otherwise>&#160;</xsl:otherwise>
 			</xsl:choose>
@@ -584,6 +589,9 @@ These problems go away when you add this IE=7 mode meta tag.
 
 	</xsl:template>
 
+	<!-- =============================================================================== -->	
+	<!-- =			Mobile ToC														   = -->
+	<!-- =============================================================================== -->
 	<xsl:template name="mobiletoc">
 		<xsl:param name="currentid"/>
 		<xsl:choose>
@@ -666,7 +674,10 @@ These problems go away when you add this IE=7 mode meta tag.
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			Build toc recursively											   = -->
+	<!-- =============================================================================== -->
     <xsl:template
             match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
             mode="mobiletoc">
@@ -725,12 +736,18 @@ These problems go away when you add this IE=7 mode meta tag.
 
     <xsl:template match="text()" mode="mobiletoc"/>
 
+	<!-- =============================================================================== -->	
+	<!-- =			user.footer.content												   = -->
+	<!-- =============================================================================== -->
     <xsl:template name="user.footer.content">
-        <script type="text/javascript" src="../common/main.js">
+<!--        <script type="text/javascript" src="../common/main.js">-->
             <xsl:comment></xsl:comment>
-        </script>
+<!--        </script>-->
     </xsl:template>
-
+	
+	<!-- =============================================================================== -->	
+	<!-- =			index html														   = -->
+	<!-- =============================================================================== -->
     <xsl:template name="index.html">
         <xsl:variable name="default.topic">
             <xsl:choose>
@@ -792,7 +809,9 @@ These problems go away when you add this IE=7 mode meta tag.
         </xsl:call-template>
     </xsl:template>
 	
-	<!-- settings -->
+	<!-- =============================================================================== -->	
+	<!-- =			Settings html													   = -->
+	<!-- =============================================================================== -->
 	<xsl:template name="settings.html">
 		
 		<xsl:call-template name="write.chunk">
@@ -1012,7 +1031,9 @@ These problems go away when you add this IE=7 mode meta tag.
 		</xsl:call-template>
 	</xsl:template>
 
-	<!-- menu Bar -->
+	<!-- =============================================================================== -->	
+	<!-- =			Menu Bar html													   = -->
+	<!-- =============================================================================== -->
 	<xsl:template name="menubar.html">
 		<xsl:call-template name="write.chunk">
 			<xsl:with-param name="filename">
