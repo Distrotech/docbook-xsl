@@ -234,6 +234,30 @@ border: none; background: none; font-weight: none; color: none; }
 .ui-tabs { padding: .2em;}
 .ui-tabs .ui-tabs-nav li { top: 0px; margin: -2px 0 1px; text-transform: uppercase; font-size: 10.5px;}
 .ui-tabs .ui-tabs-nav li a { padding: .25em 2em .25em 1em; margin: .5em; text-shadow: 0 1px 0 rgba(255,255,255,.5); }
+
+/**
+	 *	Basic Layout Theme
+	 * 
+	 *	This theme uses the default layout class-names for all classes
+	 *	Add any 'custom class-names', from options: paneClass, resizerClass, togglerClass
+	 */
+
+	.ui-layout-pane { /* all 'panes' */ 
+		background: #FFF; 
+		border: 1px solid #BBB; 
+		padding: 05x; 
+		overflow: auto;
+	} 
+        
+	.ui-layout-resizer { /* all 'resizer-bars' */ 
+		background: #DDD; 
+                top:100px
+	} 
+
+	.ui-layout-toggler { /* all 'toggler-buttons' */ 
+		background: #AAA; 
+	} 
+    
         </style>
 	<xsl:comment><xsl:text>[if IE]>
 	&lt;link rel="stylesheet" type="text/css" href="../common/css/ie.css"/>
@@ -258,7 +282,9 @@ border: none; background: none; font-weight: none; color: none; }
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/treeview/jquery.treeview.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/layout/jquery.layout.js">
+            <xsl:comment> </xsl:comment>
+        </script>
 	<xsl:if test="$webhelp.include.search.tab = 'true'">
 	  <!--Scripts/css stylesheets for Search-->
 	  <!-- TODO: Why THREE files? There's absolutely no need for having separate files. 
@@ -542,7 +568,7 @@ border: none; background: none; font-weight: none; color: none; }
                 <table class="navLinks">
                     <tr>
                         <td>
-                            <a id="showHideButton" href="javascript:showHideToc();"
+                            <a id="showHideButton" href="#" onclick="myLayout.toggle('west')"
                                 class="pointLeft" tabindex="5" title="Hide TOC tree">Sidebar
                             </a>
                         </td>
@@ -709,7 +735,7 @@ border: none; background: none; font-weight: none; color: none; }
                             <div id="treeDiv">
                                 <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
                                      id="tocLoading" style="display:block;"/>
-                                <div id="ulTreeDiv" style="display:none">
+                                <div id="ulTreeDiv" style="display:block;">
                                     <ul id="tree" class="filetree">
                                         <xsl:apply-templates select="/*/*" mode="webhelptoc">
                                             <xsl:with-param name="currentid" select="$currentid"/>
@@ -724,22 +750,22 @@ border: none; background: none; font-weight: none; color: none; }
                                         <form onsubmit="Verifie(searchForm);return false"
                                               name="searchForm"
                                               class="searchForm">
-                                            <fieldset class="searchFieldSet">
-                                                <legend>
-                                                    <xsl:call-template name="gentext.template">
+                                            <div>
+                                                
+<!--                                                    <xsl:call-template name="gentext.template">
                                                         <xsl:with-param name="name" select="'Search'"/>
 							<xsl:with-param name="context" select="'webhelp'"/>
-                                                    </xsl:call-template>
-                                                </legend>
-                                                <center>
-                                                    <input id="textToSearch" name="textToSearch" type="search" 
+                                                    </xsl:call-template>-->
+                                                
+                                                
+                                                    <input id="textToSearch" name="textToSearch" type="search" placeholder="Search"
                                                            class="searchText" tabindex="1"/>
                                                     <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
                                                     <input onclick="Verifie(searchForm)" type="button"
                                                            class="searchButton"
                                                            value="Go" id="doSearch" tabindex="1"/>
-                                                </center>
-                                            </fieldset>
+                                                
+                                            </div>
                                         </form>
                                     </div>
                                     <div id="searchResults">
@@ -818,12 +844,15 @@ border: none; background: none; font-weight: none; color: none; }
 
     <xsl:template name="user.footer.content">
         <script type="text/javascript" src="{$webhelp.common.dir}main.js">
+             <xsl:comment> </xsl:comment>
+        </script>
+        <script type="text/javascript" src="{$webhelp.common.dir}splitterInit.js">
             <xsl:comment> </xsl:comment>
         </script>
     </xsl:template>
  
     <!-- Generates index.html file at docs/. This is simply a redirection to content/$default.topic -->	
-<!--    <xsl:template name="index.html">
+    <xsl:template name="index.html">
         <xsl:variable name="default.topic">
             <xsl:choose>
                 <xsl:when test="$webhelp.default.topic != ''">
@@ -853,9 +882,9 @@ border: none; background: none; font-weight: none; color: none; }
         </xsl:variable>
         <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename">
-                       <xsl:if test="$manifest.in.base.dir != 0"> 
-                         <xsl:value-of select="$base.dir"/> 
-                       </xsl:if> 
+                <!--       <xsl:if test="$manifest.in.base.dir != 0"> -->
+                <!--         <xsl:value-of select="$base.dir"/> -->
+                <!--       </xsl:if> -->
                 <xsl:choose>
                     <xsl:when test="$webhelp.start.filename">
                         <xsl:value-of select="concat($webhelp.base.dir,'/',$webhelp.start.filename)"/>
@@ -881,7 +910,7 @@ border: none; background: none; font-weight: none; color: none; }
                 </html>
             </xsl:with-param>
         </xsl:call-template>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:template name="l10n.js">
         <xsl:call-template name="write.chunk">
