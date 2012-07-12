@@ -87,26 +87,42 @@ set       toc,title
     <!-- Moved to files under 'gentext/locale/', search for WebHelp -->
     
 
+     <xsl:template name="user.head.title">
+      <xsl:param name="node" select="."/>
+      <xsl:param name="title">
+	<xsl:apply-templates select="$node" mode="object.title.markup.textonly"/>
+      </xsl:param>
+      <xsl:param name="document-title">
+	<xsl:apply-templates select="/*" mode="object.title.markup.textonly"/>
+      </xsl:param>
+
+      <title>
+	        <xsl:copy-of select="$title"/> - <xsl:if test="parent::*"> - <xsl:copy-of select="$document-title"/></xsl:if>
+       </title>
+        
+    </xsl:template>
   <xsl:template name="system.head.content">
   <xsl:param name="node" select="."/>
 <xsl:text>
 </xsl:text>
 <!-- 
-This avoids two problems in IE 8. We should someday figure out why this is happening and tweak the JavaScript so this <meta/> tag is not necessary:
-1. When you perform a search and click the Toggle Highlight button, IE 8 adds a line break before the highlighted word.
-2. If you click the show/hide toc button, the tab crashes.
-These problems go away when you add this IE=7 mode meta tag.
+The meta tag tells the IE rendering engine that it should use the latest, or edge, version of the IE rendering environment;It prevents IE from entring compatibility mode.
  -->
-	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <xsl:text>
 </xsl:text>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <xsl:text>
 </xsl:text>
+
   </xsl:template>
 
     <!-- HTML <head> section customizations -->	
     <xsl:template name="user.head.content">
+        <xsl:param name="title">
+                <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+        </xsl:param>
+         <meta name="Section-title" content="{$title}"/>   
         <!--  <xsl:message>
             webhelp.tree.cookie.id = <xsl:value-of select="$webhelp.tree.cookie.id"/> +++ <xsl:value-of select="count(//node())"/>
             $webhelp.indexer.language = <xsl:value-of select="$webhelp.indexer.language"/> +++ <xsl:value-of select="count(//node())"/>
@@ -143,7 +159,7 @@ These problems go away when you add this IE=7 mode meta tag.
      If that's a concern, just remove the additional css contents inside these default jquery css files. I thought of keeping them intact for easier maintenance! -->
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
-        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
+        <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.21.custom.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
 
         <style type="text/css">
@@ -210,7 +226,7 @@ border: none; background: none; font-weight: none; color: none; }
     background: #C6C6C6; /* old browsers */
     background: -moz-linear-gradient(top, #C6C6C6 0%, #D8D8D8 100%); /* firefox */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#C6C6C6), color-stop(100%,#D8D8D8)); /* webkit */
-    -webkit-border-radius:15px; -moz-border-radius:10px;
+    border-radius:15px;
     border: 1px solid #f1f1f1;
 }    
 .ui-corner-all { border-radius: 0 0 0 0; }
@@ -230,10 +246,10 @@ border: none; background: none; font-weight: none; color: none; }
 	<script type="text/javascript" src="{$webhelp.common.dir}browserDetect.js">
             <xsl:comment> </xsl:comment>
 	</script>
-        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.4.2.min.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-1.7.2.min.js">
             <xsl:comment> </xsl:comment>
         </script>
-        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery-ui-1.8.2.custom.min.js">
+        <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.ui.all.js">
             <xsl:comment> </xsl:comment>
         </script>
         <script type="text/javascript" src="{$webhelp.common.dir}jquery/jquery.cookie.js">
@@ -807,7 +823,7 @@ border: none; background: none; font-weight: none; color: none; }
     </xsl:template>
  
     <!-- Generates index.html file at docs/. This is simply a redirection to content/$default.topic -->	
-    <xsl:template name="index.html">
+<!--    <xsl:template name="index.html">
         <xsl:variable name="default.topic">
             <xsl:choose>
                 <xsl:when test="$webhelp.default.topic != ''">
@@ -837,9 +853,9 @@ border: none; background: none; font-weight: none; color: none; }
         </xsl:variable>
         <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename">
-                <!--       <xsl:if test="$manifest.in.base.dir != 0"> -->
-                <!--         <xsl:value-of select="$base.dir"/> -->
-                <!--       </xsl:if> -->
+                       <xsl:if test="$manifest.in.base.dir != 0"> 
+                         <xsl:value-of select="$base.dir"/> 
+                       </xsl:if> 
                 <xsl:choose>
                     <xsl:when test="$webhelp.start.filename">
                         <xsl:value-of select="concat($webhelp.base.dir,'/',$webhelp.start.filename)"/>
@@ -865,7 +881,7 @@ border: none; background: none; font-weight: none; color: none; }
                 </html>
             </xsl:with-param>
         </xsl:call-template>
-    </xsl:template>
+    </xsl:template>-->
 
     <xsl:template name="l10n.js">
         <xsl:call-template name="write.chunk">
