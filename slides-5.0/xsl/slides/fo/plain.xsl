@@ -9,28 +9,10 @@
                 version="1.0">
 
 <xsl:import href="../../fo/docbook.xsl"/>
+<xsl:include href="plain-titlepage.xsl"/>
+<xsl:include href="param.xsl"/>
+
 <xsl:output indent="yes"/>
-
-<xsl:param name="page.margin.top" select="'0.25in'"/>
-<xsl:param name="region.before.extent" select="'0.75in'"/>
-<xsl:param name="body.margin.top" select="'1in'"/>
-
-<xsl:param name="region.after.extent" select="'0.5in'"/>
-<xsl:param name="body.margin.bottom" select="'0.5in'"/>
-<xsl:param name="page.margin.bottom" select="'0.25in'"/>
-
-<xsl:param name="page.margin.inner" select="'0.25in'"/>
-<xsl:param name="page.margin.outer" select="'0.25in'"/>
-<xsl:param name="column.count.body" select="1"/>
-
-<xsl:param name="slide.font.family">Helvetica</xsl:param>
-<xsl:param name="slide.title.font.family">Helvetica</xsl:param>
-<xsl:param name="foil.title.master">36</xsl:param>
-<xsl:param name="body.font.size">20</xsl:param>
-
-<xsl:param name="callout.icon.size" select="'40pt'"/>
-
-<xsl:param name="alignment" select="'start'"/>
 
 <xsl:param name="local.l10n.xml" select="document('')"/>
 <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
@@ -44,11 +26,25 @@
   </l:l10n>
 </i18n>
 
-<xsl:variable name="root.elements" select="' slides '"/>
+<!-- Start of overrides -->
 
+<xsl:param name="page.margin.top" select="'0.25in'"/>
+<xsl:param name="page.margin.bottom" select="'0.25in'"/>
+<xsl:param name="page.margin.inner" select="'0.25in'"/>
+<xsl:param name="page.margin.outer" select="'0.25in'"/>
+<xsl:param name="body.margin.top" select="'1in'"/>
+<xsl:param name="body.margin.bottom" select="'0.5in'"/>
+<xsl:param name="region.before.extent" select="'0.75in'"/>
+<xsl:param name="region.after.extent" select="'0.5in'"/>
+<xsl:param name="column.count.body" select="1"/>
+<xsl:param name="body.font.size">20</xsl:param>
+
+<xsl:param name="callout.icon.size" select="'40pt'"/>
+<xsl:param name="alignment" select="'start'"/>
 <xsl:param name="preferred.mediaobject.role" select="'print'"/>
-
 <xsl:param name="page.orientation" select="'landscape'"/>
+
+<xsl:variable name="root.elements" select="' slides '"/>
 
 <xsl:attribute-set name="formal.title.properties"
                    use-attribute-sets="normal.para.spacing">
@@ -84,6 +80,12 @@
   <xsl:attribute name="space-before.maximum">10pt</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="orderedlist.properties">
+  <xsl:attribute name="font-size">
+    <xsl:value-of select="$body.font.size"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:attribute-set name="footnote.properties">
   <xsl:attribute name="font-size">
     <xsl:value-of select="$body.font.size * 0.8"/>
@@ -101,6 +103,8 @@
     <xsl:value-of select="$slide.font.family"/>
   </xsl:attribute>
 </xsl:attribute-set>
+
+<!-- End of overrides -->
 
 <xsl:template name="user.pagemasters">
   <fo:simple-page-master master-name="slides-titlepage-master"
@@ -164,17 +168,49 @@
 </xsl:template>
 
 <xsl:template match="/">
-  <fo:root xsl:use-attribute-sets="slides.global.properties">
+  <fo:root xsl:use-attribute-sets="slides.properties">
     <fo:layout-master-set>
       <xsl:call-template name="user.pagemasters"/>
     </fo:layout-master-set>
-    <!-- XXX: titlepage -->
+
+<!-- XXX: titlepage
+    <xsl:if test="$generate.titlepage != 0">
+      <fo:page-sequence hyphenate="{$hyphenate}"
+			master-reference="slides-titlepage-master">
+        <xsl:attribute name="language">
+	  <xsl:call-template name="l10n.language"/>
+        </xsl:attribute>
+
+        <fo:flow flow-name="xsl-region-body">
+	  <fo:block>
+	    <xsl:call-template name="slides.titlepage.recto"/>
+	  </fo:block>
+        </fo:flow>
+      </fo:page-sequence>
+    </xsl:if>
+-->
 
     <xsl:apply-templates select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup"/>
+
+    <xsl:if test="$generate.handoutnotes.at.last != 0">
+      <xsl:for-each select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup">
+	<xsl:call-template name="generate.slide.handoutnotes"/>
+      </xsl:for-each>
+    </xsl:if>
   </fo:root>
 </xsl:template>
 
-<xsl:template match="dbs:foil|dbs:foilgroup">
+<xsl:template name="page.template">
+  <xsl:param name="mode" select="'normal'"/>
+
+  <xsl:param name="title">
+    <xsl:call-template name="get.title"/>
+  </xsl:param>
+
+  <xsl:param name="subtitle">
+    <xsl:call-template name="get.subtitle"/>
+  </xsl:param>
+
   <fo:page-sequence master-reference="slides-foil" xsl:use-attribute-sets="foil.page-sequence.properties">
     <xsl:attribute name="language">
       <xsl:call-template name="l10n.language"/>
@@ -187,24 +223,24 @@
     <fo:static-content flow-name="xsl-region-before-foil">
       <fo:block xsl:use-attribute-sets="foil.header.properties">
         <fo:block xsl:use-attribute-sets="foil.title.properties">
-	  <xsl:call-template name="get.title"/>
+          <xsl:value-of select="$title"/>
         </fo:block>
 
         <fo:block xsl:use-attribute-sets="foil.subtitle.properties">
-          <xsl:call-template name="get.subtitle"/>
-        </fo:block>
+          <xsl:value-of select="$subtitle"/>
+       </fo:block>
       </fo:block>
     </fo:static-content>
 
     <fo:static-content flow-name="xsl-region-before-foil-continued">
       <fo:block xsl:use-attribute-sets="foil.header.properties">
         <fo:block xsl:use-attribute-sets="foil.title.properties">
-          <xsl:call-template name="get.title"/>
-        </fo:block>
-        <xsl:text> </xsl:text>
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key" select="'Continued'"/>
-        </xsl:call-template>
+          <xsl:value-of select="$title"/>
+          <xsl:text> </xsl:text>
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="'Continued'"/>
+          </xsl:call-template>
+	</fo:block>
       </fo:block>
     </fo:static-content>
 
@@ -218,18 +254,59 @@
 
     <fo:flow flow-name="xsl-region-body">
       <fo:block xsl:use-attribute-sets="foil.properties">
-	<xsl:apply-templates select="*[not(self::dbs:foil)][not(self::db:info)][not(self::db:title)][not(self::db:titleabbrev)][not(self::db:subtitle)]"/>
-      </fo:block>
+	<xsl:choose>
+	  <xsl:when test="$mode = 'normal'">
+	    <xsl:apply-templates select="*[not(self::dbs:foil)][not(self::db:info)][not(self::db:title)][not(self::db:titleabbrev)][not(self::db:subtitle)]"/>
 
-      <xsl:if test="self::dbs:foilgroup">
-	<xsl:call-template name="foilgroup.generate.toc"/>
-      </xsl:if>
+	    <xsl:if test="self::dbs:foilgroup and ($generate.foilgroup.toc != 0)">
+	      <xsl:call-template name="foilgroup.generate.toc"/>
+	    </xsl:if>
+	  </xsl:when>
+
+	  <xsl:when test="$mode = 'notes'">
+	    <xsl:apply-templates select="dbs:handoutnotes"/>
+
+	    <xsl:if test="speakernotes.as.handoutnotes">
+	      <xsl:apply-templates select="dbs:speakernotes"/>
+	    </xsl:if>
+	  </xsl:when>
+	</xsl:choose>
+      </fo:block>
     </fo:flow>
   </fo:page-sequence>
+</xsl:template>
+
+<xsl:template match="dbs:foil|dbs:foilgroup">
+  <xsl:call-template name="page.template"/>
+
+  <xsl:if test="$generate.handoutnotes.at.last = 0">
+    <xsl:call-template name="generate.slide.handoutnotes"/>
+  </xsl:if>
 
   <xsl:if test="self::dbs:foilgroup">
     <xsl:apply-templates select="dbs:foil"/>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="generate.slide.handoutnotes">
+  <xsl:variable name="subtitle" select="'Notes'"/>
+
+  <xsl:call-template name="page.template">
+    <xsl:with-param name="mode" select="'notes'"/>
+    <xsl:with-param name="subtitle" select="$subtitle"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="dbs:handoutnotes">
+  <fo:block xsl:use-attribute-sets="handoutnotes.properties">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="dbs:speakernotes">
+  <fo:block xsl:use-attribute-sets="speakernotes.properties">
+    <xsl:apply-templates/>
+  </fo:block>
 </xsl:template>
 
 <xsl:template match="dbs:block">
@@ -265,7 +342,7 @@
 </xsl:template>
 
 <xsl:template name="footer.center">
-  <xsl:if test="/dbs:slides/db:info/db:copyright">
+  <xsl:if test="($generate.copyright != 0) and /dbs:slides/db:info/db:copyright">
     <fo:block>
       <xsl:call-template name="gentext">
 	<xsl:with-param name="key" select="'Copyright'"/>
@@ -278,41 +355,87 @@
       <xsl:value-of select="/dbs:slides/db:info/db:copyright/db:holder"/>
     </fo:block>
   </xsl:if>
+
+  <xsl:if test="($generate.pubdate != 0) and /dbs:slides/db:info/db:pubdate">
+    <xsl:call-template name="slide.pubdate"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="footer.right">
   <fo:block>
-    <fo:page-number/>
-    <xsl:text>&#160;/&#160;</xsl:text>
-    <fo:page-number-citation>
-      <xsl:attribute name="ref-id">
-	<xsl:call-template name="generate.id">
-	  <xsl:with-param name="ctx" select="(//dbs:foilgroup|//dbs:foil)[last()]"/>
-	</xsl:call-template>
-      </xsl:attribute>
-    </fo:page-number-citation>
+    <xsl:if test="$generate.page.number != 'no'">
+      <fo:page-number/>
+    </xsl:if>
+
+    <xsl:if test="$generate.page.number = 'full'">
+      <xsl:text>&#160;/&#160;</xsl:text>
+      <fo:page-number-citation>
+	<xsl:attribute name="ref-id">
+	  <xsl:call-template name="generate.id">
+	    <xsl:with-param name="ctx" select="(//dbs:foilgroup|//dbs:foil)[last()]"/>
+	  </xsl:call-template>
+	</xsl:attribute>
+      </fo:page-number-citation>
+    </xsl:if>
   </fo:block>
 </xsl:template>
 
+<xsl:template name="slide.pubdate">
+  <fo:block>
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'Published'"/>
+    </xsl:call-template>
+    <xsl:text>: </xsl:text>
+    <xsl:value-of select="/dbs:slides/db:info/db:pubdate"/>
+  </fo:block>
+</xsl:template>
 
 <xsl:template name="foilgroup.generate.toc">
-  <fo:list-block xsl:use-attribute-sets="list.block.spacing orderedlist.properties">
-    <xsl:for-each select="./dbs:foil">
-      <fo:list-item xsl:use-attribute-sets="list.item.spacing">
-	<fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="orderedlist.label.properties">
-	  <fo:block>
-	    <xsl:value-of select="position()"/>
-	  </fo:block>
-	</fo:list-item-label>
+  <xsl:choose>
+    <xsl:when test="$generate.foilgroup.numbered.toc != 0">
+      <fo:list-block xsl:use-attribute-sets="list.block.spacing orderedlist.properties">
+	<xsl:for-each select="./dbs:foil">
+	  <fo:list-item xsl:use-attribute-sets="list.item.spacing">
+	    <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="orderedlist.label.properties">
+	      <fo:block>
+		<xsl:value-of select="position()"/>
+	      </fo:block>
+	    </fo:list-item-label>
 
-	<fo:list-item-body start-indent="body-start()">
-	  <fo:block>
-	    <xsl:call-template name="get.title"/>
-	  </fo:block>
-	</fo:list-item-body>
-      </fo:list-item>
-    </xsl:for-each>
-  </fo:list-block>
+	    <fo:list-item-body start-indent="body-start()">
+	      <fo:block>
+		<xsl:call-template name="get.title"/>
+	      </fo:block>
+	    </fo:list-item-body>
+	  </fo:list-item>
+	</xsl:for-each>
+      </fo:list-block>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <fo:list-block xsl:use-attribute-sets="list.block.spacing itemizedlist.properties">
+        <xsl:for-each select="./dbs:foil">
+          <fo:list-item xsl:use-attribute-sets="list.item.spacing">
+            <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="itemizedlist.label.properties">
+              <fo:block>
+		<xsl:call-template name="itemizedlist.label.markup">
+		  <xsl:with-param name="itemsymbol">
+		    <xsl:call-template name="list.itemsymbol"/>
+		  </xsl:with-param>
+		</xsl:call-template>
+              </fo:block>
+            </fo:list-item-label>
+
+            <fo:list-item-body start-indent="body-start()">
+              <fo:block>
+                <xsl:call-template name="get.title"/>
+              </fo:block>
+            </fo:list-item-body>
+          </fo:list-item>
+        </xsl:for-each>
+      </fo:list-block>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*[namespace-uri() = 'http://www.w3.org/2000/svg']">
