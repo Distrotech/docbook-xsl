@@ -55,7 +55,7 @@ $Id$
 <reference xml:id="s5">
   <title>XHTML: S5 Params</title>
 
-&s5.controls.visible;
+&s5.controls;
 &s5.defaultview;
 &s5.opera.css;
 &s5.outline.css;
@@ -68,6 +68,14 @@ $Id$
 <reference xml:id="slidy">
   <title>XHTML: Slidy Params</title>
 
+&s5.controls;
+&s5.defaultview;
+&s5.opera.css;
+&s5.outline.css;
+&s5.path.prefix;
+&s5.print.css;
+&s5.slides.css;
+&s5.slides.js;
 &slidy.duration;
 &slidy.path.prefix;
 &slidy.slidy.css;
@@ -135,7 +143,7 @@ around all these parameters.</para>
 <src:fragref linkend="user.css.frag"/>
 <src:fragref linkend="wrap.slidecontent.frag"/>
 
-<src:fragref linkend="s5.controls.visible.frag"/>
+<src:fragref linkend="s5.controls.frag"/>
 <src:fragref linkend="s5.defaultview.frag"/>
 <src:fragref linkend="s5.opera.css.frag"/>
 <src:fragref linkend="s5.outline.css.frag"/>
