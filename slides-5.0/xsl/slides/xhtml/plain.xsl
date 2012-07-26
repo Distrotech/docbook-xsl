@@ -10,6 +10,7 @@
 		version="1.0">
 
 <xsl:import href="../../xhtml/chunk.xsl"/>
+<xsl:import href="param.xsl"/>
 
 <xsl:param name="local.l10n.xml" select="document('')"/>
 <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
@@ -27,37 +28,6 @@
     </l:context>
   </l:l10n>
 </i18n>
-
-<!-- whether titlepage is generated -->
-<xsl:param name="generate.titlepage">1</xsl:param>
-
-<!-- whether toc is generated for foilgroup -->
-<xsl:param name="generate.foilgroup.toc">1</xsl:param>
-
-<!-- whether foilgroup toc is numbered (or bulleted): 0 or 1 -->
-<xsl:param name="generate.foilgroup.numbered.toc">1</xsl:param>
-
-<!-- whether to generate handout notes -->
-<xsl:param name="generate.handoutnotes">1</xsl:param>
-
-<!-- whether speakernotes are generated as handout notes: 0 or 1 -->
-<xsl:param name="speakernotes.as.handoutnotes">1</xsl:param>
-
-<!-- whether to wrap slide content in a div class="slidecontent" -->
-<xsl:param name="wrap.slidecontent">1</xsl:param>
-
-<xsl:param name="disable.incremental">0</xsl:param>
-
-<xsl:param name="disable.collapsable">0</xsl:param>
-
-<!-- inline, object, embed, iframe, image, link -->
-<xsl:param name="svg.embedding.mode">object</xsl:param>
-
-<!-- inline, object, embed, iframe, image, link -->
-<xsl:param name="mml.embedding.mode">object</xsl:param>
-
-<!-- user-defined CSS; also works for S5/Slidy to extend the vendor CSS files -->
-<xsl:param name="user.css">user.css</xsl:param>
 
 <!-- Overrides from DocBook XSL -->
 <xsl:template name="process.qanda.toc"/>
@@ -150,7 +120,7 @@
 <xsl:template name="foil.classes">
   <xsl:variable name="classValue">
     <xsl:call-template name="process.dbs.attributes">
-      <!-- Do not put incremental or collapsable on foils -->
+      <!-- Do not put incremental or collapsible on foils -->
       <xsl:with-param name="attributeSet" select="self::*/@dbs:style"/>
       <xsl:with-param name="stored">
         <xsl:value-of select="'slide'"/>
@@ -224,12 +194,12 @@
     <xsl:if test="($disable.incremental = '0') and ($gotIncremental = '1')">1</xsl:if>
   </xsl:variable>
 
-  <xsl:variable name="gotCollapsable">
-    <xsl:if test="((local-name($attributeSet[1]) = 'collapsable') and ($attributeSet[1] = '1'))">1</xsl:if>
+  <xsl:variable name="gotCollapsible">
+    <xsl:if test="((local-name($attributeSet[1]) = 'collapsible') and ($attributeSet[1] = '1'))">1</xsl:if>
   </xsl:variable>
 
-  <xsl:variable name="enableCollapsable">
-    <xsl:if test="($disable.collapsable = '0') and ($gotCollapsable = '1')">1</xsl:if>
+  <xsl:variable name="enableCollapsible">
+    <xsl:if test="($disable.collapsible = '0') and ($gotCollapsible = '1')">1</xsl:if>
   </xsl:variable>
 
   <xsl:variable name="append">
@@ -238,7 +208,7 @@
 	<xsl:value-of select="$attributeSet[1]"/>
       </xsl:when>
 
-      <xsl:when test="$enableCollapsable = '1'">
+      <xsl:when test="$enableCollapsible = '1'">
         <xsl:value-of select="'outline'"/>
       </xsl:when>
  
@@ -273,7 +243,7 @@
 <xsl:template match="dbs:block">
   <xsl:variable name="classValue">
     <xsl:call-template name="process.dbs.attributes">
-      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsible)[last()] | self::*/@dbs:style"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -317,7 +287,7 @@
 <xsl:template name="list.content">
   <xsl:variable name="classValue">
     <xsl:call-template name="process.dbs.attributes">
-      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsible)[last()] | self::*/@dbs:style"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -343,7 +313,7 @@
 <xsl:template match="db:mediaobject">
   <xsl:variable name="classValue">
     <xsl:call-template name="process.dbs.attributes">
-      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsible)[last()] | self::*/@dbs:style"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -405,7 +375,7 @@
 <xsl:template name="extension.process.image.attributes">
   <xsl:variable name="classValue">
     <xsl:call-template name="process.dbs.attributes">
-      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsable)[last()] | self::*/@dbs:style"/>
+      <xsl:with-param name="attributeSet" select="(ancestor-or-self::*/@dbs:incremental)[last()] | (ancestor-or-self::*/@dbs:collapsible)[last()] | self::*/@dbs:style"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -546,10 +516,10 @@
 <xsl:template match="/" mode="slide.header.mode"/>
 
 <xsl:template match="/" mode="slide.footer.mode">
-  <xsl:if test="/dbs:slides/db:info/db:copyright">
+  <xsl:if test="($generate.copyright != 0) and /dbs:slides/db:info/db:copyright">
     <xsl:call-template name="slide.copyright"/>
   </xsl:if>
-  <xsl:if test="($s5.generate.pubdate != 0) and /dbs:slides/db:info/db:pubdate">
+  <xsl:if test="($generate.pubdate != 0) and /dbs:slides/db:info/db:pubdate">
     <xsl:call-template name="slide.pubdate"/>
   </xsl:if>
 </xsl:template>
