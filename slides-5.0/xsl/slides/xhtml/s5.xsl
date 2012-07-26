@@ -6,7 +6,6 @@
 		exclude-result-prefixes="dbs db"
 		version="1.0">
 
-<xsl:import href="../../xhtml/chunk.xsl"/>
 <xsl:import href="plain.xsl"/>
 
 <xsl:param name="wrap.slidecontent">0</xsl:param>
@@ -17,26 +16,15 @@
 	    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
 -->
 
-<!-- presentation mode: slideshow or outline -->
-<xsl:param name="s5.defaultview">slideshow</xsl:param>
-
-<!-- nav controls: hidden or visible -->
-<xsl:param name="s5.controls">hidden</xsl:param>
-
-<!-- whether to generate pubdate in the footer -->
-<xsl:param name="s5.generate.pubdate">1</xsl:param>
-
-<!-- paths for S5-related files -->
-<xsl:param name="s5.path.prefix">files/s5/</xsl:param>
-<xsl:param name="s5.path.slides.css">ui/default/slides.css</xsl:param>
-<xsl:param name="s5.path.outline.css">ui/default/outline.css</xsl:param>
-<xsl:param name="s5.path.print.css">ui/default/print.css</xsl:param>
-<xsl:param name="s5.path.opera.css">ui/default/opera.css</xsl:param>
-<xsl:param name="s5.path.slides.js">ui/default/slides.js</xsl:param>
-
-<!-- Main content starts here -->
-
 <xsl:template name="xhtml.head">
+  <xsl:variable name="s5.controls">
+    <xsl:choose>
+      <xsl:when test="$s5.controls.visible != 0">visible</xsl:when>
+
+      <xsl:otherwise>hidden</otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <meta name="generator" content="DocBook Slides Stylesheets V{$VERSION}"/>
   <meta name="version" content="S5 1.1"/>
   <meta name="defaultView" content="{$s5.defaultview}"/>

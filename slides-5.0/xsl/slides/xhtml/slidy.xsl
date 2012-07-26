@@ -10,15 +10,6 @@
 
 <xsl:param name="wrap.slidecontent">0</xsl:param>
 
-<!-- duration of the presentation (JS clock) -->
-<xsl:param name="slidy.duration">15</xsl:param>
-
-<!-- Slidy files -->
-<xsl:param name="slidy.path.prefix">files/slidy/</xsl:param>
-<xsl:param name="slidy.slidy.css">styles/slidy.css</xsl:param>
-<xsl:param name="slidy.user.css">styles/w3c-blue.css</xsl:param>
-<xsl:param name="slidy.slidy.js">scripts/slidy.js</xsl:param>
-
 <xsl:template name="xhtml.head">
   <meta name="copyright">
     <xsl:attribute name="content">
@@ -28,7 +19,7 @@
     </xsl:attribute>
   </meta>
 
-  <xsl:if test="$slidy.duration">
+  <xsl:if test="$slidy.duration != 0">
     <meta name="duration" content="{$slidy.duration}"/>
   </xsl:if>
 
