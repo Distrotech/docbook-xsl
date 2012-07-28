@@ -1,131 +1,135 @@
 <project default="help" name="DocBookMobileBuild">
 
-	<dirname property="ant.file.dir" file="${ant.file.DocBookMobileBuild}"/>
-	<loadproperties srcFile="${ant.file.dir}/build.properties"/>
+  <dirname property="ant.file.dir" file="${ant.file.DocBookMobileBuild}"/>
+  <loadproperties srcFile="${ant.file.dir}/build.properties"/>
 
-	<include file="${ant.file.dir}/android/build.xml" as="nested"/>
-	
-	<property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
+  <include file="${ant.file.dir}/android/build.xml" as="nested"/>
 
-    <path id="classpath">
-        <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
-		<pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
-		<pathelement location="${extensions.dir}/lucene-core-3.0.0.jar"/>
-    </path>	
-	
-	<condition property="perform-validation-dtd">
-		<equals arg1="${validate-against-dtd}" arg2="true"/>
-  	</condition>
-  	<condition property="do-search-indexing">
-		<equals arg1="${webhelp.include.search.tab}" arg2="true"/>
-  	</condition>
+  <property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
 
-  	<target name="validate" if="perform-validation-dtd">
-    	<xmlvalidate file="${input-xml}" classname="org.apache.xerces.parsers.SAXParser"/>
-  	</target>
-		
-  <target name="chunk" depends="clean">
-	
-	<mkdir dir="${output-dir}"/>
-	<xslt
-	  in="${input-xml}"
-	  out="${output-dir}/dummy.html"
-	  style="${stylesheet-path}"
-	  scanincludeddirectories="false"
-	  classpath="${xslt-processor-classpath}">
-	  	  
-	  <param name="mobile.base.dir" expression="${output-dir}"/>
-	</xslt>
-	
-	<delete file="${output-dir}/dummy.html"/>
-	
+  <path id="classpath">
+    <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
+    <pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
+    <pathelement location="${extensions.dir}/lucene-core-3.0.0.jar"/>
+  </path>
+
+  <condition property="perform-validation-dtd">
+    <equals arg1="${validate-against-dtd}" arg2="true"/>
+  </condition>
+  <condition property="do-search-indexing">
+    <equals arg1="${webhelp.include.search.tab}" arg2="true"/>
+  </condition>
+
+  <target name="validate" if="perform-validation-dtd">
+    <xmlvalidate file="${input-xml}" classname="org.apache.xerces.parsers.SAXParser"/>
   </target>
 
-	<target name="add_resources" description="copy js and css">
-		<copy todir="${output-dir}">
-   			 <fileset dir="./template_mobile"/>
-		</copy>
-	</target>
+  <target name="chunk" depends="clean">
+    <mkdir dir="${output-dir}"/>
+    <xslt in="${input-xml}" out="${output-dir}/dummy.html" style="${stylesheet-path}"
+      scanincludeddirectories="false" classpath="${xslt-processor-classpath}">
 
-	<target name="index" if="do-search-indexing" >
+      <param name="output_file_name" expression="${output_file_name}"/>
+      <param name="mobile.base.dir" expression="${output-dir}" if="output-dir"/>
+      <param name="mobile.toc.filename" expression="${mobile.toc.filename}" if="mobile.toc.filename"/>
+      <param name="mobile.menubar.filename" expression="${mobile.menubar.filename}" if="mobile.menubar.filename"/>
+      <param name="mobile.settings.filename" expression="${mobile.settings.filename}" if="mobile.settings.filename"/>
+      <param name="mobile.indexer.language" expression="${webhelp.indexer.language}" if="webhelp.indexer.language"/>
+      <param name="branding" expression="${branding}" if="branding"/>
+      <param name="brandname" expression="${brandname}" if="brandname"/>
+      <param name="admon.graphics" expression="${admon.graphics}" if="admon.graphics"/>
+      <param name="suppress.footer.navigation" expression="${suppress.footer.navigation}" if="suppress.footer.navigation"/>
+    </xslt>
 
-		<copy todir="${output-dir}">
-	  		<fileset dir="${ant.file.dir}/template_mobile">
-				<include name="**/*"/>
-				<exclude name="**/content/search/*.props"/>
-				<exclude name="**/content/search/stemmers/*"/>
-	  		</fileset>
-		</copy>
+    <delete file="${output-dir}/dummy.html"/>
 
-	<!-- We separate this out so we only copy the stopwords list and stemmer for the indexer language -->
-		<copy todir="${output-dir}">
-	  		<fileset dir="${ant.file.dir}/template_mobile">
-				<include name="**/content/search/default.props"/>
-				<include name="**/content/search/punctuation.props"/>
-				<include name="**/content/search/${webhelp.indexer.language}*.props"/>
-				<include name="**/content/search/stemmers/${webhelp.indexer.language}_stemmer.js"/>
-			</fileset>
-		</copy>
- 
-		<taskdef name="indexertask" classname="com.nexwave.nquindexer.IndexerTask">
-	  		<classpath refid="classpath"/>
-		</taskdef>
+  </target>
 
-		<echo>Indexing html files in ${output-dir}/content</echo>
+  <target name="add_resources" description="copy js and css">
+    <copy todir="${output-dir}">
+      <fileset dir="./template_mobile"/>
+    </copy>
+  </target>
 
-		<indexertask htmldir="${output-dir}/content" indexerLanguage="${webhelp.indexer.language}"/>
+  <target name="index" if="do-search-indexing">
 
-		<delete>
-	  		<fileset dir="${output-dir}/content/search" includes="*.props"/>
-		</delete>
+    <copy todir="${output-dir}">
+      <fileset dir="${ant.file.dir}/template_mobile">
+        <include name="**/*"/>
+        <exclude name="**/content/search/*.props"/>
+        <exclude name="**/content/search/stemmers/*"/>
+      </fileset>
+    </copy>
 
-	</target>
-	
-	<!-- Output of chunked htmls for all platforms  -->
-	<target name="mobile" depends="validate , chunk , add_resources , index"/>
+    <!-- We separate this out so we only copy the stopwords list and stemmer for the indexer language -->
+    <copy todir="${output-dir}">
+      <fileset dir="${ant.file.dir}/template_mobile">
+        <include name="**/content/search/default.props"/>
+        <include name="**/content/search/punctuation.props"/>
+        <include name="**/content/search/${webhelp.indexer.language}*.props"/>
+        <include name="**/content/search/stemmers/${webhelp.indexer.language}_stemmer.js"/>
+      </fileset>
+    </copy>
 
-	<!-- Android  -->
-	<target name="mobile_android_unsigned_apk" depends="mobile ,index ,  nested.android_unsigned_apk" />
-	<target name="mobile_android_debug_apk" depends="mobile , index ,  nested.android_debug_apk" />
-	
-	<!-- iOS -->
-	<target name="mobile_iOS_" depends="mobile , index" />
-	
-	<!-- windows phone -->
-	<target name="mobile_windows_phone_" depends="mobile , index" />
+    <taskdef name="indexertask" classname="com.nexwave.nquindexer.IndexerTask">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <echo>Indexing html files in ${output-dir}/content</echo>
+
+    <indexertask htmldir="${output-dir}/content" indexerLanguage="${webhelp.indexer.language}"/>
+
+    <delete>
+      <fileset dir="${output-dir}/content/search" includes="*.props"/>
+    </delete>
+
+  </target>
+
+  <!-- Output of chunked htmls for all platforms  -->
+  <target name="mobile" depends="validate , chunk , add_resources , index"/>
+
+  <!-- Android  -->
+  <target name="mobile_android_unsigned_apk" depends="mobile ,index ,  nested.android_unsigned_apk"/>
+  <target name="mobile_android_debug_apk" depends="mobile , index ,  nested.android_debug_apk"/>
+
+  <!-- iOS -->
+  <target name="mobile_iOS_" depends="mobile , index"/>
+
+  <!-- windows phone -->
+  <target name="mobile_windows_phone_" depends="mobile , index"/>
 
   <target name="clean">
-	<delete dir="${output-dir}" />
-	
-	<delete file="${prof-file}" />
-	<delete dir="${prof-dir}" />
+    <delete dir="${output-dir}"/>
+
+    <delete file="${prof-file}"/>
+    <delete dir="${prof-dir}"/>
 
   </target>
 
   <target name="help">
-	<echo>
-	help      : to view help options
-	* === List of Available mobile platforms ===
-	|
-	|_Android		:$ant android-help *
-	|__Apple iOS		:$ant iOS-help
-	|___Blackberry		:$ant blackberry-help
-	|____Palm webOS
-	|_____Samsung Bada
-	|______Windows Phone	:$ant windows-phone-help
-	</echo>
+    <echo> help : to view help options
+      === List of Available mobile platforms ===
+      =mobile platform=     =ant command=
+      
+      |_Android             :$ant android-help *
+      |__Apple iOS          :$ant iOS-help
+      |___Blackberry        :$ant blackberry-help
+      |____Palm webOS
+      |_____Samsung Bada
+      |______Windows Phone  :$ant windows-phone-help
+    </echo>
   </target>
-	<target name="android-help">
-		<echo>
-	Available methods :
-		1. mobile_android_unsigned_apk : this can't be installed into a device until, it signed by 'Andriod Private Key'
-
-		2. mobile_android_debug_apk : this can't be used to debug purposes. This can't distribute to the end-users until, it signed by 'Android Private Key'.
-
-		To gain an key : http://developer.android.com/distribute/googleplay/publish/register.html
-
-		To sign app with the key : http://developer.android.com/tools/publishing/app-signing.html
-
-		</echo>
-	</target>
+  <target name="android-help">
+    <echo> Available ant commands : 
+      1. $ant mobile_android_debug_apk : can't be
+      used to debug purposes. This can not distribute to the end-users until, it signed by 'Android
+      2. $ant mobile_android_unsigned_apk : can't be installed into a
+      device until, it signed by 'Andriod Private Key' 
+      
+      Private Key'. 
+      * To gain a key :
+      http://developer.android.com/distribute/googleplay/publish/register.html To sign app with the
+      key : http://developer.android.com/tools/publishing/app-signing.html 
+    </echo>
+  </target>
 </project>
