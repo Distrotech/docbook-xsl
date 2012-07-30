@@ -18,9 +18,9 @@
     <xsl:call-template name="get.doc.title"/>
   </xsl:param>
 
-  <!-- =============================================================================== -->
-  <!-- =			some configurations for mobile xsl sheets						                    = -->
-  <!-- =============================================================================== -->
+  <!-- =========================================================== -->
+  <!-- =	some configurations for mobile xsl sheets	             = -->
+  <!-- =========================================================== -->
   <xsl:param name="mobile.include.search.tab">true</xsl:param>
   <xsl:param name="mobile.start.filename">index.html</xsl:param>
   <xsl:param name="mobile.toc.filename">toc.html</xsl:param>
@@ -32,9 +32,9 @@
   <xsl:param name="mobile.default.topic"/>
   <xsl:param name="mobile.autolabel">0</xsl:param>
 
-  <!-- =============================================================================== -->
-  <!-- =			default configuration for build mobile out put					               = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	default configuration for build mobile out put	    = -->
+  <!-- ============================================================ -->
   <xsl:param name="chunker.output.indent">no</xsl:param>
   <xsl:param name="navig.showtitles">0</xsl:param>
   <xsl:param name="manifest.in.base.dir" select="0"/>
@@ -120,9 +120,9 @@
 
   </i18n>
 
-  <!-- =============================================================================== -->
-  <!-- =			system.head.content												                             = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- = system.head.content					    							          = -->
+  <!-- ============================================================ -->
   <xsl:template name="system.head.content">
     <xsl:param name="node" select="."/>
     <xsl:text>
@@ -133,9 +133,9 @@
 	</xsl:text>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			"user.head.content" called from "chunk-element-content			           = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	"user.head.content" called from "chunk-element-content  = -->
+  <!-- ============================================================ -->
   <xsl:template name="user.head.content">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -146,34 +146,34 @@
 			</xsl:message> -->
 
     <script type="text/javascript">
-			//The id for tree cookie
-			var treeCookieId = "<xsl:value-of select="$mobile.tree.cookie.id"/>";
-			var language = "<xsl:value-of select="$mobile.indexer.language"/>";
-			var w = new Object();
-			//Localization
-			txt_filesfound = '<xsl:call-template name="gentext">
-				<xsl:with-param name="key" select="'txt_filesfound'"/>
-			</xsl:call-template>';
-			txt_enter_at_least_1_char = "<xsl:call-template name="gentext">
-				<xsl:with-param name="key" select="'txt_enter_at_least_1_char'"/>
-			</xsl:call-template>";
-			txt_browser_not_supported = "<xsl:call-template name="gentext">
-				<xsl:with-param name="key" select="'txt_browser_not_supported'"/>
-			</xsl:call-template>";
-			txt_please_wait = "<xsl:call-template name="gentext">
-				<xsl:with-param name="key" select="'txt_please_wait'"/>
-			</xsl:call-template>";
-			txt_results_for = "<xsl:call-template name="gentext">
-				<xsl:with-param name="key" select="'txt_results_for'"/>
-			</xsl:call-template>";
+      //The id for tree cookie
+      var treeCookieId = "<xsl:value-of select="$mobile.tree.cookie.id"/>";
+      var language = "<xsl:value-of select="$mobile.indexer.language"/>";
+      var w = new Object();
+      //Localization
+      txt_filesfound = '<xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'txt_filesfound'"/>
+      </xsl:call-template>';
+      txt_enter_at_least_1_char = "<xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'txt_enter_at_least_1_char'"/>
+      </xsl:call-template>";
+      txt_browser_not_supported = "<xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'txt_browser_not_supported'"/>
+      </xsl:call-template>";
+      txt_please_wait = "<xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'txt_please_wait'"/>
+      </xsl:call-template>";
+      txt_results_for = "<xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'txt_results_for'"/>
+      </xsl:call-template>";
 		</script>
 
     <link rel="stylesheet" type="text/css" href="../css/themes/default/jquery.mobile-1.1.0.min.css"/>
 
-    <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">
+    <!--<script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">
 			<xsl:comment>
 			</xsl:comment>
-		</script>
+		</script>-->
     <script type="text/javascript" src="../js/jquery.min.js">
 			<xsl:comment>
 			</xsl:comment>
@@ -188,10 +188,6 @@
 		</script>
 
     <!--Scripts/css stylesheets for Search -->
-    <script type="text/javascript" src="search/htmlFileList.js">
-			<xsl:comment>
-			</xsl:comment>
-		</script>
     <script type="text/javascript" src="search/htmlFileInfoList.js">
 			<xsl:comment>
 			</xsl:comment>
@@ -200,11 +196,6 @@
 			<xsl:comment>
 			</xsl:comment>
 		</script>
-
-    <!--<script type="text/javascript" src="search/addition.js"> <xsl:comment></xsl:comment> 
-			</script> <script type="text/javascript" src="search/indexLoader.js"> <xsl:comment></xsl:comment> 
-			</script> -->
-
 
     <!-- NOTE: Stemmer javascript files should be in format <language>_stemmer.js. 
 			For example, for English(en), source should be: "search/stemmers/en_stemmer.js" 
@@ -233,9 +224,9 @@
     <!--End of index files -->
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			user.header.navigation											                           = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	user.header.navigation								                  = -->
+  <!-- ============================================================ -->
   <xsl:template name="user.header.navigation">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -254,16 +245,16 @@
         </xsl:if-->
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			user.header.content												                             = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	user.header.content								                      = -->
+  <!-- ============================================================ -->
   <xsl:template name="user.header.content">
     <xsl:comment> <!-- KEEP this code. --> </xsl:comment>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			user.footer.navigation											                           = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	user.footer.navigation						                      = -->
+  <!-- ============================================================ -->
   <xsl:template name="user.footer.navigation">
     <!--<xsl:call-template name="mobiletoc">
       <xsl:with-param name="currentid" select="generate-id(.)"/>
@@ -369,9 +360,9 @@
 
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			chunk-element-content											                             = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	chunk-element-content								                    = -->
+  <!-- ============================================================ -->
   <xsl:template name="chunk-element-content">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -421,9 +412,9 @@
     <xsl:value-of select="$chunk.append"/>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			Mobile Header													                                 = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	Mobile Header					                                  = -->
+  <!-- ============================================================ -->
   <xsl:template name="mobileheader">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -452,15 +443,15 @@
     </xsl:comment>
 
     <!--<td>
-        <img src="../common/images/highlight-blue.gif" alt="H" height="25px"
-           onclick="toggleHighlight()" id="showHideHighlight" style="cursor:pointer">
-				<xsl:attribute name="title">
-				  <xsl:call-template name="gentext">
-					<xsl:with-param name="key" select="'HighlightButton'"/>
-				  </xsl:call-template>				  
-				</xsl:attribute>
-			  </img>
-     </td>-->
+      <img src="../common/images/highlight-blue.gif" alt="H" height="25px"
+        onclick="toggleHighlight()" id="showHideHighlight" style="cursor:pointer">
+        <xsl:attribute name="title">
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="'HighlightButton'"/>
+          </xsl:call-template>
+        </xsl:attribute>
+      </img>
+    </td>-->
     <xsl:if
       test="count($prev) &gt; 0
       or (count($up) &gt; 0
@@ -483,21 +474,20 @@
 
       <!-- "Up" link-->
       <xsl:choose>
-        <xsl:when
-          test="count($up)&gt;0
-                                              and generate-id($up) != generate-id($home)">
+        <xsl:when test="count($up)&gt;0
+            and generate-id($up) != generate-id($home)">
           <!--<div accesskey="u" data-role="button" data-icon="arrow-u" data-iconpos="notext"
-						data-theme="a">-->
+            data-theme="a"/>-->
           <!--<div>
-						<xsl:attribute name="href">
-							<xsl:call-template name="href.target">
-								<xsl:with-param name="object" select="$up"/>
-							</xsl:call-template>
-						</xsl:attribute>
-						<xsl:call-template name="navig.content">
-							<xsl:with-param name="direction" select="'up'"/>
-						</xsl:call-template>
-					</div>-->
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="$up"/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:call-template name="navig.content">
+              <xsl:with-param name="direction" select="'up'"/>
+            </xsl:call-template>
+          </div>-->
           &#160; </xsl:when>
         <xsl:otherwise>&#160;</xsl:otherwise>
       </xsl:choose>
@@ -529,48 +519,49 @@
 
       <!-- actions for the events happening on the phone/device -->
       <script type="text/javascript">
-					$(function() {
-						$("#current_page").live('swipedown', function(event) {
-							$.mobile.changePage("<xsl:value-of select="$mobile.toc.filename"/>");
-						});
-					});
+        /*$(function() {
+          $("#current_page").live('swipedown', function(event) {
+            $.mobile.changePage("<xsl:value-of select="$mobile.toc.filename"/>");
+          });
+        });
 				
-					$(function() {
-						$("#current_page").live('swipeup', function(event) {
-							$.mobile.changePage("<xsl:value-of select="$mobile.menubar.filename"/>");
-						});
-					});
+        $(function() {
+          $("#current_page").live('swipeup', function(event) {
+            $.mobile.changePage("<xsl:value-of select="$mobile.menubar.filename"/>");
+          });
+        });*/
 					
-				 	$(function() {
-				 		$("#current_page").live('swipeleft', function(event) {
-				 			$.mobile.changePage("<xsl:value-of select="$nav_prev"/>");
-				 		});
+        $(function() {
+          $("#current_page").off('swipeleft').live('swipeleft', function(event) {
+            console.log();
+            $.mobile.changePage("<xsl:value-of select="$nav_prev"/>");
+          });
 				 		
-				 		$("#current_page").live('swiperight', function(event) {
-							$.mobile.changePage("<xsl:value-of select="$nav_next"/>");
-						});
-				 	});
+          $("#current_page").off('swiperight').live('swiperight', function(event) {
+            $.mobile.changePage("<xsl:value-of select="$nav_next"/>");
+          });
+        });
 			</script>
 
       <!-- pop up the settings panel when click on menu button of the phone/device -->
       <script type="text/javascript" charset="utf-8">
-				document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("deviceready", onDeviceReady, false);
 
-				function onDeviceReady() {
-					document.addEventListener("menubutton", onMenuKeyDown, false);
-				}
+        function onDeviceReady() {
+          document.addEventListener("menubutton", onMenuKeyDown, false);
+        }
 
-				function onMenuKeyDown() {
-					$.mobile.changePage("<xsl:value-of select="$mobile.setting.filename"/>");
-				}
+        function onMenuKeyDown() {
+          $.mobile.changePage("<xsl:value-of select="$mobile.setting.filename"/>");
+        }
 			</script>
     </xsl:if>
 
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			Mobile ToC														                                 = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	Mobile ToC								                              = -->
+  <!-- ============================================================ -->
   <xsl:template name="mobiletoc">
     <xsl:param name="currentid"/>
     <xsl:choose>
@@ -654,9 +645,9 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			Build toc recursively											                             = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- = Build toc recursively				                            = -->
+  <!-- ============================================================ -->
   <xsl:template
     match="book|part|reference|preface|chapter|bibliography|appendix|article|glossary|section|simplesect|sect1|sect2|sect3|sect4|sect5|refentry|colophon|bibliodiv|index"
     mode="mobiletoc">
@@ -716,18 +707,18 @@
 
   <xsl:template match="text()" mode="mobiletoc"/>
 
-  <!-- =============================================================================== -->
-  <!-- =			user.footer.content												                             = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	user.footer.content						                          = -->
+  <!-- ============================================================ -->
   <xsl:template name="user.footer.content">
     <!--        <script type="text/javascript" src="../common/main.js">-->
     <xsl:comment/>
     <!--        </script>-->
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			index html													                              	   = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- =	index html                                              = -->
+  <!-- ============================================================ -->
   <xsl:template name="index.html">
     <xsl:variable name="default.topic">
       <xsl:choose>
@@ -788,21 +779,21 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			Settings html										                              			   = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================= -->
+  <!-- =	Settings html                                            = -->
+  <!-- ============================================================= -->
   <xsl:template name="settings.html">
 
     <xsl:call-template name="write.chunk">
       <xsl:with-param name="filename">
         <!--<xsl:choose>
-					<xsl:when test="$mobile.start.filename">
-						<xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'index.html'"/>
-					</xsl:otherwise>
-				</xsl:choose>-->
+          <xsl:when test="$mobile.start.filename">
+            <xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'index.html'"/>
+          </xsl:otherwise>
+        </xsl:choose>-->
 
         <xsl:value-of select="concat($mobile.base.dir,'/content/',$mobile.setting.filename)"/>
       </xsl:with-param>
@@ -818,7 +809,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>
+<!--            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>-->
 
             <link rel="stylesheet" type="text/css"
               href="../css/themes/default/jquery.mobile-1.1.0.min.css"/>
@@ -1003,20 +994,20 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!-- =============================================================================== -->
-  <!-- =			Menu Bar html													                                 = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- = Menu Bar html                                            = -->
+  <!-- ============================================================ -->
   <xsl:template name="menubar.html">
     <xsl:call-template name="write.chunk">
       <xsl:with-param name="filename">
         <!--<xsl:choose>
-					<xsl:when test="$mobile.start.filename">
-						<xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'index.html'"/>
-					</xsl:otherwise>
-				</xsl:choose>-->
+          <xsl:when test="$mobile.start.filename">
+            <xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'index.html'"/>
+          </xsl:otherwise>
+        </xsl:choose>-->
 
         <xsl:value-of select="concat($mobile.base.dir,'/content/',$mobile.menubar.filename)"/>
       </xsl:with-param>
@@ -1028,7 +1019,7 @@
           <head>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>
+<!--            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>-->
             <link rel="stylesheet" type="text/css"
               href="../css/themes/default/jquery.mobile-1.1.0.min.css"/>
             <script type="text/javascript" src="../js/jquery.min.js">// jquery </script>
@@ -1086,20 +1077,20 @@
     </xsl:call-template>
   </xsl:template>
   
-  <!-- =============================================================================== -->
-  <!-- =			ToC html										     			                                 = -->
-  <!-- =============================================================================== -->
+  <!-- ============================================================ -->
+  <!-- = ToC html                                                 = -->
+  <!-- ============================================================ -->
   <xsl:template name="toc.html">
     <xsl:call-template name="write.chunk">
       <xsl:with-param name="filename">
         <!--<xsl:choose>
-					<xsl:when test="$mobile.start.filename">
-						<xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'index.html'"/>
-					</xsl:otherwise>
-				</xsl:choose>-->
+          <xsl:when test="$mobile.start.filename">
+            <xsl:value-of select="concat($mobile.base.dir,'/',$mobile.start.filename)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'index.html'"/>
+          </xsl:otherwise>
+        </xsl:choose>-->
         
         <xsl:value-of select="concat($mobile.base.dir,'/content/', $mobile.toc.filename)"/>
       </xsl:with-param>
@@ -1111,7 +1102,7 @@
           <head>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>
+<!--            <script type="text/javascript" charset="utf-8" src="../js/cordova-1.8.1.js">//cordova</script>-->
             <link rel="stylesheet" type="text/css"
               href="../css/themes/default/jquery.mobile-1.1.0.min.css"/>
             <script type="text/javascript" src="../js/jquery.min.js">// jquery </script>
