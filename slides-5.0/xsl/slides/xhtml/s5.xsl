@@ -8,8 +8,6 @@
 
 <xsl:import href="plain.xsl"/>
 
-<xsl:param name="wrap.slidecontent">0</xsl:param>
-
 <!-- XXX: recommended by S5 but DocBook XSL produces XHTML Transitional
 
 <xsl:output doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -21,7 +19,7 @@
     <xsl:choose>
       <xsl:when test="$s5.controls.visible != 0">visible</xsl:when>
 
-      <xsl:otherwise>hidden</otherwise>
+      <xsl:otherwise>hidden</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -30,13 +28,13 @@
   <meta name="defaultView" content="{$s5.defaultview}"/>
   <meta name="controlVis" content="{$s5.controls}"/>
 
-  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.slides.css)}" type="text/css" media="projection" id="slideProj" />
-  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.outline.css)}" type="text/css" media="screen" id="outlineStyle" />
-  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.print.css)}" type="text/css" media="print" id="slidePrint" />
-  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.path.opera.css)}" type="text/css" media="projection" id="operaFix" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.slides.css)}" type="text/css" media="projection" id="slideProj" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.outline.css)}" type="text/css" media="screen" id="outlineStyle" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.print.css)}" type="text/css" media="print" id="slidePrint" />
+  <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.opera.css)}" type="text/css" media="projection" id="operaFix" />
   <link rel="stylesheet" href="{$user.css}" type="text/css"/>
 
-  <script src="{concat($s5.path.prefix, $s5.path.slides.js)}" type="text/javascript"></script>
+  <script src="{concat($s5.path.prefix, $s5.slides.js)}" type="text/javascript"></script>
 </xsl:template>
 
 <xsl:template name="slideshow.head">
