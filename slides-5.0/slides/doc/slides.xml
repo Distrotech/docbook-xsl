@@ -66,13 +66,14 @@
   
   <dbs:foil>
     <info>
-      <title>What is DocBook Slides?</title>
+      <title>Basic Concepts</title>
     </info>
     
     <itemizedlist>
       <listitem>
-        <para>DocBook is an XML <xref linkend="w3c-xml"/> grammar to mark up papers and books and
-	  then process them with XML-related standards.</para>
+        <para>DocBook is an XML <xref linkend="w3c-xml"/> grammar to mark up
+	  papers and books and then process them with XML-related standards.
+	  It concentrates on structure and semantics, not layout.</para>
       </listitem>
 	
       <listitem>
@@ -81,9 +82,18 @@
       </listitem>
       
       <listitem>
+        <para>By nature, layout is part of a presentation but it
+	  still focuses on structure and semantics.</para>
+      </listitem>
+      
+      <listitem>
         <para>DocBook Slides uses almost the entire DocBook grammar and
-	  provides only few grammar elements that are specific to writing
-	  slides.  This keeps is simple and easy to use.</para>
+	  provides only a minimal set of layout-controlling elements.
+	  This keeps is simple and easy to use.</para>
+      </listitem>
+      
+      <listitem>
+        <para>And still, you can copy-paste, use XInclude, etc.</para>
       </listitem>
     </itemizedlist>
   </dbs:foil>
@@ -146,28 +156,21 @@
 
     <dbs:foil>
       <info>
-        <title>Current Status</title>
+        <title>Development Status</title>
       </info>
 
       <itemizedlist>
         <listitem>
-	  <para>The grammar looks mostly established, including the
-	    important elements for marking up slides.</para>
+	  <para>Slides - just like DocBook - is an open source product
+	    and it is under constant development and improvement.</para>
 	</listitem>
 	
 	<listitem>
-	  <para>Currently the output formats are limited to
-	    some XHTML based output
-	    formats, namely S5 <xref linkend="s5"/> and
-	    HTML Slidy <xref linkend="slidy"/>.
-	    In the future, support for other important type of
-	    outputs (e.g. PDF end EPUB) will be added.</para>
-	</listitem>
-	
-	<listitem>
-	  <para>DocBook Slides is still in development and future
-	    improvements are expected to arrive to better support
-	    the needs of users.</para>
+	  <para>The curently supported output formats are
+	    plain XHTML, S5 XHTML <xref linkend="s5"/>,
+	    W3C HTML Slidy <xref linkend="slidy"/> and XSL FO.
+	    In the future, support for other important
+	    output formats (e.g. EPUB) may be added.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
@@ -175,7 +178,7 @@
 
   <dbs:foilgroup xml:id="introductionary-examples">
     <info>
-      <title>Introductionary Examples</title>
+      <title>Tutorial Examples</title>
     </info>
 
     <para>Let's see some basic examples.</para>
@@ -189,20 +192,15 @@
 <programlisting>&lt;?xml version='1.0'?&gt;
 &lt;dbs:slides xmlns="http://docbook.org/ns/docbook"
             xmlns:dbs="http://docbook.org/ns/docbook-slides"&gt; <co xml:id="co.slides"/>
-  &lt;info&gt; <co xml:id="co.slides.info"/>
-    &lt;title&gt;Presentation Title&lt;/title&gt; <co xml:id="co.slides.info.title"/>
-  &lt;/info&gt;</programlisting>
+  &lt;title&gt;Presentation Title&lt;/title&gt; <co xml:id="co.slides.title"/>
+</programlisting>
 
 	<calloutlist>
 	  <callout arearefs="co.slides">
 	    <para>The root element with proper namespace declarations.</para>
 	  </callout>
 	  
-	  <callout arearefs="co.slides.info">
-	    <para>Authoring info for the whole presentation.</para>
-	  </callout>
-	  
-	  <callout arearefs="co.slides.info.title">
+	  <callout arearefs="co.slides.title">
 	    <para>It contains the title but can have more.</para>
 	  </callout>
 	</calloutlist>
@@ -217,19 +215,13 @@
       <informalexample>
 <programlisting>
   &lt;dbs:foil&gt; <co xml:id="co.foil"/>
-    &lt;info&gt;
-      &lt;title&gt;Foil Title&lt;/title&gt; <co xml:id="co.foil.info"/>
-    &lt;/info&gt;
+    &lt;title&gt;Foil Title&lt;/title&gt;
     &lt;para&gt;Foil content&lt;/para&gt; <co xml:id="co.foil.para"/>
   &lt;/dbs:foil&gt;
 &lt;/dbs:slides&gt;</programlisting>
 	<calloutlist>
 	  <callout arearefs="co.foil">
 	    <para>At least one foil obligatory.</para>
-	  </callout>
-
-	  <callout arearefs="co.foil.info">
-	    <para>Foils can also have own info.</para>
 	  </callout>
 	  
 	  <callout arearefs="co.foil.para">
@@ -250,13 +242,9 @@
 <programlisting>&lt;?xml version='1.0'?&gt;
 &lt;dbs:slides xmlns="http://docbook.org/ns/docbook"
             xmlns:dbs="http://docbook.org/ns/docbook-slides"&gt;
-  &lt;info&gt;
-    &lt;title&gt;Presentation Title&lt;/title&gt;
-  &lt;/info&gt;
+  &lt;title&gt;Presentation Title&lt;/title&gt;
   &lt;dbs:foil&gt;
-    &lt;info&gt;
-      &lt;title&gt;Foil Title&lt;/title&gt;
-    &lt;/info&gt;
+    &lt;title&gt;Foil Title&lt;/title&gt;
     &lt;para&gt;Foil content&lt;/para&gt;
   &lt;/dbs:foil&gt;
 &lt;/dbs:slides&gt;</programlisting>
@@ -269,14 +257,13 @@
       </info>
 	
 	<para>We can create logical groups with a list of foils and also add some
-	  introductionary text.  <xref linkend="introductionary-examples"/> was such
+	  introductionary text.  They can generate a table of contents of the
+	  included slides.  <xref linkend="introductionary-examples"/> was such
 	  a foilgroup.</para>
 	  
 	<informalexample>
 <programlisting><![CDATA[<dbs:foilgroup>
-  <info>
-    <title>Group 1</title>
-  </info>
+  <title>Group 1</title>
   
   <para>This is an introduction.</para>
   
@@ -290,7 +277,7 @@
     
   <dbs:foilgroup>
     <info>
-      <title>Foil Markup</title>
+      <title>Markup Examples</title>
     </info>
     
     <para>Let's see how to create the particular foils with
@@ -298,11 +285,12 @@
     
     <dbs:foil>
       <info>
-	<title>More Info Content</title>
+	<title>Info Content</title>
       </info>
       
-      <para>The info element comes from the DocBook schema (as also shown
-        by its namespace), so you can use the usual elements there:</para>
+      <para>You can wrap the title int the info element that
+        comes from the DocBook schema.  It also means you can
+	add the usual authoring info here:</para>
 	
 	<informalexample>
 <programlisting><![CDATA[
@@ -312,7 +300,7 @@
     <author>
       <personname>
         <firstname>John</firstname>
-	<surname>Doe</surname>
+        <surname>Doe</surname>
       </personname>
       <affiliation>FooBar Inc.</affiliation>
     </author>
@@ -339,9 +327,7 @@
 	</listitem>
       </itemizedlist>
       
-      <informalexample>
-        <screen>Or &lt;informalexample&gt; with a &lt;screen&gt; inside.</screen>
-      </informalexample>
+      <programlisting>Or &lt;programlisting&gt; with some code or markup inside.</programlisting>
     </dbs:foil>
     
     <dbs:foil>
@@ -415,11 +401,11 @@
 	<listitem>
 	  <para>Or for references to external content
 	    - books and websites - you can include one or more
-	    reference foils in the end.</para>
+	    bibliography foils in the end.</para>
 	</listitem>
 	
 	<listitem>
-	  <para>On these foils, you can use the
+	  <para>On these foils, instead of the usual bulleted points, use the
 	    <code>&lt;bibliography&gt;</code> element and you
 	    will get a nicely formatted reference list.</para>
 	</listitem>
@@ -438,7 +424,7 @@
       
       <itemizedlist>
         <listitem>
-	  <para>If you set the <code>incremental</code> attribute ...</para>
+	  <para>If you set the <code>dbs:incremental</code> attribute ...</para>
 	</listitem>
 	
 	<listitem>
@@ -450,24 +436,24 @@
 	</listitem>
 	
 	<listitem>
-	  <para>... like this.</para>
+	  <para>... like this if they are supported in the output format. (XHTML-based)</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
     
-    <dbs:foil dbs:collapsable="1">
+    <dbs:foil dbs:collapsible="1">
       <info>
-        <title>Collapsable Lists</title>
+        <title>Collapsible Lists</title>
       </info>
 
-      <para>You can see a collapsable list below (depending on the output
+      <para>You can see a collapsible list below (depending on the output
         format).  Click on the node to expand it.</para>
 
       <orderedlist>
         <listitem>
           <orderedlist>
           <listitem>
-            <para>If you set the <code>collapsable</code> attribute ...</para>
+            <para>If you set the <code>dbs:collapsible</code> attribute ...</para>
         </listitem>
 
         <listitem>
@@ -475,11 +461,11 @@
         </listitem>
 
         <listitem>
-          <para>... then you will get collapsable lists, ...</para>
+          <para>... then you will get collapsible lists, ...</para>
         </listitem>
 
         <listitem>
-          <para>... like this.  (Also depending on the output format.)</para>
+          <para>... like this if they are supported in the output format. (Slidy)</para>
         </listitem>
       </orderedlist>
         </listitem>
@@ -493,7 +479,7 @@
 
       <itemizedlist>
         <listitem>
-	  <para>Slides are a layout-oriented documents; formatting
+	  <para>Slides are layout-oriented documents; formatting
 	    is a crucial part of them.</para>
 	</listitem>
 	
@@ -511,7 +497,7 @@
 	
 	<listitem>
 	  <para>You can also apply the <literal>dbs:style</literal> attribute
-	    to blocks and you can even embed them.</para>
+	    to blocks and you can even embed them into each other.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
@@ -526,7 +512,7 @@
       </dbs:block>
       
       <dbs:block dbs:style="right" dbs:incremental="1">
-        <para>This is the right block.  And it is incremental.</para>
+        <para>This is the right block.  And it is marked incremental.</para>
       </dbs:block>  
     </dbs:foil>
   </dbs:foilgroup>
@@ -538,6 +524,8 @@
       <info>
         <title>Incremental Images</title>
       </info>
+      
+      <para>This is only supported in XHTML-based output.</para>
       
       <mediaobject dbs:incremental="1" dbs:style="face_container">
         <imageobject>
@@ -563,7 +551,9 @@
         <title>Embedded SVG</title>
       </info>
       
-      <para>You can embed SVG code, like this:</para>
+      <para>You can embed SVG
+        <footnote><para>See <uri xlink:href="http://www.w3.org/TR/SVG11/">http://www.w3.org/TR/SVG11/</uri>.</para></footnote>
+        code, like this:</para>
       
       <programlisting><![CDATA[<svg xml:id="circle" 
 				    xmlns="http://www.w3.org/2000/svg"
@@ -635,6 +625,11 @@
 	      <entry>Single XHTML file in S5 format.</entry>
 	    </row>
 
+	    <row>
+	      <entry>fo/plain.xsl</entry>
+	      <entry>XSL Formatting Objects for printed output.</entry>
+	    </row>
+	    
 	  </tbody>
 	</tgroup>
       </informaltable>
@@ -735,6 +730,39 @@
     
     <dbs:foil>
       <info>
+        <title>XSL FO Format</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para>XSL FO is an XML vocabulary to describe how formatted
+	    output is presented.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>It is used here as an intermediate format between Slides
+	    and printable output.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>First, generate the XSL FO document.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>Then use your XSL FO processor to render your printable
+	    in PDF, PostScript, etc. depending on the capabilities of
+	    the software you use.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>If you need a free alternative, take a look at
+	    Apache FOP.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
         <title>XSLT Parameters</title>
       </info>
 
@@ -751,8 +779,8 @@
 	</listitem>
 	
 	<listitem>
-	  <para>All the XHTML-based stylesheets are extensions of the
-	    original DocBook stylesheets so adjusting those may also
+	  <para>All the Slides stylesheets are extensions of the
+	    original DocBook stylesheets so adjusting their parameters may also
 	    affect your rendere slides.</para>
 	</listitem>
       </itemizedlist>
@@ -781,6 +809,11 @@
 	  <para>Override the original templates that do not work
 	    in the way you desire.</para>
 	</listitem>
+	
+	<listitem>
+	  <para>Of course, this requires some knowledge in XSLT and
+	    you will need to read the code to see what to override.</para>
+	</listitem>
       </orderedlist>
     </dbs:foil>
   </dbs:foilgroup>
@@ -798,18 +831,17 @@
       <itemizedlist>
         <listitem>
 	  <para>Once you have some slides marked up in DocBook Slides,
-	    you probably want to make sure your markup is valid.
+	    you probably want to make sure your markup is valid. Otherwise,
+	    it is not guaranteed that the output will be generated properly.
 	    For this, you need a validator.</para>
 	</listitem>
 	
 	<listitem>
-	  <para>You can validate DocBook Slides with RELAX-NG<footnote><para>Recommended.</para></footnote>
-	    or XSD, so you need a validator that is capable
-	    to validate with one of the two definitions.</para>
+	  <para>DocBook Slides is described in the RELAX-NG grammar language.</para>
 	</listitem>
 	
 	<listitem>
-	  <para>The recommended validator is
+	  <para>The recommended RELAX-NG validator is
 	    <application>jing</application>.</para>
 	</listitem>
 	
@@ -818,6 +850,11 @@
 	    with the supplied <filename>locatingrules.xml</filename> file.</para>
 	</listitem>
       </itemizedlist>
+      
+      <warning>
+        <para>The RELAX-NG validation in the xmllint program is known to have
+	  bugs and does not work with Slides.</para>
+      </warning>
     </dbs:foil>
     
     <dbs:foil>
@@ -876,6 +913,28 @@
 	</listitem>
       </itemizedlist>
     </dbs:foil>
+  
+    <dbs:foil>
+      <info>
+        <title>Rendering Printable Output</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para>First create the XSL FO document with XSLT:
+	    <userinput>xsltproc xsl/slides/fo/plain.xsl foo.xml &gt; foo.fo</userinput></para>
+	</listitem>
+	
+	<listitem>
+	  <para>Then use your XSL FO processor to render the final document.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>For example, to render a PDF with Apache FOP, type:
+	    <userinput>fop foo.fo foo.pdf</userinput></para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
   </dbs:foilgroup>
   
   <dbs:foilgroup>
@@ -893,8 +952,8 @@
       
       <itemizedlist>
         <listitem>
-	  <para>Rendering is not linear but based on particular
-	    slides.  The content of the foil must fit but there
+	  <para>Slides is layout-oriented as opposed to DocBook, which is
+	    structure-oriented. The content of the foil must fit but there
 	    is no easy way to detect this so this should be checked
 	    and controlled manually.</para>
 	</listitem>
@@ -903,7 +962,9 @@
 	  <para>Formatting is not necessarily consistent but part
 	    of the design of each foil and illustration used in
 	    the presentation, while an important principle of
-	    DocBook is separating content and styling.</para>
+	    DocBook is separating content and styling.  To achieve
+	    something very unique, you will probably need heavy
+	    customization.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
@@ -928,8 +989,12 @@
 	  <para>Most of the possible output formats are usually
 	    used in printed form or on the web.  The first lacks
 	    the possibility of animated and audio content and the
-	    second one lacks good open standards for doing so.
-	    Hopefully this will change with HTML5.</para>
+	    second one lacks good open standards for doing so.</para>
+	</listitem>
+	
+	<listitem>
+	  <para>Maybe a future HTML5 or OpenDocument support
+	    can bring in some new features.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
@@ -953,13 +1018,11 @@
 	  </question>
 	  
 	  <answer>
-	    <para>Not at all.  DocBook Slides 5.0 is totally
-	      different in concept and the stylesheets were also
-	      significantly redesign and simplified, dropping
-	      support for the old-fashioned output.  The latest
-	      previous version of DocBook Slides was released
-	      in 2003 and since then there were a lot of changes in
-	      technologies and best practices.</para>
+	    <para>Not at all, since it is heavily redesigned.  But
+	      you can find an XSL transformating in the
+	      <filename class="directory">tools/</filename>
+	      directory, which can convert your slides to the new
+	      schema.</para>
 	  </answer>
 	</qandaentry>
       </qandaset>
@@ -1058,7 +1121,8 @@
       <itemizedlist>
         <listitem>
 	  <para><emphasis>May contain:</emphasis> db:title, db:titleabbev,
-	    db:subtitle, db:info, [block content], dbs:foil, dbs:speakernotes</para>
+	    db:subtitle, db:info, [block content], dbs:foil, dbs:speakernotes,
+	    dbs:handoutnotes</para>
 	</listitem>
 	
 	<listitem>
@@ -1079,12 +1143,31 @@
       <itemizedlist>
         <listitem>
 	  <para><emphasis>May contain:</emphasis> db:title, db:titleabbev,
-	    db:subtitle, db:info, [block content], dbs:speakernotes</para>
+	    db:subtitle, db:info, [block content], dbs:speakernotes,
+	    dbs:handoutnotes</para>
 	</listitem>
 	
 	<listitem>
 	  <para><emphasis>Usage:</emphasis> It marks up a single foil.  It may have some speaker
 	    notes, as well.</para>
+	</listitem>
+      </itemizedlist>
+    </dbs:foil>
+    
+    <dbs:foil>
+      <info>
+        <title>dbs:block</title>
+      </info>
+      
+      <itemizedlist>
+        <listitem>
+	  <para><emphasis>May contain:</emphasis> [block content], dbs:speakernotes,
+	  dbs:handoutnotes</para>
+	</listitem>
+	
+	<listitem>
+	  <para><emphasis>Usage:</emphasis> It divides thhe content into layout units
+	    that can later processed in a specific way.</para>
 	</listitem>
       </itemizedlist>
     </dbs:foil>
