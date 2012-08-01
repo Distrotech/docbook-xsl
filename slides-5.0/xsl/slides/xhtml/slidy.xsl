@@ -32,36 +32,14 @@
 </xsl:template>
 
 <xsl:template name="slideshow.head">
-<!--
-  <div class="background"> 
-    <img id="head-icon" alt="graphic with four colored squares"
-      src="http://www.w3.org/Talks/Tools/Slidy2/graphics/icon-blue.png" /> 
-    <object id="head-logo" title="W3C logo" type="image/svg+xml"
-      data="http://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-white.svg">
-	<img src="http://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-white.gif" 
-	  alt="W3C logo" id="head-logo-fallback"/>
-    </object>
-  </div>
-
-  <div class="background slanty">
-    <img src="http://www.w3.org/Talks/Tools/Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />
-  </div>
--->
-
   <div class="background"/>
-
-  <div class="slide cover title">
-    <h1>
-      <xsl:call-template name="get.title">
-	<xsl:with-param name="ctx" select="/dbs:slides"/>
-      </xsl:call-template>
-    </h1>
-
-    <xsl:apply-templates select="/dbs:slides/db:info/*[self::db:subtitle or self::db:author]"/>
-  </div>
 </xsl:template>
 
 <xsl:template name="slideshow.content">
+  <xsl:if test="$generate.titlepage != 0">
+    <xsl:apply-templates select="/dbs:slides" mode="titlepage"/>
+  </xsl:if>
+
   <xsl:apply-templates select="/dbs:slides/dbs:foil|dbs:slides/dbs:foilgroup"/>
 </xsl:template>
 
