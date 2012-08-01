@@ -148,9 +148,9 @@ dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
   & db.common.linking.attributes
 
 dbs.style.attributes  = dbs.incremental.attribute?
-  & dbs.collapsable.attribute?
+  & dbs.collapsible.attribute?
   & dbs.style.attribute?
 
 dbs.incremental.attribute = attribute dbs:incremental { "0" | "1" }
-dbs.collapsable.attribute = attribute dbs:collapsable { "0" | "1" | "expanded" }
+dbs.collapsible.attribute = attribute dbs:collapsible { "0" | "1" | "expanded" }
 dbs.style.attribute = attribute dbs:style { text }
