@@ -10,6 +10,7 @@
 		version="1.0">
 
 <xsl:import href="../../xhtml/chunk.xsl"/>
+<xsl:import href="plain-titlepage.xsl"/>
 <xsl:import href="param.xsl"/>
 
 <xsl:param name="local.l10n.xml" select="document('')"/>
@@ -44,13 +45,15 @@
 <xsl:template name="slideshow.content">
   <div class="presentation">
     <xsl:if test="$generate.titlepage != 0">
-      <div class="slide">
-	<xsl:apply-templates select="/" mode="slide.titlepage.mode"/>
-      </div>
+      <xsl:apply-templates select="/dbs:slides" mode="titlepage"/>
     </xsl:if>
 
     <xsl:apply-templates select="/dbs:slides/dbs:foil|dbs:slides/dbs:foilgroup"/>
   </div>
+</xsl:template>
+
+<xsl:template match="/dbs:slides" mode="titlepage">
+  <xsl:call-template name="slides.titlepage"/>
 </xsl:template>
 
 <xsl:template name="slide.handout">
@@ -523,15 +526,4 @@
     <xsl:call-template name="slide.pubdate"/>
   </xsl:if>
 </xsl:template>
-
-<xsl:template match="/" mode="slide.titlepage.mode">
-  <h1>
-    <xsl:call-template name="get.title">
-      <xsl:with-param name="ctx" select="/dbs:slides"/>
-    </xsl:call-template>
-  </h1>
-
-  <xsl:apply-templates select="/dbs:slides/db:info/*[self::db:subtitle or self::db:author]"/>
-</xsl:template>
-
 </xsl:stylesheet>
