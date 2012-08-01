@@ -108,8 +108,8 @@
 
 <xsl:template name="user.pagemasters">
   <fo:simple-page-master master-name="slides-titlepage-master"
-			 xsl:use-attribute-sets="titlepage.master.properties">
-    <fo:region-body xsl:use-attribute-sets="titlepage.region-body.properties"/>
+			 xsl:use-attribute-sets="slides.titlepage.master.properties">
+    <fo:region-body xsl:use-attribute-sets="slides.titlepage.region-body.properties"/>
   </fo:simple-page-master>
 
   <fo:simple-page-master master-name="slides-foil-master"
@@ -167,37 +167,85 @@
   <xsl:value-of select="($ctx/db:info/db:subtitle|$ctx/db:subtitle)[1]"/>
 </xsl:template>
 
+<xsl:template name="presentation.title">
+  <xsl:call-template name="get.title">
+    <xsl:with-param name="ctx" select="/dbs:slides"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="slides.bookmarks">
+  <fo:bookmark-tree>
+    <xsl:apply-templates select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup" mode="bookmark.mode"/>
+  </fo:bookmark-tree>
+</xsl:template>
+
+<xsl:template match="dbs:foil|dbs:foilgroup" mode="bookmark.mode">
+  <fo:bookmark>
+    <xsl:attribute name="internal-destination">
+      <xsl:call-template name="generate.id"/>
+    </xsl:attribute>
+
+    <fo:bookmark-title>
+      <xsl:call-template name="get.title"/>
+    </fo:bookmark-title>
+
+    <xsl:if test="self::dbs:foilgroup">
+      <xsl:apply-templates select="dbs:foil" mode="bookmark.mode"/>
+    </xsl:if>
+  </fo:bookmark>
+</xsl:template>
+
+<xsl:template match="db:author" mode="titlepage.mode">
+  <fo:block>
+    <xsl:apply-templates select="db:personname" mode="titlepage.mode"/>
+  </fo:block>
+
+  <fo:block>
+    <xsl:apply-templates select="db:affiliation" mode="titlepage.mode"/>
+  </fo:block>
+
+  <fo:block>
+    <xsl:apply-templates select="db:email" mode="titlepage.mode"/>
+  </fo:block>
+</xsl:template>
+
 <xsl:template match="/">
   <fo:root xsl:use-attribute-sets="slides.properties">
     <fo:layout-master-set>
       <xsl:call-template name="user.pagemasters"/>
     </fo:layout-master-set>
 
-<!-- XXX: titlepage
+    <xsl:call-template name="slides.bookmarks"/>
+
     <xsl:if test="$generate.titlepage != 0">
       <fo:page-sequence hyphenate="{$hyphenate}"
-			master-reference="slides-titlepage-master">
+			master-reference="slides-titlepage">
         <xsl:attribute name="language">
 	  <xsl:call-template name="l10n.language"/>
         </xsl:attribute>
 
         <fo:flow flow-name="xsl-region-body">
 	  <fo:block>
-	    <xsl:call-template name="slides.titlepage.recto"/>
+	    <xsl:apply-templates select="/dbs:slides" mode="titlepage"/>
 	  </fo:block>
         </fo:flow>
       </fo:page-sequence>
     </xsl:if>
--->
 
     <xsl:apply-templates select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup"/>
 
     <xsl:if test="$generate.handoutnotes.at.last != 0">
       <xsl:for-each select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup">
-	<xsl:call-template name="generate.slide.handoutnotes"/>
+	<xsl:if test=".//dbs:handoutnotes">
+	  <xsl:call-template name="generate.slide.handoutnotes"/>
+	</xsl:if>
       </xsl:for-each>
     </xsl:if>
   </fo:root>
+</xsl:template>
+
+<xsl:template match="dbs:slides" mode="titlepage">
+  <xsl:call-template name="slides.titlepage"/>
 </xsl:template>
 
 <xsl:template name="page.template">
@@ -279,7 +327,7 @@
 <xsl:template match="dbs:foil|dbs:foilgroup">
   <xsl:call-template name="page.template"/>
 
-  <xsl:if test="$generate.handoutnotes.at.last = 0">
+  <xsl:if test="$generate.handoutnotes.at.last = 0 and .//dbs:handoutnotes">
     <xsl:call-template name="generate.slide.handoutnotes"/>
   </xsl:if>
 

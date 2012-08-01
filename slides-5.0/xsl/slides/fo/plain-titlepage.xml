@@ -15,16 +15,13 @@
 <t:templates xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
              xmlns:param="http://nwalsh.com/docbook/xsl/template/1.0/param"
              xmlns:fo="http://www.w3.org/1999/XSL/Format"
-             xmlns:dbs="http://docbook.org/ns/docbook-slides"
              xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- ==================================================================== -->
 
-<t:titlepage t:element="dbs:slides" t:wrapper="fo:block">
+<t:titlepage t:element="slides" t:wrapper="fo:block">
   <t:titlepage-content t:side="recto">
-      <title t:predicate="[1]"
-             t:named-template="component.title"
-             param:node="ancestor-or-self::dbs:slides[1]"
+      <title t:named-template="presentation.title"
              text-align="center"
              space-after="1em"
              padding-top="1.5in"
@@ -33,8 +30,7 @@
              font-weight="bold"
              font-family="{$slide.title.font.family}"/>
 
-    <subtitle t:predicate="[1]"
-              text-align="center"
+    <subtitle text-align="center"
               space-after="1em"
               font-family="{$slide.title.font.family}"/>
 
@@ -49,19 +45,6 @@
     <pubdate font-size="&hsize3;"
              text-align="center"
              space-after="1em"/>
-
-    <confgroup font-size="&hsize3;"
-               text-align="center"
-               space-after="1em"/>
-
-    <releaseinfo font-size="&hsize3;"
-                 text-align="center"
-                 space-after="1em"/>
-
-    <copyright font-size="&hsize3;"
-               text-align="center"/>
-
-    <revision text-align="center"/>
   </t:titlepage-content>
 
   <t:titlepage-content t:side="verso">
