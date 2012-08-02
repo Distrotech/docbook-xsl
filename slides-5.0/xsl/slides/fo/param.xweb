@@ -41,10 +41,10 @@ $Id: param.xweb 6633 2007-02-21 18:33:33Z xmldoc $
 &generate.copyright;
 &generate.foilgroup.numbered.toc;
 &generate.foilgroup.toc;
-&generate.handoutnotes.at.last;
 &generate.handoutnotes;
 &generate.page.number;
 &generate.pubdate;
+&generate.speakernotes;
 &generate.titlepage;
 &mml.embedding.mode.fo;
 &slide.font.family;
@@ -54,7 +54,6 @@ $Id: param.xweb 6633 2007-02-21 18:33:33Z xmldoc $
 &slidy.slidy.css;
 &slidy.slidy.js;
 &slidy.user.css;
-&speakernotes.as.handoutnotes;
 &svg.embedding.mode.fo;
 </reference>
 <reference xml:id="propsets">
@@ -124,10 +123,10 @@ around all these parameters.</para>
 <src:fragref linkend="generate.copyright.frag"/>
 <src:fragref linkend="generate.foilgroup.numbered.toc.frag"/>
 <src:fragref linkend="generate.foilgroup.toc.frag"/>
-<src:fragref linkend="generate.handoutnotes.at.last.frag"/>
 <src:fragref linkend="generate.handoutnotes.frag"/>
 <src:fragref linkend="generate.page.number.frag"/>
 <src:fragref linkend="generate.pubdate.frag"/>
+<src:fragref linkend="generate.speakernotes.frag"/>
 <src:fragref linkend="generate.titlepage.frag"/>
 <src:fragref linkend="mml.embedding.mode.fo.frag"/>
 <src:fragref linkend="slide.font.family.frag"/>
@@ -137,7 +136,6 @@ around all these parameters.</para>
 <src:fragref linkend="slidy.slidy.css.frag"/>
 <src:fragref linkend="slidy.slidy.js.frag"/>
 <src:fragref linkend="slidy.user.css.frag"/>
-<src:fragref linkend="speakernotes.as.handoutnotes.frag"/>
 <src:fragref linkend="svg.embedding.mode.fo.frag"/>
 
 <src:fragref linkend="foil.header.properties.frag"/>

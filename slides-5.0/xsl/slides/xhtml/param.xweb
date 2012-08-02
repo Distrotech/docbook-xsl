@@ -42,11 +42,10 @@ $Id$
 &generate.foilgroup.numbered.toc;
 &generate.foilgroup.toc;
 &generate.handoutnotes;
-&generate.handoutnotes.at.last;
 &generate.pubdate;
+&generate.speakernotes;
 &generate.titlepage;
 &mml.embedding.mode;
-&speakernotes.as.handoutnotes;
 &svg.embedding.mode;
 &user.css;
 &wrap.slidecontent;
@@ -134,11 +133,10 @@ around all these parameters.</para>
 <src:fragref linkend="generate.foilgroup.numbered.toc.frag"/>
 <src:fragref linkend="generate.foilgroup.toc.frag"/>
 <src:fragref linkend="generate.handoutnotes.frag"/>
-<src:fragref linkend="generate.handoutnotes.at.last.frag"/>
 <src:fragref linkend="generate.pubdate.frag"/>
+<src:fragref linkend="generate.speakernotes.frag"/>
 <src:fragref linkend="generate.titlepage.frag"/>
 <src:fragref linkend="mml.embedding.mode.frag"/>
-<src:fragref linkend="speakernotes.as.handoutnotes.frag"/>
 <src:fragref linkend="svg.embedding.mode.frag"/>
 <src:fragref linkend="user.css.frag"/>
 <src:fragref linkend="wrap.slidecontent.frag"/>
