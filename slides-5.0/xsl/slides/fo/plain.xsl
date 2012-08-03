@@ -9,6 +9,7 @@
                 version="1.0">
 
 <xsl:import href="../../fo/docbook.xsl"/>
+<xsl:import href="../common/common.xsl"/>
 <xsl:include href="plain-titlepage.xsl"/>
 <xsl:include href="param.xsl"/>
 
@@ -18,6 +19,8 @@
 <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
   <l:l10n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" language="en">
     <l:gentext key="Continued" text="(Continued)"/>
+    <l:gentext key="Speakernotes" text="Speaker Notes"/>
+    <l:gentext key="Handoutnotes" text="Handout Notes"/>
     <l:context name="title">
       <l:template name="slides" text="%t"/>
       <l:template name="foilgroup" text="%t"/>
@@ -104,6 +107,13 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:template name="bibliography.titlepage"/>
+
+<!-- Do not add db namespace to dbs elements -->
+<xsl:template match="*[namespace-uri() = 'http://docbook.org/ns/docbook-slides']" mode="addNS">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
 <!-- End of overrides -->
 
 <xsl:template name="user.pagemasters">
@@ -141,32 +151,6 @@
   </fo:page-sequence-master>
 </xsl:template>
 
-<xsl:template name="generate.id">
-  <xsl:param name="ctx" select="."/>
-
-  <xsl:choose>
-    <xsl:when test="$ctx/@xml:id">
-      <xsl:value-of select="$ctx/@xml:id"/>
-    </xsl:when>
-
-    <xsl:otherwise>
-      <xsl:value-of select="generate-id($ctx)"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template name="get.title">
-  <xsl:param name="ctx" select="."/>
-
-  <xsl:value-of select="($ctx/db:info/db:titleabbrev|$ctx/db:titleabbrev|$ctx/db:info/db:title|$ctx/db:title)[1]"/>
-</xsl:template>
-
-<xsl:template name="get.subtitle">
-  <xsl:param name="ctx" select="."/>
-
-  <xsl:value-of select="($ctx/db:info/db:subtitle|$ctx/db:subtitle)[1]"/>
-</xsl:template>
-
 <xsl:template name="presentation.title">
   <xsl:call-template name="get.title">
     <xsl:with-param name="ctx" select="/dbs:slides"/>
@@ -182,7 +166,7 @@
 <xsl:template match="dbs:foil|dbs:foilgroup" mode="bookmark.mode">
   <fo:bookmark>
     <xsl:attribute name="internal-destination">
-      <xsl:call-template name="generate.id"/>
+      <xsl:call-template name="object.id"/>
     </xsl:attribute>
 
     <fo:bookmark-title>
@@ -233,14 +217,6 @@
     </xsl:if>
 
     <xsl:apply-templates select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup"/>
-
-    <xsl:if test="$generate.handoutnotes.at.last != 0">
-      <xsl:for-each select="/dbs:slides/dbs:foil|/dbs:slides/dbs:foilgroup">
-	<xsl:if test=".//dbs:handoutnotes">
-	  <xsl:call-template name="generate.slide.handoutnotes"/>
-	</xsl:if>
-      </xsl:for-each>
-    </xsl:if>
   </fo:root>
 </xsl:template>
 
@@ -265,7 +241,7 @@
     </xsl:attribute>
 
     <xsl:attribute name="id">
-      <xsl:call-template name="generate.id"/>
+      <xsl:call-template name="object.id"/>
     </xsl:attribute>
 
     <fo:static-content flow-name="xsl-region-before-foil">
@@ -304,19 +280,19 @@
       <fo:block xsl:use-attribute-sets="foil.properties">
 	<xsl:choose>
 	  <xsl:when test="$mode = 'normal'">
-	    <xsl:apply-templates select="*[not(self::dbs:foil)][not(self::db:info)][not(self::db:title)][not(self::db:titleabbrev)][not(self::db:subtitle)]"/>
+	    <xsl:apply-templates select="*[not(self::dbs:foil)][not(self::db:info)][not(self::db:title)][not(self::db:titleabbrev)][not(self::db:subtitle)][not(self::dbs:speakernotes)][not(self::dbs:handoutnotes)]"/>
 
 	    <xsl:if test="self::dbs:foilgroup and ($generate.foilgroup.toc != 0)">
 	      <xsl:call-template name="foilgroup.generate.toc"/>
 	    </xsl:if>
 	  </xsl:when>
 
-	  <xsl:when test="$mode = 'notes'">
-	    <xsl:apply-templates select="dbs:handoutnotes"/>
+	  <xsl:when test="$mode = 'speakernotes'">
+	    <xsl:apply-templates select="dbs:speakernotes"/>
+	  </xsl:when>
 
-	    <xsl:if test="speakernotes.as.handoutnotes">
-	      <xsl:apply-templates select="dbs:speakernotes"/>
-	    </xsl:if>
+	  <xsl:when test="$mode = 'handoutnotes'">
+	    <xsl:apply-templates select="dbs:handoutnotes"/>
 	  </xsl:when>
 	</xsl:choose>
       </fo:block>
@@ -327,22 +303,39 @@
 <xsl:template match="dbs:foil|dbs:foilgroup">
   <xsl:call-template name="page.template"/>
 
-  <xsl:if test="$generate.handoutnotes.at.last = 0 and .//dbs:handoutnotes">
-    <xsl:call-template name="generate.slide.handoutnotes"/>
-  </xsl:if>
+  <xsl:call-template name="generate.slide.notes"/>
 
   <xsl:if test="self::dbs:foilgroup">
     <xsl:apply-templates select="dbs:foil"/>
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="generate.slide.handoutnotes">
-  <xsl:variable name="subtitle" select="'Notes'"/>
+<xsl:template name="generate.slide.notes">
+  <xsl:variable name="subtitle.handoutnotes">
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'Handoutnotes'"/>
+    </xsl:call-template>
+  </xsl:variable>
 
-  <xsl:call-template name="page.template">
-    <xsl:with-param name="mode" select="'notes'"/>
-    <xsl:with-param name="subtitle" select="$subtitle"/>
-  </xsl:call-template>
+  <xsl:variable name="subtitle.speakernotes">
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'Speakernotes'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:if test="($generate.handoutnotes != 0) and ./dbs:handoutnotes">
+    <xsl:call-template name="page.template">
+      <xsl:with-param name="mode" select="'handoutnotes'"/>
+      <xsl:with-param name="subtitle" select="$subtitle.handoutnotes"/>
+    </xsl:call-template>
+  </xsl:if>
+
+  <xsl:if test="($generate.speakernotes != 0) and ./dbs:speakernotes">
+    <xsl:call-template name="page.template">
+      <xsl:with-param name="mode" select="'speakernotes'"/>
+      <xsl:with-param name="subtitle" select="$subtitle.speakernotes"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="dbs:handoutnotes">
@@ -419,8 +412,8 @@
       <xsl:text>&#160;/&#160;</xsl:text>
       <fo:page-number-citation>
 	<xsl:attribute name="ref-id">
-	  <xsl:call-template name="generate.id">
-	    <xsl:with-param name="ctx" select="(//dbs:foilgroup|//dbs:foil)[last()]"/>
+	  <xsl:call-template name="object.id">
+	    <xsl:with-param name="object" select="(//dbs:foilgroup|//dbs:foil)[last()]"/>
 	  </xsl:call-template>
 	</xsl:attribute>
       </fo:page-number-citation>
@@ -517,7 +510,7 @@
 
     <xsl:otherwise>
       <xsl:variable name="id">
-        <xsl:call-template name="generate.id"/>
+        <xsl:call-template name="object.id"/>
       </xsl:variable>
       <xsl:variable name="fname">
         <xsl:value-of select="concat($id, $fileExt)"/>
