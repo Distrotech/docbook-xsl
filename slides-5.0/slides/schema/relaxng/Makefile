@@ -7,7 +7,7 @@ endif
 all: slides.rng
 
 %.rng: %.rnc
-	$(RUNTRANG) $< $@
+	trang $< $@
 
 clean:
 

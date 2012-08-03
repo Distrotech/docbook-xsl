@@ -3,7 +3,7 @@ include ../../../buildtools/Makefile.incl
 all: slides.dtd
 
 slides.dtd: ../relaxng/slides.rnc
-	$(FLATTEN) $< $@
+	trang $< $@
 
 clean:
 

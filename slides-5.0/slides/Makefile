@@ -37,8 +37,8 @@ URILIST = \
 all: base
 
 base:
-	$(MAKE) -C schema
-	$(MAKE) -C xsl
+	$(MAKE) -C schema all
+	$(MAKE) -C images all
 
 check:
 	$(XJPARSE) tests/test.xml
@@ -46,22 +46,10 @@ check:
 	$(XJPARSE) tests/testfull.xml
 
 clean:
-	$(MAKE) -C doc clean
-	$(MAKE) -C demo clean
 	$(MAKE) -C schema clean
-	$(MAKE) -C tests clean
-	$(MAKE) -C xsl clean
+	$(MAKE) -C images clean
 
 maintainer-clean: clean
 	$(MAKE) -C schema maintainer-clean
-
-demo:
-	make -C demo
-
-doc:
-	make -C doc
-
-tests:
-	make -C tests
 
 include ../releasetools/Targets.mk
