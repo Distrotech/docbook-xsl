@@ -105,7 +105,7 @@ div.background {
   display: none;
 }
 
-div.handout {
+div.handout, div.notes {
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -370,7 +370,7 @@ div.initial_prompt { display: none; visibility: hidden }
      visibility: visible;
      position: inherit;
   }
-  div.handout {
+  div.handout, div.notes {
      border-top-style: solid;
      border-top-width: thin;
      border-top-color: black;
@@ -380,7 +380,7 @@ div.initial_prompt { display: none; visibility: hidden }
   .hidden { display: none; visibility: visible }
 
   div.slide.hidden { display: block; visibility: visible }
-  div.handout.hidden { display: block; visibility: visible }
+  div.handout.hidden, div.notes.hidden { display: block; visibility: visible }
   div.background { display: none; visibility: hidden }
   body.single_slide div.initial_prompt { display: block; visibility: visible }
   body.single_slide div.background { display: block; visibility: visible }
@@ -388,7 +388,7 @@ div.initial_prompt { display: none; visibility: hidden }
   body.single_slide .invisible { visibility: hidden }
   body.single_slide .hidden { display: none; visibility: hidden }
   body.single_slide div.slide { position: absolute }
-  body.single_slide div.handout { display: none; visibility: hidden }
+  body.single_slide div.handout, body.single_slide div.notes{ display: none; visibility: hidden }
 }
 
 @media print {
