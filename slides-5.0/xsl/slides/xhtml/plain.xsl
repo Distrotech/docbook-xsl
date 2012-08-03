@@ -10,6 +10,7 @@
 		version="1.0">
 
 <xsl:import href="../../xhtml/chunk.xsl"/>
+<xsl:import href="../common/common.xsl"/>
 <xsl:import href="plain-titlepage.xsl"/>
 <xsl:import href="param.xsl"/>
 
@@ -19,7 +20,7 @@
     <l:gentext key="Foilgroup" text="Foil Group"/>
     <l:gentext key="Foil" text="Foil"/>
     <l:gentext key="Speakernotes" text="Speaker Notes"/>
-    <l:gentext key="Handout" text="Handout Notes"/>
+    <l:gentext key="Handoutnotes" text="Handout Notes"/>
     <l:gentext key="SVGImage" text="SVG image"/>
     <l:gentext key="MathMLFormula" text="MathML formula"/>
 
@@ -56,24 +57,30 @@
   <xsl:call-template name="slides.titlepage"/>
 </xsl:template>
 
-<xsl:template name="slide.handout">
-  <xsl:if test="($generate.handoutnotes != 0) or ($speakernotes.as.handoutnotes != 0)">
-    <div class="handout">
-      <xsl:if test="($generate.handoutnotes != 0)">
-	<xsl:apply-templates select="dbs:handoutnotes/*"/>
-      </xsl:if>
+<xsl:template name="slide.notes">
+  <xsl:if test="($generate.speakernotes != 0) and ./dbs:speakernotes">
+    <div class="notes">
+      <h2 class="notes">
+	<xsl:call-template name="gentext">
+	  <xsl:with-param name="key" select="'Speakernotes'"/>
+	</xsl:call-template>
+      </h2>
 
-      <xsl:if test="($speakernotes.as.handoutnotes != 0)">
-	<xsl:apply-templates select="dbs:speakernotes/*"/>
-      </xsl:if>
+      <xsl:apply-templates select="dbs:speakernotes/*"/>
     </div>
   </xsl:if>
-</xsl:template>
 
-<xsl:template name="get.title">
-  <xsl:param name="ctx" select="."/>
+  <xsl:if test="($generate.handoutnotes != 0) and ./dbs:handoutnotes">
+    <div class="handout">
+      <h2 class="handout">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key" select="'Handoutnotes'"/>
+        </xsl:call-template>
+      </h2>
 
-  <xsl:value-of select="($ctx/db:info/db:titleabbrev|$ctx/db:titleabbrev|$ctx/db:info/db:title|$ctx/db:title)[1]"/>
+      <xsl:apply-templates select="dbs:handoutnotes/*"/>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="/">
@@ -97,7 +104,7 @@
 </xsl:template>
 
 <xsl:template name="foilgroup.content">
-      <xsl:apply-templates select="*[not(self::dbs:foil)][not(self::dbs:speakernotes)]"/>
+      <xsl:apply-templates select="*[not(self::dbs:foil)][not(self::dbs:speakernotes)][not(self::dbs:handoutnotes)]"/>
 
       <xsl:if test="($generate.foilgroup.toc != 0)">
         <xsl:choose>
@@ -156,7 +163,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:call-template name="slide.handout"/>
+    <xsl:call-template name="slide.notes"/>
   </div>
 
   <xsl:apply-templates select="dbs:foil"/>
@@ -175,13 +182,25 @@
       </xsl:when>
 
       <xsl:otherwise>
-	<xsl:apply-templates select="*"/>
+	<xsl:apply-templates select="*[not(self::dbs:speakernotes)][not(self::dbs:handoutnotes)]"/>
       </xsl:otherwise>
     </xsl:choose>
 
     <xsl:call-template name="process.footnotes"/>
 
-    <xsl:call-template name="slide.handout"/>
+    <xsl:call-template name="slide.notes"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="dbs:handoutnotes">
+  <div class="handoutnotes">
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
+
+<xsl:template match="dbs:speakernotes">
+  <div class="speakernotes">
+    <xsl:apply-templates/>
   </div>
 </xsl:template>
 
@@ -420,7 +439,7 @@
 
     <xsl:otherwise>
       <xsl:variable name="id">
-	<xsl:call-template name="generate.id"/>
+	<xsl:call-template name="object.id"/>
       </xsl:variable>
       <xsl:variable name="fname">
 	<xsl:value-of select="concat($id, $fileExt)"/>
@@ -475,21 +494,9 @@
 <xsl:template name="generate.anchor">
   <a>
     <xsl:attribute name="name">
-      <xsl:call-template name="generate.id"/>
+      <xsl:call-template name="object.id"/>
     </xsl:attribute>
   </a>
-</xsl:template>
-
-<xsl:template name="generate.id">
-  <xsl:choose>
-    <xsl:when test="./@xml:id">
-      <xsl:value-of select="./@xml:id"/>
-    </xsl:when>
-
-    <xsl:otherwise>
-      <xsl:value-of select="generate-id(.)"/>
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="slide.copyright">
