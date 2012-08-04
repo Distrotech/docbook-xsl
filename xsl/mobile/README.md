@@ -1,21 +1,22 @@
-
 		* === List of Available mobile platforms ===
       	|
-      	|_Android		:$ant android-help *
-      	|__Apple iOS		:$ant iOS-help
-      	|___Blackberry		:$ant blackberry-help
+      	|_Android             :$ant android-help *
+      	|__Apple iOS          :$ant iOS-help
+      	|___Blackberry        :$ant blackberry-help
       	|____Palm webOS
       	|_____Samsung Bada
       	|______Windows Phone	:$ant windows-phone-help
+    
+    key: " * " - currently implemented
 
-========== HTMLs for all platforms ===================================
+=== HTMLs for all platforms ===================================
 
-To create chunked htmls which can be used to copy into "www" folder :
+To create chunked htmls which can be used in "www" folder of PhoneGap:
 
 	$ ant mobile
 
 
-==========  Android  ==================================================
+=== Android  ==================================================
 
 Go and Edit  xsl/mobile/android/android.config with your data.
 
@@ -28,7 +29,7 @@ Then execute to create a .apk which is signed by debug key :
 How to test output ? ----------------------------------------------------
 
 
-wing command and make an Emulator :
+Execute following command and make an Emulator :
 
 	$ android avd
 
@@ -37,17 +38,17 @@ NOTE: When You are creating an Emulator, make sure the its platform version is c
 After create an Emulator, then run it.
 To install created Android app, go to the output directory of app and then also for 'bin' directory inside it.
 
-	$ android install path/to/.apk
+	$ adb install path/to/.apk
 
 Ex: If you are in xsl/mobile directory,
 
-	$ android install andriod/output/bin/DocBookMobileAppActivity-debug.apk
+	$ adb install andriod/output/bin/DocBookMobileAppActivity-debug.apk
 
 If you already installed current app that you want to install, then you can reinstall it by:
 
-	$ android install [-r] path/to/.apk
+	$ adb install [-r] path/to/.apk
 
 Ex: If you are in xsl/mobile directory,
 
-	$ android install -r andriod/output/bin/DocBookMobileAppActivity-debug.apk
+	$ adb install -r andriod/output/bin/DocBookMobileAppActivity-debug.apk
 
