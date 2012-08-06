@@ -1,0 +1,362 @@
+<preface id="preface">
+<?dbhtml filename="ch00.html"?>
+<prefaceinfo
+><pubdate
+>$Date$</pubdate
+> <releaseinfo
+>$Revision$</releaseinfo
+> </prefaceinfo>
+<title
+>Предисловаие</title>
+<para
+>DocBook - это система написания структурированных документов с использованием &SGML; или &XML;. Чаще всего она находит применения при написании документации по аппаратному и программному обеспечениюcom, но её можно использовать и для другой тематики. DocBook - это определение типа документа (&DTD;, Document Type Definition). DocBook принят большим сообществом авторов и поддерживается многими свободными и коммерческими программами. Короче говоря, DocBook - это простое для понимания и широко используемый &DTD;. Сотни организаций используют DocBook для милионов страниц документации. </para>
+<sect1 id="pref-whyread">
+<title
+>Зачем читать эту книгу?</title>
+<para
+>Эта книга является ясным, точным и нормативным справочником DocBook &DTD;. Это официальная документация DocBook &DTD;. </para>
+<para
+>Мы надеемся, что здесь вы найдёте исчерпывающие ответы на все свои вопросы об элементах и сущностях DocBook. В частности:</para>
+<itemizedlist>
+<listitem
+><para
+>Общий обзор DocBook. Он поможет понять всю картину в целом, а затем приступить к изучению более 300 элементов DocBook.</para>
+</listitem>
+<listitem
+><para
+>Как писать документы DocBook. С чего начать и что делать?</para>
+</listitem>
+<listitem
+><para
+>Обработка и проверка. Соответствует ли ваш документ строгому стандарту DocBook &DTD;?</para>
+</listitem>
+<listitem
+><para
+>Как публиковать документы DocBook. Здесь описывается как сделать версию книги в виде для печати и для публикации в Web.</para>
+</listitem>
+<listitem
+><para
+>Внесение изменений в &DTD;. Если вам не хватает DocBook и вы хотите внести в этот стандарт специфические элементы, вы можете написать <quote
+>расширение</quote
+> DocBook.</para>
+</listitem>
+<listitem
+><para
+>Понимание всех элементов. Каждый элемент обильно документирован, включая предполагаемую семантику значение всех элементов и примеры. Параметрические и символьные сущности также описаны. </para>
+</listitem>
+<listitem
+><para
+>Таблицы стилей. Даётся краткое введение в несколько распространённых языков описания стилей.</para>
+</listitem>
+<listitem
+><para
+>Совместимость с &XML;. Здесь излагаются все нюансы использования нового разметочного языка &XML;</para>
+</listitem>
+<listitem
+><para
+>Дополнительные файлы на <acronym
+>CD-ROM</acronym
+>.</para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="pref-bookaud">
+<title
+>На кого расчитана книга</title>
+<para
+>Мы ожидаем, что большинство читающих уже знакомы с &SGML; или &XML;. Однако даже если ваш опыт заключается в написании нескольких &HTML; страниц, вы также можете читать книгу, т.к. в ней даётся краткое введение в &SGML;, &XML; и структурированную разметку. Ссылки на другую документацию даются в <xref linkend="app-resources"/>. </para>
+<para
+>Большинство описуемого программного обеспечения работает либо в &UNIX;-подобных операционных системах, либо в Microsoft Windows. Но это не должно помешать получить нужную информацию пользователям других ОС. </para>
+</sect1>
+
+<sect1 id="pref-organization">
+<title
+>Организация книги</title>
+<para
+>Книга разделена на 3 части. <citetitle
+>Часть I: Введение</citetitle
+>:</para>
+<variablelist>
+<varlistentry
+><term
+><xref linkend="ch-gssgml"/></term>
+<listitem>
+<para
+>Краткое введение в структурированную разметку.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="ch-create"/></term>
+<listitem>
+<para
+>Как создавать документы DocBook.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="ch-parse"/></term>
+<listitem>
+<para
+>Обработка и проверка документов DocBook.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="ch-publish"/></term>
+<listitem>
+<para
+>Как публиковать документы DocBook.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-customizing"/></term>
+<listitem>
+<para
+>Как вносить изменения в DocBook.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para condition="refpages"
+><citetitle
+>Часть II: Справочник</citetitle
+> <phrase condition="online"
+> содержит полный перечень и описания элементов и сущностей DocBook &dtd.version; &DTD;. </phrase
+><phrase condition="print"
+> содержит полный перечень и описания элементов, а также краткий справочник по сущностям. Полностью сущности описаны на <link linkend="app-cdrom"
+> <acronym
+>CD-ROM</acronym
+></link
+> или <ulink url="http://docbook.org/"
+>web-сайте</ulink
+>.</phrase
+> </para>
+
+<variablelist condition="refpages">
+<varlistentry
+><term
+><xref linkend="ref-element"/></term>
+<listitem>
+<para
+>Справочник по элементам DocBook.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="ref-parement"/></term>
+<listitem>
+<para
+>Справочник по параметрическим сущностям DocBook.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="ref-charent"/></term>
+<listitem>
+<para
+>Справочник по символьным сущностям DocBook.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+><citetitle
+>Часть III: Приложения</citetitle
+>: </para>
+<variablelist>
+<varlistentry
+><term
+><xref linkend="app-install"/></term>
+<listitem>
+<para
+>Как установить DocBook, Jade, и таблицы стилей.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-xml"/></term>
+<listitem>
+<para
+>DocBook как &XML;.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-versions"/></term>
+<listitem>
+<para
+>Различные версии DocBook, а также планы по будущим релизам.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-resources"/></term>
+<listitem>
+<para
+>Другие ресурсы</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-cdrom"/></term>
+<listitem>
+<para
+>Что на <acronym
+>сидюке</acronym
+>?</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="app-interchange"/></term>
+<listitem>
+<para
+>Как распространять свои DocBook документы.</para>
+</listitem>
+</varlistentry>
+<varlistentry
+><term
+><xref linkend="quickref"/></term>
+<listitem>
+<para
+>Краткий справочник по элементам DocBook.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<para
+><link linkend="glossary"
+> Глоссарий </link
+> и <phrase condition="online"
+><link linkend="index"
+>Алфавитный указатель</link
+>. </phrase
+> <phrase condition="print"
+>Алфавитный указатель.</phrase
+> </para>
+</sect1>
+
+<sect1 id="pref-conventions">
+<title
+>Сокращения, использованные в книге</title>
+
+<itemizedlist>
+<listitem
+><para
+><sgmltag
+>Garamond Book</sgmltag
+> используется для имён элементов и атрибутов. </para
+></listitem>
+<listitem
+><para
+><literal
+>Constant Willison</literal
+> используется для примеров программ, значений атрибутов, начальных конечных тегов и исходного кода. </para
+></listitem>
+<listitem
+><para
+><replaceable
+>Constant Willison Oblique</replaceable
+> используется для <quote
+>заменяемого</quote
+> текста или переменных. Пример заменяемого текста: <replaceable
+>filename</replaceable
+>. Вместо него вам нужно ввести свой текст (в данном случае имя файла).</para>
+</listitem>
+<listitem
+><para
+><filename
+>Garamond Italic</filename
+> используется для имён файлов и (в печатной версии) <acronym
+>URL</acronym
+>. </para
+></listitem>
+<listitem condition="print"
+><para
+>В печатной версии <ulink url="http://docbook.org/"
+><acronym
+>URL</acronym
+></ulink
+> даются в скобках после имени ресурса. </para
+></listitem>
+</itemizedlist>
+</sect1>
+<sect1 id="pref-getbook"
+><title
+>Получение книги</title>
+<para
+>Вы можете получить её в форме &SGML; или &HTML;, либо на диске, либо на официальном сайте стандарта - <ulink url="http://docbook.org/"
+></ulink
+>, либо на сайте переводчика - <ulink url="http://docbook.program.net.ua/"
+></ulink
+>. </para>
+</sect1>
+
+<sect1 id="pref-getexamples">
+<title
+>Получение примеров из книги</title>
+<para
+>все примеры есть на <acronym
+>CD-ROM</acronym
+> и на официальном сайте: <ulink url="http://docbook.org/"
+>http://docbook.org/</ulink
+>.</para>
+</sect1>
+
+<sect1 id="pref-getdocbook">
+<title
+>Получение DocBook</title>
+<para
+>DocBook &DTD; есть на <link linkend="app-cdrom-docbook"
+> <acronym
+>CD-ROM</acronym
+></link
+>., а также на сайте: <ulink url="http://www.oasis-open.org/docbook/"
+>http://www.oasis-open.org/docbook/</ulink
+>.</para>
+</sect1>
+
+<sect1 id="pref-req-comments">
+<title
+>Комментарии</title>
+<para
+>Замечания, предложения всегда приветствуются. Список ошибок: <ulink url="http://docbook.org/tdg/errata.html"
+>http://docbook.org/tdg/errata.html</ulink
+>. Комментарии по поводу книги высылайте на <ulink role="online" url="mailto:bookcomments@docbook.org"
+>bookcomments@docbook.org</ulink
+>, а по поводу перевода - на <ulink role="online" url="mailto:free@program.net.ua"
+>free@program.net.ua</ulink
+>.</para>
+</sect1>
+<sect1 id="pref-acknorm">
+<title
+>Благодарности от Норма</title>
+<para
+>Многие люди участвовали в составлении этой книги, либо на прямую, либо морально - как моя жена Дебора. </para>
+<para
+>Спасибо Лэнни за сотрудничество, особенно за помощь при написании лирических отступлений.</para>
+<para
+>Техподдержка: Terry Allen Eve Maler. Большую часть знаний о &SGML; я получил от них. Участники Davenport Group: Jon Bosak, Eduardo Guttentag и Murray Maloney. Paul Prescod, Mark Galassi и Dave Pawson также оттачивали техническую сторону книги. </para>
+</sect1>
+<sect1 id="pref-acklen">
+<title
+>Благодарности от Лэенни</title>
+<para
+>Спасибо Dale Dougherty и Terry Allen и производственному отделу O'Reilly за помощь в изучении &SGML;, а также Lar Kaufman. Большое спасибо Норму за то, что пристрастил меня к DocBook. </para>
+</sect1>
+<sect1 id="pref-ackboth">
+<title
+>Благодарности от Норма и Лэнни</title>
+<para
+>Респект пиплам из O'Reilly, без которых мы бы не начали писать эту книгу (Frank Willison и Sheryl Avruch), согласились отредактировать её (Frank), за то, что помогли с оформлением (Alicia Cech и Edie Freeman), отверстали и напечатали её (Chris Maden, Madeline Newell и David Futato). </para>
+</sect1>
+</preface>
+
+<!--
+Local Variables:
+mode:sgml
+sgml-parent-document: ("book.sgm" "preface")
+End:
+-->

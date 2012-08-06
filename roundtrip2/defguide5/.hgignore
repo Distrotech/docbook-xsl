@@ -1,0 +1,25 @@
+syntax: glob
+*~
+*.7z
+*.[ad]sc
+*.[ao]
+*.bz?
+*.class
+*.deb
+*.gz
+*.jar
+*.mo
+*.orig
+*.py[co]
+*.rpm
+*.tbz
+*.tgz
+*.tmp
+*.rar
+*.zip
+.svn
+.bzr
+.git
+build
+build-common.properties
+*-import.xsl
