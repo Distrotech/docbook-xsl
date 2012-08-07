@@ -5,6 +5,7 @@
                 xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:exsl="http://exslt.org/common"
+                xmlns:dbs="http://docbook.org/ns/docbook-slides"
                 exclude-result-prefixes="doc t param exsl"
                 version='1.0'>
 
