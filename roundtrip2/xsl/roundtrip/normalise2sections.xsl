@@ -53,6 +53,11 @@
             <axsl:when test="dbk:para[@rnd:style='article' or @rnd:style='article-title']">
                 <axsl:call-template name="make-article"/>
             </axsl:when>
+            <axsl:otherwise>
+                <axsl:copy>
+                    <axsl:apply-templates mode="sections"/>
+                </axsl:copy>
+            </axsl:otherwise>
         </axsl:choose>
     </axsl:template>
     
