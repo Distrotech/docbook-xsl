@@ -15,9 +15,9 @@
 -->
 
 <xsl:template name="xhtml.head">
-  <xsl:variable name="s5.controls">
+  <xsl:variable name="s5.controls.visible">
     <xsl:choose>
-      <xsl:when test="$s5.controls.visible != 0">visible</xsl:when>
+      <xsl:when test="$s5.controls != 0">visible</xsl:when>
 
       <xsl:otherwise>hidden</xsl:otherwise>
     </xsl:choose>
@@ -26,7 +26,7 @@
   <meta name="generator" content="DocBook Slides Stylesheets V{$VERSION}"/>
   <meta name="version" content="S5 1.1"/>
   <meta name="defaultView" content="{$s5.defaultview}"/>
-  <meta name="controlVis" content="{$s5.controls}"/>
+  <meta name="controlVis" content="{$s5.controls.visible}"/>
 
   <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.slides.css)}" type="text/css" media="projection" id="slideProj" />
   <link rel="stylesheet" href="{concat($s5.path.prefix, $s5.outline.css)}" type="text/css" media="screen" id="outlineStyle" />
