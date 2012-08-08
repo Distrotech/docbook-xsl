@@ -6,7 +6,7 @@
   xmlns:src="http://nwalsh.com/xmlns/litprog/fragment"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  xml:id="slides_fo_doc">
+  xml:id="slides_xhtml_doc">
 <info>
 <title>Slides XHTML Parameter Reference</title>
 <releaseinfo role="meta">
@@ -67,14 +67,6 @@ $Id$
 <reference xml:id="slidy">
   <title>XHTML: Slidy Params</title>
 
-&s5.controls;
-&s5.defaultview;
-&s5.opera.css;
-&s5.outline.css;
-&s5.path.prefix;
-&s5.print.css;
-&s5.slides.css;
-&s5.slides.js;
 &slidy.duration;
 &slidy.path.prefix;
 &slidy.slidy.css;
