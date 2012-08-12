@@ -46,6 +46,9 @@
   <xsl:param name="phrase.propagates.style" select="1"/>
   <xsl:param name="chunk.first.sections" select="1"/>
   <xsl:param name="chunk.section.depth" select="5"/>
+  <xsl:param name="toc.max.depth">5</xsl:param>
+  <xsl:param name="toc.section.depth">4</xsl:param>
+  <xsl:param name="generate.section.toc.level" select="3"></xsl:param>
   <xsl:param name="branding">not set</xsl:param>
   <xsl:param name="brandname"> </xsl:param>
   
@@ -155,9 +158,24 @@
       </xsl:when>
     </xsl:choose>
     
+    <script type="text/javascript">
+              //The id for tree cookie
+              var treeCookieId = "treeview-1055";
+              var language = "en";
+              var w = new Object();
+              //Localization
+              txt_filesfound = 'Results';
+              txt_enter_at_least_1_char = "You must enter at least one character.";
+              txt_browser_not_supported = "JavaScript is disabled on your browser. Please enable JavaScript to enjoy all the features of this site.";
+              txt_please_wait = "Please wait. Search in progress...";
+              txt_results_for = "Results for: ";
+            </script>
+    
+    <script type="text/javascript" src="../js/browserDetect.js">
+      <xsl:comment>//jQuery</xsl:comment>
+    </script>
     <script type="text/javascript" src="../js/jquery.min.js">
-      <xsl:comment>
-      </xsl:comment>
+      <xsl:comment>//jQuery</xsl:comment>
     </script>
     <script type="text/javascript" src="../js/jquery.cookie.min.js">
       <xsl:comment>include mobile menubar js</xsl:comment>
@@ -168,7 +186,31 @@
     <script type="text/javascript" src="../js/mobile-settings.js">
       <xsl:comment>include mobile settings js</xsl:comment>
     </script>
-    
+    <!-- JS for Indexer Search -->
+    <script type="text/javascript" src="search/l10n.js">
+              <xsl:comment>l10n</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/htmlFileInfoList.js">
+              <xsl:comment>htmlFileInfoList</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/nwSearchFnt.js">
+              <xsl:comment>nwSearchFnt</xsl:comment>
+            </script>
+    <script type="text/javascript" src="{concat('search/stemmers/',$mobile.indexer.language,'_stemmer.js')}">
+              <xsl:comment>make scalable to other languages as well.</xsl:comment>
+            </script>
+    <!--Index Files: Index is broken in to three equal sized(number of index
+                items) files. This is to help parallel downloading of files to make it faster. -->
+    <script type="text/javascript" src="search/index-1.js">
+              <xsl:comment>index-1</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/index-2.js">
+              <xsl:comment>index-2</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/index-3.js">
+              <xsl:comment>index-3</xsl:comment>
+            </script>
+    <!-- End of index js -->
     <!-- pop up the settings panel when click on menu button of the phone/device -->
     <script type="text/javascript" charset="utf-8">
         document.addEventListener("deviceready", onDeviceReady, false);
@@ -211,9 +253,7 @@
   <!-- =	user.header.content								                      = -->
   <!-- ============================================================ -->
   <xsl:template name="user.header.content">
-    <script type="text/javascript" src="../js/mobile-menubar.js">
-               <xsl:comment>mobile menubar</xsl:comment>
-              </script>
+    <xsl:comment>KEEP THIS CODE</xsl:comment>
   </xsl:template>
 
   <!-- ============================================================ -->
@@ -360,7 +400,7 @@
             <xsl:value-of select="$id_current"/>
           </xsl:attribute>
           
-          <xsl:call-template name="user.header.content"></xsl:call-template>
+          <xsl:call-template name="user.header.content"/>
           
           <div data-role="header" data-theme="b">
             <xsl:call-template name="body.attributes"/>
@@ -373,8 +413,6 @@
           </div>
           <div data-role="content" id="bodyone">
             <div id="content">
-
-              <xsl:call-template name="user.header.content"/>
 
               <xsl:copy-of select="$content"/>
 
@@ -406,13 +444,13 @@
 
     <!-- Display the page title and the main heading(parent) of it-->
     <h4>
-      <xsl:choose>
+      <!--<xsl:choose>
         <xsl:when test="count($up) &gt; 0 and generate-id($up) != generate-id($home)">
           <xsl:apply-templates select="$up" mode="object.title.markup"/>
           <br/>
         </xsl:when>
         <xsl:otherwise>&#160;</xsl:otherwise>
-      </xsl:choose>
+      </xsl:choose>-->
       
       <xsl:apply-templates select="." mode="object.title.markup"/>
     </h4>
@@ -510,7 +548,7 @@
 
       <!-- actions for the events happening on the phone/device -->
       <script type="text/javascript">
-        /*$(function() {
+        $(function() {
           $("<xsl:value-of select="$id_current"/>").live('swipedown', function(event) {
             $.mobile.changePage("<xsl:value-of select="$mobile.toc.filename"/>");
           });
@@ -520,7 +558,7 @@
           $("<xsl:value-of select="$id_current"/>").live('swipeup', function(event) {
             $.mobile.changePage("<xsl:value-of select="$mobile.menubar.filename"/>");
           });
-        });*/
+        });
 					
         $(function() {
           $("<xsl:value-of select="$id_current"/>").live('swipeleft', function(event) {
@@ -1305,9 +1343,9 @@
               href="../css/themes/default/jquery.mobile-1.1.0.min.css"/>
             <script type="text/javascript" src="../js/jquery.min.js">// jquery </script>
             <script type="text/javascript" src="../js/jquery.cookie.min.js">// cookies </script>
-            <!--<script type="text/javascript" src="../js/mobile-menubar.js">
+            <script type="text/javascript" src="../js/mobile-menubar.js">
               <xsl:comment>mobile menubar</xsl:comment>
-            </script>-->
+            </script>
             <script type="text/javascript" src="../js/mobile-settings.js">
                 <xsl:comment>mobile settings</xsl:comment>
               </script>
@@ -1322,10 +1360,12 @@
                 <xsl:value-of select="$id_toc"/>
               </xsl:attribute>
               
-              <script type="text/javascript" src="../js/mobile-menubar.js">
-               <xsl:comment>mobile menubar</xsl:comment>
-              </script>
-              
+              <xsl:variable name="id_toc_ref" select="concat('#',$id_toc)"/>
+              <script type="text/javascript">
+                $( "<xsl:value-of select="$id_toc_ref"/>").bind('pageshow',function(){
+                  $(".ui-collapsible-heading").css('font-size', '13px');
+                });
+            </script>
               <div data-role="header">
                 <h1>Table of Content</h1>
               </div>
