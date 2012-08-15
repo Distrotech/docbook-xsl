@@ -899,8 +899,8 @@ border: none; background: none; font-weight: none; color: none; }
             <xsl:with-param name="method" select="'text'"/>
             <xsl:with-param name="encoding" select="'utf-8'"/>
             <xsl:with-param name="indent" select="'no'"/>
-            <xsl:with-param name="content"> //Resource strings for localization var localeresource =
-                new Object; localeresource["search_no_results"]="<xsl:call-template
+            <xsl:with-param name="content"> //Resource strings for localization 
+	    var localeresource = new Object; localeresource["search_no_results"]="<xsl:call-template
                     name="gentext.template">
                     <xsl:with-param name="name" select="'Your_search_returned_no_results'"/>
                     <xsl:with-param name="context" select="'webhelp'"/>
