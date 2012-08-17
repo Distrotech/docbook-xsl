@@ -36,40 +36,54 @@ include "docbook.rnc" inherit = db {
   # Avoid ID clashes
   db._any.attribute = attribute * - (xml:id | linkend) { text }
 
+  ## Common attributes that can appear on both DocBook and
+  ## DocBook Slides elements
   db.common.attributes =
     db.xml.id.attribute?
     & db.common.base.attributes
     & db.annotations.attribute?
     & dbs.style.attributes?
 
+  ## Any attribute from the SVG namespace
   db._any.svg =
     element svg:* { (dbs._any.attribute | text | db._any)* }
 
+  ## Any attribute from the MathML namespace
   db._any.mml =
     element mml:* { (dbs._any.attribute | text | db._any)* }
 }
 
+## Any element from any namespace
 dbs._any.attribute = attribute * { text }
 
+## All types of content element that can appear on a foil:
+## DocBook block-level elements, anything from SVG and MathML namespaces and
+## the block element
 dbs.all.content = db.all.blocks? &
   db._any.svg? &
   db._any.mml? &
   dbs.block?
 
+## Indicates a formatting block that can have its own styling applied
 dbs.block = element block { dbs.block.attlist,
   dbs.all.content*
 }
 
+## Role attribute for the block element
 dbs.block.role.attribute = attribute role { text }
 
+## Status attribute for the block element
 dbs.block.status.attribute = db.status.attribute
 
+## Attribute list for the block element: role, common DocBook attributes,
+## DocBook linking attributes, label, status
 dbs.block.attlist = dbs.block.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.block.status.attribute?
 
+## Root element of a slides document
 dbs.slides = element slides { dbs.slides.attlist,
   db._info.title.req,
   dbs.speakernotes?,
@@ -80,16 +94,21 @@ dbs.slides = element slides { dbs.slides.attlist,
   )*
 }
 
+## Role attribute for the slides element
 dbs.slides.role.attribute = attribute role { text }
 
+## Status attribute for the slides element
 dbs.slides.status.attribute = db.status.attribute
 
+## Attribute list for the slides element: role, common DocBook attributes,
+## DocBook linking attributes, status
 dbs.slides.attlist = dbs.slides.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.slides.status.attribute?
 
+## Indicates a logical group of foils that can have an introductionary text
 dbs.foilgroup = element foilgroup {
   dbs.foilgroup.attlist,
   db._info.title.req,
@@ -99,16 +118,21 @@ dbs.foilgroup = element foilgroup {
   dbs.foil+
 }
 
+## Role attribute for the foilgroup element
 dbs.foilgroup.role.attribute = attribute role { text }
 
+## Status attribute for the foilgroup element
 dbs.foilgroup.status.attribute = db.status.attribute
 
+## Attribute list for the foilgroup element: role, common DocBook attributes,
+## DocBook linking attributes, label, status
 dbs.foilgroup.attlist = dbs.foilgroup.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.slides.status.attribute?
 
+## Indicates a foil that may have some info and content
 dbs.foil = element foil { dbs.foil.attlist,
   db._info.title.req,
   dbs.speakernotes?,
@@ -117,40 +141,67 @@ dbs.foil = element foil { dbs.foil.attlist,
   db.navigation.components*
 }
 
+## Role attribute for the foil element
 dbs.foil.role.attribute = attribute role { text }
 
+## Status attribute for the foil element
 dbs.foil.status.attribute = db.status.attribute
 
+## Attribute list for the foil element: role, common DocBook attributes,
+## DocBook linking attributes
 dbs.foil.attlist = dbs.foil.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
   & db.label.attribute?
   & dbs.foil.status.attribute?
 
+## Indicates notes for the speaker
 dbs.speakernotes = element speakernotes { dbs.speakernotes.attlist,
   db.all.blocks+
 }
 
+## Role attribute for the speakernotes element
 dbs.speakernotes.role.attribute = attribute role { text }
 
+## Attribute list for the speakernotes element
 dbs.speakernotes.attlist = dbs.speakernotes.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
 
+## Indicates notes that are meant for printed copies
 dbs.handoutnotes = element handoutnotes { dbs.handoutnotes.attlist,
   db.all.blocks+
 }
 
+## Role attribute for the handoutnotes element
 dbs.handoutnotes.role.attribute = attribute role { text }
 
+## Attribute list for the handoutnotes element: role, common DocBook attributes,
+## DocBook linking attributes
 dbs.handoutnotes.attlist = dbs.handoutnotes.role.attribute?
   & db.common.attributes
   & db.common.linking.attributes
 
+## Styling attributes: incremental, collapsible, style
 dbs.style.attributes  = dbs.incremental.attribute?
   & dbs.collapsible.attribute?
   & dbs.style.attribute?
 
-dbs.incremental.attribute = attribute dbs:incremental { "0" | "1" }
-dbs.collapsible.attribute = attribute dbs:collapsible { "0" | "1" | "expanded" }
+## Attribute indicating an incremental part
+dbs.incremental.attribute = attribute dbs:incremental {
+  ## disabled
+  "0" | 
+  ## enabled
+  "1" }
+
+## Attribute indicating a collapsible part
+dbs.collapsible.attribute = attribute dbs:collapsible {
+  ## disabled
+  "0" |
+  ## enabled
+  "1" |
+  ## enabled and expanded by default
+  "expanded" }
+
+## Attribute indicating a formatting style class
 dbs.style.attribute = attribute dbs:style { text }
