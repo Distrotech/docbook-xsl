@@ -10,7 +10,7 @@
 <!ENTITY % ext SYSTEM "blocks2dbk.dtd">
 %ext;
 ]>
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:dbk='http://docbook.org/ns/docbook'
   xmlns:rnd='http://docbook.org/ns/docbook/roundtrip'
@@ -34,16 +34,16 @@
   <xsl:preserve-space elements='dbk:para dbk:emphasis'/>
 
   <xsl:template match="&components; |
-                       &blocks;">
+                       &blocks;"> 
     <xsl:choose>
       <xsl:when test='self::dbk:article and
                       count(dbk:book) = 1 and
-                      count(dbk:info|dbk:book) &lt;= 2'>
+                      count(dbk:info|dbk:book) le 2'>
         <xsl:apply-templates select='dbk:book'/>
       </xsl:when>
       <xsl:when test='self::dbk:article and
                       *[1][self::dbk:para] and
-                      *[1]/@rnd:style != "article-title" and
+                      *[1]/@rnd:style ne "article-title" and
                       contains(*[1]/@rnd:style, "-title")'>
         <xsl:variable name='element-name'
           select='substring-before(*[1]/@rnd:style, "-title")'/>
@@ -99,42 +99,42 @@
 
     <!-- This paragraph may be in a sidebar -->
     <xsl:variable name='sidebar'
-		  select='preceding-sibling::*[self::dbk:para and @rnd:style = "sidebar-title"][1]'/>
+		  select='preceding-sibling::*[self::dbk:para and @rnd:style eq "sidebar-title"][1]'/>
 
     <!-- This paragraph may be in the textobject of a table or figure -->
     <xsl:variable name='table'
 		  select='preceding-sibling::dbk:informaltable[1]'/>
     <xsl:variable name='figure'
-		  select='preceding-sibling::dbk:para[@rnd:style = "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) = "")][1]'/>
+		  select='preceding-sibling::dbk:para[@rnd:style eq "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) eq "")][1]'/>
     <xsl:variable name='caption'
-		  select='following-sibling::dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"]'/>
+		  select='following-sibling::dbk:para[@rnd:style = ("caption", "Caption")]'/>
 
     <xsl:choose>
       <!-- continue style paragraphs are handled in context -->
       <xsl:when test='$suppress and
-                      @rnd:style = "para-continue"'/>
+                      @rnd:style eq "para-continue"'/>
 
       <!-- Certain elements gather the following paragraph -->
       <xsl:when test='$suppress and
                       preceding-sibling::*[1][self::dbk:para and
-                      @rnd:style = "example-title"]'/>
+                      @rnd:style eq "example-title"]'/>
 
       <xsl:when test='$suppress and
 		      $sidebar and
-		      not(preceding-sibling::dbk:para[(not(@rnd:style) or @rnd:style = "") and
+		      not(preceding-sibling::dbk:para[(not(@rnd:style) or @rnd:style eq "") and
 		        preceding-sibling::*[preceding-sibling::*[generate-id() = generate-id($sidebar)]]])'/>
 
       <!-- Separate processing is performed for table/figure titles and captions -->
       <xsl:when test='$suppress and
-		      @rnd:style = "table-title" and
-		      following-sibling::*[1][self::dbk:informaltable|self::dbk:para[@rnd:style = "informalfigure-imagedata"]|self::dbk:para[dbk:inlinemediaobject and count(*) = 1 and normalize-space() = ""]]'/>
+		      @rnd:style eq "table-title" and
+		      following-sibling::*[1][self::dbk:informaltable|self::dbk:para[@rnd:style eq "informalfigure-imagedata"]|self::dbk:para[dbk:inlinemediaobject and count(*) = 1 and normalize-space() eq ""]]'/>
       <xsl:when test='$suppress and
-		      @rnd:style = "figure-title" and
-		      following-sibling::*[1][self::dbk:para][@rnd:style = "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) = "")]'/>
+		      @rnd:style eq "figure-title" and
+		      following-sibling::*[1][self::dbk:para][@rnd:style eq "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) eq "")]'/>
       <xsl:when test='$suppress and
-		      (@rnd:style = "caption" or @rnd:style = "Caption") and
+		      (@rnd:style = ("caption", "Caption")) and
 		      (preceding-sibling::*[self::dbk:informaltable] or
-		      preceding-sibling::*[self::dbk:para][@rnd:style = "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) = "")])'/>
+		      preceding-sibling::*[self::dbk:para][@rnd:style eq "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) eq "")])'/>
 
       <xsl:when test='$suppress and
 		      $table and
@@ -143,35 +143,33 @@
       <xsl:when test='$suppress and
 		      $figure and
 		      $caption and
-		      generate-id($caption/preceding-sibling::dbk:para[@rnd:style = "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) = "")][1]) = generate-id($figure)'/>
+		      generate-id($caption/preceding-sibling::dbk:para[@rnd:style eq "informalfigure-imagedata" or (dbk:inlinemediaobject and count(*) = 1 and normalize-space(.) eq "")][1]) = generate-id($figure)'/>
 
-      <xsl:when test='@rnd:style = "imagedata-metadata" or
-                      @rnd:style = "table-metadata"'/>
+      <xsl:when test='@rnd:style = ("imagedata-metadata", "table-metadata")'/>
 
       <!-- Ignore empty paragraphs -->
       <xsl:when test='(not(@rnd:style) or
-                      @rnd:style = "") and
-                      normalize-space(.) = "" and
+                      @rnd:style eq "") and
+                      normalize-space(.) eq "" and
 		      not(*)'/>
 
       <!-- Image inline or block? -->
       <xsl:when test='(not(@rnd:style) or
-                      @rnd:style = "") and
-                      normalize-space(.) = "" and
+                      @rnd:style eq "") and
+                      normalize-space(.) eq "" and
 		      count(*) = 1 and
 		      dbk:inlinemediaobject'>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test='not(@rnd:style) or
-                      @rnd:style = "" or
-                      @rnd:style = "para-continue"'>
+                      @rnd:style = ("", "para-continue")'>
         <dbk:para>
           <xsl:call-template name='rnd:attributes'/>
           <xsl:apply-templates/>
         </dbk:para>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "xinclude"'
+      <xsl:when test='@rnd:style eq "xinclude"'
         xmlns:xi='http://www.w3.org/2001/XInclude'>
         <xi:include>
           <xsl:attribute name='href'>
@@ -202,11 +200,11 @@
 
         <xsl:variable name='stop.node'
           select='following-sibling::dbk:para[not(@rnd:style) or
-                  (not(starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist")) and @rnd:style != "para-continue")][1]'/>
+                  (not(starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist")) and @rnd:style ne "para-continue")][1]'/>
 
         <xsl:choose>
-          <xsl:when test='translate(substring-after(@rnd:style, "list"), "0123456789", "") != "" or
-                          substring-after(@rnd:style, "list") = ""'>
+          <xsl:when test='translate(substring-after(@rnd:style, "list"), "0123456789", "") ne "" or
+                          substring-after(@rnd:style, "list") eq ""'>
             <xsl:call-template name='rnd:error'>
               <xsl:with-param name='code' select='"list-bad-level"'/>
               <xsl:with-param name='message'>style "<xsl:value-of select='@rnd:style'/>" is not a valid list style</xsl:with-param>
@@ -216,8 +214,8 @@
           <!-- TODO: the previous para-continue may not be associated with a list -->
 
           <!-- NB. Look back at the previous paragraph. There may be intervening tables or images. -->
-          <xsl:when test='preceding-sibling::dbk:para[1][starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist") or @rnd:style = "para-continue"]'/>
-          <xsl:when test='substring-after(@rnd:style, "list") != 1'>
+          <xsl:when test='preceding-sibling::dbk:para[1][starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist") or @rnd:style eq "para-continue"]'/>
+          <xsl:when test='substring-after(@rnd:style, "list") ne "1"'>
             <xsl:call-template name='rnd:error'>
               <xsl:with-param name='code'>list-wrong-level</xsl:with-param>
               <xsl:with-param name='message'>list started at the wrong level</xsl:with-param>
@@ -240,12 +238,11 @@
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "programlisting" and
-                      preceding-sibling::*[1][self::dbk:para and @rnd:style = "programlisting"]'/>
-      <xsl:when test='@rnd:style = "literallayout" and
-                      preceding-sibling::*[1][self::dbk:para and @rnd:style = "literallayout"]'/>
-      <xsl:when test='@rnd:style = "programlisting" or
-                      @rnd:style = "literallayout"'>
+      <xsl:when test='@rnd:style eq "programlisting" and
+                      preceding-sibling::*[1][self::dbk:para and @rnd:style eq "programlisting"]'/>
+      <xsl:when test='@rnd:style eq "literallayout" and
+                      preceding-sibling::*[1][self::dbk:para and @rnd:style eq "literallayout"]'/>
+      <xsl:when test='@rnd:style = ("programlisting", "literallayout")'>
 
         <xsl:variable name='stop.node'
           select='following-sibling::dbk:para[@rnd:style != current()/@rnd:style][1]'/>
@@ -267,7 +264,7 @@
         </xsl:element>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "example-title"'>
+      <xsl:when test='@rnd:style eq "example-title"'>
         <xsl:element name='{substring-before(@rnd:style, "-title")}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:call-template name='rnd:attributes'/>
@@ -281,11 +278,11 @@
         </xsl:element>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "sidebar-title"'>
+      <xsl:when test='@rnd:style eq "sidebar-title"'>
         <!-- TODO: next sidebar should stop this sidebar -->
 	<xsl:variable name='stop.node'
-		      select='following-sibling::dbk:para[(not(@rnd:style) or @rnd:style = "") and
-			      normalize-space(.) = ""][1]'/>
+		      select='following-sibling::dbk:para[(not(@rnd:style) or @rnd:style eq "") and
+			      normalize-space(.) eq ""][1]'/>
 
 	<dbk:sidebar>
           <xsl:call-template name='rnd:attributes'/>
@@ -323,13 +320,13 @@
       <!-- TODO: make sure this is in a bibliography.
 	   If not, create a bibliolist.
 	-->
-      <xsl:when test='@rnd:style = "bibliomixed"'>
+      <xsl:when test='@rnd:style eq "bibliomixed"'>
 	<dbk:bibliomixed>
           <xsl:call-template name='rnd:attributes'/>
 	  <xsl:apply-templates/>
 	</dbk:bibliomixed>
       </xsl:when>
-      <xsl:when test='@rnd:style = "biblioentry-title"'>
+      <xsl:when test='@rnd:style eq "biblioentry-title"'>
 	<dbk:biblioentry>
           <xsl:call-template name='rnd:attributes'/>
           <dbk:title>
@@ -342,28 +339,27 @@
 	</dbk:biblioentry>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "blockquote-attribution" and
-                      preceding-sibling::*[1][self::dbk:para][@rnd:style = "blockquote-title" or @rnd:style = "blockquote"]'/>
-      <xsl:when test='@rnd:style = "blockquote-attribution"'>
+      <xsl:when test='@rnd:style eq "blockquote-attribution" and
+                      preceding-sibling::*[1][self::dbk:para][@rnd:style = ("blockquote-title", "blockquote")]'/>
+      <xsl:when test='@rnd:style eq "blockquote-attribution"'>
         <xsl:call-template name='rnd:error'>
           <xsl:with-param name='code'>improper-blockquote-attribution</xsl:with-param>
           <xsl:with-param name='message'>blockquote attribution must follow a blockquote title</xsl:with-param>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test='@rnd:style = "blockquote" or
-                      @rnd:style = "blockquote-title"'>
+      <xsl:when test='@rnd:style = ("blockquote", "blockquote-title")'>
         <xsl:choose>
-          <xsl:when test='@rnd:style = "blockquote" and
+          <xsl:when test='@rnd:style eq "blockquote" and
                           preceding-sibling::*[1][self::dbk:para][starts-with(@rnd:style, "blockquote")]'/>
           <xsl:otherwise>
 
             <xsl:variable name='stop.node'
-              select='following-sibling::*[not(@rnd:style = "blockquote" or
-                      @rnd:style = "blockquote-attribution")][1]'/>
+              select='following-sibling::*[not(@rnd:style eq "blockquote" or
+                      @rnd:style eq "blockquote-attribution")][1]'/>
 
             <dbk:blockquote>
               <xsl:call-template name='rnd:attributes'/>
-	      <xsl:if test='@rnd:style = "blockquote-title"'>
+	      <xsl:if test='@rnd:style eq "blockquote-title"'>
 		<dbk:info>
 		  <dbk:title>
 		    <xsl:apply-templates/>
@@ -372,14 +368,14 @@
 	      </xsl:if>
               <xsl:choose>
                 <xsl:when test='$stop.node'>
-		  <xsl:apply-templates select='following-sibling::*[following-sibling::*[generate-id() = generate-id($stop.node)]][@rnd:style = "blockquote-attribution"]' mode='rnd:blockquote-attribution'/>
-                  <xsl:apply-templates select='self::*[@rnd:style = "blockquote"] |
+		  <xsl:apply-templates select='following-sibling::*[following-sibling::*[generate-id() = generate-id($stop.node)]][@rnd:style eq "blockquote-attribution"]' mode='rnd:blockquote-attribution'/>
+                  <xsl:apply-templates select='self::*[@rnd:style eq "blockquote"] |
 					       following-sibling::*[following-sibling::*[generate-id() = generate-id($stop.node)]]'
                     mode='rnd:blockquote'/>
                 </xsl:when>
                 <xsl:otherwise>
-		  <xsl:apply-templates select='following-sibling::*[@rnd:style = "blockquote-attribution"]' mode='rnd:blockquote-attribution'/>
-                  <xsl:apply-templates select='self::*[@rnd:style = "blockquote"] |
+		  <xsl:apply-templates select='following-sibling::*[@rnd:style eq "blockquote-attribution"]' mode='rnd:blockquote-attribution'/>
+                  <xsl:apply-templates select='self::*[@rnd:style eq "blockquote"] |
 					       following-sibling::*'
                     mode='rnd:blockquote'/>
                 </xsl:otherwise>
@@ -389,7 +385,7 @@
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "bridgehead"'>
+      <xsl:when test='@rnd:style eq "bridgehead"'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:call-template name='rnd:attributes'/>
@@ -397,14 +393,14 @@
         </xsl:element>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "formalpara-title"'>
+      <xsl:when test='@rnd:style eq "formalpara-title"'>
         <dbk:formalpara>
           <dbk:title>
             <xsl:call-template name='rnd:attributes'/>
             <xsl:apply-templates/>
           </dbk:title>
           <xsl:choose>
-            <xsl:when test='following-sibling::*[1][self::dbk:para][@rnd:style = "formalpara"]'>
+            <xsl:when test='following-sibling::*[1][self::dbk:para][@rnd:style eq "formalpara"]'>
               <dbk:para>
                 <xsl:call-template name='rnd:attributes'>
                   <xsl:with-param name='node'
@@ -416,25 +412,25 @@
           </xsl:choose>
         </dbk:formalpara>
       </xsl:when>
-      <xsl:when test='@rnd:style = "formalpara" and
-                      preceding-sibling::*[1][self::dbk:para][@rnd:style = "formalpara-title"]'/>
-      <xsl:when test='@rnd:style = "formalpara"'>
+      <xsl:when test='@rnd:style eq "formalpara" and
+                      preceding-sibling::*[1][self::dbk:para][@rnd:style eq "formalpara-title"]'/>
+      <xsl:when test='@rnd:style eq "formalpara"'>
         <xsl:call-template name='rnd:error'>
           <xsl:with-param name='code'>formalpara-notitle</xsl:with-param>
           <xsl:with-param name='message'>formalpara used without a title</xsl:with-param>
         </xsl:call-template>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "informalfigure-imagedata"'>
+      <xsl:when test='@rnd:style eq "informalfigure-imagedata"'>
         <xsl:variable name='caption.next'
-          select='following-sibling::dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"][1]'/>
+          select='following-sibling::dbk:para[@rnd:style = ("caption", "Caption")][1]'/>
 
         <xsl:variable name='metadata'
-          select='preceding-sibling::*[1][self::dbk:para][@rnd:style = "imagedata-metadata"]'/>
+          select='preceding-sibling::*[1][self::dbk:para][@rnd:style eq "imagedata-metadata"]'/>
 
         <xsl:choose>
-          <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style = "figure-title"] or
-                          ($metadata and preceding-sibling::*[2][self::dbk:para][@rnd:style = "figure-title"])'>
+          <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style eq "figure-title"] or
+                          ($metadata and preceding-sibling::*[2][self::dbk:para][@rnd:style eq "figure-title"])'>
             <dbk:figure>
               <xsl:call-template name='rnd:attributes'/>
               <dbk:info>
@@ -456,7 +452,7 @@
                   <dbk:imagedata>
                     <xsl:attribute name='fileref'>
                       <xsl:choose>
-                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref != ""'>
+                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref ne ""'>
                           <xsl:value-of select='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref'/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -475,8 +471,8 @@
               </xsl:call-template>
             </dbk:figure>
           </xsl:when>
-          <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style = "table-title"] or
-                          ($metadata and preceding-sibling::*[2][self::dbk:para][@rnd:style = "table-title"])'>
+          <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style eq "table-title"] or
+                          ($metadata and preceding-sibling::*[2][self::dbk:para][@rnd:style eq "table-title"])'>
             <dbk:table>
               <xsl:call-template name='rnd:attributes'/>
               <dbk:info>
@@ -499,7 +495,7 @@
                   <dbk:imagedata>
                     <xsl:attribute name='fileref'>
                       <xsl:choose>
-                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref != ""'>
+                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref ne ""'>
                           <xsl:value-of select='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref'/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -526,7 +522,7 @@
                   <dbk:imagedata>
                     <xsl:attribute name='fileref'>
                       <xsl:choose>
-                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref != ""'>
+                        <xsl:when test='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref ne ""'>
                           <xsl:value-of select='dbk:inlinemediaobject/dbk:imageobject/dbk:imagedata/@fileref'/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -548,9 +544,9 @@
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='(@rnd:style = "caption" or @rnd:style = "Caption") and
+      <xsl:when test='(@rnd:style = ("caption", "Caption")) and
                       preceding-sibling::*[(self::dbk:para and contains(@rnd:style, "imagedata")) or self::dbk:informaltable]'/>
-      <xsl:when test='@rnd:style = "caption" or @rnd:style = "Caption"'>
+      <xsl:when test='@rnd:style = ("caption", "Caption")'>
         <xsl:call-template name='rnd:error'>
           <xsl:with-param name='code'>bad-caption</xsl:with-param>
           <xsl:with-param name='message'>caption does not follow table or figure</xsl:with-param>
@@ -590,8 +586,7 @@
       <xsl:when test='not($caption)'/> <!-- nothing to do -->
       <xsl:when test='$textobjs[self::dbk:informaltable |
                       self::dbk:inlinemediaobject |
-                      self::dbk:para[@rnd:style = "informalfigure-imagedata" or
-                      @rnd:style = "mediaobject-imagedata"]]'/> <!-- caption belongs to something else -->
+                      self::dbk:para[@rnd:style = ("informalfigure-imagedata", "mediaobject-imagedata")]]'/> <!-- caption belongs to something else -->
       <xsl:otherwise>
         <xsl:apply-templates select='$textobjs' mode='rnd:textobject'/>
 
@@ -639,23 +634,15 @@
           select='translate(normalize-space(substring-after($metadata, "=")), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")'/>
 
         <xsl:choose>
-          <xsl:when test='$name = "scalefit"'>
+          <xsl:when test='$name eq "scalefit"'>
             <xsl:attribute name='scalefit'>
               <xsl:choose>
-                <xsl:when test='$value = "1" or
-                                $value = "yes" or
-                                $value = "true"'>1</xsl:when>
+                <xsl:when test='$value = ("1", "yes", "true")'>1</xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
               </xsl:choose>
             </xsl:attribute>
           </xsl:when>
-          <xsl:when test='$name = "align" or
-                          $name = "contentdepth" or
-                          $name = "contentwidth" or
-                          $name = "depth" or
-                          $name = "scale" or
-                          $name = "valign" or
-                          $name = "width"'>
+          <xsl:when test='$name = ("align", "contentdepth", "contentwidth", "depth", "scale", "valign", "width")'>
             <!-- TODO: check enumerate values-->
             <xsl:attribute name='{$name}'>
               <xsl:value-of select='$value'/>
@@ -678,7 +665,7 @@
 
   <xsl:template match='dbk:emphasis'>
     <xsl:choose>
-      <xsl:when test='not(@rnd:style) and @role = "italic"'>
+      <xsl:when test='not(@rnd:style) and @role eq "italic"'>
 	<xsl:copy>
           <xsl:apply-templates mode='rnd:copy'/>
 	</xsl:copy>
@@ -692,7 +679,7 @@
 
       <xsl:when test='@rnd:style = preceding-sibling::node()[1][self::dbk:emphasis]/@rnd:style'/>
 
-      <xsl:when test='@rnd:style = "emphasis"'>
+      <xsl:when test='@rnd:style eq "emphasis"'>
         <xsl:copy>
           <xsl:call-template name='rnd:attributes'/>
           <xsl:apply-templates mode='rnd:copy'/>
@@ -700,8 +687,7 @@
             mode='rnd:emphasis'/>
         </xsl:copy>
       </xsl:when>
-      <xsl:when test='@rnd:style = "emphasis-bold" or
-                      @rnd:style = "emphasis-strong"'>
+      <xsl:when test='@rnd:style = ("emphasis-bold", "emphasis-strong")'>
         <xsl:copy>
           <xsl:attribute name='role'>bold</xsl:attribute>
           <xsl:call-template name='rnd:attributes'/>
@@ -710,7 +696,7 @@
             mode='rnd:emphasis'/>
         </xsl:copy>
       </xsl:when>
-      <xsl:when test='@rnd:style = "emphasis-underline"'>
+      <xsl:when test='@rnd:style eq "emphasis-underline"'>
         <xsl:copy>
           <xsl:attribute name='role'>underline</xsl:attribute>
           <xsl:call-template name='rnd:attributes'/>
@@ -720,9 +706,7 @@
         </xsl:copy>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "citetitle" or
-                      @rnd:style = "literal" or
-                      @rnd:style = "sgmltag"'>
+      <xsl:when test='@rnd:style = ("citetitle", "literal", "sgmltag")'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:call-template name='rnd:attributes'/>
@@ -732,12 +716,17 @@
         </xsl:element>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "Hyperlink" and
+      <xsl:when test='@rnd:style eq "Hyperlink" and
 		      parent::dbk:link'>
 	<!-- This occurs in a hyperlink; parent should be dbk:link -->
-	<xsl:apply-templates/>
+        <xsl:variable name='linkaddr'
+          select='../@xlink:href'/>
+        <dbk:ulink url = '{$linkaddr}'>
+          <dbk:citetitle><xsl:apply-templates/>
+          </dbk:citetitle>
+        </dbk:ulink>
       </xsl:when>
-      <xsl:when test='@rnd:style = "Hyperlink"'>
+      <xsl:when test='@rnd:style eq "Hyperlink"'>
         <!-- dbk:link is missing -->
         <dbk:link xlink:href='{.}'>
           <xsl:apply-templates/>
@@ -745,9 +734,8 @@
       </xsl:when>
 
       <!-- In rare circumstances, Word inserts an empty element that appears to be something like a space in the editor -->
-      <xsl:when test='(@rnd:style = "EndnoteReference" or
-                      @rnd:style = "FootnoteReference") and
-                      . = ""'>
+      <xsl:when test='(@rnd:style = ("EndnoteReference", "FootnoteReference")) and
+                      . eq ""'>
         <xsl:text> </xsl:text>
       </xsl:when>
 
@@ -785,7 +773,6 @@
       </xsl:when>
     </xsl:choose>
   </xsl:template>
-  <xsl:template match='*|text()' mode='rnd:emphasis'/>
 
   <xsl:template match='dbk:subscript|dbk:superscript'>
     <xsl:copy>
@@ -799,13 +786,13 @@
   <xsl:template match='dbk:inlinemediaobject'>
     <xsl:choose>
       <xsl:when test='not(preceding-sibling::*|following-sibling::*) and
-		      normalize-space(..) = ""'>
+		      normalize-space(..) eq ""'>
 
 	<xsl:variable name='next.captioned'
-		      select='ancestor::dbk:para/following-sibling::*[self::dbk:informaltable or self::dbk:para[dbk:inlinemediaobject and count(*) = 1 and normalize-space() = ""]][1]'/>
+		      select='ancestor::dbk:para/following-sibling::*[self::dbk:informaltable or self::dbk:para[dbk:inlinemediaobject and count(*) = 1 and normalize-space() eq ""]][1]'/>
 
 	<xsl:variable name='caption'
-		      select='ancestor::dbk:para/following-sibling::dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"]'/>
+		      select='ancestor::dbk:para/following-sibling::dbk:para[@rnd:style = ("caption", "Caption")]'/>
 
 	<xsl:variable name='metadata'>
 	  <xsl:apply-templates select='ancestor::dbk:para/following-sibling::*[1]'
@@ -813,10 +800,10 @@
 	</xsl:variable>
 
 	<dbk:figure>
-	  <xsl:if test='ancestor::dbk:para/preceding-sibling::*[1][self::dbk:para][@rnd:style = "figure-title"] or
+	  <xsl:if test='ancestor::dbk:para/preceding-sibling::*[1][self::dbk:para][@rnd:style eq "figure-title"] or
 			$metadata'>
 	    <dbk:info>
-	      <xsl:if test='ancestor::dbk:para/preceding-sibling::*[1][self::dbk:para][@rnd:style = "figure-title"]'>
+	      <xsl:if test='ancestor::dbk:para/preceding-sibling::*[1][self::dbk:para][@rnd:style eq "figure-title"]'>
 		<dbk:title>
 		  <xsl:apply-templates select='ancestor::dbk:para/preceding-sibling::*[1]/node()'/>
 		</dbk:title>
@@ -856,7 +843,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match='dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"]'
+  <xsl:template match='dbk:para[@rnd:style =( "caption", "Caption")]'
     mode='rnd:caption'>
     <dbk:caption>
       <dbk:para>
@@ -901,34 +888,34 @@
          - This is probably better done in a previous stage using grouping.
         -->
       <xsl:variable name='stop.node'
-        select='following-sibling::dbk:para[@rnd:style != concat("itemizedlist", $list-level + 1) and
-                @rnd:style != concat("orderedlist", $list-level + 1) and
-                @rnd:style != concat("itemizedlist", $list-level + 2) and
-                @rnd:style != concat("orderedlist", $list-level + 2) and
-                @rnd:style != concat("itemizedlist", $list-level + 3) and
-                @rnd:style != concat("orderedlist", $list-level + 3) and
-                @rnd:style != "para-continue"][1]'/>
+        select='following-sibling::dbk:para[@rnd:style != concat("itemizedlist", number($list-level) + 1)[1] and
+        @rnd:style ne concat("orderedlist", number($list-level) + 1) and
+        @rnd:style ne concat("itemizedlist", number($list-level) + 2) and
+        @rnd:style ne concat("orderedlist", number($list-level) + 2) and
+        @rnd:style ne concat("itemizedlist", number($list-level) + 3) and
+        @rnd:style ne concat("orderedlist", number($list-level) + 3) and
+        @rnd:style ne "para-continue"][1]'/>
 
       <xsl:variable name='nested'
-        select='following-sibling::dbk:para[@rnd:style = concat("itemizedlist", $list-level + 1) or @rnd:style = concat("orderedlist", $list-level + 1)][1]'/>
+        select='following-sibling::dbk:para[@rnd:style = (concat("itemizedlist", number($list-level) + 1), concat("orderedlist", number($list-level) + 1))][1]'/>
 
       <xsl:choose>
         <!-- Is there a nested list at all? -->
-        <xsl:when test='following-sibling::*[self::dbk:para and @rnd:style != "para-continue"][1][@rnd:style != concat("itemizedlist", $list-level + 1) and @rnd:style != concat("orderedlist", $list-level + 1)]'/>
+        <xsl:when test='following-sibling::*[self::dbk:para and @rnd:style ne "para-continue"][1][@rnd:style ne concat("itemizedlist", number($list-level) + 1) and @rnd:style ne concat("orderedlist", number($list-level) + 1)]'/>
 
-        <xsl:when test='following-sibling::dbk:para[@rnd:style = concat("itemizedlist", $list-level + 1) or @rnd:style = concat("orderedlist", $list-level + 1)] and
+        <xsl:when test='following-sibling::dbk:para[@rnd:style = (concat("itemizedlist", number($list-level) + 1), concat("orderedlist", number($list-level) + 1))] and
                         $stop.node'>
           <xsl:element name='{concat(substring-before($nested/@rnd:style, "list"), "list")}'
             namespace='http://docbook.org/ns/docbook'>
-            <xsl:apply-templates select='following-sibling::dbk:para[@rnd:style = concat("itemizedlist", $list-level + 1) or @rnd:style = concat("orderedlist", $list-level + 1)][following-sibling::*[generate-id() = generate-id($stop.node)]]'
+            <xsl:apply-templates select='following-sibling::dbk:para[@rnd:style = (concat("itemizedlist", number($list-level) + 1), concat("orderedlist", number($list-level) + 1))][following-sibling::*[generate-id() = generate-id($stop.node)]]'
               mode='rnd:listitem'/>
           </xsl:element>
         </xsl:when>
-        <xsl:when test='following-sibling::dbk:para[@rnd:style = concat("itemizedlist", $list-level + 1) or @rnd:style = concat("orderedlist", $list-level + 1)]'>
+        <xsl:when test='following-sibling::dbk:para[@rnd:style = (concat("itemizedlist", number($list-level) + 1), concat("orderedlist", number($list-level) + 1))]'>
 
           <xsl:element name='{concat(substring-before($nested/@rnd:style, "list"), "list")}'
             namespace='http://docbook.org/ns/docbook'>
-            <xsl:apply-templates select='following-sibling::dbk:para[@rnd:style = concat("itemizedlist", $list-level + 1) or @rnd:style = concat("orderedlist", $list-level + 1)]'
+            <xsl:apply-templates select='following-sibling::dbk:para[@rnd:style = (concat("itemizedlist", number($list-level) + 1), concat("orderedlist", number($list-level) + 1))]'
               mode='rnd:listitem'/>
           </xsl:element>
         </xsl:when>
@@ -940,8 +927,8 @@
 
   <xsl:template match='dbk:para' mode='rnd:blockquote'>
     <xsl:choose>
-      <xsl:when test='@rnd:style ="blockquote-attribution"'/>
-      <xsl:when test='@rnd:style ="blockquote-title"'/>
+      <xsl:when test='@rnd:style eq "blockquote-attribution"'/>
+      <xsl:when test='@rnd:style eq "blockquote-title"'/>
       <xsl:otherwise>
         <dbk:para>
           <xsl:apply-templates/>
@@ -950,7 +937,7 @@
     </xsl:choose>
   </xsl:template>
   <xsl:template match='dbk:para' mode='rnd:blockquote-attribution'>
-    <xsl:if test='@rnd:style ="blockquote-attribution"'>
+    <xsl:if test='@rnd:style eq "blockquote-attribution"'>
       <dbk:attribution>
         <xsl:apply-templates/>
       </dbk:attribution>
@@ -961,23 +948,22 @@
 
   <xsl:template match='dbk:para' mode='rnd:metadata'>
     <xsl:choose>
-      <xsl:when test='@rnd:style = "biblioentry-title" and
+      <xsl:when test='@rnd:style eq "biblioentry-title" and
                       parent::dbk:bibliography|parent::dbk:bibliodiv'/>
-      <xsl:when test='@rnd:style = "biblioentry-title"'>
+      <xsl:when test='@rnd:style eq "biblioentry-title"'>
         <xsl:call-template name='rnd:error'>
           <xsl:with-param name='code'>bad-metadata</xsl:with-param>
           <xsl:with-param name='message'>style "<xsl:value-of select='@rnd:style'/>" must not be metadata for parent "<xsl:value-of select='local-name(..)'/>"</xsl:with-param>
         </xsl:call-template>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "abstract-title" or
-                      @rnd:style = "abstract"'>
+      <xsl:when test='@rnd:style = ("abstract-title", "abstract")'>
         <xsl:variable name='stop.node'
-          select='following-sibling::dbk:para[@rnd:style != "abstract"][1]'/>
+          select='following-sibling::dbk:para[@rnd:style ne "abstract"][1]'/>
         <xsl:choose>
           <xsl:when test='$stop.node'>
             <dbk:abstract>
-              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style = "abstract"][following-sibling::*[generate-id() = generate-id($stop.node)]]'
+              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style eq "abstract"][following-sibling::*[generate-id() = generate-id($stop.node)]]'
                 mode='rnd:abstract'/>
             </dbk:abstract>
             <xsl:apply-templates select='$stop.node'
@@ -985,43 +971,43 @@
           </xsl:when>
           <xsl:otherwise>
             <dbk:abstract>
-              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style = "abstract"]' mode='rnd:abstract'/>
+              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style eq "abstract"]' mode='rnd:abstract'/>
             </dbk:abstract>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "legalnotice"'>
+      <xsl:when test='@rnd:style eq "legalnotice"'>
         <xsl:variable name='stop.node'
-          select='following-sibling::dbk:para[@rnd:style != "legalnotice"][1]'/>
+          select='following-sibling::dbk:para[@rnd:style ne "legalnotice"][1]'/>
 
         <xsl:choose>
           <xsl:when test='$stop.node'>
             <dbk:legalnotice>
-              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style = "legalnotice"][following-sibling::*[generate-id() = generate-id($stop.node)]]'
+              <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style eq "legalnotice"][following-sibling::*[generate-id() = generate-id($stop.node)]]'
                 mode='rnd:legalnotice'/>
             </dbk:legalnotice>
             <xsl:apply-templates select='$stop.node'
               mode='rnd:metadata'/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style = "legalnotice"]'
+            <xsl:apply-templates select='.|following-sibling::dbk:para[@rnd:style eq "legalnotice"]'
               mode='rnd:legalnotice'/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "keyword"'>
+      <xsl:when test='@rnd:style eq "keyword"'>
         <xsl:variable name='stop.node'
           select='following-sibling::*[not(self::dbk:para) or
-                  (self::dbk:para and @rnd:style != "keyword")][1]'/>
+                  (self::dbk:para and @rnd:style ne "keyword")][1]'/>
 
         <xsl:choose>
           <xsl:when test='$stop.node'>
             <dbk:keywordset>
               <xsl:call-template name='rnd:keyword'>
                 <xsl:with-param name='nodes'
-                  select='.|following-sibling::dbk:para[@rnd:style = "keyword"][following-sibling::*[generate-id() = generate-id($stop.node)]]'/>
+                  select='.|following-sibling::dbk:para[@rnd:style eq "keyword"][following-sibling::*[generate-id() = generate-id($stop.node)]]'/>
               </xsl:call-template>
             </dbk:keywordset>
             <xsl:apply-templates select='$stop.node'
@@ -1030,25 +1016,25 @@
           <xsl:otherwise>
             <xsl:call-template name='rnd:keyword'>
               <xsl:with-param name='nodes'
-                select='.|following-sibling::dbk:para[@rnd:style = "keyword"]'/>
+                select='.|following-sibling::dbk:para[@rnd:style eq "keyword"]'/>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "author"'>
+      <xsl:when test='@rnd:style eq "author"'>
         <dbk:author>
           <xsl:choose>
-            <xsl:when test='dbk:emphasis[@rnd:style = "orgname"]'>
+            <xsl:when test='dbk:emphasis[@rnd:style eq "orgname"]'>
               <dbk:orgname>
                 <xsl:apply-templates
-                  select='dbk:emphasis[@rnd:style = "orgname"]'
+                  select='dbk:emphasis[@rnd:style eq "orgname"]'
                   mode='rnd:orgname'/>
               </dbk:orgname>
-              <xsl:if test='*[not(@rnd:style = "orgname")]'>
+              <xsl:if test='*[not(@rnd:style eq "orgname")]'>
                 <xsl:call-template name='rnd:error'>
                   <xsl:with-param name='code'>bad-author-orgname-combo</xsl:with-param>
-                  <xsl:with-param name='message'>character span "<xsl:value-of select='dbk:emphasis[@rnd:style != "orgname"][1]/@rnd:style'/>" not allowed in an author paragraph combined with orgname</xsl:with-param>
+                  <xsl:with-param name='message'>character span "<xsl:value-of select='dbk:emphasis[@rnd:style ne "orgname"][1]/@rnd:style'/>" not allowed in an author paragraph combined with orgname</xsl:with-param>
                 </xsl:call-template>
               </xsl:if>
             </xsl:when>
@@ -1067,26 +1053,10 @@
 	  <xsl:with-param name='node' select='following-sibling::*[1]'/>
 	</xsl:call-template>
       </xsl:when>
-      <xsl:when test='@rnd:style = "personblurb" or
-                      @rnd:style = "address" or
-                      @rnd:style = "affiliation" or
-                      @rnd:style = "contrib" or
-                      @rnd:style = "email"'/>
+      <xsl:when test='@rnd:style = ("personblurb", "address", "affiliation", "contrib", "email")'/>
 
-      <xsl:when test='@rnd:style = "releaseinfo" or
-                      @rnd:style = "date" or
-                      @rnd:style = "pubdate" or
-                      @rnd:style = "pagenums" or
-                      @rnd:style = "issuenum" or
-                      @rnd:style = "volumenum" or
-                      @rnd:style = "edition" or
-                      @rnd:style = "editor" or
-                      @rnd:style = "othercredit" or
-                      @rnd:style = "biblioid" or
-                      @rnd:style = "bibliosource" or
-                      @rnd:style = "bibliomisc" or
-                      @rnd:style = "revhistory" or
-                      @rnd:style = "revision"'>
+      <xsl:when test='@rnd:style = ("releaseinfo", "date", "pubdate", "pagenums", "issuenum", "volumenum",
+        "edition", "editor", "othercredit", "biblioid", "bibliosource", "bibliomisc", "revhistory", "revision")'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:apply-templates mode='rnd:metadata'/>
@@ -1126,8 +1096,7 @@
           select='substring-before(@rnd:style, "-title")'/>
 
         <xsl:choose>
-          <xsl:when test='$parent = "table" or
-                          $parent = "figure"'>
+          <xsl:when test='$parent = ("table", "figure")'>
             <dbk:title>
               <xsl:apply-templates mode='rnd:metadata'/>
             </dbk:title>
@@ -1161,7 +1130,7 @@
       </xsl:when>
 
       <!-- Exception to normal subtitle handling is biblioentry-subtitle -->
-      <xsl:when test='@rnd:style = "biblioentry-subtitle"'>
+      <xsl:when test='@rnd:style eq "biblioentry-subtitle"'>
         <!-- TODO: check that this is in a biblioentry -->
         <dbk:subtitle>
           <xsl:apply-templates mode='rnd:metadata'/>
@@ -1198,8 +1167,8 @@
           mode='rnd:metadata'/>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "publisher-address" and
-                      preceding-sibling::*[1][not(self::dbk:para) or not(@rnd:style = "publisher")]'>
+      <xsl:when test='@rnd:style eq "publisher-address" and
+                      preceding-sibling::*[1][not(self::dbk:para) or not(@rnd:style eq "publisher")]'>
         <xsl:call-template name='rnd:error'>
           <xsl:with-param name='code'>bad-publisher-address</xsl:with-param>
           <xsl:with-param name='message'>publisher-address must follow publisher</xsl:with-param>
@@ -1207,16 +1176,16 @@
         <xsl:apply-templates select='following-sibling::*[1]'
           mode='rnd:metadata'/>
       </xsl:when>
-      <xsl:when test='@rnd:style = "publisher-address"'>
+      <xsl:when test='@rnd:style eq "publisher-address"'>
         <xsl:apply-templates select='following-sibling::*[1]'
           mode='rnd:metadata'/>
       </xsl:when>
-      <xsl:when test='@rnd:style = "publisher"'>
+      <xsl:when test='@rnd:style eq "publisher"'>
         <dbk:publisher>
           <dbk:publishername>
             <xsl:apply-templates/>
           </dbk:publishername>
-          <xsl:if test='following-sibling::*[1][@rnd:style = "publisher-address"]'>
+          <xsl:if test='following-sibling::*[1][@rnd:style eq "publisher-address"]'>
             <xsl:apply-templates select='following-sibling::*[1]'
               mode='rnd:publisher'/>
           </xsl:if>
@@ -1271,11 +1240,11 @@
           <xsl:apply-templates mode='rnd:metadata'/>
         </xsl:copy>
       </xsl:when>
-      <xsl:when test='@rnd:style = "Hyperlink" and
+      <xsl:when test='@rnd:style eq "Hyperlink" and
                       parent::dbk:link'>
         <xsl:apply-templates mode='rnd:metadata'/>
       </xsl:when>
-      <xsl:when test='@rnd:style = "Hyperlink"'>
+      <xsl:when test='@rnd:style eq "Hyperlink"'>
         <dbk:link xlink:href='{.}'>
           <xsl:apply-templates mode='rnd:metadata'/>
         </dbk:link>
@@ -1316,7 +1285,7 @@
 
   <xsl:template match='dbk:para' mode='rnd:abstract'>
     <xsl:choose>
-      <xsl:when test='@rnd:style = "abstract-title"'>
+      <xsl:when test='@rnd:style eq "abstract-title"'>
         <dbk:title>
           <xsl:call-template name='rnd:attributes'/>
           <xsl:apply-templates/>
@@ -1345,18 +1314,14 @@
          are preserved in paragraph content.
       -->
     <xsl:variable name='previous'
-      select='preceding-sibling::node()[not(self::text()) or (self::text() and normalize-space() != "")]'/>
+      select='preceding-sibling::node()[not(self::text()) or (self::text() and normalize-space() ne "")]'/>
     <!--
     <xsl:comment> this style is <xsl:value-of select='@rnd:style'/>, previous style is <xsl:value-of select='$previous[last()]/@rnd:style'/> # previous <xsl:value-of select='count($previous)'/></xsl:comment>
 -->
     <xsl:choose>
       <!-- inlines are coalesced -->
       <xsl:when test='@rnd:style = $previous[last()][self::dbk:emphasis]/@rnd:style'/>
-      <xsl:when test='@rnd:style = "honorific" or
-                      @rnd:style = "firstname" or
-                      @rnd:style = "lineage" or
-                      @rnd:style = "othername" or
-                      @rnd:style = "surname"'>
+      <xsl:when test='@rnd:style = ("honorific", "firstname", "lineage", "othername", "surname")'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:apply-templates/>
@@ -1390,20 +1355,20 @@
 
   <xsl:template match='dbk:para' mode='rnd:author'>
     <xsl:choose>
-      <xsl:when test='@rnd:style = "personblurb" and
-                      preceding-sibling::*[1][self::dbk:para and @rnd:style != "personblurb"]'>
+      <xsl:when test='@rnd:style eq "personblurb" and
+                      preceding-sibling::*[1][self::dbk:para and @rnd:style ne "personblurb"]'>
         <dbk:personblurb>
           <xsl:apply-templates select='.'
             mode='rnd:personblurb'/>
         </dbk:personblurb>
       </xsl:when>
-      <xsl:when test='@rnd:style = "personblurb"'>
+      <xsl:when test='@rnd:style eq "personblurb"'>
         <xsl:apply-templates select='following-sibling::*[1]'
           mode='rnd:author'/>
       </xsl:when>
 
       <!-- Web and mail addresses may appear in a simplified form -->
-      <xsl:when test='@rnd:style = "address"'>
+      <xsl:when test='@rnd:style eq "address"'>
         <xsl:choose>
           <xsl:when test='dbk:link and
                           count(dbk:link) = count(*)'>
@@ -1423,7 +1388,7 @@
         </xsl:choose>
       </xsl:when>
 
-      <xsl:when test='@rnd:style = "affiliation"'>
+      <xsl:when test='@rnd:style eq "affiliation"'>
 	<dbk:affiliation>
 	  <xsl:choose>
 	    <xsl:when test='not(*)'>
@@ -1439,8 +1404,7 @@
 	<xsl:apply-templates select='following-sibling::*[1]'
 			     mode='rnd:author'/>
       </xsl:when>
-      <xsl:when test='@rnd:style = "contrib" or
-                      @rnd:style = "email"'>
+      <xsl:when test='@rnd:style = ("contrib", "email")'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:apply-templates mode='rnd:author'/>
@@ -1463,20 +1427,8 @@
     -->
   <xsl:template match='dbk:emphasis' mode='rnd:author'>
     <xsl:choose>
-      <xsl:when test='@rnd:style = "city" or
-                      @rnd:style = "country" or
-                      @rnd:style = "email" or
-                      @rnd:style = "fax" or
-                      @rnd:style = "jobtitle" or
-                      @rnd:style = "orgdiv" or
-                      @rnd:style = "orgname" or
-                      @rnd:style = "otheraddr" or
-                      @rnd:style = "phone" or
-                      @rnd:style = "pob" or
-                      @rnd:style = "postcode" or
-                      @rnd:style = "shortaffil" or
-                      @rnd:style = "state" or
-                      @rnd:style = "street"'>
+      <xsl:when test='@rnd:style = ("city", "country", "email", "fax", "jobtitle", "orgdiv", "orgname", 
+        "otheraddr", "phone", "pob", "postcode", "shortaffil", "state", "street")'>
         <xsl:element name='{@rnd:style}'
           namespace='http://docbook.org/ns/docbook'>
           <xsl:apply-templates/>
@@ -1492,7 +1444,7 @@
   </xsl:template>
 
   <xsl:template match='dbk:para' mode='rnd:personblurb'>
-    <xsl:if test='@rnd:style = "personblurb"'>
+    <xsl:if test='@rnd:style eq "personblurb"'>
       <dbk:para>
         <xsl:apply-templates/>
       </dbk:para>
@@ -1502,7 +1454,7 @@
   </xsl:template>
 
   <xsl:template match='dbk:para' mode='rnd:publisher'>
-    <xsl:if test='@rnd:style = "publisher-address"'>
+    <xsl:if test='@rnd:style eq "publisher-address"'>
       <dbk:address>
         <xsl:apply-templates/>
       </dbk:address>
@@ -1518,7 +1470,7 @@
 
   <xsl:template match='*' mode='rnd:continue'/>
   <xsl:template match='dbk:para' mode='rnd:continue'>
-    <xsl:if test='@rnd:style = "para-continue"'>
+    <xsl:if test='@rnd:style eq "para-continue"'>
       <dbk:para>
         <xsl:call-template name='rnd:attributes'/>
         <xsl:apply-templates/>
@@ -1542,8 +1494,8 @@
 
     <xsl:choose>
       <xsl:when test='not($in-list) and
-                      preceding-sibling::dbk:para[1][starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist") or @rnd:style = "para-continue"]'/>
-      <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style ="table-title"]'>
+                      preceding-sibling::dbk:para[1][starts-with(@rnd:style, "itemizedlist") or starts-with(@rnd:style, "orderedlist") or @rnd:style eq "para-continue"]'/>
+      <xsl:when test='preceding-sibling::*[1][self::dbk:para][@rnd:style eq "table-title"]'>
 	<dbk:table>
 	  <xsl:apply-templates select='@*' mode='rnd:copy'/>
 
@@ -1634,9 +1586,9 @@
   <!-- Find the caption associated with this table -->
   <xsl:template name='rnd:table-caption'>
     <xsl:variable name='candidate'
-		  select='following-sibling::dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"][1]'/>
+		  select='following-sibling::dbk:para[@rnd:style = ("caption", "Caption")][1]'/>
 
-    <xsl:if test='$candidate != "" and
+    <xsl:if test='$candidate ne "" and
 		  generate-id($candidate/preceding-sibling::dbk:informaltable[1]) = generate-id(.)'>
       <dbk:caption>
 	<dbk:para>
@@ -1649,7 +1601,7 @@
   <!-- Find table associated text -->
   <xsl:template name='rnd:table-textobject'>
     <xsl:variable name='caption'
-		  select='following-sibling::dbk:para[@rnd:style = "caption" or @rnd:style = "Caption"][1]'/>
+		  select='following-sibling::dbk:para[@rnd:style = ("caption", "Caption")][1]'/>
 
     <xsl:if test='generate-id($caption/preceding-sibling::dbk:informaltable[1]) = generate-id(.)'>
       <xsl:variable name='content'
