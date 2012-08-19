@@ -580,9 +580,10 @@ border: none; background: none; font-weight: none; color: none; }
                 <table class="navLinks">
                     <tr>
                         <td>
-                            <a id="showHideButton" href="javascript:showHideToc();"
-                                class="pointLeft" tabindex="5" title="Hide TOC tree">Sidebar </a>
-                        </td>
+                            <a id="showHideButton" href="#" onclick="myLayout.toggle('west')"
+                                class="pointLeft" tabindex="5" title="Hide TOC tree">Sidebar
+                            </a>
+                            </td>
                         <xsl:if
                             test="count($prev) &gt; 0
                             or (count($up) &gt; 0
