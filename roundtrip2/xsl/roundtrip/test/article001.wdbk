@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<dbk:article xmlns:dbk="http://docbook.org/ns/docbook" xmlns:rnd="http://docbook.org/ns/docbook/roundtrip" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <dbk:info>
+    <dbk:title>Test Document 001</dbk:title>
+    <edition xmlns="http://docbook.org/ns/docbook">1st Ed.</edition>
+    <dbk:author>
+      <dbk:personname><firstname xmlns="http://docbook.org/ns/docbook">Steve</firstname> <surname xmlns="http://docbook.org/ns/docbook">Ball</surname></dbk:personname>
+      <dbk:affiliation>
+        <dbk:jobtitle>Packaged Press Research Laboratories</dbk:jobtitle>
+      </dbk:affiliation>
+      <dbk:address>Packaged Press Lane</dbk:address>
+    </dbk:author>
+    <dbk:abstract>
+      <dbk:para>This document is used for testing conversion.</dbk:para>
+    </dbk:abstract>
+  </dbk:info>
+  <dbk:para>Prefatory paragraph.</dbk:para>
+  <sect1 xmlns="http://docbook.org/ns/docbook">
+    <dbk:info>
+      <dbk:title>First Level 1 Section</dbk:title>
+    </dbk:info>
+    <dbk:para>First level 1 section.</dbk:para>
+    <dbk:blockquote>
+      <dbk:attribution>Ogden Nash</dbk:attribution>
+      <dbk:para>Candy is dandy,</dbk:para>
+      <dbk:para>but liquor is quicker!</dbk:para>
+    </dbk:blockquote>
+    <sect2>
+      <dbk:info>
+        <dbk:title>Level 2 Section</dbk:title>
+      </dbk:info>
+      <dbk:para>First level 2 section in first level 1 section.</dbk:para>
+      <itemizedlist>
+        <dbk:listitem>
+          <dbk:para>Bullet list item 1, level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 1, level 2</dbk:para>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 2, level 2</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Bullet list item 2, level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 1, level 2</dbk:para>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 2, level 2</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+      </itemizedlist>
+      <dbk:para>A mixed list:</dbk:para>
+      <orderedlist>
+        <dbk:listitem>
+          <dbk:para>First numbered level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>First bullet</dbk:para>
+              <orderedlist>
+                <dbk:listitem>
+                  <dbk:para>First numbered</dbk:para>
+                </dbk:listitem>
+                <dbk:listitem>
+                  <dbk:para>Second numbered</dbk:para>
+                </dbk:listitem>
+              </orderedlist>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Second bullet</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Second numbered level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>First bullet</dbk:para>
+              <orderedlist>
+                <dbk:listitem>
+                  <dbk:para>First numbered</dbk:para>
+                </dbk:listitem>
+                <dbk:listitem>
+                  <dbk:para>Second numbered</dbk:para>
+                </dbk:listitem>
+              </orderedlist>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Second bullet</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+      </orderedlist>
+      <dbk:para>Item continuations</dbk:para>
+      <itemizedlist>
+        <dbk:listitem>
+          <dbk:para>List item.</dbk:para>
+          <dbk:para>item continued.</dbk:para>
+          <dbk:para>item continued some more.</dbk:para>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Next item</dbk:para>
+          <dbk:para>more continuations</dbk:para>
+        </dbk:listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+  <sect1 xmlns="http://docbook.org/ns/docbook">
+    <dbk:info>
+      <dbk:title>Second Level 1 Section</dbk:title>
+      <dbk:abstract>
+        <dbk:title>Abstract</dbk:title>
+        <dbk:para>An abstract for a section that has a title.</dbk:para>
+      </dbk:abstract>
+    </dbk:info>
+    <dbk:para>Third level 1 section.</dbk:para>
+    <sect2>
+      <dbk:info>
+        <dbk:title>Level 2 Section</dbk:title>
+      </dbk:info>
+      <dbk:para>First level 2 section in second level 1 section.</dbk:para>
+    </sect2>
+  </sect1>
+</dbk:article>

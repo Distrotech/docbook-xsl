@@ -1,0 +1,359 @@
+<?xml version="1.0"?>
+<dbk:article xmlns:dbk="http://docbook.org/ns/docbook" xmlns:rnd="http://docbook.org/ns/docbook/roundtrip">
+  <dbk:info>
+    <dbk:title>Test Document 002</dbk:title>
+    <dbk:author>
+      <dbk:personname>
+    <firstname xmlns="http://docbook.org/ns/docbook">Steve</firstname>
+    <surname xmlns="http://docbook.org/ns/docbook">Ball</surname>
+  </dbk:personname>
+      <dbk:affiliation>
+        <dbk:jobtitle>Packaged Press Research Laboratories</dbk:jobtitle>
+      </dbk:affiliation>
+      <dbk:address>Packaged Press Lane</dbk:address>
+    </dbk:author>
+    <dbk:abstract>
+      <dbk:para>This document is used for testing conversion.</dbk:para>
+    </dbk:abstract>
+  </dbk:info>
+  <dbk:para>Prefatory paragraph.</dbk:para>
+  <sect1 xmlns="http://docbook.org/ns/docbook">
+    <dbk:info>
+      <dbk:title>First Level 1 Section</dbk:title>
+    </dbk:info>
+    <dbk:para>First level 1 section.</dbk:para>
+    <dbk:blockquote>
+      <dbk:attribution>Ogden Nash</dbk:attribution>
+      <dbk:para>Candy is dandy,</dbk:para>
+      <dbk:para>but liquor is quicker!</dbk:para>
+    </dbk:blockquote>
+    <sect2>
+      <dbk:info>
+        <dbk:title>Level 2 Section</dbk:title>
+      </dbk:info>
+      <dbk:para>First level 2 section in first level 1 section.</dbk:para>
+      <itemizedlist>
+        <dbk:listitem>
+          <dbk:para>Bullet list item 1, level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 1, level 2</dbk:para>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 2, level 2</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Bullet list item 2, level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 1, level 2</dbk:para>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Bullet list item 2, level 2</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+      </itemizedlist>
+      <dbk:para>A mixed list:</dbk:para>
+      <orderedlist>
+        <dbk:listitem>
+          <dbk:para>First numbered level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>First bullet</dbk:para>
+              <orderedlist>
+                <dbk:listitem>
+                  <dbk:para>First numbered</dbk:para>
+                </dbk:listitem>
+                <dbk:listitem>
+                  <dbk:para>Second numbered</dbk:para>
+                </dbk:listitem>
+              </orderedlist>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Second bullet</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Second numbered level 1</dbk:para>
+          <itemizedlist>
+            <dbk:listitem>
+              <dbk:para>First bullet</dbk:para>
+              <orderedlist>
+                <dbk:listitem>
+                  <dbk:para>First numbered</dbk:para>
+                </dbk:listitem>
+                <dbk:listitem>
+                  <dbk:para>Second numbered</dbk:para>
+                </dbk:listitem>
+              </orderedlist>
+            </dbk:listitem>
+            <dbk:listitem>
+              <dbk:para>Second bullet</dbk:para>
+            </dbk:listitem>
+          </itemizedlist>
+        </dbk:listitem>
+      </orderedlist>
+      <dbk:para>Item continuations</dbk:para>
+      <itemizedlist>
+        <dbk:listitem>
+          <dbk:para>List item.</dbk:para>
+          <dbk:para>item continued.</dbk:para>
+          <dbk:para>item continued some more.</dbk:para>
+        </dbk:listitem>
+        <dbk:listitem>
+          <dbk:para>Next item</dbk:para>
+          <dbk:para>more continuations</dbk:para>
+        </dbk:listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+  <sect1 xmlns="http://docbook.org/ns/docbook">
+    <dbk:info>
+      <dbk:title>Second Level 1 Section</dbk:title>
+    </dbk:info>
+    <dbk:para>Second level 1 section.  4x3 table with header and fully framed:</dbk:para>
+    <dbk:informaltable frame="all">
+      <dbk:tgroup cols="3">
+        <dbk:colspec colwidth="160.20472717285156" colname="column-1"/>
+        <dbk:colspec colwidth="160.20472717285156" colname="column-2"/>
+        <dbk:colspec colwidth="160.20472717285156" colname="column-3"/>
+        <dbk:thead>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Header 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Header 1,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Header 1,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:thead>
+        <dbk:tbody>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 1,1</dbk:para>
+              <dbk:para>Next paragraph</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 1,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 1,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 2,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 2,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 2,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 3,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 3,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 3,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:tbody>
+      </dbk:tgroup>
+    </dbk:informaltable>
+    <dbk:para>Table 5x3 with horizontal borders around header row:</dbk:para>
+    <dbk:informaltable frame="top">
+      <dbk:tgroup cols="3">
+        <dbk:colspec colwidth="160.53805541992188" colname="column-1"/>
+        <dbk:colspec colwidth="160.53805541992188" colname="column-2"/>
+        <dbk:colspec colwidth="160.53805541992188" colname="column-3"/>
+        <dbk:thead>
+          <dbk:row>
+            <dbk:entry rowsep="1">
+              <dbk:para>Header 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1">
+              <dbk:para>Header 1,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1">
+              <dbk:para>Header 1,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:thead>
+        <dbk:tbody>
+          <dbk:row>
+            <dbk:entry>
+              <dbk:para>Body 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 1,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 1,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry>
+              <dbk:para>Body 2,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 2,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 2,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry>
+              <dbk:para>Body 3,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 3,2</dbk:para>
+            </dbk:entry>
+            <dbk:entry>
+              <dbk:para>Body 3,3</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:tbody>
+      </dbk:tgroup>
+    </dbk:informaltable>
+    <dbk:para>Table, 1x4, with title and no borders:</dbk:para>
+    <dbk:para>Table, 4x1, with caption.  Only cell 2,1 is framed.</dbk:para>
+    <dbk:informaltable>
+      <dbk:tgroup cols="1">
+        <dbk:colspec colwidth="161" colname="column-1"/>
+        <dbk:tbody>
+          <dbk:row>
+            <dbk:entry rowsep="1">
+              <dbk:para>Body 1,1</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1">
+              <dbk:para>Body 2,1</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry>
+              <dbk:para>Body 3,1</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry>
+              <dbk:para>Body 4,1</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:tbody>
+      </dbk:tgroup>
+      <dbk:caption>
+        <dbk:para>Caption of 4x1 table.</dbk:para>
+      </dbk:caption>
+    </dbk:informaltable>
+    <dbk:para>Table, 7x2 with two header rows, title, caption and additional text.  Splits page boundary.</dbk:para>
+    <dbk:table frame="all">
+      <dbk:info>
+        <dbk:title>A 7x2 Table</dbk:title>
+      </dbk:info>
+      <dbk:textobject>
+        <dbk:para>Table notes for the textobject.</dbk:para>
+        <dbk:para>Additional note.</dbk:para>
+      </dbk:textobject>
+      <dbk:tgroup cols="2">
+        <dbk:colspec colwidth="160.5" colname="column-1"/>
+        <dbk:colspec colwidth="160.5" colname="column-2"/>
+        <dbk:thead>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Header 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Header 1,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:thead>
+        <dbk:tbody>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 1,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 2,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 2,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 3,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 3,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 4,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 4,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 5,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Body 5,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:tbody>
+        <dbk:tfoot>
+          <dbk:row>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Footer 1,1</dbk:para>
+            </dbk:entry>
+            <dbk:entry rowsep="1" colsep="1">
+              <dbk:para>Footer 1,2</dbk:para>
+            </dbk:entry>
+          </dbk:row>
+        </dbk:tfoot>
+      </dbk:tgroup>
+      <dbk:caption>
+        <dbk:para>The caption of the 7x2 table.</dbk:para>
+      </dbk:caption>
+    </dbk:table>
+  </sect1>
+  <sect1 xmlns="http://docbook.org/ns/docbook">
+    <dbk:info>
+      <dbk:title>Third Level 1 Section</dbk:title>
+      <dbk:abstract>
+        <dbk:title>Abstract</dbk:title>
+        <dbk:para>An abstract for a section that has a title.</dbk:para>
+      </dbk:abstract>
+    </dbk:info>
+    <dbk:para>Third level 1 section.</dbk:para>
+    <sect2>
+      <dbk:info>
+        <dbk:title>Level 2 Section</dbk:title>
+      </dbk:info>
+      <dbk:para>First level 2 section in third level 1 section.</dbk:para>
+    </sect2>
+  </sect1>
+</dbk:article>
