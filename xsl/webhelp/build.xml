@@ -4,7 +4,8 @@
   <loadproperties srcFile="${ant.file.dir}/build.properties"/>
   <property name="webhelp.include.search.tab" value="true"/>
 
-  <property name="extensions.dir" value="/home/visitha/docbook-xsl-snapshot/extensions"/>
+  <property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
+  
     <path id="classpath">
         <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
 	<pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
