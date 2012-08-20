@@ -209,7 +209,7 @@
 
       <a href="{$href}">
         <xsl:apply-templates select="." mode="class.attribute"/>
-        <xsl:if test="$target/title or $target/*/title">
+        <xsl:if test="$target/title or $target/info/title">
           <xsl:attribute name="title">
             <xsl:apply-templates select="$target" mode="xref-title"/>
           </xsl:attribute>
@@ -358,7 +358,7 @@
                      |constraintdef|formalpara|glossdiv|important|indexdiv
                      |itemizedlist|legalnotice|lot|msg|msgexplan|msgmain
                      |msgrel|msgset|msgsub|note|orderedlist|partintro
-                     |productionset|qandadiv|refsynopsisdiv|segmentedlist
+                     |productionset|qandadiv|refsynopsisdiv|screenshot|segmentedlist
                      |set|setindex|sidebar|tip|toc|variablelist|warning"
               mode="xref-to">
   <xsl:param name="referrer"/>

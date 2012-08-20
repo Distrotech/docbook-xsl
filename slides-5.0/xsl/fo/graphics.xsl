@@ -98,8 +98,15 @@
 
 <xsl:template match="screenshot">
   <fo:block>
+    <xsl:call-template name="anchor"/>
     <xsl:apply-templates/>
   </fo:block>
+</xsl:template>
+
+<xsl:template match="screenshot/title">
+  <xsl:call-template name="formal.object.heading">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="screeninfo">
@@ -473,6 +480,7 @@
     </xsl:when>
     <xsl:otherwise>
       <fo:block>
+        <xsl:call-template name="anchor"/>
         <xsl:if test="@align">
           <xsl:attribute name="text-align">
             <xsl:value-of select="@align"/>
@@ -763,7 +771,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template match="caption">
+<xsl:template match="mediaobject/caption|figure/caption">
   <fo:block>
     <xsl:if test="@align = 'right' or @align = 'left' or @align='center'">
       <xsl:attribute name="text-align"><xsl:value-of

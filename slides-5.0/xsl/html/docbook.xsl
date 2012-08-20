@@ -23,7 +23,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:include href="../VERSION"/>
+<xsl:include href="../VERSION.xsl"/>
 <xsl:include href="param.xsl"/>
 <xsl:include href="../lib/lib.xsl"/>
 <xsl:include href="../common/l10n.xsl"/>
@@ -131,9 +131,10 @@
     <xsl:apply-templates select="$node" mode="object.title.markup.textonly"/>
   </xsl:param>
 
-  <title>
-    <xsl:copy-of select="$title"/>
-  </title>
+  <xsl:call-template name="user.head.title">
+    <xsl:with-param name="title" select="$title"/>
+    <xsl:with-param name="node" select="$node"/>
+  </xsl:call-template>
 
   <xsl:if test="$html.base != ''">
     <base href="{$html.base}"/>
@@ -337,12 +338,24 @@ body { background-image: url('</xsl:text>
   <!-- This must not output any element content! -->
 </xsl:template>
 
+<xsl:template name="user.head.title">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="title"/>
+
+  <title>
+    <xsl:copy-of select="$title"/>
+  </title>
+</xsl:template>
+
 <xsl:template name="user.head.content">
   <xsl:param name="node" select="."/>
 </xsl:template>
 
 <xsl:template name="user.header.navigation">
   <xsl:param name="node" select="."/>
+  <xsl:param name="prev" select="/foo"/>
+  <xsl:param name="next" select="/foo"/>
+  <xsl:param name="nav.context"/>
 </xsl:template>
 
 <xsl:template name="user.header.content">
@@ -355,6 +368,9 @@ body { background-image: url('</xsl:text>
 
 <xsl:template name="user.footer.navigation">
   <xsl:param name="node" select="."/>
+  <xsl:param name="prev" select="/foo"/>
+  <xsl:param name="next" select="/foo"/>
+  <xsl:param name="nav.context"/>
 </xsl:template>
 
 <!-- To use the same stripped nodeset everywhere, it should
@@ -471,6 +487,7 @@ Used by docbook.xsl, chunk-code.xsl and chunkfast.xsl -->
   <xsl:call-template name="root.messages"/>
 
   <html>
+    <xsl:call-template name="root.attributes"/>
     <head>
       <xsl:call-template name="system.head.content">
         <xsl:with-param name="node" select="$doc"/>
@@ -497,6 +514,10 @@ Used by docbook.xsl, chunk-code.xsl and chunkfast.xsl -->
   
   <!-- Generate any css files only once, not once per chunk -->
   <xsl:call-template name="generate.css.files"/>
+</xsl:template>
+
+<xsl:template name="root.attributes">
+  <!-- customize to add attributes to <html> element  -->
 </xsl:template>
 
 <xsl:template name="root.messages">

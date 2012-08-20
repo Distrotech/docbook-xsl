@@ -77,8 +77,15 @@
   <div>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
     <xsl:call-template name="id.attribute"/>
+    <xsl:call-template name="anchor"/>
     <xsl:apply-templates/>
   </div>
+</xsl:template>
+
+<xsl:template match="screenshot/title">
+  <xsl:call-template name="formal.object.heading">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="screeninfo">
@@ -690,8 +697,13 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
   <xsl:choose>
     <xsl:when test="$use.viewport">
-      <table border="0" summary="manufactured viewport for HTML img"
-             cellspacing="0" cellpadding="0">
+      <table border="{$table.border.off}">
+        <xsl:if test="$div.element != 'section'">
+          <xsl:attribute name="summary">manufactured viewport for HTML img</xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$css.decoration != ''">
+          <xsl:attribute name="style">cellpadding: 0; cellspacing: 0;</xsl:attribute>
+        </xsl:if>
         <xsl:if test="$html.width != ''">
           <xsl:attribute name="width">
             <xsl:value-of select="$html.width"/>
