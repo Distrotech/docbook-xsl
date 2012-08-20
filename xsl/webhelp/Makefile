@@ -6,6 +6,7 @@ DOCBOOK_EXTENSIONS_DIR = $(DOCBOOK_DIST)/extensions
 INPUT_XML = docsrc/readme.xml
 USER_IMAGES_PARENT_DIR=docsrc
 OUTPUT_DIR = docs
+INDEXER_EXCLUDED_FILES = ch02.*.html,ch03.*.html
 
 INDEXER_JAR   := $(DOCBOOK_EXTENSIONS_DIR)/webhelpindexer.jar
 TAGSOUP_JAR   := $(DOCBOOK_EXTENSIONS_DIR)/tagsoup-1.2.1.jar
@@ -16,7 +17,7 @@ classpath := $(INDEXER_JAR):$(TAGSOUP_JAR):$(LUCENE_ANALYZER_JAR):$(LUCENE_CORE_
 
 all: webhelp
 
-webhelp: docsrc/readme.xml copyfiles chunk index
+webhelp: $(INPUT_XML) copyfiles chunk index
 
 copyfiles:
 	-rm -rf $(OUTPUT_DIR)
@@ -38,6 +39,7 @@ index:
                 -DindexerLanguage=en \
                 -DhtmlExtension=html \
                 -DdoStem=true \
+                -DindexerExcludedFiles=$(INDEXER_EXCLUDED_FILES) \
                 -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
                 -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
                 -classpath $(classpath) \
