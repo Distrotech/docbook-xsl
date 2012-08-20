@@ -25,25 +25,33 @@
 
 <xsl:template match="foil">
   <dbs:foil>
+    <xsl:call-template name="copy.attributes"/>
+
     <xsl:call-template name="process.content"/>
   </dbs:foil>
 </xsl:template>
 
 <xsl:template match="foilgroup">
   <dbs:foilgroup>
+    <xsl:call-template name="copy.attributes"/>
+
     <xsl:call-template name="process.content"/>
   </dbs:foilgroup>
 </xsl:template>
 
 <xsl:template match="speakernotes">
   <dbs:speakernotes>
+    <xsl:call-template name="copy.attributes"/>
+
     <xsl:apply-templates select="*"/>
   </dbs:speakernotes>
 </xsl:template>
 
-<xsl:template name="slidesinfo|foilgroupinfo|foilinfo">
+<xsl:template match="slidesinfo|foilgroupinfo|foilinfo">
   <info>
-    <xsl:copy-of select="*"/>
+    <xsl:call-template name="copy.attributes"/>
+
+    <xsl:apply-templates select="*"/>
   </info>
 </xsl:template>
 
