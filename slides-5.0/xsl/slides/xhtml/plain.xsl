@@ -5,7 +5,7 @@
 		xmlns:db="http://docbook.org/ns/docbook"
 		xmlns:dbs="http://docbook.org/ns/docbook-slides"
 		xmlns:exsl="http://exslt.org/common"
-		exclude-result-prefixes="dbs db"
+		exclude-result-prefixes="dbs db xlink"
 		extension-element-prefixes="exsl"
 		version="1.0">
 
@@ -84,7 +84,13 @@
 </xsl:template>
 
 <xsl:template match="/">
-  <html xml:lang="{/dbs:slides/@xml:lang}">
+  <html>
+    <xsl:if test="/dbs:slides/@xml:lang">
+      <xsl:attribute name="xml:lang">
+	<xsl:value-of select="/dbs:slides/@xml:lang"/>
+      </xsl:attribute>
+    </xsl:if>
+
     <head>
       <title>
 	<xsl:call-template name="get.title">
@@ -462,7 +468,7 @@
         </xsl:when>
 
         <xsl:when test="$modeParam = 'image'">
-	  <img src="{$fname}"/>
+	  <img alt="{$mimeType} object" src="{$fname}"/>
         </xsl:when>
 
         <xsl:when test="$modeParam = 'link'">
