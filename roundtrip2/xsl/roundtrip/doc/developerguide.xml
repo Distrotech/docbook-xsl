@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbk:article xmlns:rel="http://schemas.openxmlformats.org/package/2006/relationships"
+             xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+             xmlns:dbk="http://docbook.org/ns/docbook"
+             xmlns:rnd="http://docbook.org/ns/docbook/roundtrip"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+   <dbk:info>
+      <dbk:title>Developer Guide</dbk:title>
+      <dbk:author>
+         <dbk:personname>Author: <firstname xmlns="http://docbook.org/ns/docbook">Buddhiprabha </firstname>
+            <surname xmlns="http://docbook.org/ns/docbook">Erabadda</surname>
+         </dbk:personname>
+      </dbk:author>
+      <edition xmlns="http://docbook.org/ns/docbook">Edition 1</edition>
+   </dbk:info>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>Introduction</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">DocBook roundtripping helps to create basic DocBook documents using familiar word processors. The intention of the project is to enable popular word processors, which use XML as their data representation, to create DocBook documents. By converting documents from these word processors into XML, it is possible to apply XSLT transformations to convert them into DocBook and viceversa.</dbk:para>
+   </sect1>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>The process of conversion</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">The document should undergo pipeline processing when converting from Word to DocBook. The set of stylesheets(in XSLT 2.0) and the order of trasformations can be found at userguide.xml. Ideally the reverse process should have one stylesheet for each type of word processor. At this stage, a single stylesheet is there which converts from DocBook to WordML. Stylesheets are imported by some stylesheets. Refer User Guide for customization layer information.</dbk:para>
+   </sect1>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>Style<dbk:emphasis xmlns="http://docbook.org/ns/docbook"> </dbk:emphasis>Sheets</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">There are four stylesheets used when converting from either Microsoft Word or Open Office to DdocBook.</dbk:para>
+      <itemizedlist>
+         <dbk:listitem xmlns="">
+            <dbk:para>wordml2normaise2007.xsl / oo2normalise.xsl</dbk:para>
+         </dbk:listitem>
+         <dbk:listitem xmlns="">
+            <dbk:para>normalise2sections.xsl - refer sections-spec.xml</dbk:para>
+         </dbk:listitem>
+         <dbk:listitem xmlns="">
+            <dbk:para>sections2blocks.xsl - refer blocks-spec.xml</dbk:para>
+         </dbk:listitem>
+         <dbk:listitem xmlns="">
+            <dbk:para>bloks2dbk.xsl</dbk:para>
+         </dbk:listitem>
+      </itemizedlist>
+      <dbk:para xmlns="">The test documents used for stylesheet development can be found at /test folder.</dbk:para>
+      <note>
+         <dbk:para xmlns="">Refer userguide.xml for more information about using the stylesheets.</dbk:para>
+      </note>
+   </sect1>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>Development Prerequisites</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">Developers are expected to be familiar with:</dbk:para>
+      <itemizedlist>
+         <dbk:listitem xmlns="">
+            <dbk:para>using the roundtripping system</dbk:para>
+         </dbk:listitem>
+         <dbk:listitem xmlns="">
+            <dbk:para>XSLT / XPath</dbk:para>
+         </dbk:listitem>
+         <dbk:listitem xmlns="">
+            <dbk:para>word processor content models</dbk:para>
+         </dbk:listitem>
+      </itemizedlist>
+   </sect1>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>Future Goals</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">At this version, conversion from word processor documents into DocBook has pipeline processing. It is expected to have these transformation in one stylesheet, so that the process is less complex for the user.</dbk:para>
+   </sect1>
+</dbk:article>
