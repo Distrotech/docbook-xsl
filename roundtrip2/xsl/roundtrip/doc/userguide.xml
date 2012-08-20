@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbk:article xmlns:rel="http://schemas.openxmlformats.org/package/2006/relationships"
+             xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+             xmlns:dbk="http://docbook.org/ns/docbook"
+             xmlns:rnd="http://docbook.org/ns/docbook/roundtrip"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+   <dbk:info>
+      <dbk:title>User Guide</dbk:title>
+      <edition xmlns="http://docbook.org/ns/docbook">Edition:1st edition</edition>
+      <dbk:author>
+         <dbk:personname>Author: <firstname xmlns="http://docbook.org/ns/docbook">Buddhiprabha </firstname>
+      
+            <surname xmlns="http://docbook.org/ns/docbook">Erabadda</surname>
+         </dbk:personname>
+      </dbk:author>
+      <dbk:abstract>
+         <dbk:para>This is the user guide for new users of DocBook roundtripping system. Roundtripping system has been extended to be used with Microsoft Word 2007 and later versions and Open Office. This document specifies how the system can be used.</dbk:para>
+      </dbk:abstract>
+   </dbk:info>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>Introduction</dbk:title>
+      </dbk:info>
+      <dbk:para xmlns="">These stylesheets help you to create DocBook documents with your familiar word processors. At this stage, the stylesheets can be used with Microsoft Word (for Microsoft Office 2007 and later versions) and Open Office. Although all elements and structures are not supported in this system, you can create basic documents and add elements. Adding elements will not be a difficult task, since the flat structure of documents provided by the common Word Processors are handled by the stylesheets. You need to have an XSLT 2.0 processor.</dbk:para>
+   </sect1>
+   <sect1 xmlns="http://docbook.org/ns/docbook">
+      <dbk:info xmlns="">
+         <dbk:title>How to use</dbk:title>
+      </dbk:info>
+      <sect2>
+         <dbk:info xmlns="">
+            <dbk:title>Converting from .docx / .odt to DocBook</dbk:title>
+         </dbk:info>
+         <dbk:para xmlns="">To create DocBook documents with the stylesheets, you have to use paragraph and character styles which are known by the system. The document author can create the document and at the time of transformation, the document elements should be mapped accordingly, in order for the stylesheets to be affective. The person, who manages the transformation system should map these styles to the documents in order to use the stylesheets. In your Word Processor (Microsoft Word or OpenOffice), you have the facility to create styles of your own and give them the names you want. You can use this facility to create the required styles that are identified by the system. A list of supported elements can be found at specifications.xml by Steve Ball. However, for the current version, adding images is not supported. Only those styles that are specified in specifications.xml are identified and you are not allowed to use arbitrary styles that are not supported by the system. If styles used are arbitrary, the system will report errors. These error messages will give hints to the user to figure out which styles causes errors.</dbk:para>
+         <dbk:para xmlns="">If you need to customise the output from these stylesheets to suit your requirements, it is always advisable to use a separate customisation layer for that rather than editing the stylesheets. There is a customisation layer in the repository, normalise-common.xsl, which matches user defined styles to known styles. If you need to give customized names to the paragraph and character styles, you need to map your styles to styles known by the system. For example, if you need to define a style name “section-1-title” for the system known paragraph style “sect1-title”, you may add the following line to the template named “rnd:map-paragraph-style” in the stylesheet normalise-common.xsl.</dbk:para>
+         <dbk:para xmlns="">&lt;xsl:when test='$style = "section-1-title"'&gt;sect1-title&lt;/xsl:when&gt;</dbk:para>
+         <dbk:para xmlns="">The same procedure can be followed when defining character styles of your own. When defining character styles, you will be adding to the template named “rnd:map-character-style”.</dbk:para>
+         <dbk:para xmlns="">Once you have created documents, you can save the documents in their native formats. (.docx for Microsoft Office and .odt for Open Office). Then you can change the extension of the documents to be .zip. Unzipping a zipped document will give you a set of folders and a few xml files in them. You can bring them to a one file in order to apply the necessary transformations. Pipeline Processing is used to create the DocBook document from your .docx or .odt file i.e. there are four stylesheets that you need to apply, feeding the output of one stylesheet to the next.</dbk:para>
+         <dbk:para xmlns="">The order of the stylesheets is as follows;</dbk:para>
+         <dbk:informaltable>
+            <dbk:tgroup cols="3">
+               <dbk:colspec colwidth="3192*" colname="column-1"/>
+               <dbk:colspec colwidth="3192*" colname="column-2"/>
+               <dbk:colspec colwidth="3192*" colname="column-3"/>
+               <dbk:tbody>
+                  <dbk:row>
+                     <dbk:entry xmlns="">
+                        <dbk:para>Stylesheet Order</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="">
+                        <dbk:para>Open Office</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="">
+                        <dbk:para>Microsoft Word</dbk:para>
+                     </dbk:entry>
+                  </dbk:row>
+                  <dbk:row>
+                     <dbk:entry xmlns="">
+                        <dbk:para>#1</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="">
+                        <dbk:para>oo2normalise.xsl</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="">
+                        <dbk:para>wordml2normalise2007.xml</dbk:para>
+                     </dbk:entry>
+                  </dbk:row>
+                  <dbk:row>
+                     <dbk:entry xmlns="">
+                        <dbk:para>#2</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="" namest="column-2" nameend="column-3">
+                        <dbk:para>normalise2sections.xsl</dbk:para>
+                     </dbk:entry>
+                  </dbk:row>
+                  <dbk:row>
+                     <dbk:entry xmlns="">
+                        <dbk:para>#3</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="" namest="column-2" nameend="column-3">
+                        <dbk:para>sections2blocks.xsl</dbk:para>
+                     </dbk:entry>
+                  </dbk:row>
+                  <dbk:row>
+                     <dbk:entry xmlns="">
+                        <dbk:para>#4</dbk:para>
+                     </dbk:entry>
+                     <dbk:entry xmlns="" namest="column-2" nameend="column-3">
+                        <dbk:para>blocks2dbk.xsl</dbk:para>
+                     </dbk:entry>
+                  </dbk:row>
+               </dbk:tbody>
+            </dbk:tgroup>
+         </dbk:informaltable>
+      </sect2>
+      <sect2>
+         <dbk:info xmlns="">
+            <dbk:title>Converting from DocBook to WordML</dbk:title>
+         </dbk:info>
+         <dbk:para xmlns="">You can also convert DocBook documents into wordml using the stylesheet dbk2wordml.xsl. This stylesheet converts from DocBook to WordML. You can open the resulting documents in Open Office as well if you need to do any changes and convert them back to DocBook.</dbk:para>
+      </sect2>
+   </sect1>
+</dbk:article>
