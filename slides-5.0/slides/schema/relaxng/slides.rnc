@@ -55,6 +55,8 @@ include "docbook.rnc" inherit = db {
 dbs._any.attribute = attribute * { text }
 
 dbs.all.content = db.all.blocks? &
+  dbs.speakernotes &
+  dbs.handoutnotes &
   db._any.svg? &
   db._any.mml? &
   dbs.block?
@@ -108,8 +110,6 @@ dbs.slides.attlist = dbs.slides.role.attribute?
 dbs.foilgroup = element foilgroup {
   dbs.foilgroup.attlist,
   db._info.title.req,
-  dbs.speakernotes?,
-  dbs.handoutnotes?,
   dbs.all.content*,
   dbs.foil+
 }
@@ -132,8 +132,6 @@ dbs.foil =
   ## Indicates a foil that may have some info and content
   element foil { dbs.foil.attlist,
   db._info.title.req,
-  dbs.speakernotes?,
-  dbs.handoutnotes?,
   dbs.all.content*,
   db.navigation.components*
 }
