@@ -346,7 +346,7 @@
   </xsl:variable>
 
   <div class="{$classValue}">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="db:imageobject[1]"/>
   </div>
 </xsl:template>
 
