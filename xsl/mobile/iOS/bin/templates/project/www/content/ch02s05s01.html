@@ -32,35 +32,6 @@
           var $nextPage="ch02s05.html";
           var $prevPage="ch02s05s02.html";
         
-          var $toc="toc.html";
-          var $menubar="menubar.html";
-          //when swipe down event happens
-          $("#id_ch02s05s01_html").live('swipedown', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar') ){
-              if("swipeDown"===$.cookie('menubardirection') ){
-                $.mobile.changePage($menubar);
-              }
-            }
-            if("showtoc"===$.cookie('popuptoc') ) {
-              if("swipeDown"===$.cookie('tocdirection') ){
-                $.mobile.changePage($toc);
-              }
-            }
-          });
-				  //when swipe up event happens
-          $("#id_ch02s05s01_html").live('swipeup', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar')){
-              if("swipeUp"===$.cookie('menubardirection') ){
-                $.mobile.changePage($menubar);
-              }
-            }
-            if("showtoc"===$.cookie('popuptoc')) {
-              if("swipeUp"===$.cookie('tocdirection') ){
-                $.mobile.changePage($toc);
-              }
-            }
-          });
-        
           //when swipe left event happens
           $("#id_ch02s05s01_html").live('swipeleft', function(event) {
             if("swipeLeft" === $.cookie('nextpage') ){

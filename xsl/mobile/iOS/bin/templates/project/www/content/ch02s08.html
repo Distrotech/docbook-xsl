@@ -3,7 +3,7 @@
   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-	<title>Adding images</title><meta name="generator" content="Bluefish 2.2.2" /><link rel="home" href="index.html" title="Mobile docBook Help" /><link rel="up" href="ch02.html" title="User guide" /><link rel="prev" href="ch02s07.html" title="Adding support for other (non-CJKV) languages" /><link rel="next" href="ch03.html" title="Developer guide" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../css/themes/default/jquery.mobile-1.1.0.min.css" /><link rel="stylesheet" type="text/css" href="../css/mobile.positioning.css" /><script type="text/javascript">
+	<title>Adding images</title><meta name="generator" content="Bluefish 2.2.2" /><link rel="home" href="index.html" title="Mobile docBook Help" /><link rel="up" href="ch02.html" title="User guide" /><link rel="prev" href="ch02s07.html" title="Adding support for other (non-CJKV) languages" /><link rel="next" href="ch03.html" title="Developer guide" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../css/themes/default/jquery.mobile-1.1.0.min.css" /><link rel="stylesheet" type="text/css" href="../css/mobile.positioning.css" /><script type="text/javascript" charset="utf-8" src="../cordova-2.0.0.js"><!----></script><script type="text/javascript">
               //The id for tree cookie
               var treeCookieId = "treeview-1055";
               var language = "en";
@@ -27,61 +27,12 @@
 		</script><script type="text/javascript" src="../js/jquery.mobile-1.1.0.min.js"><!----></script><script type="text/javascript" src="../js/swipeupdown.js"><!----></script></head><body><div data-role="page" id="id_ch02s08_html"><!--KEEP THIS CODE--><div data-role="header" data-theme="b"><h4>Adding images</h4><!----><a accesskey="p" data-role="button" data-icon="arrow-l" data-iconpos="notext" data-theme="a" href="ch02s07.html">Prev</a>
           
           
-            <a accesskey="n" data-role="button" data-icon="arrow-r" data-iconpos="notext" data-theme="a" href="ch03.html">Next</a><script type="text/javascript">
-        /*$(function() {
-          $("#id_ch02s08_html").live('swipedown', function(event) {
-            $.mobile.changePage("toc.html");
-          });
-        });
-				
-        $(function() {
-          $("#id_ch02s08_html").live('swipeup', function(event) {
-            $.mobile.changePage("menubar.html");
-          });
-        });
-					
-        $(function() {
-          $("#id_ch02s08_html").live('swipeleft', function(event) {
-            $.mobile.changePage("ch02s07.html");
-          });
-				 		
-          $("#id_ch02s08_html").live('swiperight', function(event) {
-            $.mobile.changePage("ch03.html");
-          });
-        });*/
-        
+            <a accesskey="n" data-role="button" data-icon="arrow-r" data-iconpos="notext" data-theme="a" href="ch03.html">Next</a><script type="text/javascript">        
         $(function() {
           var $nextPage="ch02s07.html";
           var $prevPage="ch03.html";
-          var $toc="toc.html";
-          var $menubar="menubar.html";
         
-          $("#id_ch02s08_html").live('swipedown', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar') ){
-              if("swipeDown"===$.cookie('menubardirection') ){
-                $.mobile.changePage($menubar);
-              }
-            }
-            if("showtoc"===$.cookie('popuptoc') ) {
-              if("swipeDown"===$.cookie('tocdirection') ){
-                $.mobile.changePage($toc);
-              }
-            }
-          });
-				
-          $("#id_ch02s08_html").live('swipeup', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar')){
-              if("swipeUp"===$.cookie('menubardirection') ){
-                $.mobile.changePage($menubar);
-              }
-            }
-            if("showtoc"===$.cookie('popuptoc')) {
-              if("swipeUp"===$.cookie('tocdirection') ){
-                $.mobile.changePage($toc);
-              }
-            }
-          });
-          
+          //when swipe left event happens
           $("#id_ch02s08_html").live('swipeleft', function(event) {
             if("swipeLeft" === $.cookie('nextpage') ){
               $.mobile.changePage($nextPage);
@@ -89,7 +40,7 @@
               $.mobile.changePage($prevPage);
             }
           });
-				 		
+				 	//when swipe right event happens
           $("#id_ch02s08_html").live('swiperight', function(event) {
             if("swipeRight" === $.cookie('prevpage') ){
               $.mobile.changePage($prevPage);
@@ -97,12 +48,19 @@
               $.mobile.changePage($nextPage);
             }
           });
+        
+          //if taphold feature enabled
+          $("#id_ch02s08_html_taphold").hide();
+          $("#id_ch02s08_html").live('taphold', function(event) {
+            $("#id_ch02s08_html_taphold").click();
+          });
+         
         });
-			</script></div><div data-role="content" id="bodyone"><div id="content"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="d0e1097"></a>Adding images</h2></div></div></div><p>This section shows how to add images to Mobile. For that, follow the simple procedure given.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Put the images in a subdirectory of your source file directory. For example
+			</script></div><div data-role="content" id="bodyone"><a href="tapholdDialog.html" data-role="button" data-inline="true" data-rel="dialog" data-transition="flip" id="id_ch02s08_html_taphold"></a><div id="content"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="d0e1549"></a>Adding images</h2></div></div></div><p>This section shows how to add images to Mobile. For that, follow the simple procedure given.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Put the images in a subdirectory of your source file directory. For example
                 <code class="filename">docsrc/images</code>.</p></li><li class="listitem"><p>Then refer to those images from your docbook document.</p><p>Following image is from <span class="bold"><strong>mobile/docsrs/images/sample.jpg</strong></span>. The docbook code is shown
               below.</p><p>
-              </p><div class="figure"><a id="d0e1119"></a><p class="title"><strong>Figure 1. Sample Image</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/sample.jpg" alt="Sample Image" /></div></div></div><p><br class="figure-break" />
-            </p><div class="example"><a id="d0e1126"></a><p class="title"><strong>Example 1. Example code for adding images. Note down the relative path used</strong></p><div class="example-contents"><pre class="programlisting">&lt;figure&gt;
+              </p><div class="figure"><a id="d0e1571"></a><p class="title"><strong>Figure 1. Sample Image</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/sample.jpg" alt="Sample Image" /></div></div></div><p><br class="figure-break" />
+            </p><div class="example"><a id="d0e1578"></a><p class="title"><strong>Example 1. Example code for adding images. Note down the relative path used</strong></p><div class="example-contents"><pre class="programlisting">&lt;figure&gt;
   &lt;title&gt;Sample&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject&gt;
