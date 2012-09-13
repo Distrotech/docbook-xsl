@@ -355,7 +355,8 @@
 </xsl:template>
 
 <xsl:template name="generate.footer">
-  <fo:table xsl:use-attribute-sets="foil.footer.properties">
+<fo:block xsl:use-attribute-sets="foil.footer.properties">
+  <fo:table>
     <fo:table-column column-number="1" column-width="33%"/>
     <fo:table-column column-number="2" column-width="34%"/>
     <fo:table-column column-number="3" column-width="33%"/>
@@ -376,6 +377,7 @@
       </fo:table-row>
     </fo:table-body>
   </fo:table>
+</fo:block>
 </xsl:template>
 
 <xsl:template name="footer.left">
