@@ -49,11 +49,6 @@ $Id: param.xweb 6633 2007-02-21 18:33:33Z xmldoc $
 &mml.embedding.mode.fo;
 &slide.font.family;
 &slide.title.font.family;
-&slidy.duration;
-&slidy.path.prefix;
-&slidy.slidy.css;
-&slidy.slidy.js;
-&slidy.user.css;
 &svg.embedding.mode.fo;
 </reference>
 <reference xml:id="propsets">
@@ -67,10 +62,17 @@ $Id: param.xweb 6633 2007-02-21 18:33:33Z xmldoc $
 &foil.region-body.properties;
 &foil.subtitle.properties;
 &foil.title.properties;
+&foil.footer.properties;
 &handoutnotes.properties;
 &slides.properties;
 &slides.titlepage.master.properties;
 &slides.titlepage.region-body.properties;
+&slides.titlepage.corpauthor.properties;
+&slides.titlepage.title.properties;
+&slides.titlepage.subtitle.properties;
+&slides.titlepage.author.properties;
+&slides.titlepage.pubdate.properties;
+&slides.titlepage.authorgroup.properties;
 &speakernotes.properties;
 </reference>
 <!--
@@ -131,11 +133,6 @@ around all these parameters.</para>
 <src:fragref linkend="mml.embedding.mode.fo.frag"/>
 <src:fragref linkend="slide.font.family.frag"/>
 <src:fragref linkend="slide.title.font.family.frag"/>
-<src:fragref linkend="slidy.duration.frag"/>
-<src:fragref linkend="slidy.path.prefix.frag"/>
-<src:fragref linkend="slidy.slidy.css.frag"/>
-<src:fragref linkend="slidy.slidy.js.frag"/>
-<src:fragref linkend="slidy.user.css.frag"/>
 <src:fragref linkend="svg.embedding.mode.fo.frag"/>
 
 <src:fragref linkend="foil.header.properties.frag"/>
@@ -152,6 +149,14 @@ around all these parameters.</para>
 <src:fragref linkend="slides.titlepage.master.properties.frag"/>
 <src:fragref linkend="slides.titlepage.region-body.properties.frag"/>
 <src:fragref linkend="speakernotes.properties.frag"/>
+
+<src:fragref linkend="slides.titlepage.corpauthor.properties.frag"/>
+<src:fragref linkend="slides.titlepage.title.properties.frag"/>
+<src:fragref linkend="slides.titlepage.subtitle.properties.frag"/>
+<src:fragref linkend="foil.footer.properties.frag"/>
+<src:fragref linkend="slides.titlepage.author.properties.frag"/>
+<src:fragref linkend="slides.titlepage.pubdate.properties.frag"/>
+<src:fragref linkend="slides.titlepage.authorgroup.properties.frag"/>
 
 </xsl:stylesheet>
 </src:fragment>
