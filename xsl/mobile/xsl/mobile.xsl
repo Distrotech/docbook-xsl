@@ -72,7 +72,8 @@
   </xsl:param>
   <xsl:param name="mobile.taphold">
     <xsl:choose>
-      <xsl:when test="($mobile.device.platform = 'android')or($mobile.device.platform = 'iOS')"
+      <xsl:when
+        test="($mobile.device.platform = 'android')or($mobile.device.platform = 'iOS')or($mobile.device.platform='none')"
         >1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
@@ -281,6 +282,8 @@
       <xsl:with-param name="next" select="$next"/>
       <xsl:with-param name="nav.context" select="$nav.context"/>
     </xsl:call-template>
+    <!--xsl:call-template name="mobiletoc"/-->
+    
   </xsl:template>
 
   <!-- ============================================================ -->
@@ -442,14 +445,14 @@
         <!-- cuncact the file name with "#" symbol to identify in DOM -->
         <xsl:variable name="id_current" select="translate(concat('id_',$currentPage),'.','_')"/>
         
-        <div data-role="page">
+        <div data-role="page" >
           <xsl:attribute name="id">
             <xsl:value-of select="$id_current"/>
           </xsl:attribute>
-
+          
           <xsl:call-template name="user.header.content"/>
-
-          <div data-role="header" data-theme="b" data-position="fixed">
+          
+          <div data-role="header" data-theme="b">
             <xsl:call-template name="body.attributes"/>
 
             <xsl:call-template name="user.header.navigation">
@@ -460,27 +463,29 @@
           </div>
           <div data-role="content" id="bodyone">
             <xsl:if test="$mobile.taphold=1">
-              <a href="tapholdDialog.html" data-role="button" data-inline="true" data-rel="dialog"
-                data-transition="flip">
+              <a href="tapholdDialog.html" data-role="button"
+                data-inline="true" data-rel="dialog" data-transition="flip">
                 <xsl:attribute name="id">
                   <xsl:value-of select="concat($id_current,'_taphold')"/>
                 </xsl:attribute>
               </a>
             </xsl:if>
-
+            
             <div id="content">
 
               <xsl:copy-of select="$content"/>
 
             </div>
           </div>
-          <xsl:call-template name="user.footer.content"/>
+          <div id="mobile_footer">
+            <xsl:call-template name="user.footer.content"/>
 
-          <xsl:call-template name="user.footer.navigation">
-            <xsl:with-param name="prev" select="$prev"/>
-            <xsl:with-param name="next" select="$next"/>
-            <xsl:with-param name="nav.context" select="$nav.context"/>
-          </xsl:call-template>
+            <xsl:call-template name="user.footer.navigation">
+              <xsl:with-param name="prev" select="$prev"/>
+              <xsl:with-param name="next" select="$next"/>
+              <xsl:with-param name="nav.context" select="$nav.context"/>
+            </xsl:call-template>
+          </div>
         </div>
       </body>
     </html>
@@ -549,8 +554,28 @@
         </a>
       </xsl:if>-->
 
+      <!-- "Up" link-->
+      <xsl:choose>
+        <xsl:when test="count($up)&gt;0
+            and generate-id($up) != generate-id($home)">
+          <!--<div accesskey="u" data-role="button" data-icon="arrow-u" data-iconpos="notext"
+            data-theme="a"/>-->
+          <!--<div>
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="$up"/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:call-template name="navig.content">
+              <xsl:with-param name="direction" select="'up'"/>
+            </xsl:call-template>
+          </div>-->
+          &#160; </xsl:when>
+        <xsl:otherwise>&#160;</xsl:otherwise>
+      </xsl:choose>
       <!-- "Next" navigator genarate -->
       <!--<xsl:if test="count($next)>0">
+
         <a accesskey="n" data-role="button" data-icon="arrow-r" data-iconpos="notext" data-theme="a">
           <xsl:attribute name="href">
             <xsl:call-template name="href.target">
@@ -653,16 +678,16 @@
   </xsl:template>
 
   <!-- ============================================================ -->
-  <!-- =	Mobile Footer					                                  = -->
+  <!-- = Mobile Footer                                            = -->
   <!-- ============================================================ -->
   <xsl:template name="mobilefooter">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
-    
+
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
-    
+
     <xsl:if
       test="count($prev) &gt; 0
       or (count($up) &gt; 0
@@ -675,27 +700,36 @@
           <ul>
 
             <!-- "Previous" navigator genarate -->
-            <xsl:if test="count($prev)>0">
-              <li>
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$prev"/>
+            <li>
+              <a>
+                <xsl:choose>
+                  <xsl:when test="count($prev)>0">
+                    <xsl:attribute name="href">
+                      <xsl:call-template name="href.target">
+                        <xsl:with-param name="object" select="$prev"/>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'prev'"/>
                     </xsl:call-template>
-                  </xsl:attribute>
-                  <xsl:call-template name="navig.content">
-                    <xsl:with-param name="direction" select="'prev'"/>
-                  </xsl:call-template>
-                </a>
-              </li>
-            </xsl:if>
+                  </xsl:when>
+
+                  <xsl:otherwise>
+                    <xsl:attribute name="class">ui-disabled</xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'prev'"/>
+                    </xsl:call-template> &#160; </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </li>
 
             <!-- "Up" link-->
-            <xsl:choose>
-              <xsl:when test="count($up)&gt;0
-          and generate-id($up) != generate-id($home)">
-                <li>
-                  <a>
+            <li>
+              <a>
+                <xsl:choose>
+                  <xsl:when
+                    test="count($up)&gt;0
+                and generate-id($up) != generate-id($home)">
                     <xsl:attribute name="href">
                       <xsl:call-template name="href.target">
                         <xsl:with-param name="object" select="$up"/>
@@ -703,16 +737,22 @@
                     </xsl:attribute>
                     <xsl:call-template name="navig.content">
                       <xsl:with-param name="direction" select="'up'"/>
-                    </xsl:call-template>
-                  </a></li> &#160; </xsl:when>
-              <xsl:otherwise>&#160;</xsl:otherwise>
-            </xsl:choose>
+                    </xsl:call-template> &#160; </xsl:when>
+
+                  <xsl:otherwise>
+                    <xsl:attribute name="class">ui-disabled</xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'up'"/>
+                    </xsl:call-template> &#160; </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </li>
 
             <!-- "Home" link-->
-            <xsl:choose>
-              <xsl:when test="generate-id($up) != generate-id($home)">
-                <li>
-                  <a>
+            <li>
+              <a>
+                <xsl:choose>
+                  <xsl:when test="count($up)">
                     <xsl:attribute name="href">
                       <xsl:call-template name="href.target">
                         <xsl:with-param name="object" select="$home"/>
@@ -720,33 +760,48 @@
                     </xsl:attribute>
                     <xsl:call-template name="navig.content">
                       <xsl:with-param name="direction" select="'home'"/>
-                    </xsl:call-template>
-                  </a></li> &#160; </xsl:when>
-              <xsl:otherwise>&#160;</xsl:otherwise>
-            </xsl:choose>
+                    </xsl:call-template> &#160; </xsl:when>
+
+                  <xsl:otherwise>
+                    <xsl:attribute name="class">ui-disabled</xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'home'"/>
+                    </xsl:call-template> &#160; </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </li>
 
             <!-- "Next" navigator genarate -->
-            <xsl:if test="count($next)>0">
-              <!-- Had an issue on last navigation link of footer. To align it with others change the  margin. -->
-              <li style="margin-top: -19px;">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$next"/>
+            <li>
+              <a>
+                <xsl:choose>
+                  <xsl:when test="count($next)>0">
+                    <!-- Had an issue on last navigation link of footer. To align it with others change the margin. -->
+                    <!-- li style="margin-top: -16px;" -->
+                    <xsl:attribute name="href">
+                      <xsl:call-template name="href.target">
+                        <xsl:with-param name="object" select="$next"/>
+                      </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'next'"/>
                     </xsl:call-template>
-                  </xsl:attribute>
-                  <xsl:call-template name="navig.content">
-                    <xsl:with-param name="direction" select="'next'"/>
-                  </xsl:call-template>
-                </a>
-              </li>
-            </xsl:if>
+                  </xsl:when>
+                  
+                  <xsl:otherwise>
+                    <xsl:attribute name="class">ui-disabled</xsl:attribute>
+                    <xsl:call-template name="navig.content">
+                      <xsl:with-param name="direction" select="'next'"/>
+                    </xsl:call-template> &#160; </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- ============================================================ -->
   <!-- =	Mobile ToC								                              = -->
   <!-- ============================================================ -->
@@ -899,7 +954,9 @@
   <!-- =	user.footer.content						                          = -->
   <!-- ============================================================ -->
   <xsl:template name="user.footer.content">
-    
+    <!--        <script type="text/javascript" src="../common/main.js">-->
+    <xsl:comment/>
+    <!--        </script>-->
   </xsl:template>
 
   <!-- ============================================================ -->
@@ -1426,12 +1483,12 @@
                       <div style="margin: 10px 15px;">
                         <select name="font-size" id="font-size" data-theme="e"
                           data-native-menu="false" data-mini="true">
-                          <option value="8px">Front size-8</option>
-                          <option value="9px">Front size-9</option>
-                          <option value="10px">Front size-10</option>
-                          <option value="12px">Front size-12</option>
-                          <option value="14px">Front size-14</option>
-                          <option value="16px">Front size-16</option>
+                          <option value="8px">Font size-8</option>
+                          <option value="9px">Font size-9</option>
+                          <option value="10px">Font size-10</option>
+                          <option value="12px">Font size-12</option>
+                          <option value="14px">Font size-14</option>
+                          <option value="16px">Font size-16</option>
                         </select>
                       </div>
                     </li>
