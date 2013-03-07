@@ -5,12 +5,13 @@
   <property name="mobile.include.search" value="true"/>
 
   <include file="${ant.file.dir}/android/build.xml" as="nested"/>
-  <include file="${ant.file.dir}/iOS/build.xml" as="nested"/>
+  <include file="${ant.file.dir}/ios/build.xml" as="nested"/>
 
   <property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
 
   <path id="classpath">
-    <pathelement location="${extensions.dir}/webhelpindexer.jar"/>
+<!--    <pathelement location="${extensions.dir}/webhelpindexer.jar"/> Due to not versioning the webhelpindexer,to avoid conflicts-->
+    <pathelement location="${ant.file.dir}/extensions/webhelpindexer.jar"/>
     <pathelement location="${extensions.dir}/lucene-analyzers-3.0.0.jar"/>
     <pathelement location="${extensions.dir}/lucene-core-3.0.0.jar"/>
     <pathelement location="${extensions.dir}/tagsoup-1.2.1.jar"/>
@@ -37,9 +38,11 @@
         if="mobile.include.search"/>
       <param name="output_file_name" expression="${output_file_name}"/>
       <param name="mobile.base.dir" expression="${output-dir}" if="output-dir"/>
+      <param name="mobile.cordova.version" expression="${phonegap.version}" if="phonegap.version"/>
       <param name="mobile.toc.filename" expression="${mobile.toc.filename}" if="mobile.toc.filename"/>
       <param name="mobile.menubar.filename" expression="${mobile.menubar.filename}" if="mobile.menubar.filename"/>
       <param name="mobile.settings.filename" expression="${mobile.settings.filename}" if="mobile.settings.filename"/>
+      <param name="mobile.taphold.filename" expression="${mobile.taphold.filename}" if="mobile.taphold.filename"/>
       <param name="mobile.indexer.language" expression="${mobile.indexer.language}" if="mobile.indexer.language"/>
       <param name="mobile.device.platform" expression="${mobile.device.platform}" if="mobile.device.platform"/>
       <param name="branding" expression="${branding}" if="branding"/>
@@ -59,8 +62,16 @@
       <fileset dir="${ant.file.dir}/template_mobile">
         <include name="**/*"/>
         <exclude name="**/content/search/**"/>
+        <exclude name="**/PhoneGapBuild/**"/>
       </fileset>
     </copy>
+    <!-- copy xml configurations for PhoneGap Build -->
+    <copy todir="${output-dir}">
+      <fileset dir="${ant.file.dir}/template_mobile/PhoneGapBuild">
+        <include name="**/**" if="phonegap.build"/>
+      </fileset>
+    </copy>
+    
     <!-- Very simple-minded copy to handle the source document's images -->
     <!-- Customize mobile.xsl to produce ant file to copy images actually used? -->
     <dirname property="input-images-basedir" file="${input-xml}"/>
@@ -77,6 +88,7 @@
         <include name="**/*"/>
         <exclude name="**/content/search/*.props"/>
         <exclude name="**/content/search/stemmers/*"/>
+        <exclude name="**/PhoneGapBuild/**"/>
       </fileset>
     </copy>
 
@@ -137,14 +149,30 @@
   </target>
 
   <!-- Output of chunked htmls for all platforms  -->
-  <target name="mobile" depends="validate , chunk , add_resources , index"/>
+  <target name="build" depends="validate , chunk , add_resources , index"/>
+  
+  <!-- Output chunked of htmls for build apps with "PhoneGap Build" cloud service -->
+  <target name="mobile">
+    <property name="phonegap.build" value="true"/>
+    <antcall>
+      <target name="build"/>
+    </antcall>
+  </target>
 
+  <!-- Output chunked of htmls for webview: don't need phonegap library -->
+  <target name="mobile.web">
+    <property name="mobile.device.platform" value="none"/>
+    <antcall>
+      <target name="build"></target>
+    </antcall>
+  </target>
+  
   <!-- Android -->
   <target name="mobile.android">
     <property name="mobile.device.platform" value="android"/>
     <antcall>
-      <target name="mobile"/>
-      <target name="nested.android"/>
+      <target name="build"/>
+<!--      <target name="nested.android"/>-->
     </antcall>
   </target>
 
@@ -152,8 +180,8 @@
   <target name="mobile.iOS">
     <property name="mobile.device.platform" value="iOS"/>
     <antcall>
-      <target name="mobile"/>
-      <target name="nested.iOS"/>
+      <target name="build"/>
+<!--      <target name="nested.iOS"/>-->
     </antcall>
   </target>
 
@@ -161,13 +189,21 @@
   <target name="mobile.blackberry">
     <property name="mobile.device.platform" value="blackberry"/>
     <antcall>
-      <target name="mobile"/>
-      <target name="nested.blackberry"/>
+      <target name="build"/>
+<!--      <target name="nested.blackberry"/>-->
     </antcall>
   </target>
 
-  <!-- windows phone -->
-  <target name="mobile.windows.phone" depends="mobile"/>
+  <!-- Windows phone -->
+  <target name="mobile.windows_phone_8">
+    <property name="mobile.device.platform" value="windows_phone_8"/>
+    <antcall>
+      <target name="build"/>
+    </antcall>
+  </target>
+  
+  <!-- Symbian -->
+  <target name="mobile.symbian" depends="build"/>
 
   <target name="clean">
     <delete dir="${output-dir}"/>
@@ -181,24 +217,45 @@
       =mobile platform=     =ant command=
       
       |_Android             :$ant android-help *
-      |__Apple iOS          :$ant iOS-help
-      |___Blackberry        :$ant blackberry-help
+      |__Apple iOS          :$ant iOS-help *
+      |___Blackberry        :$ant blackberry-help *
       |____Palm webOS
       |_____Samsung Bada
-      |______Windows Phone  :$ant windows-phone-help
+      |______Windows Phone  :$ant windows-phone-help *
+      
+      (*) :- implemented
     </echo>
   </target>
   <target name="android-help">
-    <echo> Available ant commands : 
-      1. $ant mobile_android_debug_apk : can't be
-      used to debug purposes. This can not distribute to the end-users until, it signed by 'Android
-      2. $ant mobile_android_unsigned_apk : can't be installed into a
-      device until, it signed by 'Andriod Private Key' 
+    <echo> Available Android commands 
+      1. $ant mobile : 
+      2. $ant mobile.android :  
       
       Private Key'. 
       * To gain a key :
       http://developer.android.com/distribute/googleplay/publish/register.html To sign app with the
       key : http://developer.android.com/tools/publishing/app-signing.html 
+    </echo>
+  </target>
+  <target name="iOS-help">
+    <echo> Available iOS commands
+      1. $ant mobile :
+      2. $ant mobile.iOS :
+      
+    </echo>
+  </target>
+  <target name="blackberry-help">
+    <echo> Available BlackBerry commands
+    1. $ant mobile :
+    2. $ant mobile.blackberry :
+    
+    </echo>
+  </target>
+  <target name="windows_phone_8-help">
+    <echo> Available Windows Phone 8 commands
+      1. $ant mobile :
+      2. $ant mobile.blackberry :
+      
     </echo>
   </target>
 </project>

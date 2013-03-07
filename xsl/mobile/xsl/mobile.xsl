@@ -25,6 +25,7 @@
   <xsl:param name="mobile.toc.filename">toc.html</xsl:param>
   <xsl:param name="mobile.setting.filename">settings.html</xsl:param>
   <xsl:param name="mobile.menubar.filename">menubar.html</xsl:param>
+  <xsl:param name="mobile.taphold.filename">tapholdDialog.html</xsl:param>
   <xsl:param name="mobile.base.dir">www</xsl:param>
   <xsl:param name="mobile.indexer.language">en</xsl:param>
   <xsl:param name="mobile.default.topic"/>
@@ -61,7 +62,7 @@
   <xsl:param name="jquery.mobile.css">../css/themes/default/jquery.mobile-1.1.0.min.css</xsl:param>
   <xsl:param name="jquery.js">../js/jquery-1.7.1.min.js</xsl:param>
   <xsl:param name="jquery.mobile.js">../js/jquery.mobile-1.1.0.min.js</xsl:param>
-  <xsl:param name="mobile.device.platform">none</xsl:param>
+  <xsl:param name="mobile.device.platform">all</xsl:param>
   <xsl:param name="mobile.cordova.version">2.0.0</xsl:param>
   <xsl:param name="mobile.cordova.path" select="concat('../','cordova-',$mobile.cordova.version,'.js')"/>
   <xsl:param name="mobile.swipeupdown">
@@ -73,7 +74,8 @@
   <xsl:param name="mobile.taphold">
     <xsl:choose>
       <xsl:when
-        test="($mobile.device.platform = 'android')or($mobile.device.platform = 'iOS')or($mobile.device.platform='none')"
+        test="($mobile.device.platform='android')or($mobile.device.platform='iOS')
+        or($mobile.device.platform='none')"
         >1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
@@ -178,7 +180,8 @@
     <link rel="stylesheet" type="text/css" href="../css/mobile.positioning.css"/>
 
     <xsl:choose>
-      <xsl:when test="('android'=$mobile.device.platform) or ('iOS'=$mobile.device.platform)">
+      <xsl:when test="('android'=$mobile.device.platform)or('iOS'=$mobile.device.platform)
+        or('all'=$mobile.device.platform)">
         <script type="text/javascript" charset="utf-8">
           <xsl:attribute name="src">
             <xsl:value-of select="$mobile.cordova.path"/>
@@ -399,7 +402,8 @@
     <xsl:call-template name="toc.html"/>
     
     <xsl:choose>
-      <xsl:when test="('none'=$mobile.device.platform) or ('iOS'=$mobile.device.platform)">
+      <xsl:when test="('none'=$mobile.device.platform) or ('all'=$mobile.device.platform)
+        or ('android'=$mobile.device.platform) or ('iOS'=$mobile.device.platform)">
         <xsl:call-template name="index.html"/>
       </xsl:when>
     </xsl:choose>
@@ -409,7 +413,7 @@
     <xsl:call-template name="menubar.html"/>
     
 <!--    <xsl:if test="('1'=$mobile.taphold)">-->
-      <xsl:call-template name="tapholdDialog.html" />
+      <xsl:call-template name="tapholdDialog" />
 <!--    </xsl:if>-->
     
     <xsl:call-template name="l10n.js"></xsl:call-template>
@@ -452,7 +456,7 @@
           
           <xsl:call-template name="user.header.content"/>
           
-          <div data-role="header" data-theme="b">
+          <div data-role="header" data-theme="b" data-position="fixed">
             <xsl:call-template name="body.attributes"/>
 
             <xsl:call-template name="user.header.navigation">
@@ -467,6 +471,9 @@
                 data-inline="true" data-rel="dialog" data-transition="flip">
                 <xsl:attribute name="id">
                   <xsl:value-of select="concat($id_current,'_taphold')"/>
+                </xsl:attribute>
+                <xsl:attribute name="href">
+                  <xsl:value-of select="$mobile.taphold.filename"/>
                 </xsl:attribute>
               </a>
             </xsl:if>
@@ -591,7 +598,12 @@
       <!-- show the "Options" to user such as ToC, menubar and settings -->
       <a accesskey="n" data-role="button" data-icon="grid" class="ui-btn-right"
         data-iconpos="notext" data-theme="a" href="tapholdDialog.html" data-inline="true"
-        data-rel="dialog" data-transition="flip">Options</a>
+        data-rel="dialog" data-transition="flip">
+      <xsl:attribute name="href">
+        <xsl:value-of select="$mobile.taphold.filename"/>
+      </xsl:attribute>
+        <xsl:text>Options</xsl:text>
+      </a>
       
       <!-- add swipe scripts to navigate -->
       <xsl:variable name="nav_prev">
@@ -1016,7 +1028,8 @@
           <body> If not automatically redirected, click here to: <a id="redir" href="content/{$mobile.start.filename}"
               >Start Reading...</a>
             <xsl:choose>
-              <xsl:when test="'iOS'=$mobile.device.platform">
+              <xsl:when test="('all'=$mobile.device.platform)or('android'=$mobile.device.platform)
+                or('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
@@ -1064,7 +1077,8 @@
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <!-- Add resources to Android device -->
             <xsl:choose>
-              <xsl:when test="('android'=$mobile.device.platform)or('iOS'=$mobile.device.platform)">
+              <xsl:when test="('all'=$mobile.device.platform) or ('android'=$mobile.device.platform)
+                or ('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
@@ -1369,7 +1383,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <xsl:choose>
-              <xsl:when test="('android'=$mobile.device.platform)or('iOS'=$mobile.device.platform)">
+              <xsl:when test="('all'=$mobile.device.platform) or ('android'=$mobile.device.platform)
+                or ('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
@@ -1613,7 +1628,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <xsl:choose>
-              <xsl:when test="'android'=$mobile.device.platform">
+              <xsl:when test="('all'=$mobile.device.platform) or ('android'=$mobile.device.platform)
+                or ('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
@@ -1686,7 +1702,7 @@
   <!-- ============================================================ -->
   <!-- = Tap Hold Dialog                                          = -->
   <!-- ============================================================ -->
-  <xsl:template name="tapholdDialog.html">
+  <xsl:template name="tapholdDialog">
     <xsl:call-template name="write.chunk">
       <xsl:with-param name="filename">
         <!--<xsl:choose>
@@ -1698,7 +1714,7 @@
           </xsl:otherwise>
         </xsl:choose>-->
         
-        <xsl:value-of select="concat($mobile.base.dir,'/content/','tapholdDialog.html')"/>
+        <xsl:value-of select="concat($mobile.base.dir,'/content/',$mobile.taphold.filename)"/>
       </xsl:with-param>
       <xsl:with-param name="method" select="'xml'"/>
       <xsl:with-param name="encoding" select="'utf-8'"/>
@@ -1709,7 +1725,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <xsl:choose>
-              <xsl:when test="('android'=$mobile.device.platform) or ('iOS'=$mobile.device.platform)">
+              <xsl:when test="('all'=$mobile.device.platform)or('android'=$mobile.device.platform)
+                or ('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
