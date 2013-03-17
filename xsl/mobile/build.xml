@@ -4,8 +4,8 @@
   <loadproperties srcFile="${ant.file.dir}/build.properties"/>
   <property name="mobile.include.search" value="true"/>
 
-  <include file="${ant.file.dir}/android/build.xml" as="nested"/>
-  <include file="${ant.file.dir}/ios/build.xml" as="nested"/>
+  <!--include file="${ant.file.dir}/android/build.xml" as="nested"/-->
+  <!--include file="${ant.file.dir}/ios/build.xml" as="nested"/-->
 
   <property name="extensions.dir" value="${ant.file.dir}/../extensions"/>
 
