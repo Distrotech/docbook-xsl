@@ -7,9 +7,30 @@
       <link rel="shortcut icon" href="favicon.ico"/>
       <title> Mobile docBook Help   </title>
    </head>
-   <body> If not automatically redirected, click here to: <a id="redir" href="content/index.html">Start Reading...</a>
+   <body>
+      <div class="ex">
+         <p> If not automatically redirected, click here to: </p>
+         <a id="redir" href="content/index.html">
+            <b>Start Reading</b>
+         </a>
+      </div>
       <script type="text/javascript">
               document.getElementById("redir").click();
             </script>
+      <style type="text/css">
+              div.ex
+              {
+              width:220px;
+              padding:10px;
+              border:5px solid #400000 ;
+              margin:50px 0 0 20px;
+              background-color: gray;
+              text-align:center;
+              }
+              div.ex a{
+              text-decoration:blink;
+              font-size:18px;
+              }
+            </style>
    </body>
 </html>

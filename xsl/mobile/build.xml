@@ -63,6 +63,7 @@
         <include name="**/*"/>
         <exclude name="**/content/search/**"/>
         <exclude name="**/PhoneGapBuild/**"/>
+        <exclude name="**/js-dev/**"/>
       </fileset>
     </copy>
     <!-- copy xml configurations for PhoneGap Build -->
@@ -89,6 +90,7 @@
         <exclude name="**/content/search/*.props"/>
         <exclude name="**/content/search/stemmers/*"/>
         <exclude name="**/PhoneGapBuild/**"/>
+				<exclude name="**/js-dev/**"/>
       </fileset>
     </copy>
 
@@ -215,15 +217,30 @@
     <echo> help : to view help options
       === List of Available mobile platforms ===
       =mobile platform=     =ant command=
+			|
+      |_PhoneGap Build        :$ant mobile-help *
+      |__Web View             :$ant web-help *
+      |___Android             :$ant android-help *
+      |____Apple iOS          :$ant iOS-help *
+      |_____Blackberry        :$ant blackberry-help *
+      |______Palm webOS
+      |_______Samsung Bada
+      |________Windows Phone  :$ant windows-phone-help
       
-      |_Android             :$ant android-help *
-      |__Apple iOS          :$ant iOS-help *
-      |___Blackberry        :$ant blackberry-help *
-      |____Palm webOS
-      |_____Samsung Bada
-      |______Windows Phone  :$ant windows-phone-help *
+      (*) :- check for more details
+    </echo>
+  </target>
+  <target name="mobile-help">
+    <echo> Available PhoneGap Build commands
+      1. $ant mobile : Build apps for all platforms using "PhoneGap Build".
+      For more details check on DocBook Mobile documentaion on /www/ directory
       
-      (*) :- implemented
+    </echo>
+  </target>
+  <target name="web-help">
+    <echo> Available Web View commands
+      1. $ant mobile.web : Build documentation to use with Web Browser. Don't need to build using PhoneGap.
+      
     </echo>
   </target>
   <target name="android-help">

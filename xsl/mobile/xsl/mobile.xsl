@@ -63,6 +63,7 @@
   <xsl:param name="jquery.js">../js/jquery-1.7.1.min.js</xsl:param>
   <xsl:param name="jquery.mobile.js">../js/jquery.mobile-1.1.0.min.js</xsl:param>
   <xsl:param name="mobile.device.platform">all</xsl:param>
+  <!-- Platform considered : [all],[none],[androd],[iOS],[blackberry] -->
   <xsl:param name="mobile.cordova.version">2.0.0</xsl:param>
   <xsl:param name="mobile.cordova.path" select="concat('../','cordova-',$mobile.cordova.version,'.js')"/>
   <xsl:param name="mobile.swipeupdown">
@@ -74,8 +75,8 @@
   <xsl:param name="mobile.taphold">
     <xsl:choose>
       <xsl:when
-        test="($mobile.device.platform='android')or($mobile.device.platform='iOS')
-        or($mobile.device.platform='none')"
+        test="($mobile.device.platform='all')or($mobile.device.platform='android')
+        or($mobile.device.platform='iOS')or($mobile.device.platform='none')"
         >1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
@@ -179,6 +180,7 @@
     </link>
     <link rel="stylesheet" type="text/css" href="../css/mobile.positioning.css"/>
 
+    <!-- Insert PhoneGap Cordova library if output is going to host on a device, not on web -->
     <xsl:choose>
       <xsl:when test="('android'=$mobile.device.platform)or('iOS'=$mobile.device.platform)
         or('all'=$mobile.device.platform)">
@@ -205,7 +207,7 @@
               txt_results_for = "Results for: ";
             </script>
     
-    <script type="text/javascript" src="../js/browserDetect.js">
+    <script type="text/javascript" src="../js/browserDetect.min.js">
       <xsl:comment>//jQuery</xsl:comment>
     </script>
     <script type="text/javascript" src="../js/jquery.min.js">
@@ -214,59 +216,68 @@
       </xsl:attribute>
       <xsl:comment>//jQuery</xsl:comment>
     </script>
-    <script type="text/javascript" src="../js/jquery.cookie.min.js">
-      <xsl:comment>include mobile menubar js</xsl:comment>
-    </script>
-    <script type="text/javascript" src="../js/mobile-menubar.js">
-      <xsl:comment>mobile-menubar</xsl:comment>
-    </script>
-    <script type="text/javascript" src="../js/mobile-settings.js">
-      <xsl:comment>include mobile settings js</xsl:comment>
-    </script>
-    <!-- JS for Indexer Search -->
-    <script type="text/javascript" src="search/l10n.js">
-              <xsl:comment>l10n</xsl:comment>
-            </script>
-    <script type="text/javascript" src="search/htmlFileInfoList.js">
-              <xsl:comment>htmlFileInfoList</xsl:comment>
-            </script>
-    <script type="text/javascript" src="search/nwSearchFnt.js">
-              <xsl:comment>nwSearchFnt</xsl:comment>
-            </script>
-    <script type="text/javascript" src="{concat('search/stemmers/',$mobile.indexer.language,'_stemmer.js')}">
-              <xsl:comment>make scalable to other languages as well.</xsl:comment>
-            </script>
-    <!--Index Files: Index is broken in to three equal sized(number of index
-                items) files. This is to help parallel downloading of files to make it faster. -->
-    <script type="text/javascript" src="search/index-1.js">
-              <xsl:comment>index-1</xsl:comment>
-            </script>
-    <script type="text/javascript" src="search/index-2.js">
-              <xsl:comment>index-2</xsl:comment>
-            </script>
-    <script type="text/javascript" src="search/index-3.js">
-              <xsl:comment>index-3</xsl:comment>
-            </script>
-    <!-- End of index js -->
-    <!-- pop up the settings panel when click on menu button of the phone/device -->
-    <script type="text/javascript" charset="utf-8">
-        document.addEventListener("deviceready", onDeviceReady, false);
-
-        function onDeviceReady() {
-          document.addEventListener("menubutton", onMenuKeyDown, false);
-        }
-
-        function onMenuKeyDown() {
-          $.mobile.changePage("<xsl:value-of select="$mobile.setting.filename"/>");
-        }
-		</script>
     <script type="text/javascript">
       <xsl:attribute name="src">
         <xsl:value-of select="$jquery.mobile.js"/>
       </xsl:attribute>
-      <xsl:comment>
-      </xsl:comment>
+      <xsl:comment>//jQuery-Mobile</xsl:comment>
     </script>
+    <script type="text/javascript" src="../js/jquery.cookie.min.js">
+      <xsl:comment>//include mobile menubar js</xsl:comment>
+    </script>
+    <script type="text/javascript" src="../js/mobile-menubar.js">
+      <xsl:comment>//mobile-menubar</xsl:comment>
+    </script>
+    <script type="text/javascript" src="../js/mobile-settings.js">
+      <xsl:comment>//include mobile settings js</xsl:comment>
+    </script>
+    <!-- JS for Indexer Search -->
+    <script type="text/javascript" src="search/l10n.js">
+              <xsl:comment>//l10n</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/htmlFileInfoList.js">
+              <xsl:comment>//htmlFileInfoList</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/nwSearchFnt.js">
+              <xsl:comment>//nwSearchFnt</xsl:comment>
+            </script>
+    <script type="text/javascript" src="{concat('search/stemmers/',$mobile.indexer.language,'_stemmer.js')}">
+              <xsl:comment>//make scalable to other languages as well.</xsl:comment>
+            </script>
+    <!--Index Files: Index is broken in to three equal sized(number of index
+                items) files. This is to help parallel downloading of files to make it faster. -->
+    <script type="text/javascript" src="search/index-1.js">
+              <xsl:comment>//index-1</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/index-2.js">
+              <xsl:comment>//index-2</xsl:comment>
+            </script>
+    <script type="text/javascript" src="search/index-3.js">
+              <xsl:comment>//index-3</xsl:comment>
+            </script>
+    <!-- End of index js -->
+    
+    <!-- pop up the settings panel when click on menu button of the phone/device (only support with android,blackberry and iOS-5(higher)) -->
+    <xsl:choose>
+      <xsl:when
+        test="('android'=$mobile.device.platform)or('blackberry'=$mobile.device.platform)">
+        <script type="text/javascript" charset="utf-8">
+          function onMobileLoad(){
+          mobile.initMobileSettings();
+          document.addEventListener("deviceready", onDeviceReady, false);
+          }
+          
+          function onDeviceReady() {
+          document.addEventListener("menubutton", onMenuKeyDown, false);
+          }
+          
+          function onMenuKeyDown() {
+          $.mobile.changePage("<xsl:value-of select="$mobile.setting.filename"/>");
+          }
+        </script>
+      </xsl:when>
+    </xsl:choose>
+    
     <!--<script type="text/javascript" src="../js/swipeupdown.js">
       <xsl:comment>
       </xsl:comment>
@@ -440,6 +451,8 @@
       </xsl:call-template>
 
       <body>
+        <!-- Execute a onMobileLoad when a page is finished loading: to phoneGap deviceready
+        xsl:attribute name="onload">onMobileLoad()</xsl:attribute -->
         <!--Page should have identical id to identify itselt. It is logical to use html file name as id -->
         <xsl:variable name="currentPage">
           <xsl:call-template name="href.target">
@@ -628,54 +641,60 @@
       <!-- actions for the events happening on the phone/device -->
       <script type="text/javascript">        
         $(function() {
-          var $nextPage="<xsl:value-of select="$nav_prev"/>";
-          var $prevPage="<xsl:value-of select="$nav_next"/>";
+          var $nextPage='<xsl:value-of select="$nav_prev"/>';
+          var $prevPage='<xsl:value-of select="$nav_next"/>';
         <xsl:if test="$mobile.swipeupdown=1">
-          var $toc="<xsl:value-of select="$mobile.toc.filename"/>";
-          var $menubar="<xsl:value-of select="$mobile.menubar.filename"/>";
+          var $toc='<xsl:value-of select="$mobile.toc.filename"/>';
+          var $menubar='<xsl:value-of select="$mobile.menubar.filename"/>';
           //when swipe down event happens
           $("<xsl:value-of select="$id_current"/>").live('swipedown', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar') ){
-              if("swipeDown"===$.cookie('menubardirection') ){
+            if("showMenuBar"===mobile.getMobileValue('popupmenubar') ){
+              if("swipeDown"===mobile.getMobileValue('menubardirection') ){
                 $.mobile.changePage($menubar);
               }
             }
-            if("showtoc"===$.cookie('popuptoc') ) {
-              if("swipeDown"===$.cookie('tocdirection') ){
+            if("showtoc"===mobile.getMobileValue('popuptoc') ) {
+              if("swipeDown"===mobile.getMobileValue('tocdirection') ){
                 $.mobile.changePage($toc);
               }
             }
           });
 				  //when swipe up event happens
           $("<xsl:value-of select="$id_current"/>").live('swipeup', function(event) {
-            if("showMenuBar"===$.cookie('popupmenubar')){
-              if("swipeUp"===$.cookie('menubardirection') ){
+            if("showMenuBar"===mobile.getMobileValue('popupmenubar')){
+              if("swipeUp"===mobile.getMobileValue('menubardirection') ){
                 $.mobile.changePage($menubar);
               }
             }
-            if("showtoc"===$.cookie('popuptoc')) {
-              if("swipeUp"===$.cookie('tocdirection') ){
+            if("showtoc"===mobile.getMobileValue('popuptoc')) {
+              if("swipeUp"===mobile.getMobileValue('tocdirection') ){
                 $.mobile.changePage($toc);
               }
             }
           });
         </xsl:if>
-          //when swipe left event happens
-          $("<xsl:value-of select="$id_current"/>").live('swipeleft', function(event) {
-            if("swipeLeft" === $.cookie('nextpage') ){
-              $.mobile.changePage($nextPage);
-            }else{
-              $.mobile.changePage($prevPage);
+          
+          // Bind the swiperightHandler callback function to the swipe event
+          $("<xsl:value-of select="$id_current"/>").on('swipeleft', swipeleftHandler );
+          // Bind the swiperightHandler callback function to the swipe event
+          $("<xsl:value-of select="$id_current"/>").on('swiperight', swiperightHandler );
+        
+          function swipeleftHandler( event ){
+            if("swipeLeft" === mobile.getMobileValue('prevpage') ){
+              $.mobile.changePage($nextPage, { transition: "flow", reverse: false });
+            }else if("swipeLeft" == mobile.getMobileValue('nextpage') ){
+              $.mobile.changePage($prevPage, { transition: "flow", reverse: false});
             }
-          });
-				 	//when swipe right event happens
-          $("<xsl:value-of select="$id_current"/>").live('swiperight', function(event) {
-            if("swipeRight" === $.cookie('prevpage') ){
-              $.mobile.changePage($prevPage);
-            }else{
-              $.mobile.changePage($nextPage);
+          }
+        
+          function swiperightHandler( event ){
+            if("swipeRight" === mobile.getMobileValue('nextpage') ){
+              $.mobile.changePage($prevPage, { transition: "turn", reverse: false });
+            }else if("swipeRight" === mobile.getMobileValue('prevpage') ){
+              $.mobile.changePage($nextPage, { transition: "turn", reverse: false });
             }
-          });
+        }
+          
         <xsl:if test="$mobile.taphold='1'">
           //if taphold feature enabled
           $("<xsl:value-of select="concat($id_current,'_taphold')"/>").hide();
@@ -714,6 +733,8 @@
             <!-- "Previous" navigator genarate -->
             <li>
               <a>
+                <!-- fetch the page hidden via AJAX -->
+                <xsl:attribute name="data-prefetch"></xsl:attribute>
                 <xsl:choose>
                   <xsl:when test="count($prev)>0">
                     <xsl:attribute name="href">
@@ -786,6 +807,8 @@
             <!-- "Next" navigator genarate -->
             <li>
               <a>
+                <!-- fetch the page hidden via AJAX -->
+                <xsl:attribute name="data-prefetch"></xsl:attribute>
                 <xsl:choose>
                   <xsl:when test="count($next)>0">
                     <!-- Had an issue on last navigation link of footer. To align it with others change the margin. -->
@@ -1025,14 +1048,16 @@
             <link rel="shortcut icon" href="favicon.ico"/>
             <title><xsl:value-of select="//title[1]"/>&#160; </title>
           </head>
-          <body> If not automatically redirected, click here to: <a id="redir" href="content/{$mobile.start.filename}"
-              >Start Reading...</a>
+          <body>
+            <div class="ex"><p> If not automatically redirected, click here to: </p>
+              <a id="redir" href="content/{$mobile.start.filename}"><b>Start Reading</b></a>
+            </div>
             <xsl:choose>
               <xsl:when test="('all'=$mobile.device.platform)or('android'=$mobile.device.platform)
                 or('iOS'=$mobile.device.platform)">
                 <script type="text/javascript" charset="utf-8">
                   <xsl:attribute name="src">
-                    <xsl:value-of select="$mobile.cordova.path"/>
+                    <xsl:value-of select="concat('cordova-',$mobile.cordova.version,'.js')"/>
                   </xsl:attribute>
                   <xsl:comment></xsl:comment>
                 </script>
@@ -1041,6 +1066,21 @@
             <script type="text/javascript">
               document.getElementById("redir").click();
             </script>
+            <style type="text/css">
+              div.ex
+              {
+              width:220px;
+              padding:10px;
+              border:5px solid #400000 ;
+              margin:50px 0 0 20px;
+              background-color: gray;
+              text-align:center;
+              }
+              div.ex a{
+              text-decoration:blink;
+              font-size:18px;
+              }
+            </style>
           </body>
         </html>
       </xsl:with-param>
@@ -1153,13 +1193,14 @@
                   function refreshSelectMenus(){
                     //set the select menu values
                   <xsl:if test="'1'=$mobile.swipeupdown">
-                    $("#select-menu-bar-direction").val($.cookie('menubardirection')).selectmenu('refresh', true);
-                    $("#select-toc-direction").val($.cookie('tocdirection')).selectmenu('refresh', true);
-                    $("#select-pop-up-menu-bar").val($.cookie('popupmenubar')).selectmenu('refresh', true);
-                    $("#select-pop-up-toc").val($.cookie('popuptoc')).selectmenu('refresh', true);
+                    $("#select-menu-bar-direction").val(mobile.getMobileValue('menubardirection') ).selectmenu( 'refresh', true);
+                    $("#select-toc-direction").val(mobile.getMobileValue('tocdirection')).selectmenu( 'refresh', true);
+                    $("#select-pop-up-menu-bar").val(mobile.getMobileValue('popupmenubar')).selectmenu( 'refresh', true);
+                    $("#select-pop-up-toc").val(mobile.getMobileValue('popuptoc')).selectmenu( 'refresh', true);
                   </xsl:if>
-                    $("#select-prev-page-direction").val($.cookie('prevpage')).selectmenu('refresh', true);
-                    $("#select-next-page-direction").val($.cookie('nextpage')).selectmenu('refresh', true);
+                  $("#select-prev-page-direction").val(mobile.getMobileValue('prevpage')).selectmenu( 'refresh', true);
+                    
+                    $("#select-next-page-direction").val(mobile.getMobileValue('nextpage')).selectmenu( 'refresh', true);
                     $("#reset-settings").val("cancel").selectmenu('refresh', true);
                   }
                 </script>
@@ -1174,10 +1215,10 @@
                     <!-- =  Go to ToC / Menubar                = -->
                     <!-- ======================================= -->
                     <li>
-                      <a id="viewtoc">ToC</a>
+                      <a id="viewtoc" style="font-size:16px;">ToC</a>
                     </li>
                     <li>
-                      <a id="viewmenubar"> Menu Bar</a>
+                      <a id="viewmenubar" style="font-size:16px;"> Menu Bar</a>
                     </li>
 
                     <!--<li>
@@ -1411,7 +1452,7 @@
                 <xsl:value-of select="$jquery.mobile.css"/>
               </xsl:attribute>
             </link>
-            <script type="text/javascript" src="../js/browserDetect.js">
+            <script type="text/javascript" src="../js/browserDetect.min.js">
               <xsl:comment>browserDetect</xsl:comment>
             </script>
             <script type="text/javascript">
@@ -1564,11 +1605,11 @@
                   $("#id_menubar_html").live('pageshow',function(){
                    
                     //set the select menu focused
-                    $("#font-size").val($.cookie('font-size')).selectmenu('refresh', true);
-                    $("#font-family").val($.cookie('font-family')).selectmenu('refresh', true);
-                    if($.cookie('textToSearch') !== null){
-                      if("on" === $.cookie('remembersearchword') ) {
-                        $("#textToSearch").val($.cookie('textToSearch'));
+                    $("#font-size").val(mobile.getMobileValue('font-size')).selectmenu('refresh', true);
+                    $("#font-family").val(mobile.getMobileValue('font-family')).selectmenu('refresh', true);
+                    if(mobile.getMobileValue('textToSearch') !== null){
+                    if("on" === mobile.getMobileValue('remembersearchword') ) {
+                    $("#textToSearch").val(mobile.getMobileValue('textToSearch'));
                       }else{
                         $("#textToSearch").val('');
                       }
@@ -1731,8 +1772,7 @@
                   <xsl:attribute name="src">
                     <xsl:value-of select="$mobile.cordova.path"/>
                   </xsl:attribute>
-                  <xsl:comment>
-                  </xsl:comment>
+                  <xsl:comment>//cordova js</xsl:comment>
                 </script>
               </xsl:when>
             </xsl:choose>
@@ -1741,41 +1781,41 @@
                 <xsl:value-of select="$jquery.mobile.css"/>
               </xsl:attribute>
             </link>
-            <script type="text/javascript" src="../js/browserDetect.js">
-              <xsl:comment>browserDetect</xsl:comment>
+            <script type="text/javascript" src="../js/browserDetect.min.js">
+              <xsl:comment>//browserDetect</xsl:comment>
             </script>
             <script type="text/javascript">
               <xsl:attribute name="src">
                 <xsl:value-of select="$jquery.js"/>
               </xsl:attribute>
-              <xsl:comment>jquery</xsl:comment>
+              <xsl:comment>//jquery</xsl:comment>
             </script>
             <script type="text/javascript" src="../js/jquery.cookie.min.js">
-              <xsl:comment>cookies</xsl:comment>
+              <xsl:comment>//cookies</xsl:comment>
             </script>
             <script type="text/javascript" src="../js/mobile-menubar.js">
-              <xsl:comment>mobile menubar</xsl:comment>
+              <xsl:comment>//mobile menubar</xsl:comment>
             </script>
             <script type="text/javascript" src="../js/mobile-settings.js">
-              <xsl:comment>mobile settings</xsl:comment>
+              <xsl:comment>//mobile settings</xsl:comment>
             </script>
             
             <script type="text/javascript">
               <xsl:attribute name="src">
                 <xsl:value-of select="$jquery.mobile.js"/>
               </xsl:attribute>
-              <xsl:comment>jquerymobile</xsl:comment>
+              <xsl:comment>//jquerymobile</xsl:comment>
             </script>
           </head>
           <body>
             <div data-role="page" class="dialog-actionsheet" data-overlay-theme="b">
               
               <div data-role="content" data-theme="a">
-                <a id="toc_button" data-role="button" data-rel="dialog"
+                <a id="toc_button" class="taphold" data-role="button" data-rel="dialog"
                   data-transition="slidedown" data-theme="b">ToC</a>
-                <a id="menubar_button" data-role="button" data-rel="dialog"
+                <a id="menubar_button" class="taphold" data-role="button" data-rel="dialog"
                   data-transition="slidedown" data-theme="b">Menu Bar</a>
-                <a id="settings_button" data-role="button" data-rel="dialog"
+                <a id="settings_button" class="taphold" data-role="button" data-rel="dialog"
                   data-transition="slidedown" data-theme="b">Settings</a>
                 <a href="index.html" data-role="button" data-rel="back" data-theme="a">Cancel</a>
                 <script type="text/javascript">

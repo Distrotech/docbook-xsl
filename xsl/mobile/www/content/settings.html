@@ -42,8 +42,9 @@
                   function refreshSelectMenus(){
                     //set the select menu values
                   
-                    $("#select-prev-page-direction").val($.cookie('prevpage')).selectmenu('refresh', true);
-                    $("#select-next-page-direction").val($.cookie('nextpage')).selectmenu('refresh', true);
+                  $("#select-prev-page-direction").val(mobile.getMobileValue('prevpage')).selectmenu( 'refresh', true);
+                    
+                    $("#select-next-page-direction").val(mobile.getMobileValue('nextpage')).selectmenu( 'refresh', true);
                     $("#reset-settings").val("cancel").selectmenu('refresh', true);
                   }
                 </script>
@@ -53,10 +54,10 @@
                <ul data-role="listview" data-inset="true" data-theme="b">
                   <li data-role="list-divider">Edit</li>
                   <li>
-                     <a id="viewtoc">ToC</a>
+                     <a id="viewtoc" style="font-size:16px;">ToC</a>
                   </li>
                   <li>
-                     <a id="viewmenubar"> Menu Bar</a>
+                     <a id="viewmenubar" style="font-size:16px;"> Menu Bar</a>
                   </li>
                   <li data-theme="a">
                      <label for="select-prev-page-direction" class="select" data-mini="true">
