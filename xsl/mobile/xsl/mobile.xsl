@@ -216,6 +216,7 @@
       </xsl:attribute>
       <xsl:comment>//jQuery</xsl:comment>
     </script>
+    
     <script type="text/javascript">
       <xsl:attribute name="src">
         <xsl:value-of select="$jquery.mobile.js"/>
@@ -681,17 +682,17 @@
         
           function swipeleftHandler( event ){
             if("swipeLeft" === mobile.getMobileValue('prevpage') ){
-              $.mobile.changePage($nextPage, { transition: "flow", reverse: false });
+              $.mobile.changePage($nextPage, { transition: "pop", reverse: false });
             }else if("swipeLeft" == mobile.getMobileValue('nextpage') ){
-              $.mobile.changePage($prevPage, { transition: "flow", reverse: false});
+              $.mobile.changePage($prevPage, { transition: "slidefade", reverse: false});
             }
           }
         
           function swiperightHandler( event ){
             if("swipeRight" === mobile.getMobileValue('nextpage') ){
-              $.mobile.changePage($prevPage, { transition: "turn", reverse: false });
+              $.mobile.changePage($prevPage, { transition: "slidefade", reverse: false });
             }else if("swipeRight" === mobile.getMobileValue('prevpage') ){
-              $.mobile.changePage($nextPage, { transition: "turn", reverse: false });
+              $.mobile.changePage($nextPage, { transition: "pop", reverse: false });
             }
         }
           
