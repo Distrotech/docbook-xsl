@@ -150,6 +150,12 @@
 
   </target>
 
+  <!-- Create zip file for PhoneGap build -->
+  <target name="zip">
+    <echo>Creating zip file for PhoneGap Build into ${output-dir}/PhoneGap_build.zip </echo>
+		<zip destfile="${output-dir}/PhoneGap_Build.zip" basedir="${output-dir}" update="true"/>
+  </target>
+
   <!-- Output of chunked htmls for all platforms  -->
   <target name="build" depends="validate , chunk , add_resources , index"/>
   
@@ -158,6 +164,7 @@
     <property name="phonegap.build" value="true"/>
     <antcall>
       <target name="build"/>
+      <target name="zip"/>
     </antcall>
   </target>
 
