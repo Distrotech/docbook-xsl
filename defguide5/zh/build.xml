@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Usage:
+    Building 'The Definitive Guide (5.0)' - all(html & pdf)
+        $ ant
+
+    Building 'The Definitive Guide (5.0)' - html
+        $ ant html
+
+    Building 'The Definitive Guide (5.0)' - pdf
+        $ ant pdf
+
+Dependency:
+    *) jdk 1.6
+    *) ant 1.7
+    *) bsf 2.4
+    *) beanshell 2.0b4
+    *) saxon 6.5 & 9.1
+    *) RELAX NG Support(jing)
+    *) DocBook XSL
+    *) xsltproc 1.1.24
+    *) python 2.5
+    *) python-libxml2 2.6.32
+    *) gettext 0.17
+    *) xep 4.1.4 or fop trunk 2008-12-19(r728025), pdf only
+    *) chinese font files, chinese pdf only
+-->
+<project name="defguide5-zh" default="html">
+
+    <property file="../build-common.properties"/>
+    <import file="../build-common.xml"/>
+
+    <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask"/>
+
+    <target name="usage">
+        <echo message="Use the -projecthelp option instead"/>
+    </target>
+
+    <target name="clean" description="Clean the build directory">
+        <delete dir="build"/>
+        <delete dir="../en/build"/>
+        <delete file="../en/bookinfo.xml"/>
+        <ant dir="../en" target="clean"/>
+    </target>
+
+    <target name="init" description="Check runtime configuration">
+        <echo message="java.version: ${java.version}"/>
+
+        <fail>
+            <condition>
+                <not><available file="../build-common.properties"/></not>
+            </condition>
+            Please create your ../build-common.properties from ../build-common.properties.tmpl !
+        </fail>
+
+        <antcall target="init-avail"/>
+    </target>
+
+    <target name="validate" depends="xinclude" description="Validate document">
+        <jing rngfile="${docbook5.home}/rng/docbook.rng"
+                file="../en/build/defguide5.xml"/>
+        <!-- Don't uncomment this unless xml2po support namespace ! -->
+        <!--jing rngfile="${docbook5.home}/rng/docbook.rng"
+                file="build/defguide5-zh.xml"/-->
+    </target>
+
+    <target name="all" description="Generate document - pdf,html">
+        <antcall target="pdf"/>
+        <antcall target="html"/>
+    </target>
+
+    <target name="xinclude" description="XInclude processing on document">
+        <ant dir="../en" target="xinclude"/>
+    </target>
+
+    <target name="po.init">
+        <uptodate property="po.isUpToDate" targetfile="po/zh.po">
+            <srcfiles dir="../en" includes="book.xml, VERSION.xml"/>
+            <srcfiles dir="../en/src" includes="*.xml"/>
+            <srcfiles dir="../en/refpages" includes="**/*.xml" excludes="elements/build/*.xml"/>
+        </uptodate>
+    </target>
+
+    <!-- Total time: 14 minutes 42 seconds -->
+    <target name="updatepo" depends="xinclude,po.init" unless="po.isUpToDate"
+            description="Update PO file">
+        <echo message="Making defguide5.pot ..."/>
+        <exec dir="${basedir}/po" executable="python" failonerror="true">
+            <arg value="../xml2po/xml2po.py"/>
+            <arg value="-o"/>
+            <arg value="defguide5.pot"/>
+            <arg value="../../en/build/defguide5.xml"/>
+        </exec>
+
+        <echo message="Merging zh.po ..."/>
+        <exec dir="${basedir}/po" executable="msgmerge">
+            <arg value="--sort-by-file"/>
+            <arg value="--width=80"/>
+            <arg value="-o"/>
+            <arg value="zh.po.new"/>
+            <arg value="zh.po"/>
+            <arg value="defguide5.pot"/>
+        </exec>
+        <move file="po/zh.po.new" tofile="po/zh.po"/>
+    </target>
+
+    <target name="translate.init" depends="updatepo">
+        <uptodate property="translate.isUpToDate" targetfile="build/defguide5-zh.xml">
+            <srcfiles dir="../en" includes="book.xml, VERSION.xml"/>
+            <srcfiles dir="../en/src" includes="*.xml"/>
+            <srcfiles dir="../en/refpages" includes="intro-elements.xml, references.xml"/>
+            <srcfiles dir="po" includes="zh.po"/>
+        </uptodate>
+    </target>
+
+    <!-- Total time: 6 minutes 9 seconds -->
+    <target name="translate" depends="translate.init" unless="translate.isUpToDate"
+            description="Translate document">
+        <mkdir dir="build"/>
+        <echo message="Translating defguide5-zh.xml ..."/>
+        <exec dir="${basedir}/xml2po" executable="python" failonerror="true">
+            <arg value="xml2po.py"/>
+            <arg value="-l"/>
+            <arg value="zh-cn"/>
+            <arg value="-p"/>
+            <arg value="../po/zh.po"/>
+            <arg value="-o"/>
+            <arg value="${basedir}/build/defguide5-zh.xml"/>
+            <arg value="../../en/build/defguide5.xml"/>
+        </exec>
+        <delete file="xml2po/.xml2po.mo"/>
+    </target>
+
+    <target name="html.init">
+        <uptodate property="html.isUpToDate" targetfile="build/defguide5/.done">
+            <srcfiles dir="../en" includes="book.xml, VERSION.xml"/>
+            <srcfiles dir="../en/src" includes="*.xml"/>
+            <srcfiles dir="../en/refpages" includes="intro-elements.xml, references.xml"/>
+            <srcfiles dir="../en/refpages/elements" includes="*/*.xml" excludes="build/*"/>
+            <srcfiles dir="po" includes="zh.po"/>
+            <srcfiles dir="stylesheets" includes="html.xsl"/>
+            <srcfiles dir="stylesheets/zh" includes="html.xsl"/>
+        </uptodate>
+    </target>
+
+    <!-- Total time: 14 minutes 16 seconds -->
+    <target name="html" depends="translate,html.init" unless="html.isUpToDate"
+            description="Generate document - html">
+        <copy todir="build/defguide5/images">
+            <fileset dir="${docbook.xsl}/images" includes="**/*.png"/>
+        </copy>
+        <copy todir="build/defguide5/figures">
+            <fileset dir="../en/figures"/>
+        </copy>
+        <copy todir="build/defguide5/graphics">
+            <fileset dir="../en/graphics"/>
+        </copy>
+        <copy todir="build/defguide5/src/examples">
+            <fileset dir="../en/examples"/>
+        </copy>
+
+        <echo message="Making html ..."/>
+        <java classname="com.icl.saxon.StyleSheet" fork="true" maxmemory="512m"
+                failonerror="true" dir="${basedir}/build/defguide5">
+            <jvmarg value="-Xss512k"/>
+            <classpath refid="lib.classpath"/>
+            <arg value="-x"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-y"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-r"/>
+            <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+            <arg value="../defguide5-zh.xml"/>
+            <arg value="../../stylesheets/zh/html.xsl"/>
+        </java>
+        <!--exec dir="${basedir}/build/defguide5" executable="xsltproc" failonerror="true">
+            <arg value="../../stylesheets/zh/html.xsl"/>
+            <arg value="../defguide5-zh.xml"/>
+        </exec-->
+        <touch file="build/defguide5/.done"/>
+    </target>
+
+    <target name="pdf.init">
+        <uptodate property="pdf.isUpToDate" targetfile="build/defguide5-zh.pdf">
+            <srcfiles dir="../en" includes="book.xml, VERSION.xml"/>
+            <srcfiles dir="../en/src" includes="*.xml"/>
+            <srcfiles dir="../en/refpages" includes="intro-elements.xml, references.xml"/>
+            <srcfiles dir="../en/refpages/elements" includes="*/*.xml" excludes="build/*"/>
+            <srcfiles dir="po" includes="zh.po"/>
+            <srcfiles dir="stylesheets" includes="fo.xsl"/>
+            <srcfiles dir="stylesheets/zh" includes="fo.xsl"/>
+        </uptodate>
+    </target>
+
+    <!-- Total time: 9 minutes 31 seconds -->
+    <target name="pdf" depends="translate,pdf.init" unless="pdf.isUpToDate"
+            description="Generate document - pdf">
+        <copy todir="build/src/examples">
+          <fileset dir="../en/examples"/>
+        </copy>
+        <copy todir="build/images">
+            <fileset dir="${docbook.xsl}/images" includes="**/*.png"/>
+        </copy>
+        <copy todir="build/refpages/elements/build/figures">
+            <fileset dir="../en/figures"/>
+        </copy>
+        <copy todir="build/refpages/graphics">
+            <fileset dir="../en/graphics"/>
+        </copy>
+
+        <echo message="Making fo ..."/>
+        <java classname="com.icl.saxon.StyleSheet" fork="true" maxmemory="512m"
+                failonerror="true" dir="${basedir}">
+            <jvmarg value="-Xss512k"/>
+            <classpath refid="lib.classpath"/>
+            <arg value="-x"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-y"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-r"/>
+            <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+            <arg value="-o"/>
+            <arg value="build/defguide5-zh.fo"/>
+            <arg value="build/defguide5-zh.xml"/>
+            <arg value="stylesheets/zh/fo.xsl"/>
+            <arg value="fop1.extensions=1"/>
+            <arg value="title.font.family=${fop.title.font.family}"/>
+            <arg value="body.font.family=${fop.body.font.family}"/>
+            <arg value="sans.font.family=${fop.sans.font.family}"/>
+            <arg value="ingbat.font.family=${fop.ingbat.font.family}"/>
+            <arg value="monospace.font.family=${fop.monospace.font.family}"/>
+        </java>
+
+        <echo message="Making pdf ..."/>
+        <java classname="${fop.class}" fork="true" maxmemory="1024m"
+                failonerror="true" dir="${basedir}/build">
+            <classpath refid="lib.classpath"/>
+            <arg value="-c"/>
+            <arg value="${fop.home}/conf/userconfig.xml"/>
+            <arg value="defguide5-zh.fo"/>
+            <arg value="defguide5-zh.pdf"/>
+        </java>
+    </target>
+
+    <!-- Total time: 8 minutes 39 seconds -->
+    <target name="pdf-xep" depends="translate,pdf.init" unless="pdf.isUpToDate"
+            description="Generate document - pdf - xep">
+        <copy todir="build/src/examples">
+          <fileset dir="../en/examples"/>
+        </copy>
+        <copy todir="build/images">
+            <fileset dir="${docbook.xsl}/images" includes="**/*.png"/>
+        </copy>
+        <copy todir="build/refpages/elements/build/figures">
+            <fileset dir="../en/figures"/>
+        </copy>
+        <copy todir="build/refpages/graphics">
+            <fileset dir="../en/graphics"/>
+        </copy>
+
+        <echo message="Making fo ..."/>
+        <java classname="com.icl.saxon.StyleSheet" fork="true" maxmemory="512m"
+                failonerror="true" dir="${basedir}">
+            <jvmarg value="-Xss512k"/>
+            <classpath refid="lib.classpath"/>
+            <arg value="-x"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-y"/>
+            <arg value="org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+            <arg value="-r"/>
+            <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+            <arg value="-o"/>
+            <arg value="build/defguide5-zh.fo"/>
+            <arg value="build/defguide5-zh.xml"/>
+            <arg value="stylesheets/zh/fo.xsl"/>
+            <arg value="xep.extensions=1"/>
+        </java>
+
+        <echo message="Making pdf ..."/>
+        <java classname="com.renderx.xep.XSLDriver" fork="true" maxmemory="1536m"
+                failonerror="true" dir="${basedir}/build">
+            <jvmarg value="-Xss512k"/>
+            <classpath refid="xep.classpath"/>
+            <arg value="-DCONFIG=${xep.home}/xep.xml"/>
+            <arg value="-quiet"/>
+            <arg value="defguide5-zh.fo"/>
+            <arg value="defguide5-zh.pdf"/>
+        </java>
+    </target>
+
+</project>
